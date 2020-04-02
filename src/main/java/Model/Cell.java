@@ -31,27 +31,11 @@ public class Cell {
     }
 
     /**
-     * Sets the column number
-     * @param column the column number
-     */
-    public void setColumn(int column) {
-        this.column = column;
-    }
-
-    /**
      * Gets the row number
      * @return the row number
      */
     public int getRow() {
         return row;
-    }
-
-    /**
-     * Sets the row number
-     * @param row the row number
-     */
-    public void setRow(int row) {
-        this.row = row;
     }
 
     /**
