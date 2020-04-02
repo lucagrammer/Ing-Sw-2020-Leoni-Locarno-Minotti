@@ -1,6 +1,7 @@
 package Model;
 
-import java.awt.*;
+import Util.*;
+
 import java.util.Date;
 
 public class Player {
@@ -41,8 +42,8 @@ public class Player {
      * @param color The color chosen by the player
      */
     public void chooseColor(Color color){
-        this.maleWorker = new Worker(color, Genre.MALE, this);
-        this.femaleWorker = new Worker(color, Genre.FEMALE, this);
+        this.maleWorker = new Worker(Genre.MALE, color, this);
+        this.femaleWorker = new Worker(Genre.FEMALE, color, this);
     }
 
     /**
