@@ -15,8 +15,9 @@ public class Worker {
      * @param genre the genre of the worker
      * @param player the player who owns this worker
      */
-    public Worker(Genre genre, Player player) {
+    public Worker(Genre genre, Color color, Player player) {
         this.genre = genre;
+        this.color = color;
         this.player = player;
         this.position=null;
     }
@@ -35,14 +36,6 @@ public class Worker {
      */
     public Cell getPosition() {
         return position;
-    }
-
-    /**
-     * Sets the color of the worker
-     * @param color the color of the worker
-     */
-    public void setColor(Color color) {
-        this.color = color;
     }
 
     /**
