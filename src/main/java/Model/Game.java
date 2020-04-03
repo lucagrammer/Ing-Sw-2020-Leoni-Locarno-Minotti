@@ -1,5 +1,8 @@
 package Model;
 
+import Util.Color;
+import Util.Genre;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +48,7 @@ public class Game {
 
     /**
      * Gets all the players of the game
+     *
      * @return all the players of the game
      */
     public List<Player> getPlayers() {
@@ -52,7 +56,22 @@ public class Game {
     }
 
     /**
+     * Gets a player by his color
+     *
+     * @param color the color of the player
+     * @return the player associated to the color or null value if there isn't a player with that color
+     */
+    public Player getPlayersByColor(Color color) {
+        for (Player player : players) {
+            if (player.getWorker(Genre.MALE).getColor() == color)
+                return player;
+        }
+        return null;
+    }
+
+    /**
      * Sets all the cards that will be used during the game
+     *
      * @param cards the cards selected
      */
     public void setUsedCards(List<Card> cards) {

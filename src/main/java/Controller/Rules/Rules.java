@@ -15,15 +15,19 @@ import java.util.stream.Collectors;
 
 public class Rules {
 
-    public RoundActions nextPossibleActions(RoundActions roundActions, Player player, Game game) {
-        RoundActions possibleRoundActions = new RoundActions();
+    public RoundActions nextPossibleActions(Player player, Game game) {
+        RoundActions roundActions = player.getRoundActions();
+        RoundActions nextPossibleActions = new RoundActions();
 
+        // Has already moved?
         if (roundActions.hasMoved() == 0) {
-            possibleRoundActions.add(getPossibleMoves(player.getWorker(Genre.MALE), game));
-            possibleRoundActions.add(getPossibleMoves(player.getWorker(Genre.FEMALE), game));
-            if (possibleRoundActions.isEmpty())
-                roundActions.add(new Action(ActionType.LOSE));
+            nextPossibleActions.add(getPossibleMoves(player.getWorker(Genre.MALE), game));
+            nextPossibleActions.add(getPossibleMoves(player.getWorker(Genre.FEMALE), game));
+            //Can't move?
+            if (nextPossibleActions.isEmpty())
+                nextPossibleActions.add(new Action(ActionType.LOSE));
         } else {
+            // Has already build?
             if (roundActions.hasBuildAnything() == 0) {
                 Genre movedWorkerGenre = roundActions.
                         getActionList().
@@ -32,24 +36,19 @@ public class Rules {
                         collect(Collectors.toList()).
                         get(0).
                         getGenre();
-                possibleRoundActions.add(getPossibleBuilds(player.getWorker(movedWorkerGenre), game));
-                possibleRoundActions.add(getPossibleDomes(player.getWorker(movedWorkerGenre), game));
-                if (possibleRoundActions.isEmpty())
-                    roundActions.add(new Action(ActionType.LOSE));
+                nextPossibleActions.add(getPossibleBuilds(player.getWorker(movedWorkerGenre), game));
+                nextPossibleActions.add(getPossibleDomes(player.getWorker(movedWorkerGenre), game));
+                //Can't build anything?
+                if (nextPossibleActions.isEmpty())
+                    nextPossibleActions.add(new Action(ActionType.LOSE));
             } else {
-                roundActions.add(new Action(ActionType.END));
+                nextPossibleActions.add(new Action(ActionType.END));
             }
         }
-
-
-        return possibleRoundActions;
+        return nextPossibleActions;
     }
 
-    public boolean doAction(Action action) {
-        return false;
-    }
-
-    private RoundActions getPossibleMoves(Worker worker, Game game) {
+    RoundActions getPossibleMoves(Worker worker, Game game) {
         List<Cell> cells = new ArrayList<>();
         RoundActions roundMoves = new RoundActions();
         Cell workerCell = worker.getPosition();
@@ -70,7 +69,7 @@ public class Rules {
         return roundMoves;
     }
 
-    private RoundActions getPossibleBuilds(Worker worker, Game game) {
+    RoundActions getPossibleBuilds(Worker worker, Game game) {
         List<Cell> cells = new ArrayList<>();
         RoundActions roundBuilds = new RoundActions();
         Cell workerCell = worker.getPosition();
@@ -91,7 +90,7 @@ public class Rules {
         return roundBuilds;
     }
 
-    private RoundActions getPossibleDomes(Worker worker, Game game) {
+    RoundActions getPossibleDomes(Worker worker, Game game) {
         List<Cell> cells = new ArrayList<>();
         RoundActions roundDomes = new RoundActions();
         Cell workerCell = worker.getPosition();
@@ -111,4 +110,51 @@ public class Rules {
         roundDomes.addDomes(cells, workerCell, worker.getGenre());
         return roundDomes;
     }
+
+    public boolean doAction(Action action, Player player, Game game) {
+        switch (action.getActionType()) {
+            case MOVE:
+                return doMove(action, player, game);
+            case BUILD_FLOOR:
+                return doBuild(action, player, game);
+            case BUILD_DOME:
+                return doDome(action, player, game);
+            default:
+                return false;
+        }
+    }
+
+    boolean doDome(Action action, Player player, Game game) {
+        Worker worker = player.getWorker(action.getGenre());
+        Cell currentCell = worker.getPosition();
+        Cell position = game.getBoard().getNextCell(currentCell, action.getDirection());
+        position.setDome(true);
+
+        // Update the actions of the player
+        player.registerAction(action);
+        return false;
+    }
+
+    boolean doBuild(Action action, Player player, Game game) {
+        Worker worker = player.getWorker(action.getGenre());
+        Cell currentCell = worker.getPosition();
+        Cell position = game.getBoard().getNextCell(currentCell, action.getDirection());
+        position.addFloor();
+
+        // Update the actions of the player
+        player.registerAction(action);
+        return false;
+    }
+
+    boolean doMove(Action action, Player player, Game game) {
+        Worker worker = player.getWorker(action.getGenre());
+        Cell currentCell = worker.getPosition();
+        Cell nexCell = game.getBoard().getNextCell(currentCell, action.getDirection());
+        worker.setPosition(nexCell);
+
+        // Update the actions of the player
+        player.registerAction(action);
+        return currentCell.getFloor() == 2 && nexCell.getFloor() == 3;
+    }
+
 }
