@@ -3,6 +3,8 @@ package Model;
 import Util.Direction;
 import Util.Genre;
 
+import java.util.Objects;
+
 public class Cell {
 
     private int row;
@@ -175,5 +177,16 @@ public class Cell {
                         return Direction.SE;
                 }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cell cell = (Cell) o;
+        return row == cell.row &&
+                column == cell.column &&
+                dome == cell.dome &&
+                floor == cell.floor;
     }
 }
