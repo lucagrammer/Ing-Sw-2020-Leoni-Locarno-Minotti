@@ -4,7 +4,6 @@ import Model.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class RoundActions {
     private List<Action> actionList;
@@ -15,7 +14,6 @@ public class RoundActions {
 
     /**
      * Gets the action list of the current round
-     *
      * @return
      */
     public List<Action> getActionList() {
@@ -78,6 +76,11 @@ public class RoundActions {
 
     }
 
+    public void add(List<Action> actions) {
+        actionList.addAll(actions);
+
+    }
+
     public void add(Action action) {
         actionList.add(action);
     }
@@ -88,5 +91,13 @@ public class RoundActions {
         if (o == null || getClass() != o.getClass()) return false;
         RoundActions that = (RoundActions) o;
         return actionList.containsAll(that.getActionList()) && that.getActionList().containsAll(actionList);
+    }
+
+    public boolean hasMovedUp() {
+        for (Action action : actionList) {
+            if (action.getActionType() == ActionType.MOVE && action.getLevelDifference() > 0)
+                return true;
+        }
+        return false;
     }
 }

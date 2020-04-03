@@ -1,10 +1,14 @@
 package Controller.Rules;
 
+import Model.Game;
+import Model.Player;
 import Util.RoundActions;
 
 public class EnemyRules {
 
-    RoundActions notAllowedEnemyActions(RoundActions roundActions) {
-        return new RoundActions();
+    RoundActions fixEnemyActions(RoundActions enemyPossibleActions, Game game, Player player) {
+        RoundActions fixedActions = new RoundActions();
+        fixedActions.add(enemyPossibleActions);
+        return fixedActions;
     }
 }
