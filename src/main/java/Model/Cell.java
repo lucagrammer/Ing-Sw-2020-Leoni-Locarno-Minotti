@@ -1,25 +1,28 @@
 package Model;
 
+import Util.Direction;
+import Util.Genre;
+
 public class Cell {
 
     private int row;
     private int column;
     private boolean dome;
     private int floor;
-    private Game game;
-
+    private Board board; // TODO: FORSE DA RIMUOVERE
 
     /**
      * Build a cell
-     * @param row is row number
+     *
+     * @param row    is row number
      * @param column is the column number
      */
-    public Cell(int row, int column, Game game){
+    public Cell(int row, int column, Board board) {
         this.row = row;
         this.column = column;
         this.dome = false;
         this.floor = 0;
-        this.game=game;
+        this.board = board;
     }
 
     /**
@@ -54,23 +57,25 @@ public class Cell {
      * Tests if the cell is free
      * @return true if the cell is not occupied by a worker and doesn't have the couple
      */
+    // TODO: FORSE DA RIMUOVERE, NON TESTARE
     public boolean isFree(){
         return getWorkerHere()==null && !this.getDome();
     }
 
     /**
      * Gets the worker that occupies the cell
+     *
      * @return the worker who occupies the cell or the null value if the cell is not occupied
      */
-    public Worker getWorkerHere(){
-        for (Player player : game.getPlayers()) {
-            Worker femaleWorker=player.getFemaleWorker();
-            if(femaleWorker.getPosition()==this) {
+    // TODO: FORSE DA RIMUOVERE, NON TESTARE
+    public Worker getWorkerHere() {
+        for (Player player : board.getGame().getPlayers()) {
+            Worker femaleWorker = player.getWorker(Genre.FEMALE);
+            if (femaleWorker.getPosition() == this) {
                 return femaleWorker;
-            }
-            else{
-                Worker maleWorker=player.getMaleWorker();
-                if(maleWorker.getPosition()==this)
+            } else {
+                Worker maleWorker = player.getWorker(Genre.MALE);
+                if (maleWorker.getPosition() == this)
                     return maleWorker;
             }
         }
@@ -79,19 +84,21 @@ public class Cell {
 
     /**
      * Gets the level difference between the current cell and a specified cell
+     *
      * @param nextCell the specified cell
      * @return the difference (positive or negative) between the current cell and a specified cell
      */
-    public int getFloorDifference(Cell nextCell){
-        return nextCell.getFloor()-this.getFloor();
+    public int getFloorDifference(Cell nextCell) {
+        return nextCell.getFloor() - this.getFloor();
     }
 
     /**
      * Sets the dome attribute
-     * @param dome true to add the dome, false to remove the dome
+     *
+     * @param set true to add the dome, false to remove the dome
      */
-    public void setDome(boolean dome) {
-        this.dome= dome;
+    public void setDome(boolean set) {
+        dome = set;
     }
 
     /**
@@ -118,16 +125,55 @@ public class Cell {
             floor++;
         }
         else {
-            dome=true;
+            dome = true;
         }
     }
 
     /**
      * Gets the number of floors
+     *
      * @return the number of the floors
      */
-    public int getFloor(){
+    public int getFloor() {
         return floor;
     }
 
+    /**
+     * Calculates the direction in which you need to move to reach a specified cell
+     *
+     * @param adjacentCell the cell to be reached
+     * @return the direction in wich you need to move
+     */
+    public Direction calculateDirection(Cell adjacentCell) {
+        int rowDifference = adjacentCell.getRow() - row;
+        int columnDifference = adjacentCell.getColumn() - column;
+
+        switch (rowDifference) {
+            case 0:
+                switch (columnDifference) {
+                    case -1:
+                        return Direction.W;
+                    case 1:
+                        return Direction.E;
+                }
+            case -1:
+                switch (columnDifference) {
+                    case 0:
+                        return Direction.N;
+                    case -1:
+                        return Direction.NW;
+                    case 1:
+                        return Direction.NE;
+                }
+            default:
+                switch (columnDifference) {
+                    case 0:
+                        return Direction.S;
+                    case -1:
+                        return Direction.SW;
+                    default:
+                        return Direction.SE;
+                }
+        }
+    }
 }

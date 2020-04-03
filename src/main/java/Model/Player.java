@@ -1,8 +1,11 @@
 package Model;
 
-import Util.*;
+import Util.Color;
+import Util.Genre;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Player {
     private String nickname;
@@ -47,19 +50,16 @@ public class Player {
     }
 
     /**
-     * Get the male worker
-     * @return the male worker
+     * Get a specific worker of the player
+     *
+     * @param genre the genre of the worker
+     * @return the worker
      */
-    public Worker getMaleWorker() {
-        return maleWorker;
-    }
-
-    /**
-     * Get the female worker
-     * @return the female worker
-     */
-    public Worker getFemaleWorker() {
-        return femaleWorker;
+    public Worker getWorker(Genre genre) {
+        if (genre == Genre.MALE)
+            return maleWorker;
+        else
+            return femaleWorker;
     }
 
     /**
@@ -72,6 +72,7 @@ public class Player {
 
     /**
      * Get the card
+     *
      * @return the card
      */
     public Card getCard() {
@@ -79,11 +80,25 @@ public class Player {
     }
 
     /**
+     * Gets all the cells occupied by the workers of the player
+     *
+     * @return all the occupied cells
+     */
+    public List<Cell> getOccupiedCells() {
+        List<Cell> occupiedCells = new ArrayList<>();
+
+        occupiedCells.add(femaleWorker.getPosition());
+        occupiedCells.add(maleWorker.getPosition());
+        return occupiedCells;
+    }
+
+    /**
      * Compares the nicknames of two players
+     *
      * @param player The second player
      * @return true if the players match
      */
-    public boolean equals(Player player){
+    public boolean equals(Player player) {
         return this.nickname.equals(player.nickname);
     }
 

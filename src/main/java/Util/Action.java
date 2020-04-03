@@ -1,5 +1,7 @@
 package Util;
 
+import java.util.Objects;
+
 public class Action {
 
     private ActionType actionType;
@@ -16,16 +18,23 @@ public class Action {
      * @param actionType      the action that the worker can do
      * @param direction       the direction of the action
      * @param levelDifference the level difference (positive or negative) from the current position of the worker
-     * @param winning         true if the action is a winning action
-     * @param influenceRivals true if the action may influence the actions of the enemy workers
      */
-    public Action(ActionType actionType, Genre genre, Direction direction, int levelDifference, boolean winning, boolean influenceRivals) {
+    public Action(ActionType actionType, Genre genre, Direction direction, int levelDifference) {
         this.actionType = actionType;
         this.genre = genre;
         this.direction = direction;
         this.levelDifference = levelDifference;
-        this.winning = winning;
-        this.influenceRivals = influenceRivals;
+        //this.winning = winning;
+        //this.influenceRivals = influenceRivals;
+    }
+
+    /**
+     * Build the Action
+     *
+     * @param actionType the action that the worker can do
+     */
+    public Action(ActionType actionType) {
+        this.actionType = actionType;
     }
 
     /**
@@ -57,7 +66,6 @@ public class Action {
 
     /**
      * Sets the ActionTyper of the action
-     *
      * @param action the action type
      */
     public void setActionType(ActionType action) {
@@ -66,7 +74,6 @@ public class Action {
 
     /**
      * Gets the Direction of the action
-     *
      * @return the direction of the action
      */
     public Direction getDirection() {
@@ -75,7 +82,6 @@ public class Action {
 
     /**
      * Sets the Direction of the action
-     *
      * @param direction the direction of the action
      */
     public void setDirection(Direction direction) {
@@ -84,7 +90,6 @@ public class Action {
 
     /**
      * Gets the level difference (positive or negative) from the current position of the worker
-     *
      * @return the level difference (positive or negative)
      */
     public int getLevelDifference() {
@@ -93,7 +98,6 @@ public class Action {
 
     /**
      * Sets the level difference (positive or negative) from the current position of the worker
-     *
      * @param levelDifference the level difference (positive or negative)
      */
     public void setLevelDifference(int levelDifference) {
@@ -102,7 +106,6 @@ public class Action {
 
     /**
      * Tests if the action may influence the actions of the enemy workers
-     *
      * @return true if the action may influence the actions of the enemy workers, otherwise false
      */
     public boolean isInfluenceRivals() {
@@ -111,7 +114,6 @@ public class Action {
 
     /**
      * Sets if the action may influence the actions of the enemy workers
-     *
      * @param influenceRivals true if the the action may influence the actions of the enemy workers , otherwise false
      */
     public void setInfluenceRivals(boolean influenceRivals) {
@@ -120,7 +122,6 @@ public class Action {
 
     /**
      * Tests if the action is a winning action
-     *
      * @return true if the action is a winning action, otherwise false;
      */
     public boolean isWinning() {
@@ -135,4 +136,16 @@ public class Action {
     public void setWinning(boolean winning) {
         this.winning = winning;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Action action = (Action) o;
+        return levelDifference == action.levelDifference &&
+                actionType == action.actionType &&
+                genre == action.genre &&
+                direction == action.direction;
+    }
+
 }

@@ -11,7 +11,7 @@ public class ActionTest {
 
     @Before
     public void setUp() {
-        action = new Action(ActionType.MOVE, Genre.MALE, Direction.N, 1, true, false);
+        action = new Action(ActionType.MOVE, Genre.MALE, Direction.N, 1);
     }
 
     @After
@@ -22,18 +22,15 @@ public class ActionTest {
     @Test
     public void action_actionSetUp_correctSetUp() {
         Genre genre = Genre.FEMALE;
-        ActionType actionType = ActionType.OPT_BUILD;
+        ActionType actionType = ActionType.BUILD_FLOOR;
         Direction direction = Direction.NE;
-        boolean winning = true, influenceRivals = false;
         int levelDifference = -2;
 
-        action = new Action(actionType, genre, direction, levelDifference, winning, influenceRivals);
+        action = new Action(actionType, genre, direction, levelDifference);
         assertEquals(actionType, action.getActionType());
         assertEquals(genre, action.getGenre());
         assertEquals(direction, action.getDirection());
         assertEquals(levelDifference, action.getLevelDifference());
-        assertEquals(winning, action.isWinning());
-        assertEquals(influenceRivals, action.isInfluenceRivals());
     }
 
     @Test
@@ -45,7 +42,7 @@ public class ActionTest {
 
     @Test
     public void actionInfo_setAction_getCorrectAction() {
-        ActionType type = ActionType.BUILD;
+        ActionType type = ActionType.BUILD_DOME;
         action.setActionType(type);
         assertEquals(type, action.getActionType());
     }
