@@ -92,4 +92,22 @@ public class Board {
     public Game getGame() {
         return game;
     }
+
+    /**
+     * Gets the cell from which you moved to reach the current cell
+     *
+     * @param currentCell             the current cell
+     * @param previouslyMoveDirection the direction of the movement
+     * @return the cell from which you moved or null value
+     */
+    public Cell getPrevCell(Cell currentCell, Direction previouslyMoveDirection) {
+        List<Cell> cells = getAdjacents(currentCell).
+                stream().
+                filter(cell -> currentCell.equals(getNextCell(cell, previouslyMoveDirection))).
+                collect(Collectors.toList());
+        if (cells.size() > 0)
+            return cells.get(0);
+        else
+            return null;
+    }
 }

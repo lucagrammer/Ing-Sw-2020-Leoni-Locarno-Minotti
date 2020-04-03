@@ -367,6 +367,4 @@ public class ApolloRulesTest {
         assertEquals(player2.getWorker(Genre.FEMALE).getPosition(), board.getCell(1, 3));
         assertEquals(player1.getWorker(Genre.MALE).getPosition(), board.getCell(0, 3));
     }
-
-
 }

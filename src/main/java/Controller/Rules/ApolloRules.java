@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 public class ApolloRules extends Rules {
 
+    @Override
     RoundActions getPossibleMoves(Worker worker, Game game) {
         List<Cell> cells = new ArrayList<>();
         RoundActions roundMoves = new RoundActions();
@@ -33,6 +34,7 @@ public class ApolloRules extends Rules {
         return roundMoves;
     }
 
+    @Override
     boolean doMove(Action action, Player player, Game game) {
         Worker worker = player.getWorker(action.getGenre());
         Cell currentCell = worker.getPosition();
