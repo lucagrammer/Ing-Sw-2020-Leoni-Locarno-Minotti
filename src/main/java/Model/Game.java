@@ -11,6 +11,7 @@ public class Game {
     private int numPlayer;
     private List<Player> players;
     private Board board;
+    private int gameId;
     private ArrayList<Card> usedCards;
 
     /**
@@ -19,11 +20,11 @@ public class Game {
      * @param numPlayer the number of players
      */
     public Game(Player player, int numPlayer){
-        this.players = new ArrayList<>();
+        this.players = new ArrayList<Player>();
         this.players.add(player);
-        this.numPlayer = numPlayer;
-        this.usedCards = new ArrayList<>();
-        this.board = new Board(this);
+        this.numPlayer=numPlayer;
+        this.usedCards = new ArrayList<Card>();
+        this.board= new Board(this);
     }
 
     /**
