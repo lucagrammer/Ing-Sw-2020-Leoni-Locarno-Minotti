@@ -28,6 +28,10 @@ public class Board {
         }
     }
 
+    public Cell[][] getBoard(){
+        return board;
+    }
+
     /**
      * Gets a specified Cell
      *
