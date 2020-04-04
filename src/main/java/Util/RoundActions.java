@@ -104,6 +104,20 @@ public class RoundActions {
     }
 
     /**
+     * Gets the number of times the player has build a floor during the current round
+     *
+     * @return The number of times that player has build a floor
+     */
+    public int hasBuildFloor() {
+        int counter = 0;
+        for (Action action : actionList) {
+            if (action.getActionType() == ActionType.BUILD_FLOOR)
+                counter++;
+        }
+        return counter;
+    }
+
+    /**
      * Adds all the actions stored in another Round Actions object
      *
      * @param actions The Round Action object that contains the actions to be added
