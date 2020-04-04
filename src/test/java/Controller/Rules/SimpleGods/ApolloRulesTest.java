@@ -1,6 +1,6 @@
-package Controller.Rules;
+package Controller.Rules.SimpleGods;
 
-import Controller.Rules.SimpleGods.ApolloRules;
+import Controller.Rules.Rules;
 import Model.Board;
 import Model.Game;
 import Model.Player;
@@ -28,12 +28,7 @@ public class ApolloRulesTest {
         player1.chooseColor(Color.WHITE);
         player2.chooseColor(Color.GREY);
         rules = new ApolloRules();
-
-        player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
-        player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
-
-        player2.getWorker(Genre.MALE).setPosition(board.getCell(0, 2));
-        player2.getWorker(Genre.FEMALE).setPosition(board.getCell(0, 3));
+        //DEBUG_ONLY
         //System.out.println(nextPossibleActions.getActionList().size());
         //nextPossibleActions.getActionList().stream().forEach(x ->System.out.println(x.getDirection()+" "+ x.getGenre()+" "+x.getActionType()+" "+x.getLevelDifference()));
     }
