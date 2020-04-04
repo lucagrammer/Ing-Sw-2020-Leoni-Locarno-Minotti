@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ActionTest {
     Action action;
@@ -60,19 +60,4 @@ public class ActionTest {
         action.setLevelDifference(level);
         assertEquals(level, action.getLevelDifference());
     }
-
-    @Test
-    public void winningInfo_setWinning_getCorrectWinning() {
-        boolean winning = true;
-        action.setWinning(winning);
-        assertEquals(winning, action.isWinning());
-    }
-
-    @Test
-    public void influenceRivalsInfo_setInfluenceRival_getCorrectInfluenceRival() {
-        boolean influence = false;
-        action.setInfluenceRivals(influence);
-        assertEquals(influence, action.isInfluenceRivals());
-    }
-
 }

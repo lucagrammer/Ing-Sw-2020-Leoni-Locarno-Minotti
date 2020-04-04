@@ -7,23 +7,24 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Stores information about the game board
+ */
 public class Board {
 
     private static final int ROWS = 5;
     private static final int COLUMNS = 5;
     private Cell[][] board;
-    private Game game; // TODO: FORSE DA RIMUOVERE
 
     /**
-     * Build the Board
+     * Constructor: build the Board
      */
-    public Board(Game game) {
-        this.game = game;
+    public Board() {
         this.board = new Cell[ROWS][COLUMNS];
 
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
-                board[i][j] = new Cell(i, j, this);
+                board[i][j] = new Cell(i, j);
             }
         }
     }
@@ -35,9 +36,9 @@ public class Board {
     /**
      * Gets a specified Cell
      *
-     * @param row    is the row number
-     * @param column is the column number
-     * @return the cell placed in specified coordinates or null value if row and column are not valid
+     * @param row    The row number
+     * @param column The column number
+     * @return The cell placed in specified coordinates or null value if row and column are not valid
      */
     public Cell getCell(int row, int column) {
         if (row >= 0 && row < ROWS && column >= 0 && column < COLUMNS)
@@ -46,10 +47,23 @@ public class Board {
             return null;
     }
 
+    /**
+     * Gets all the cells that are adjacent to a specified cell
+     *
+     * @param cell A cell of the board
+     * @return A list of the adjacent cells
+     */
     public List<Cell> getAdjacents(Cell cell) {
         return Stream.of(Direction.values()).map(direction -> getNextCell(cell, direction)).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
+    /**
+     * Gets the cell obtained by moving from one cell in one direction
+     *
+     * @param cell      The starting cell
+     * @param direction The direction of the movement
+     * @return The next cell
+     */
     public Cell getNextCell(Cell cell, Direction direction) {
         Cell nextCell = null;
 
@@ -84,21 +98,10 @@ public class Board {
     }
 
     /**
-     * Gets the game that uses the Board
-     *
-     * @return the game that uses the board
-     */
-    // TODO: FORSE DA RIMUOVERE, NON TESTARE
-    public Game getGame() {
-        return game;
-    }
-
-    /**
      * Gets the cell from which you moved to reach the current cell
-     *
-     * @param currentCell             the current cell
-     * @param previouslyMoveDirection the direction of the movement
-     * @return the cell from which you moved or null value
+     * @param currentCell             The current cell
+     * @param previouslyMoveDirection The direction of the movement
+     * @return The cell from which you moved or null value
      */
     public Cell getPrevCell(Cell currentCell, Direction previouslyMoveDirection) {
         List<Cell> cells = getAdjacents(currentCell).

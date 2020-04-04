@@ -6,26 +6,26 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class BoardTest {
 
     Board board;
-    Game game;
     Cell cell;
 
     @Test
     public void board_getCorrectBoard_getCorrectCell() {
-        board = new Board (game);
+        board = new Board();
         assertNull(board.getCell(4, 6));
-        assertEquals(board.getBoard()[3][3], board.getCell(3,3));
-        assertEquals(null, board.getCell(6,6));
+        assertEquals(board.getBoard()[3][3], board.getCell(3, 3));
+        assertNull(board.getCell(6, 6));
     }
 
     @Test
     public void getCorrectAdjacents() {
-        board = new Board(game);
-        List<Cell> cells = new ArrayList<Cell>();
+        board = new Board();
+        List<Cell> cells = new ArrayList<>();
         cells.add(board.getCell(2, 3));
         cells.add(board.getCell(2, 4));
         cells.add(board.getCell(3, 4));
@@ -39,8 +39,8 @@ public class BoardTest {
 
     @Test
     public void getNextCell_board_getCorrectNextCell() {
-        board= new Board(game);
-        cell= board.getCell(3,3);
+        board = new Board();
+        cell = board.getCell(3, 3);
         assertEquals(board.getCell(2,3), board.getNextCell(cell, Direction.N));
         assertEquals(board.getCell(3,4), board.getNextCell(cell, Direction.E));
         assertEquals(board.getCell(4,3), board.getNextCell(cell, Direction.S));
@@ -49,8 +49,8 @@ public class BoardTest {
         assertEquals(board.getCell(4,4), board.getNextCell(cell, Direction.SE));
         assertEquals(board.getCell(4,2), board.getNextCell(cell, Direction.SW));
         assertEquals(board.getCell(2,2), board.getNextCell(cell, Direction.NW));
-        cell= board.getCell(4,4);
-        assertEquals(null, board.getNextCell(cell, Direction.SE));
+        cell = board.getCell(4, 4);
+        assertNull(board.getNextCell(cell, Direction.SE));
     }
 
 }

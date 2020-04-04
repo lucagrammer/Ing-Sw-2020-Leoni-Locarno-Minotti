@@ -1,5 +1,6 @@
-package Controller.Rules;
+package Controller.Rules.SimpleGods;
 
+import Controller.Rules.EnemyRules;
 import Model.Game;
 import Model.Player;
 import Util.Action;
@@ -9,10 +10,10 @@ import Util.RoundActions;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AtenaEnemyRules extends EnemyRules {
+public class AthenaEnemyRules extends EnemyRules {
 
     @Override
-    RoundActions fixEnemyActions(RoundActions enemyPossibleActions, Game game, Player player) {
+    public RoundActions fixEnemyActions(RoundActions enemyPossibleActions, Game game, Player player) {
         RoundActions myActions = player.getRoundActions();
         RoundActions fixedActions = new RoundActions();
 

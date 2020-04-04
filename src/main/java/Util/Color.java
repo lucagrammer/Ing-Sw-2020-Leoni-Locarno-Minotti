@@ -1,7 +1,7 @@
 package Util;
 
 /**
- * Possible colors of the workers
+ * All possible colors of the players/workers
  */
 public enum Color {
     WHITE, GREY, BLUE

@@ -1,5 +1,6 @@
 package Controller.Rules;
 
+import Controller.Rules.SimpleGods.AthenaEnemyRules;
 import Model.Board;
 import Model.Game;
 import Model.Player;
@@ -11,7 +12,7 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
-public class AtenaEnemyRulesTest {
+public class AthenaEnemyRulesTest {
     static EnemyRules enemyRules;
     static Game game;
     static Board board;
@@ -26,7 +27,7 @@ public class AtenaEnemyRulesTest {
         board = game.getBoard();
         player1.chooseColor(Color.WHITE);
         player2.chooseColor(Color.GREY);
-        enemyRules = new AtenaEnemyRules();
+        enemyRules = new AthenaEnemyRules();
     }
 
 

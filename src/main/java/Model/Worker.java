@@ -3,6 +3,9 @@ package Model;
 import Util.Color;
 import Util.Genre;
 
+/**
+ * Stores information about a worker
+ */
 public class Worker {
 
     private Color color;
@@ -11,9 +14,10 @@ public class Worker {
     private Cell position;
 
     /**
-     * Build a Worker
-     * @param genre the genre of the worker
-     * @param player the player who owns this worker
+     * Constructor: build a Worker
+     *
+     * @param genre  The genre of the worker
+     * @param player The player who owns this worker
      */
     public Worker(Genre genre, Color color, Player player) {
         this.genre = genre;
@@ -23,24 +27,27 @@ public class Worker {
     }
 
     /**
-     * Sets the position of the worker
-     * @param position the new position
-     */
-    public void setPosition(Cell position) {
-        this.position = position;
-    }
-
-    /**
      * Gets the current position of the worker
-     * @return the current position
+     *
+     * @return The current position
      */
     public Cell getPosition() {
         return position;
     }
 
     /**
+     * Sets the position of the worker
+     *
+     * @param position The new position
+     */
+    public void setPosition(Cell position) {
+        this.position = position;
+    }
+
+    /**
      * Gets the color of the worker
-     * @return the color of the worker
+     *
+     * @return The color of the worker
      */
     public Color getColor() {
         return color;
@@ -48,7 +55,7 @@ public class Worker {
 
     /**
      * Gets the genre of the worker
-     * @return the genre of the worker
+     * @return The genre of the worker
      */
     public Genre getGenre() {
         return genre;
@@ -56,7 +63,7 @@ public class Worker {
 
     /**
      * Gets the player who owns this worker
-     * @return the player who owns this worker
+     * @return The player who owns this worker
      */
     public Player getPlayer() {
         return player;

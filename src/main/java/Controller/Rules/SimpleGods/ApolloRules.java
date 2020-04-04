@@ -1,5 +1,6 @@
-package Controller.Rules;
+package Controller.Rules.SimpleGods;
 
+import Controller.Rules.Rules;
 import Model.Cell;
 import Model.Game;
 import Model.Player;
@@ -7,20 +8,18 @@ import Model.Worker;
 import Util.Action;
 import Util.RoundActions;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ApolloRules extends Rules {
 
     @Override
-    RoundActions getPossibleMoves(Worker worker, Game game) {
-        List<Cell> cells = new ArrayList<>();
+    protected RoundActions getPossibleMoves(Worker worker, Game game) {
         RoundActions roundMoves = new RoundActions();
         Cell workerCell = worker.getPosition();
 
         // Add all the adjacent cells that don't have a dome and are reachable from the current positions of the worker
-        cells = game.
+        List<Cell> cells = game.
                 getBoard().
                 getAdjacents(workerCell).
                 stream().
@@ -35,7 +34,7 @@ public class ApolloRules extends Rules {
     }
 
     @Override
-    boolean doMove(Action action, Player player, Game game) {
+    protected boolean doMove(Action action, Player player, Game game) {
         Worker worker = player.getWorker(action.getGenre());
         Cell currentCell = worker.getPosition();
         Cell nexCell = game.getBoard().getNextCell(currentCell, action.getDirection());

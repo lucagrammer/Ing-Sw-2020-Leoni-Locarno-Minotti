@@ -1,5 +1,6 @@
 package Controller.Rules;
 
+import Controller.Rules.SimpleGods.ApolloRules;
 import Model.Board;
 import Model.Game;
 import Model.Player;
@@ -69,7 +70,7 @@ public class ApolloRulesTest {
     }
 
     @Test
-    public void nextPossibleActions_myWorkersArroundFirstAction_moveToAllCorrectCells() {
+    public void nextPossibleActions_myWorkersAroundFirstAction_moveToAllCorrectCells() {
         player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
         player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
 

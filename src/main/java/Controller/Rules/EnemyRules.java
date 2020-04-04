@@ -6,7 +6,7 @@ import Util.RoundActions;
 
 public class EnemyRules {
 
-    RoundActions fixEnemyActions(RoundActions enemyPossibleActions, Game game, Player player) {
+    public RoundActions fixEnemyActions(RoundActions enemyPossibleActions, Game game, Player player) {
         RoundActions fixedActions = new RoundActions();
         fixedActions.add(enemyPossibleActions);
         return fixedActions;

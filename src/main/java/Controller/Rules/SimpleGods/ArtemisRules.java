@@ -1,16 +1,16 @@
-package Controller.Rules;
+package Controller.Rules.SimpleGods;
 
+import Controller.Rules.Rules;
 import Model.Cell;
 import Model.Game;
 import Model.Player;
 import Model.Worker;
 import Util.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ArtemideRules extends Rules {
+public class ArtemisRules extends Rules {
 
     public RoundActions nextPossibleActions(Player player, Game game) {
         RoundActions roundActions = player.getRoundActions();
@@ -56,13 +56,12 @@ public class ArtemideRules extends Rules {
         return nextPossibleActions;
     }
 
-    RoundActions getPossibleMoves(Worker worker, Game game) {
-        List<Cell> cells = new ArrayList<>();
+    protected RoundActions getPossibleMoves(Worker worker, Game game) {
         RoundActions roundMoves = new RoundActions();
         Cell workerCell = worker.getPosition();
 
         // Add all the adjacent cells that don't have a dome and are reachable from the current positions of the worker
-        cells = game.
+        List<Cell> cells = game.
                 getBoard().
                 getAdjacents(workerCell).
                 stream().

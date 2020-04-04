@@ -1,7 +1,11 @@
 package Model;
 
-import Controller.Rules.*;
+import Controller.Rules.EnemyRules;
+import Controller.Rules.Rules;
 
+/**
+ * Stores information about a card of the game
+ */
 public class Card {
 
     private String name;
@@ -11,13 +15,13 @@ public class Card {
     private EnemyRules enemyRules;
 
     /**
-     * Build the Card
+     * Constructor: build the Card
      *
-     * @param name                      the name of the card
-     * @param threePlayersCompatibility three player compatibility of the card
-     * @param description               description of the card effect
-     * @param rules                     the game rules for the player that owns this card
-     * @param enemyRules                the game rules for the enemies
+     * @param name                      The name of the card
+     * @param threePlayersCompatibility Three player compatibility of the card
+     * @param description               Description of the card effect
+     * @param rules                     The game rules for the player that owns this card
+     * @param enemyRules                The game rules for the enemies
      */
     public Card(String name, boolean threePlayersCompatibility, String description, Rules rules, EnemyRules enemyRules) {
         this.name = name;
@@ -29,8 +33,7 @@ public class Card {
 
     /**
      * Gets the name of the card
-     *
-     * @return the name of the card
+     * @return The name of the card
      */
     public String getName() {
         return name;
@@ -38,8 +41,7 @@ public class Card {
 
     /**
      * Gets the description of the card
-     *
-     * @return the description of the card
+     * @return The description of the card
      */
     public String getDescription() {
         return description;
@@ -47,8 +49,7 @@ public class Card {
 
     /**
      * Checks if the card can be used in a three player game
-     *
-     * @return true if the card can be used in a three player game, otherwise false
+     * @return True if the card can be used in a three player game, otherwise false
      */
     public boolean isThreePlayersCompatible() {
         return threePlayersCompatibility;
@@ -56,8 +57,7 @@ public class Card {
 
     /**
      * Gets the card rules for the player that own this card
-     *
-     * @return the card rules fot the player that own this card
+     * @return The card rules fot the player that own this card
      */
     public Rules getRules() {
         return rules;
@@ -65,8 +65,7 @@ public class Card {
 
     /**
      * Gets the card rules for the enemies
-     *
-     * @return the card rules fot the enemies
+     * @return The card rules fot the enemies
      */
     public EnemyRules getEnemyRules() {
         return enemyRules;

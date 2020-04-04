@@ -9,7 +9,6 @@ import Util.ActionType;
 import Util.Genre;
 import Util.RoundActions;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,13 +47,12 @@ public class Rules {
         return nextPossibleActions;
     }
 
-    RoundActions getPossibleMoves(Worker worker, Game game) {
-        List<Cell> cells = new ArrayList<>();
+    protected RoundActions getPossibleMoves(Worker worker, Game game) {
         RoundActions roundMoves = new RoundActions();
         Cell workerCell = worker.getPosition();
 
         // Add all the adjacent cells that don't have a dome and are reachable from the current positions of the worker
-        cells = game.
+        List<Cell> cells = game.
                 getBoard().
                 getAdjacents(workerCell).
                 stream().
@@ -69,13 +67,12 @@ public class Rules {
         return roundMoves;
     }
 
-    RoundActions getPossibleBuilds(Worker worker, Game game) {
-        List<Cell> cells = new ArrayList<>();
+    protected RoundActions getPossibleBuilds(Worker worker, Game game) {
         RoundActions roundBuilds = new RoundActions();
         Cell workerCell = worker.getPosition();
 
         // Add all the adjacent cells that don't have a dome and don't have 3 floors: here you can build a floor
-        cells = game.
+        List<Cell> cells = game.
                 getBoard().
                 getAdjacents(workerCell).
                 stream().
@@ -90,13 +87,12 @@ public class Rules {
         return roundBuilds;
     }
 
-    RoundActions getPossibleDomes(Worker worker, Game game) {
-        List<Cell> cells = new ArrayList<>();
+    protected RoundActions getPossibleDomes(Worker worker, Game game) {
         RoundActions roundDomes = new RoundActions();
         Cell workerCell = worker.getPosition();
 
         // Add all the adjacent cells that don't have a dome and have 3 floors: here you can build a dome
-        cells = game.
+        List<Cell> cells = game.
                 getBoard().
                 getAdjacents(workerCell).
                 stream().
@@ -124,7 +120,7 @@ public class Rules {
         }
     }
 
-    boolean doDome(Action action, Player player, Game game) {
+    protected boolean doDome(Action action, Player player, Game game) {
         Worker worker = player.getWorker(action.getGenre());
         Cell currentCell = worker.getPosition();
         Cell position = game.getBoard().getNextCell(currentCell, action.getDirection());
@@ -135,7 +131,7 @@ public class Rules {
         return false;
     }
 
-    boolean doBuild(Action action, Player player, Game game) {
+    protected boolean doBuild(Action action, Player player, Game game) {
         Worker worker = player.getWorker(action.getGenre());
         Cell currentCell = worker.getPosition();
         Cell position = game.getBoard().getNextCell(currentCell, action.getDirection());
@@ -146,7 +142,7 @@ public class Rules {
         return false;
     }
 
-    boolean doMove(Action action, Player player, Game game) {
+    protected boolean doMove(Action action, Player player, Game game) {
         Worker worker = player.getWorker(action.getGenre());
         Cell currentCell = worker.getPosition();
         Cell nexCell = game.getBoard().getNextCell(currentCell, action.getDirection());

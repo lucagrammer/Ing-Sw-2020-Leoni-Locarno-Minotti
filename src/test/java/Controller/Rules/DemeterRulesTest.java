@@ -1,5 +1,6 @@
 package Controller.Rules;
 
+import Controller.Rules.SimpleGods.DemeterRules;
 import Model.Board;
 import Model.Game;
 import Model.Player;
@@ -11,7 +12,7 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
-public class RulesTest {
+public class DemeterRulesTest {
     static Rules rules;
     static Game game;
     static Board board;
@@ -26,13 +27,7 @@ public class RulesTest {
         board = game.getBoard();
         player1.chooseColor(Color.WHITE);
         player2.chooseColor(Color.GREY);
-        rules = new Rules();
-
-        player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
-        player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
-
-        player2.getWorker(Genre.MALE).setPosition(board.getCell(0, 2));
-        player2.getWorker(Genre.FEMALE).setPosition(board.getCell(0, 3));
+        rules = new DemeterRules();
     }
 
     @Test
@@ -191,12 +186,19 @@ public class RulesTest {
     }
 
     @Test
-    public void nextPossibleActions_AfterBuild_endRound() {
+    public void nextPossibleActions_multipleFloorsAroundAfterFirstBuild_endRoundOrDemetraPower() {
         player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
         player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
 
         player2.getWorker(Genre.MALE).setPosition(board.getCell(0, 2));
         player2.getWorker(Genre.FEMALE).setPosition(board.getCell(0, 3));
+
+        board.getCell(1, 3).addFloor();
+        board.getCell(1, 3).addFloor();
+        board.getCell(1, 4).addFloor();
+        board.getCell(1, 4).addFloor();
+        board.getCell(1, 4).addFloor();
+        board.getCell(0, 4).setDome(true);
 
         RoundActions roundActionWithMoveAndBuild = new RoundActions();
         roundActionWithMoveAndBuild.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.NW, -3));
@@ -207,6 +209,95 @@ public class RulesTest {
         RoundActions expectedActions = new RoundActions();
         //expected male actions
         expectedActions.add(new Action(ActionType.END));
+        expectedActions.add(new Action(ActionType.BUILD_DOME, Genre.FEMALE, Direction.SE, 3));
+
+        assertEquals(expectedActions, nextPossibleActions);
+    }
+
+    @Test
+    public void nextPossibleActions_multipleFloorsAroundAfterFirstDome_endRoundOrDemetraPower() {
+        player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
+        player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
+
+        player2.getWorker(Genre.MALE).setPosition(board.getCell(0, 2));
+        player2.getWorker(Genre.FEMALE).setPosition(board.getCell(0, 3));
+
+        board.getCell(1, 3).addFloor();
+        board.getCell(1, 3).addFloor();
+        board.getCell(1, 4).addFloor();
+        board.getCell(1, 4).addFloor();
+        board.getCell(1, 4).addFloor();
+        board.getCell(0, 4).setDome(true);
+
+        RoundActions roundActionWithMoveAndDome = new RoundActions();
+        roundActionWithMoveAndDome.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.NW, -3));
+        roundActionWithMoveAndDome.add(new Action(ActionType.BUILD_DOME, Genre.FEMALE, Direction.SE, 0));
+        player2.setRoundActions(roundActionWithMoveAndDome);
+        RoundActions nextPossibleActions = rules.nextPossibleActions(player2, game);
+
+        RoundActions expectedActions = new RoundActions();
+        //expected male actions
+        expectedActions.add(new Action(ActionType.END));
+        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.S, 2));
+
+        assertEquals(expectedActions, nextPossibleActions);
+    }
+
+    @Test
+    public void nextPossibleActions_allOccupiedAfterFirstBuild_endRound() {
+        player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
+        player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
+
+        player2.getWorker(Genre.MALE).setPosition(board.getCell(0, 2));
+        player2.getWorker(Genre.FEMALE).setPosition(board.getCell(0, 3));
+
+        board.getCell(1, 3).addFloor();
+        board.getCell(1, 3).addFloor();
+        board.getCell(1, 4).addFloor();
+        board.getCell(1, 4).addFloor();
+        board.getCell(1, 4).addFloor();
+        board.getCell(0, 4).setDome(true);
+        board.getCell(1, 3).setDome(true);
+
+        RoundActions roundActionWithMoveAndBuild = new RoundActions();
+        roundActionWithMoveAndBuild.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.NW, -3));
+        roundActionWithMoveAndBuild.add(new Action(ActionType.BUILD_DOME, Genre.FEMALE, Direction.SE, 3));
+        player2.setRoundActions(roundActionWithMoveAndBuild);
+        RoundActions nextPossibleActions = rules.nextPossibleActions(player2, game);
+
+        RoundActions expectedActions = new RoundActions();
+        //expected male actions
+        expectedActions.add(new Action(ActionType.END));
+
+        assertEquals(expectedActions, nextPossibleActions);
+    }
+
+    @Test
+    public void nextPossibleActions_afterSecondBuild_endRound() {
+        player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
+        player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
+
+        player2.getWorker(Genre.MALE).setPosition(board.getCell(0, 2));
+        player2.getWorker(Genre.FEMALE).setPosition(board.getCell(0, 3));
+
+        board.getCell(1, 3).addFloor();
+        board.getCell(1, 3).addFloor();
+        board.getCell(1, 4).addFloor();
+        board.getCell(1, 4).addFloor();
+        board.getCell(1, 4).addFloor();
+        board.getCell(0, 4).setDome(true);
+
+        RoundActions roundActionWithMoveAndBuild = new RoundActions();
+        roundActionWithMoveAndBuild.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.NW, -3));
+        roundActionWithMoveAndBuild.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.S, 2));
+        roundActionWithMoveAndBuild.add(new Action(ActionType.BUILD_DOME, Genre.FEMALE, Direction.SE, 3));
+        player2.setRoundActions(roundActionWithMoveAndBuild);
+        RoundActions nextPossibleActions = rules.nextPossibleActions(player2, game);
+
+        RoundActions expectedActions = new RoundActions();
+        //expected male actions
+        expectedActions.add(new Action(ActionType.END));
+
         assertEquals(expectedActions, nextPossibleActions);
     }
 

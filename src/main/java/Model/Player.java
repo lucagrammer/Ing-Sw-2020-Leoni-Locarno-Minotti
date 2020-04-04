@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Stores information about a player
+ */
 public class Player {
     private String nickname;
     private Date dateOfBirth;
@@ -30,6 +33,7 @@ public class Player {
 
     /**
      * Gets the nickname of the player
+     *
      * @return Player's nickname
      */
     public String getNickname(){
@@ -55,8 +59,8 @@ public class Player {
 
     /**
      * Get a specific worker of the player
-     * @param genre the genre of the worker
-     * @return the worker
+     * @param genre The genre of the worker
+     * @return The worker
      */
     public Worker getWorker(Genre genre) {
         if (genre == Genre.MALE)
@@ -67,9 +71,8 @@ public class Player {
 
     /**
      * Get a worker of the player by the occupied position
-     *
-     * @param cell the cell
-     * @return the worker that occupies the specified cell or null value
+     * @param cell  The cell
+     * @return The worker that occupies the specified cell or null value
      */
     public Worker getWorkerByPosition(Cell cell) {
         if (maleWorker.getPosition().equals(cell))
@@ -83,7 +86,16 @@ public class Player {
     }
 
     /**
-     * The player chooses his card
+     * Get the card of the player
+     *
+     * @return The card of the player
+     */
+    public Card getCard() {
+        return card;
+    }
+
+    /**
+     * Set the card of the player
      *
      * @param card The card chosen by the player
      */
@@ -92,18 +104,9 @@ public class Player {
     }
 
     /**
-     * Get the card
-     *
-     * @return the card
-     */
-    public Card getCard() {
-        return card;
-    }
-
-    /**
      * Gets all the cells occupied by the workers of the player
      *
-     * @return all the occupied cells
+     * @return All the occupied cells
      */
     public List<Cell> getOccupiedCells() {
         List<Cell> occupiedCells = new ArrayList<>();
@@ -115,8 +118,7 @@ public class Player {
 
     /**
      * Compares the nicknames of two players
-     *
-     * @param player The second player
+     * @param player    The second player
      * @return true if the players match
      */
     public boolean equals(Player player) {
@@ -124,9 +126,8 @@ public class Player {
     }
 
     /**
-     * Gets the actions of the player during the current round
-     *
-     * @return the actions of the player during the current round
+     * Gets all the actions of the player during the current round
+     * @return The actions of the player during the current round
      */
     public RoundActions getRoundActions() {
         return roundActions;
@@ -134,17 +135,15 @@ public class Player {
 
     /**
      * Sets the actions of the player during the current round
-     *
-     * @param roundActions the actions of the player during the current round
+     * @param roundActions  The actions of the player during the current round
      */
     public void setRoundActions(RoundActions roundActions) {
         this.roundActions = roundActions;
     }
 
     /**
-     * Add a new action of the player for the current round
-     *
-     * @param action the new action of the player during the current round
+     * Adds a new action of the player for the current round
+     * @param action    The new action of the player during the current round
      */
     public void registerAction(Action action) {
         roundActions.add(action);
