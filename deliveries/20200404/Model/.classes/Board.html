@@ -1,0 +1,225 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Board</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">Model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Board (Model)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Board</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97,2%
+  </span>
+  <span class="absValue">
+    (35/ 36)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Board$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97,3%
+  </span>
+  <span class="absValue">
+    (36/ 37)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package Model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import Util.Direction;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.List;
+<i>6</i>&nbsp;import java.util.Objects;
+<i>7</i>&nbsp;import java.util.stream.Collectors;
+<i>8</i>&nbsp;import java.util.stream.Stream;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * Stores information about the game board
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;public class Board {
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    private static final int ROWS = 5;
+<i>16</i>&nbsp;    private static final int COLUMNS = 5;
+<i>17</i>&nbsp;    private Cell[][] board;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    /**
+<i>20</i>&nbsp;     * Constructor: build the Board
+<i>21</i>&nbsp;     */
+<b class="fc"><i>22</i>&nbsp;    public Board() {</b>
+<b class="fc"><i>23</i>&nbsp;        this.board = new Cell[ROWS][COLUMNS];</b>
+<i>24</i>&nbsp;
+<b class="fc"><i>25</i>&nbsp;        for (int i = 0; i &lt; ROWS; i++) {</b>
+<b class="fc"><i>26</i>&nbsp;            for (int j = 0; j &lt; COLUMNS; j++) {</b>
+<b class="fc"><i>27</i>&nbsp;                board[i][j] = new Cell(i, j);</b>
+<i>28</i>&nbsp;            }
+<i>29</i>&nbsp;        }
+<b class="fc"><i>30</i>&nbsp;    }</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    public Cell[][] getBoard(){
+<b class="fc"><i>33</i>&nbsp;        return board;</b>
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * Gets a specified Cell
+<i>38</i>&nbsp;     *
+<i>39</i>&nbsp;     * @param row    The row number
+<i>40</i>&nbsp;     * @param column The column number
+<i>41</i>&nbsp;     * @return The cell placed in specified coordinates or null value if row and column are not valid
+<i>42</i>&nbsp;     */
+<i>43</i>&nbsp;    public Cell getCell(int row, int column) {
+<b class="fc"><i>44</i>&nbsp;        if (row &gt;= 0 &amp;&amp; row &lt; ROWS &amp;&amp; column &gt;= 0 &amp;&amp; column &lt; COLUMNS)</b>
+<b class="fc"><i>45</i>&nbsp;            return board[row][column];</b>
+<i>46</i>&nbsp;        else
+<b class="fc"><i>47</i>&nbsp;            return null;</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    /**
+<i>51</i>&nbsp;     * Gets all the cells that are adjacent to a specified cell
+<i>52</i>&nbsp;     *
+<i>53</i>&nbsp;     * @param cell A cell of the board
+<i>54</i>&nbsp;     * @return A list of the adjacent cells
+<i>55</i>&nbsp;     */
+<i>56</i>&nbsp;    public List&lt;Cell&gt; getAdjacents(Cell cell) {
+<b class="fc"><i>57</i>&nbsp;        return Stream.of(Direction.values()).map(direction -&gt; getNextCell(cell, direction)).filter(Objects::nonNull).collect(Collectors.toList());</b>
+<i>58</i>&nbsp;    }
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    /**
+<i>61</i>&nbsp;     * Gets the cell obtained by moving from one cell in one direction
+<i>62</i>&nbsp;     *
+<i>63</i>&nbsp;     * @param cell      The starting cell
+<i>64</i>&nbsp;     * @param direction The direction of the movement
+<i>65</i>&nbsp;     * @return The next cell
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public Cell getNextCell(Cell cell, Direction direction) {
+<b class="fc"><i>68</i>&nbsp;        Cell nextCell = null;</b>
+<i>69</i>&nbsp;
+<b class="fc"><i>70</i>&nbsp;        switch (direction) {</b>
+<i>71</i>&nbsp;            case N:
+<b class="fc"><i>72</i>&nbsp;                nextCell = getCell(cell.getRow() - 1, cell.getColumn());</b>
+<b class="fc"><i>73</i>&nbsp;                break;</b>
+<i>74</i>&nbsp;            case NE:
+<b class="fc"><i>75</i>&nbsp;                nextCell = getCell(cell.getRow() - 1, cell.getColumn() + 1);</b>
+<b class="fc"><i>76</i>&nbsp;                break;</b>
+<i>77</i>&nbsp;            case E:
+<b class="fc"><i>78</i>&nbsp;                nextCell = getCell(cell.getRow(), cell.getColumn() + 1);</b>
+<b class="fc"><i>79</i>&nbsp;                break;</b>
+<i>80</i>&nbsp;            case SE:
+<b class="fc"><i>81</i>&nbsp;                nextCell = getCell(cell.getRow() + 1, cell.getColumn() + 1);</b>
+<b class="fc"><i>82</i>&nbsp;                break;</b>
+<i>83</i>&nbsp;            case S:
+<b class="fc"><i>84</i>&nbsp;                nextCell = getCell(cell.getRow() + 1, cell.getColumn());</b>
+<b class="fc"><i>85</i>&nbsp;                break;</b>
+<i>86</i>&nbsp;            case SW:
+<b class="fc"><i>87</i>&nbsp;                nextCell = getCell(cell.getRow() + 1, cell.getColumn() - 1);</b>
+<b class="fc"><i>88</i>&nbsp;                break;</b>
+<i>89</i>&nbsp;            case W:
+<b class="fc"><i>90</i>&nbsp;                nextCell = getCell(cell.getRow(), cell.getColumn() - 1);</b>
+<b class="fc"><i>91</i>&nbsp;                break;</b>
+<i>92</i>&nbsp;            case NW:
+<b class="fc"><i>93</i>&nbsp;                nextCell = getCell(cell.getRow() - 1, cell.getColumn() - 1);</b>
+<i>94</i>&nbsp;                break;
+<i>95</i>&nbsp;        }
+<i>96</i>&nbsp;
+<b class="fc"><i>97</i>&nbsp;        return nextCell;</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * Gets the cell from which you moved to reach the current cell
+<i>102</i>&nbsp;     * @param currentCell             The current cell
+<i>103</i>&nbsp;     * @param previouslyMoveDirection The direction of the movement
+<i>104</i>&nbsp;     * @return The cell from which you moved or null value
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    public Cell getPrevCell(Cell currentCell, Direction previouslyMoveDirection) {
+<b class="fc"><i>107</i>&nbsp;        List&lt;Cell&gt; cells = getAdjacents(currentCell).</b>
+<b class="fc"><i>108</i>&nbsp;                stream().</b>
+<b class="fc"><i>109</i>&nbsp;                filter(cell -&gt; currentCell.equals(getNextCell(cell, previouslyMoveDirection))).</b>
+<b class="fc"><i>110</i>&nbsp;                collect(Collectors.toList());</b>
+<b class="fc"><i>111</i>&nbsp;        if (cells.size() &gt; 0)</b>
+<b class="fc"><i>112</i>&nbsp;            return cells.get(0);</b>
+<i>113</i>&nbsp;        else
+<b class="nc"><i>114</i>&nbsp;            return null;</b>
+<i>115</i>&nbsp;    }
+<i>116</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-04 17:56</div>
+</div>
+</body>
+</html>
