@@ -1,6 +1,6 @@
-package Controller.Rules;
+package Controller.Rules.SimpleGods;
 
-import Controller.Rules.SimpleGods.AthenaEnemyRules;
+import Controller.Rules.EnemyRules;
 import Model.Board;
 import Model.Game;
 import Model.Player;

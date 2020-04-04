@@ -1,5 +1,6 @@
-package Controller.Rules;
+package Controller.Rules.SimpleGods;
 
+import Controller.Rules.Rules;
 import Model.Board;
 import Model.Game;
 import Model.Player;
@@ -11,7 +12,7 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
-public class RulesTest {
+public class MinotaurRulesTest {
     static Rules rules;
     static Game game;
     static Board board;
@@ -26,11 +27,11 @@ public class RulesTest {
         board = game.getBoard();
         player1.chooseColor(Color.WHITE);
         player2.chooseColor(Color.GREY);
-        rules = new Rules();
+        rules = new MinotaurRules();
     }
 
     @Test
-    public void nextPossibleActions_noDomesNoFloorAroundFirstMove_moveToAllFreeCells() {
+    public void nextPossibleActions_noDomesNoFloorAroundFirstMove_regularMove() {
         player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
         player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
 
@@ -54,11 +55,12 @@ public class RulesTest {
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.N, 0));
+
         assertEquals(expectedActions, nextPossibleActions);
     }
 
     @Test
-    public void nextPossibleActions_myWorkersAroundFirstAction_moveToAllFreeCells() {
+    public void nextPossibleActions_myWorkersAroundFirstAction_regularMoveAndMinotaurPower() {
         player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
         player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
 
@@ -71,12 +73,108 @@ public class RulesTest {
         //expected male actions
         expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.W, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.SW, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.S, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.SE, 0));
 
         //expected female actions
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SE, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.E, 0));
+        assertEquals(expectedActions, nextPossibleActions);
+    }
+
+    @Test
+    public void nextPossibleActions_enemyNextCellOccupiedByMyWorkerAtFirstAction_regularMove() {
+        player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 3));
+        player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 1));
+
+        player2.getWorker(Genre.MALE).setPosition(board.getCell(2, 2));
+        player2.getWorker(Genre.FEMALE).setPosition(board.getCell(0, 4));
+
+        board.getCell(4, 0).addFloor();
+        board.getCell(4, 0).addFloor();
+
+        RoundActions nextPossibleActions = rules.nextPossibleActions(player2, game);
+
+        RoundActions expectedActions = new RoundActions();
+        //expected male actions
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.NW, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.SW, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.S, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.SE, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.E, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.N, 0));
+
+        //expected female actions
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
+
+        assertEquals(expectedActions, nextPossibleActions);
+    }
+
+    @Test
+    public void nextPossibleActions_enemyNextCellOccupiedByEnemyFirstAction_regularMove() {
+        player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 3));
+        player1.getWorker(Genre.FEMALE).setPosition(board.getCell(0, 4));
+
+        player2.getWorker(Genre.MALE).setPosition(board.getCell(2, 2));
+        player2.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 1));
+
+        RoundActions nextPossibleActions = rules.nextPossibleActions(player2, game);
+
+        RoundActions expectedActions = new RoundActions();
+        //expected male actions
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.NW, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.S, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.SE, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.E, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.N, 0));
+
+        //expected female actions
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.NW, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SE, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.E, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.N, 0));
+
+        assertEquals(expectedActions, nextPossibleActions);
+    }
+
+    @Test
+    public void nextPossibleActions_enemyCellTooHighOrEnemyNextCellOccupiedByDomeAtFirstAction_regularMove() {
+        player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 3));
+        player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 1));
+
+        player2.getWorker(Genre.MALE).setPosition(board.getCell(2, 2));
+        player2.getWorker(Genre.FEMALE).setPosition(board.getCell(2, 4));
+
+        board.getCell(4, 0).setDome(true);
+        board.getCell(3, 1).addFloor();
+        board.getCell(1, 3).addFloor();
+        board.getCell(1, 3).addFloor();
+
+        RoundActions nextPossibleActions = rules.nextPossibleActions(player2, game);
+
+        RoundActions expectedActions = new RoundActions();
+        //expected male actions
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.NW, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.S, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.SE, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.E, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.N, 0));
+
+        //expected female actions
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.N, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 0));
+        expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
+
         assertEquals(expectedActions, nextPossibleActions);
     }
 
@@ -93,6 +191,8 @@ public class RulesTest {
         board.getCell(1, 4).addFloor();
         board.getCell(1, 4).addFloor();
         board.getCell(1, 4).addFloor();
+        board.getCell(1, 2).addFloor();
+        board.getCell(1, 2).addFloor();
         board.getCell(0, 4).setDome(true);
         board.getCell(0, 1).setDome(true);
         board.getCell(1, 1).setDome(true);
@@ -102,6 +202,7 @@ public class RulesTest {
         RoundActions expectedActions = new RoundActions();
         //expected actions
         expectedActions.add(new Action(ActionType.LOSE));
+
         assertEquals(expectedActions, nextPossibleActions);
     }
 
@@ -126,6 +227,7 @@ public class RulesTest {
         expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, 0));
         expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SE, 0));
         expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.E, 0));
+
         assertEquals(expectedActions, nextPossibleActions);
     }
 
@@ -251,7 +353,7 @@ public class RulesTest {
     }
 
     @Test
-    public void doAction_doMove_winningMove() {
+    public void doAction_doRegularMove_winningMove() {
         player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
         player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
 
@@ -276,9 +378,8 @@ public class RulesTest {
         assertEquals(player2.getWorker(Genre.FEMALE).getPosition(), board.getCell(1, 3));
     }
 
-
     @Test
-    public void doAction_doMove_notWinningMove() {
+    public void doAction_doRegularMove_notWinningMove() {
         player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
         player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
 
@@ -301,17 +402,54 @@ public class RulesTest {
     }
 
     @Test
-    public void doAction_doEnd_nothingToDo() {
-        player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
+    public void doAction_doMinotaurMove_notWinningMove() {
+        player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 3));
         player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
 
         player2.getWorker(Genre.MALE).setPosition(board.getCell(0, 2));
         player2.getWorker(Genre.FEMALE).setPosition(board.getCell(0, 3));
 
-        Action endAction = new Action(ActionType.END);
-        boolean hasWin = rules.doAction(endAction, player2, game);
+        board.getCell(0, 2).addFloor();
+        board.getCell(1, 3).addFloor();
+        board.getCell(1, 3).addFloor();
+
+        Action moveAction = new Action(ActionType.MOVE, Genre.MALE, Direction.SE, 1);
+        boolean hasWin = rules.doAction(moveAction, player2, game);
+
+        RoundActions playerActions = player2.getRoundActions();
+        RoundActions expectedPlayerActions = new RoundActions();
+        expectedPlayerActions.add(moveAction);
 
         assertFalse(hasWin);
-        assertEquals(player2.getWorker(Genre.FEMALE).getPosition(), board.getCell(0, 3));
+        assertEquals(expectedPlayerActions, playerActions);
+        assertEquals(player2.getWorker(Genre.MALE).getPosition(), board.getCell(1, 3));
+        assertEquals(player1.getWorker(Genre.MALE).getPosition(), board.getCell(2, 4));
+    }
+
+    @Test
+    public void doAction_doMinotaurMove_winningMove() {
+        player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 3));
+        player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
+
+        player2.getWorker(Genre.MALE).setPosition(board.getCell(0, 2));
+        player2.getWorker(Genre.FEMALE).setPosition(board.getCell(0, 3));
+
+        board.getCell(0, 3).addFloor();
+        board.getCell(0, 3).addFloor();
+        board.getCell(1, 3).addFloor();
+        board.getCell(1, 3).addFloor();
+        board.getCell(1, 3).addFloor();
+
+        Action moveAction = new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 1);
+        boolean hasWin = rules.doAction(moveAction, player2, game);
+
+        RoundActions playerActions = player2.getRoundActions();
+        RoundActions expectedPlayerActions = new RoundActions();
+        expectedPlayerActions.add(moveAction);
+
+        assertTrue(hasWin);
+        assertEquals(expectedPlayerActions, playerActions);
+        assertEquals(player2.getWorker(Genre.FEMALE).getPosition(), board.getCell(1, 3));
+        assertEquals(player1.getWorker(Genre.MALE).getPosition(), board.getCell(2, 3));
     }
 }
