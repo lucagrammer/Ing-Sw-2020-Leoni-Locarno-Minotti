@@ -7,40 +7,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Stores information about a game
- */
 public class Game {
     private int numPlayer;
     private List<Player> players;
     private Board board;
+    private int gameId;
     private ArrayList<Card> usedCards;
 
     /**
-     * Constructor: build the Game
-     *
-     * @param player    The player who creates the game
-     * @param numPlayer The number of players
+     * Build the Game
+     * @param player    the player who creates the game
+     * @param numPlayer the number of players
      */
-    public Game(Player player, int numPlayer) {
-        this.players = new ArrayList<>();
+    public Game(Player player, int numPlayer){
+        this.players = new ArrayList<Player>();
         this.players.add(player);
-        this.numPlayer = numPlayer;
-        this.usedCards = new ArrayList<>();
-        this.board = new Board();
+        this.numPlayer=numPlayer;
+        this.usedCards = new ArrayList<Card>();
+        this.board= new Board();
     }
 
     /**
      * Gets the board of the game
-     * @return The board of the game
+     * @return the board of the game
      */
     public Board getBoard() {
         return board;
     }
 
     /**
-     * Adds the player to the game
-     * @param player    The new player
+     * Add the player to the game
+     * @param player the new player
      */
     public void addPlayer(Player player){
         if(players.size() < numPlayer) {
@@ -51,7 +48,8 @@ public class Game {
 
     /**
      * Gets all the players of the game
-     * @return A list of the players of the game
+     *
+     * @return all the players of the game
      */
     public List<Player> getPlayers() {
         return new ArrayList<>(players);
@@ -60,7 +58,7 @@ public class Game {
     /**
      * Gets a player by his color
      *
-     * @param color The color of the player
+     * @param color the color of the player
      * @return the player associated to the color or null value if there isn't a player with that color
      */
     public Player getPlayersByColor(Color color) {
@@ -72,18 +70,9 @@ public class Game {
     }
 
     /**
-     * Gets all the cards that will be used during the game
-     *
-     * @return A list containing all the used cards
-     */
-    public List<Card> getUsedCards() {
-        return new ArrayList<>(usedCards);
-    }
-
-    /**
      * Sets all the cards that will be used during the game
      *
-     * @param cards The cards selected
+     * @param cards the cards selected
      */
     public void setUsedCards(List<Card> cards) {
         usedCards.clear();
@@ -91,8 +80,16 @@ public class Game {
     }
 
     /**
+     * Gets all the cards that will be used during the game
+     * @return the cards
+     */
+    public List<Card> getUsedCards(){
+        return new ArrayList<>(usedCards);
+    }
+
+    /**
      * Check if everything is ready to start the game
-     * @return True if all the players has joined the game and the cards has been set
+     * @return true if all the players has joined the game and the cards has been set
      */
     public boolean isReady(){
         return players.size() == numPlayer && usedCards.size() == numPlayer;
@@ -100,8 +97,8 @@ public class Game {
 
     /**
      * Gets the youngest player who is older than a specified player
-     * @param player    The specified player
-     * @return The youngest player who is older than the specified player
+     * @param player the specified player
+     * @return the youngest player who is older than the specified player
      */
     public Player getNextPlayer(Player player){
         if(player == null || !players.contains(player) || players.indexOf(player) == players.size() -1)
