@@ -27,7 +27,8 @@ public class Action {
 
     /**
      * Constructor: build the Action
-     * @param actionType    the action type
+     *
+     * @param actionType the action type
      */
     public Action(ActionType actionType) {
         this.actionType = actionType;
@@ -35,6 +36,7 @@ public class Action {
 
     /**
      * Gets the Genre of the worker that do the action
+     *
      * @return The genre of the worker
      */
     public Genre getGenre() {
@@ -43,7 +45,8 @@ public class Action {
 
     /**
      * Sets the Genre of the worker that does the action
-     * @param genre     The genre of the worker
+     *
+     * @param genre The genre of the worker
      */
     public void setGenre(Genre genre) {
         this.genre = genre;
@@ -51,6 +54,7 @@ public class Action {
 
     /**
      * Gets the ActionType of the action
+     *
      * @return The action type
      */
     public ActionType getActionType() {
@@ -59,7 +63,8 @@ public class Action {
 
     /**
      * Sets the ActionType of the action
-     * @param action    The action type
+     *
+     * @param action The action type
      */
     public void setActionType(ActionType action) {
         this.actionType = action;
@@ -67,6 +72,7 @@ public class Action {
 
     /**
      * Gets the Direction of the action
+     *
      * @return The direction of the action
      */
     public Direction getDirection() {
@@ -75,7 +81,8 @@ public class Action {
 
     /**
      * Sets the Direction of the action
-     * @param direction     The direction of the action
+     *
+     * @param direction The direction of the action
      */
     public void setDirection(Direction direction) {
         this.direction = direction;
@@ -83,6 +90,7 @@ public class Action {
 
     /**
      * Gets the level difference (positive or negative) between the current cell and the target cell of the action
+     *
      * @return The level difference (positive or negative)
      */
     public int getLevelDifference() {
@@ -91,7 +99,8 @@ public class Action {
 
     /**
      * Sets the level difference (positive or negative) between the current cell and the target cell of the action
-     * @param levelDifference   The level difference (positive or negative)
+     *
+     * @param levelDifference The level difference (positive or negative)
      */
     public void setLevelDifference(int levelDifference) {
         this.levelDifference = levelDifference;

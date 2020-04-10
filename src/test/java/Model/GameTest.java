@@ -1,7 +1,7 @@
 package Model;
 
-import Controller.Rules.EnemyRules;
-import Controller.Rules.Rules;
+import Server.Rules.EnemyRules;
+import Server.Rules.Rules;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

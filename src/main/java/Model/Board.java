@@ -29,7 +29,7 @@ public class Board {
         }
     }
 
-    public Cell[][] getBoard(){
+    public Cell[][] getBoard() {
         return board;
     }
 
@@ -99,6 +99,7 @@ public class Board {
 
     /**
      * Gets the cell from which you moved to reach the current cell
+     *
      * @param currentCell             The current cell
      * @param previouslyMoveDirection The direction of the movement
      * @return The cell from which you moved or null value

@@ -23,7 +23,7 @@ public class Worker {
         this.genre = genre;
         this.color = color;
         this.player = player;
-        this.position=null;
+        this.position = null;
     }
 
     /**
@@ -55,6 +55,7 @@ public class Worker {
 
     /**
      * Gets the genre of the worker
+     *
      * @return The genre of the worker
      */
     public Genre getGenre() {
@@ -63,6 +64,7 @@ public class Worker {
 
     /**
      * Gets the player who owns this worker
+     *
      * @return The player who owns this worker
      */
     public Player getPlayer() {

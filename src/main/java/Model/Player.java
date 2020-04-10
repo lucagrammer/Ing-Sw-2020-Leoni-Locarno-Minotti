@@ -22,10 +22,11 @@ public class Player {
 
     /**
      * Constructor: build a player
+     *
      * @param nickname    Player's nickname
      * @param dateOfBirth Player's date of birth
      */
-    public Player(String nickname, Date dateOfBirth){
+    public Player(String nickname, Date dateOfBirth) {
         this.nickname = nickname;
         this.dateOfBirth = dateOfBirth;
         roundActions = new RoundActions();
@@ -36,29 +37,32 @@ public class Player {
      *
      * @return Player's nickname
      */
-    public String getNickname(){
+    public String getNickname() {
         return nickname;
     }
 
     /**
      * Gets the date of birth of the player
+     *
      * @return Player's date of birth
      */
-    public Date getDateOfBirth(){
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
     /**
      * The player chooses his color
+     *
      * @param color The color chosen by the player
      */
-    public void chooseColor(Color color){
+    public void chooseColor(Color color) {
         this.maleWorker = new Worker(Genre.MALE, color, this);
         this.femaleWorker = new Worker(Genre.FEMALE, color, this);
     }
 
     /**
      * Get a specific worker of the player
+     *
      * @param genre The genre of the worker
      * @return The worker
      */
@@ -71,7 +75,8 @@ public class Player {
 
     /**
      * Get a worker of the player by the occupied position
-     * @param cell  The cell
+     *
+     * @param cell The cell
      * @return The worker that occupies the specified cell or null value
      */
     public Worker getWorkerByPosition(Cell cell) {
@@ -118,7 +123,8 @@ public class Player {
 
     /**
      * Compares the nicknames of two players
-     * @param player    The second player
+     *
+     * @param player The second player
      * @return true if the players match
      */
     public boolean equals(Player player) {
@@ -127,6 +133,7 @@ public class Player {
 
     /**
      * Gets all the actions of the player during the current round
+     *
      * @return The actions of the player during the current round
      */
     public RoundActions getRoundActions() {
@@ -135,7 +142,8 @@ public class Player {
 
     /**
      * Sets the actions of the player during the current round
-     * @param roundActions  The actions of the player during the current round
+     *
+     * @param roundActions The actions of the player during the current round
      */
     public void setRoundActions(RoundActions roundActions) {
         this.roundActions = roundActions;
@@ -143,7 +151,8 @@ public class Player {
 
     /**
      * Adds a new action of the player for the current round
-     * @param action    The new action of the player during the current round
+     *
+     * @param action The new action of the player during the current round
      */
     public void registerAction(Action action) {
         roundActions.add(action);

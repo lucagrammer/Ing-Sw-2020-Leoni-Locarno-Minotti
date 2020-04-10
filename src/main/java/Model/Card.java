@@ -1,12 +1,15 @@
 package Model;
 
-import Controller.Rules.EnemyRules;
-import Controller.Rules.Rules;
+import Server.Rules.EnemyRules;
+import Server.Rules.Rules;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Stores information about a card of the game
  */
-public class Card {
+public class Card implements Serializable {
 
     private String name;
     private boolean threePlayersCompatibility;
@@ -33,6 +36,7 @@ public class Card {
 
     /**
      * Gets the name of the card
+     *
      * @return The name of the card
      */
     public String getName() {
@@ -41,6 +45,7 @@ public class Card {
 
     /**
      * Gets the description of the card
+     *
      * @return The description of the card
      */
     public String getDescription() {
@@ -49,6 +54,7 @@ public class Card {
 
     /**
      * Checks if the card can be used in a three player game
+     *
      * @return True if the card can be used in a three player game, otherwise false
      */
     public boolean isThreePlayersCompatible() {
@@ -57,6 +63,7 @@ public class Card {
 
     /**
      * Gets the card rules for the player that own this card
+     *
      * @return The card rules fot the player that own this card
      */
     public Rules getRules() {
@@ -65,9 +72,19 @@ public class Card {
 
     /**
      * Gets the card rules for the enemies
+     *
      * @return The card rules fot the enemies
      */
     public EnemyRules getEnemyRules() {
         return enemyRules;
     }
+
+    //TODO javadoc
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return Objects.equals(name, card.name);
+    }
+
 }

@@ -30,6 +30,7 @@ public class RoundActions {
 
     /**
      * Gets the number of times the player has moved a worker during the current round
+     *
      * @return The number of times that the worker has moved
      */
     public int hasMoved() {

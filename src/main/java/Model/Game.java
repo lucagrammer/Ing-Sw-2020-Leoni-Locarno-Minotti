@@ -16,19 +16,21 @@ public class Game {
 
     /**
      * Build the Game
+     *
      * @param player    the player who creates the game
      * @param numPlayer the number of players
      */
-    public Game(Player player, int numPlayer){
+    public Game(Player player, int numPlayer) {
         this.players = new ArrayList<Player>();
         this.players.add(player);
-        this.numPlayer=numPlayer;
+        this.numPlayer = numPlayer;
         this.usedCards = new ArrayList<Card>();
-        this.board= new Board();
+        this.board = new Board();
     }
 
     /**
      * Gets the board of the game
+     *
      * @return the board of the game
      */
     public Board getBoard() {
@@ -37,10 +39,11 @@ public class Game {
 
     /**
      * Add the player to the game
+     *
      * @param player the new player
      */
-    public void addPlayer(Player player){
-        if(players.size() < numPlayer) {
+    public void addPlayer(Player player) {
+        if (players.size() < numPlayer) {
             players.add(player);
             players = players.stream().sorted((o1, o2) -> o2.getDateOfBirth().compareTo(o1.getDateOfBirth())).collect(Collectors.toList());
         }
@@ -61,12 +64,35 @@ public class Game {
      * @param color the color of the player
      * @return the player associated to the color or null value if there isn't a player with that color
      */
-    public Player getPlayersByColor(Color color) {
+    public Player getPlayerByColor(Color color) {
         for (Player player : players) {
             if (player.getWorker(Genre.MALE).getColor() == color)
                 return player;
         }
         return null;
+    }
+
+    /**
+     * Gets a player by his nickname
+     *
+     * @param nickname the nickname of the player
+     * @return the player associated to the color or null value if there isn't a player with that color
+     */
+    public Player getPlayerByNickname(String nickname) {
+        for (Player player : players) {
+            if (player.getNickname().equalsIgnoreCase(nickname))
+                return player;
+        }
+        return null;
+    }
+
+    /**
+     * Gets all the cards that will be used during the game
+     *
+     * @return the cards
+     */
+    public List<Card> getUsedCards() {
+        return new ArrayList<>(usedCards);
     }
 
     /**
@@ -80,31 +106,25 @@ public class Game {
     }
 
     /**
-     * Gets all the cards that will be used during the game
-     * @return the cards
-     */
-    public List<Card> getUsedCards(){
-        return new ArrayList<>(usedCards);
-    }
-
-    /**
      * Check if everything is ready to start the game
-     * @return true if all the players has joined the game and the cards has been set
+     *
+     * @return true if all the players has joined the game
      */
-    public boolean isReady(){
-        return players.size() == numPlayer && usedCards.size() == numPlayer;
+    public boolean isReady() {
+        return players.size() == numPlayer;
     }
 
     /**
      * Gets the youngest player who is older than a specified player
+     *
      * @param player the specified player
      * @return the youngest player who is older than the specified player
      */
-    public Player getNextPlayer(Player player){
-        if(player == null || !players.contains(player) || players.indexOf(player) == players.size() -1)
+    public Player getNextPlayer(Player player) {
+        if (player == null || !players.contains(player) || players.indexOf(player) == players.size() - 1)
             return players.get(0);
         else
-            return players.get(players.indexOf(player) +1);
+            return players.get(players.indexOf(player) + 1);
     }
 
 }

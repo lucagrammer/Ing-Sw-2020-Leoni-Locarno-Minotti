@@ -1,11 +1,13 @@
 package Model;
 
-import Controller.Rules.*;
+import Server.Rules.EnemyRules;
+import Server.Rules.Rules;
+import Util.Color;
+import Util.Genre;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import Util.*;
 import java.util.Date;
 
 import static org.junit.Assert.*;

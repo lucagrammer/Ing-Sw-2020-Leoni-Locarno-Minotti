@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<connection-config>
+    <server-ip-default>127.0.0.1</server-ip-default>
+    <server-port-default>9837</server-port-default>
+</connection-config>

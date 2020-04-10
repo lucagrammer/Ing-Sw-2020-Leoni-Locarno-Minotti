@@ -27,6 +27,7 @@ public class Cell {
 
     /**
      * Gets the column number of the cell
+     *
      * @return The column number of the cell
      */
     public int getColumn() {
@@ -35,6 +36,7 @@ public class Cell {
 
     /**
      * Gets the row number
+     *
      * @return The row number
      */
     public int getRow() {
@@ -43,19 +45,21 @@ public class Cell {
 
     /**
      * Checks if the next cell is adjacent to the current one
-     * @param nextCell  The cell to be checked
+     *
+     * @param nextCell The cell to be checked
      * @return True is the cell is adjacent to the current one
      */
-    public boolean isAdjacent(Cell nextCell){
-        int nextRow=nextCell.getRow();
-        int nextColumn=nextCell.getColumn();
+    public boolean isAdjacent(Cell nextCell) {
+        int nextRow = nextCell.getRow();
+        int nextColumn = nextCell.getColumn();
 
-        return Math.abs(nextRow - row)<=1 && Math.abs(nextColumn - column)<=1 && (nextRow!=row || nextColumn!=column);
+        return Math.abs(nextRow - row) <= 1 && Math.abs(nextColumn - column) <= 1 && (nextRow != row || nextColumn != column);
     }
 
     /**
      * Gets the level difference between the current cell and a specified cell
-     * @param nextCell  The specified cell
+     *
+     * @param nextCell The specified cell
      * @return The difference (positive or negative) between the current cell and a specified cell
      */
     public int getFloorDifference(Cell nextCell) {
@@ -93,16 +97,16 @@ public class Cell {
      * Build a floor or if the are three floors build the dome
      */
     public void addFloor() {
-        if(this.floor<3){
+        if (this.floor < 3) {
             floor++;
-        }
-        else {
+        } else {
             dome = true;
         }
     }
 
     /**
      * Gets the number of floors
+     *
      * @return The number of the floors
      */
     public int getFloor() {
@@ -111,7 +115,8 @@ public class Cell {
 
     /**
      * Calculates the direction in which you need to move to reach a specified cell
-     * @param adjacentCell  The cell to be reached
+     *
+     * @param adjacentCell The cell to be reached
      * @return The direction in which you need to move
      */
     public Direction calculateDirection(Cell adjacentCell) {
