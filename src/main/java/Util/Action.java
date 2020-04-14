@@ -1,9 +1,11 @@
 package Util;
 
+import java.io.Serializable;
+
 /**
  * Stores information about a user's actions
  */
-public class Action {
+public class Action implements Serializable {
 
     private ActionType actionType;
     private Genre genre;
@@ -106,7 +108,12 @@ public class Action {
         this.levelDifference = levelDifference;
     }
 
-    @Override
+    /**
+     * Tests if the current object is equal to another object
+     *
+     * @param o The other object
+     * @return True if the objects are the same
+     */
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

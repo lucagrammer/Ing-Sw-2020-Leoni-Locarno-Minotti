@@ -3,16 +3,16 @@ package Model;
 import Util.Color;
 import Util.Genre;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Game {
-    private int numPlayer;
+public class Game implements Serializable {
+    private final int numPlayer;
+    private final Board board;
+    private final List<Card> usedCards;
     private List<Player> players;
-    private Board board;
-    private int gameId;
-    private ArrayList<Card> usedCards;
 
     /**
      * Build the Game
@@ -21,10 +21,10 @@ public class Game {
      * @param numPlayer the number of players
      */
     public Game(Player player, int numPlayer) {
-        this.players = new ArrayList<Player>();
+        this.players = new ArrayList<>();
         this.players.add(player);
         this.numPlayer = numPlayer;
-        this.usedCards = new ArrayList<Card>();
+        this.usedCards = new ArrayList<>();
         this.board = new Board();
     }
 
@@ -56,6 +56,19 @@ public class Game {
      */
     public List<Player> getPlayers() {
         return new ArrayList<>(players);
+    }
+
+    /**
+     * Gets all the nickname of the players
+     *
+     * @return all the nicknames
+     */
+    public List<String> getPlayersNickname() {
+        List<String> nicknames = new ArrayList<>();
+        for (Player player : players) {
+            nicknames.add(player.getNickname());
+        }
+        return nicknames;
     }
 
     /**

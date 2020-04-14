@@ -57,7 +57,7 @@ public class PlayerTest {
 
     @Test
     public void chooseColor_color_getWorker(){
-        Color color = Color.WHITE;
+        Color color = Color.PURPLE;
         player.chooseColor(color);
         assertEquals(color, player.getWorker(Genre.FEMALE).getColor());
         assertEquals(color, player.getWorker(Genre.MALE).getColor());

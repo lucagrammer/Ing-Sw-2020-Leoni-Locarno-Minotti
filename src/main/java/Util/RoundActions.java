@@ -2,15 +2,16 @@ package Util;
 
 import Model.Cell;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Stores a set of player actions
  */
-public class RoundActions {
+public class RoundActions implements Serializable {
 
-    private List<Action> actionList;
+    private final List<Action> actionList;
 
     /**
      * Constructor: build an empty RoundActions
@@ -145,7 +146,12 @@ public class RoundActions {
         actionList.add(action);
     }
 
-    @Override
+    /**
+     * Tests if the current object is equal to another object
+     *
+     * @param o The other object
+     * @return True if the objects are the same
+     */
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

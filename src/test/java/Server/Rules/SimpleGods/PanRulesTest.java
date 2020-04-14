@@ -26,8 +26,8 @@ public class PanRulesTest {
         game = new Game(player1, 2);
         game.addPlayer(player2);
         board = game.getBoard();
-        player1.chooseColor(Color.WHITE);
-        player2.chooseColor(Color.GREY);
+        player1.chooseColor(Color.PURPLE);
+        player2.chooseColor(Color.YELLOW);
         rules = new PanRules();
 
         player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));

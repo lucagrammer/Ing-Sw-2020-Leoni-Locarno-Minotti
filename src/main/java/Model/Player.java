@@ -5,6 +5,7 @@ import Util.Color;
 import Util.Genre;
 import Util.RoundActions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,11 +13,11 @@ import java.util.List;
 /**
  * Stores information about a player
  */
-public class Player {
-    private String nickname;
-    private Date dateOfBirth;
-    private Worker maleWorker;
-    private Worker femaleWorker;
+public class Player implements Serializable {
+    private final String nickname;
+    private final Date dateOfBirth;
+    private final Worker maleWorker;
+    private final Worker femaleWorker;
     private Card card;
     private RoundActions roundActions;
 
@@ -29,7 +30,9 @@ public class Player {
     public Player(String nickname, Date dateOfBirth) {
         this.nickname = nickname;
         this.dateOfBirth = dateOfBirth;
-        roundActions = new RoundActions();
+        this.roundActions = new RoundActions();
+        this.maleWorker = new Worker(Genre.MALE, this);
+        this.femaleWorker = new Worker(Genre.FEMALE, this);
     }
 
     /**
@@ -56,8 +59,17 @@ public class Player {
      * @param color The color chosen by the player
      */
     public void chooseColor(Color color) {
-        this.maleWorker = new Worker(Genre.MALE, color, this);
-        this.femaleWorker = new Worker(Genre.FEMALE, color, this);
+        this.maleWorker.setColor(color);
+        this.femaleWorker.setColor(color);
+    }
+
+    /**
+     * Gets the color of the player's workers
+     *
+     * @return The color of the workers of the player
+     */
+    public Color getColor() {
+        return (femaleWorker == null) ? null : femaleWorker.getColor();
     }
 
     /**
@@ -115,9 +127,14 @@ public class Player {
      */
     public List<Cell> getOccupiedCells() {
         List<Cell> occupiedCells = new ArrayList<>();
-
-        occupiedCells.add(femaleWorker.getPosition());
-        occupiedCells.add(maleWorker.getPosition());
+        Cell fCell = femaleWorker.getPosition();
+        if (fCell != null) {
+            occupiedCells.add(fCell);
+        }
+        Cell mCell = maleWorker.getPosition();
+        if (mCell != null) {
+            occupiedCells.add(mCell);
+        }
         return occupiedCells;
     }
 

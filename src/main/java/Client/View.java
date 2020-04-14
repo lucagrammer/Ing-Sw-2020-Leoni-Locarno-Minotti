@@ -1,6 +1,8 @@
 package Client;
 
 import Model.Card;
+import Model.Game;
+import Model.Player;
 
 import java.util.List;
 
@@ -41,7 +43,53 @@ public interface View {
      */
     void gameSetUp(boolean newGame);
 
+    /**
+     * Asks the game cards
+     *
+     * @param numCards Number of cards to be selected
+     */
     void chooseCards(int numCards);
 
+    /**
+     * Asks the card the player whats to use during the game
+     *
+     * @param possibleChoices All the possible cards
+     */
     void chooseCard(List<Card> possibleChoices);
+
+    /**
+     * Asks the nickname of the first player
+     *
+     * @param playersNicknames All the nicknames
+     */
+    void chooseFirstPlayer(List<String> playersNicknames);
+
+    /**
+     * Show all the cards of the game
+     *
+     * @param cards All the cards of the game
+     */
+    void showGameCards(List<Card> cards);
+
+    /**
+     * Shows th cards assignment of the game
+     *
+     * @param playerList The list of players of the game
+     */
+    void showCardAssignment(List<Player> playerList);
+
+    /**
+     * Asks the color the player whats to choose and the first position for the male and female worker
+     *
+     * @param availableColors All the available colors
+     * @param game            The game
+     */
+    void chooseColorAndPosition(List<String> availableColors, Game game);
+
+    /**
+     * Shows the board of the game
+     *
+     * @param game The game
+     */
+    void showMap(Game game);
 }

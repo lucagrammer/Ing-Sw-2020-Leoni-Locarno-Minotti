@@ -2,13 +2,15 @@ package Model;
 
 import Util.Direction;
 
+import java.io.Serializable;
+
 /**
  * Stores information about a cell of the game board
  */
-public class Cell {
+public class Cell implements Serializable {
 
-    private int row;
-    private int column;
+    private final int row;
+    private final int column;
     private boolean dome;
     private int floor;
 
@@ -152,14 +154,29 @@ public class Cell {
         }
     }
 
-    @Override
+    /**
+     * Tests if the current object is equal to another object
+     *
+     * @param o The other object
+     * @return True if the objects are the same
+     */
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cell cell = (Cell) o;
         return row == cell.row &&
-                column == cell.column &&
-                dome == cell.dome &&
-                floor == cell.floor;
+                column == cell.column;
+    }
+
+    /**
+     * Gets the cell info
+     *
+     * @return A string containing cell info
+     */
+    public String toString() {
+        return "row=" + row +
+                ", column=" + column +
+                ", dome=" + dome +
+                ", floor=" + floor;
     }
 }

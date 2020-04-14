@@ -4,7 +4,7 @@ import Messages.ClientToServer.ConnectionSetup;
 import Messages.Message;
 import Messages.ServerToClient.ResetNicknameProcess;
 import Messages.VCMessage;
-import Util.Formatter;
+import Util.Frmt;
 import Util.MessageType;
 
 import java.io.IOException;
@@ -18,14 +18,14 @@ import java.util.Date;
  * Manages communication from and to a client
  */
 class ClientHandler extends Thread {
+    private final ServerSocket serverSocket;
+    private final VirtualView virtualView;
+    private final boolean isFirstPlayer;
     private Socket socket;
-    private ServerSocket serverSocket;
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private String nickname;
-    private VirtualView virtualView;
     private boolean isConnected;
-    private boolean isFirstPlayer;
 
     /**
      * Constructor: build a ClientHandler
@@ -61,7 +61,7 @@ class ClientHandler extends Thread {
                 }
             } catch (IOException | ClassNotFoundException e) {
                 isConnected = false;
-                System.out.println(Formatter.cText('r', "> Warning: " + nickname + " has disconnected"));
+                System.out.println(Frmt.color('r', "> Warning: " + nickname + " has disconnected"));
                 e.printStackTrace();
             }
         }
@@ -78,7 +78,7 @@ class ClientHandler extends Thread {
             output.flush();
             output.reset();
         } catch (IOException e) {
-            System.out.println(Formatter.cText('r', "> Error: Could not contact the client " + socket.getRemoteSocketAddress()));
+            System.out.println(Frmt.color('r', "> Error: Could not contact the client " + socket.getRemoteSocketAddress()));
             e.printStackTrace();
         }
     }
@@ -100,7 +100,7 @@ class ClientHandler extends Thread {
                 Date birthDate = connectionSetup.getBirthDate();
 
                 if (isFirstPlayer) {
-                    System.out.println(Formatter.cText('g', "> Connected to " + socket.getRemoteSocketAddress() + " as " + requestedNickname.toUpperCase()));
+                    System.out.println(Frmt.color('g', "> Connected to " + socket.getRemoteSocketAddress() + " as " + requestedNickname.toUpperCase()));
 
                     int playersNumber = connectionSetup.getNumPlayers();
                     virtualView.requestAddPlayer(requestedNickname, birthDate, playersNumber);
@@ -115,21 +115,21 @@ class ClientHandler extends Thread {
                     do {
                         uniqueUsername = virtualView.requestAddPlayer(requestedNickname, birthDate);
                         if (!uniqueUsername) {
-                            System.out.println(Formatter.cText('y', "> Warning: " + socket.getRemoteSocketAddress() + " is trying to connect with a nickname already in use"));
+                            System.out.println(Frmt.color('y', "> Warning: " + socket.getRemoteSocketAddress() + " is trying to connect with a nickname already in use"));
                             send(new ResetNicknameProcess());
                             response = (Message) input.readObject();
                             requestedNickname = ((ResetNicknameProcess) response).getNickname();
                         }
                     } while (!uniqueUsername);
 
-                    System.out.println(Formatter.cText('g', "> Connected to " + socket.getRemoteSocketAddress() + " as " + requestedNickname.toUpperCase()));
+                    System.out.println(Frmt.color('g', "> Connected to " + socket.getRemoteSocketAddress() + " as " + requestedNickname.toUpperCase()));
                 }
                 isConnected = true;
                 nickname = requestedNickname;
                 virtualView.ready();
             }
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println(Formatter.cText('r', "> Error: connection rejected"));
+            System.out.println(Frmt.color('r', "> Error: connection rejected"));
             e.printStackTrace();
         }
     }
@@ -141,7 +141,7 @@ class ClientHandler extends Thread {
         try {
             socket.close();
         } catch (IOException e) {
-            System.out.println(Formatter.cText('r', "> Error: An error occurred when closing the connection " + nickname));
+            System.out.println(Frmt.color('r', "> Error: An error occurred when closing the connection " + nickname));
             e.printStackTrace();
         }
     }
