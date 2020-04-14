@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Message requesting to reset the nickname because it is already in use. Response message to the reset request.
  */
 public class ResetNicknameProcess implements CVMessage, Serializable {
-    private MessageType messageType;
+    private final MessageType messageType;
     private String nickname;
 
     /**

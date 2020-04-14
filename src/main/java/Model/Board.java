@@ -2,6 +2,7 @@ package Model;
 
 import Util.Direction;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -10,11 +11,11 @@ import java.util.stream.Stream;
 /**
  * Stores information about the game board
  */
-public class Board {
+public class Board implements Serializable {
 
     private static final int ROWS = 5;
     private static final int COLUMNS = 5;
-    private Cell[][] board;
+    private final Cell[][] board;
 
     /**
      * Constructor: build the Board
@@ -29,8 +30,17 @@ public class Board {
         }
     }
 
+    /**
+     * Gets the board as matrix
+     *
+     * @return The matrix of cells
+     */
     public Cell[][] getBoard() {
-        return board;
+        Cell[][] theBoard = new Cell[ROWS][COLUMNS];
+        for (int i = 0; i < ROWS; i++) {
+            System.arraycopy(board[i], 0, theBoard[i], 0, COLUMNS);
+        }
+        return theBoard;
     }
 
     /**

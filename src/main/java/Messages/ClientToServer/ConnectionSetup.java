@@ -13,7 +13,7 @@ import java.util.Date;
  * Server connection message and exchange of player and game information
  */
 public class ConnectionSetup implements Serializable, CVMessage, VCMessage {
-    private MessageType messageType;
+    private final MessageType messageType;
     private String nickname;
     private Date birthDate;
     private int numPlayers;

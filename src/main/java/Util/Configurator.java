@@ -18,7 +18,7 @@ import java.util.List;
  * Menage the configuration of the application
  */
 public class Configurator {
-    private static SAXBuilder builder = new SAXBuilder();
+    private static final SAXBuilder builder = new SAXBuilder();
 
     /**
      * Gets the default IP of the server

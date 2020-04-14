@@ -1,6 +1,6 @@
 package Client;
 
-import Util.Formatter;
+import Util.Frmt;
 
 import java.util.Scanner;
 
@@ -13,7 +13,6 @@ public class ClientLauncher {
         clientLauncher.launch();
     }
 
-
     /**
      * ClientLauncher launcher. Asks the preferred UI and launches it.
      */
@@ -24,7 +23,7 @@ public class ClientLauncher {
 
         boolean incorrect;
         do {
-            System.out.print(Formatter.fText('b', "Choose the interface you want to use [CLI or GUI]: "));
+            System.out.print(Frmt.style('b', "Choose the interface you want to use [CLI or GUI]: "));
             String preferredInterface = scanner.nextLine();
             if ((preferredInterface.equalsIgnoreCase("CLI"))) {
                 view = new CliView();
@@ -39,10 +38,10 @@ public class ClientLauncher {
                     //view.addServerHandeler(serverHandler);
                     //incorrect = false;
                     //view.launch();
-                    System.out.println(Formatter.cText('r', "> This functionality is not available. Try again."));
+                    System.out.println(Frmt.color('r', "> This functionality is not available. Try again."));
                     incorrect = true;
                 } else {
-                    System.out.println(Formatter.cText('r', "> Invalid choice. Try again."));
+                    System.out.println(Frmt.color('r', "> Invalid choice. Try again."));
                     incorrect = true;
                 }
             }

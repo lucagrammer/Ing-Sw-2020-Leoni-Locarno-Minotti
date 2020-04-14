@@ -4,12 +4,11 @@ import Messages.CVMessage;
 import Messages.ClientToServer.ConnectionSetup;
 import Messages.MVMessage;
 import Messages.Message;
-import Messages.ServerToClient.ChooseCards;
-import Messages.ServerToClient.ResetNicknameProcess;
-import Messages.ServerToClient.SelectCard;
+import Messages.ServerToClient.*;
 import Model.Card;
+import Model.Cell;
 import Util.Configurator;
-import Util.Formatter;
+import Util.Frmt;
 import Util.MessageType;
 
 import java.io.IOException;
@@ -27,6 +26,7 @@ class ServerHandler {
     private ObjectOutputStream output;
     private Socket socket;
     private View view;
+    private String nickname;
 
     /**
      * Starts listening for server messages and execute them client-side
@@ -46,7 +46,7 @@ class ServerHandler {
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
-                System.out.println(Formatter.cText('r', "> Error: Could not contact the server"));
+                System.out.println(Frmt.color('r', "> Error: Could not contact the server"));
                 e.printStackTrace();
                 running = false;
             }
@@ -76,7 +76,7 @@ class ServerHandler {
 
             startListening();
         } catch (IOException e) {
-            System.out.println(Formatter.cText('r', "> Error: Server unreachable."));
+            System.out.println(Frmt.color('r', "> Error: Server unreachable."));
             e.printStackTrace();
         }
     }
@@ -88,7 +88,7 @@ class ServerHandler {
         try {
             socket.close();
         } catch (IOException e) {
-            System.out.println(Formatter.cText('r', "Error: An error occurred when closing the connection"));
+            System.out.println(Frmt.color('r', "Error: An error occurred when closing the connection"));
             e.printStackTrace();
         }
     }
@@ -104,7 +104,7 @@ class ServerHandler {
             output.flush();
             output.reset();
         } catch (IOException e) {
-            System.out.println(Formatter.cText('r', "> Error: Could not contact the server"));
+            System.out.println(Frmt.color('r', "> Error: Could not contact the server"));
             e.printStackTrace();
         }
     }
@@ -117,6 +117,7 @@ class ServerHandler {
      * @param numPlayers The number of players of the game to be created (irrelevant if the player is joining an existing game)
      */
     public void sendGameInfo(String nickname, Date date, int numPlayers) {
+        this.nickname = nickname;
         send(new ConnectionSetup(nickname, date, numPlayers));
     }
 
@@ -126,14 +127,54 @@ class ServerHandler {
      * @param newNickname The new requested nickname
      */
     public void sendNewNickname(String newNickname) {
+        this.nickname = newNickname;
         send(new ResetNicknameProcess(newNickname));
     }
 
+    /**
+     * Prepares the response to the server ChooseCards request
+     *
+     * @param chosenCards The chosen cards
+     */
     public void sendCards(List<Card> chosenCards) {
         send(new ChooseCards(chosenCards));
     }
 
-    public void sendCard(Card chosenCard, String nickname) {
+    /**
+     * Prepares the response to the server SelectCard request
+     *
+     * @param chosenCard The chosen card
+     */
+    public void sendCard(Card chosenCard) {
         send(new SelectCard(chosenCard, nickname));
+    }
+
+    /**
+     * Prepares the response to the server SelectFirst request
+     *
+     * @param chosenNickname The first player's nickname
+     */
+    public void sendFirstPlayerNickname(String chosenNickname) {
+        send(new SelectFirst(chosenNickname));
+    }
+
+    /**
+     * Prepares the response to the server PlayerInit request
+     *
+     * @param myColor    The chosen color
+     * @param maleCell   The position of the male worker
+     * @param femaleCell The position of the female worker
+     */
+    public void sendColorAndPosition(String myColor, Cell maleCell, Cell femaleCell) {
+        send(new PlayerInit(myColor, maleCell, femaleCell, nickname));
+    }
+
+    /**
+     * Gets the nickname of the player
+     *
+     * @return The nickname of the player
+     */
+    public String getNickname() {
+        return nickname;
     }
 }

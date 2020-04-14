@@ -3,7 +3,7 @@ package Util;
 /**
  * Stores useful text-formatting ansi codes
  */
-public enum Formatter {
+public enum Frmt {
     RED("\u001B[31m"),
     GREEN("\u001B[32m"),
     YELLOW("\u001B[33m"),
@@ -13,10 +13,19 @@ public enum Formatter {
     ITALIC("\u001B[3m"),
     UNDERLINE("\u001b[4m"),
     REVERSED("\u001b[7m"),
-    RESET("\u001B[0m");
-    private String escape;
+    RESET("\u001B[0m"),
+    DOME("◉"),
+    NOT_DOME("◯"),
+    MALE_ICON("M"),
+    FEMALE_ICON("F");
+    private final String escape;
 
-    Formatter(String escape) {
+    /**
+     * Constructor: build an escape character
+     *
+     * @param escape The escape
+     */
+    Frmt(String escape) {
         this.escape = escape;
     }
 
@@ -27,9 +36,9 @@ public enum Formatter {
      * @param text  The text to be colored
      * @return The colored string
      */
-    public static String cText(char color, String text) {
+    public static String color(char color, String text) {
         color = Character.toLowerCase(color);
-        Formatter myColor;
+        Frmt myColor;
         switch (color) {
             case 'r':
                 myColor = RED;
@@ -43,6 +52,9 @@ public enum Formatter {
             case 'y':
                 myColor = YELLOW;
                 break;
+            case 'p':
+                myColor = PURPLE;
+                break;
             default:
                 myColor = RESET;
         }
@@ -54,11 +66,11 @@ public enum Formatter {
      *
      * @param style The style
      * @param text  The text to be formatted
-     * @return The colored string
+     * @return The formatted string
      */
-    public static String fText(char style, String text) {
+    public static String style(char style, String text) {
         style = Character.toLowerCase(style);
-        Formatter myStyle;
+        Frmt myStyle;
         switch (style) {
             case 'i':
                 myStyle = ITALIC;
@@ -79,6 +91,18 @@ public enum Formatter {
     }
 
     /**
+     * Gets a string containing formatted text
+     *
+     * @param style The styles
+     * @param text  The text to be formatted
+     * @return The formatted string
+     */
+    public static String style(String style, String text) {
+        style = style.toLowerCase();
+        return style(style.charAt(1), style(style.charAt(0), text));
+    }
+
+    /**
      * Gets an heading text
      *
      * @param s The string to be formatted
@@ -93,7 +117,27 @@ public enum Formatter {
         return BOLD + "" + REVERSED + padding + s + padding + RESET + "\n";
     }
 
-    @Override
+    /**
+     * Gets the icon of a specified genre
+     *
+     * @param genre The specified genre
+     * @return The string icon
+     */
+    public static String getGengreIcon(Genre genre) {
+        switch (genre) {
+            case MALE:
+                return MALE_ICON.toString();
+            case FEMALE:
+                return FEMALE_ICON.toString();
+        }
+        return null;
+    }
+
+    /**
+     * Gets the escape character
+     *
+     * @return The escape character
+     */
     public String toString() {
         return this.escape;
     }

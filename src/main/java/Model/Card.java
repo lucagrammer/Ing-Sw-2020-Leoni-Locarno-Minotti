@@ -11,11 +11,11 @@ import java.util.Objects;
  */
 public class Card implements Serializable {
 
-    private String name;
-    private boolean threePlayersCompatibility;
-    private String description;
-    private Rules rules;
-    private EnemyRules enemyRules;
+    private final String name;
+    private final boolean threePlayersCompatibility;
+    private final String description;
+    private final Rules rules;
+    private final EnemyRules enemyRules;
 
     /**
      * Constructor: build the Card

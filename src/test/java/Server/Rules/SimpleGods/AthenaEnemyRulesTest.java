@@ -25,8 +25,8 @@ public class AthenaEnemyRulesTest {
         game = new Game(player1, 2);
         game.addPlayer(player2);
         board = game.getBoard();
-        player1.chooseColor(Color.WHITE);
-        player2.chooseColor(Color.GREY);
+        player1.chooseColor(Color.PURPLE);
+        player2.chooseColor(Color.YELLOW);
         enemyRules = new AthenaEnemyRules();
     }
 
