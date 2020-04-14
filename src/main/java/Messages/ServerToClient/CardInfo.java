@@ -2,27 +2,27 @@ package Messages.ServerToClient;
 
 import Client.View;
 import Messages.MVMessage;
-import Model.Player;
+import Model.Card;
 import Util.MessageType;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * Message to inform the player of the allocation of cards
+ * Message to inform users of the game cards selected by the challenger
  */
-public class ShowCard implements Serializable, MVMessage {
+public class CardInfo implements Serializable, MVMessage {
     private final MessageType messageType;
-    private final List<Player> playerList;
+    private final List<Card> cards;
 
     /**
-     * Server-side constructor: build a message
+     * Server-side constructor: build the message
      *
-     * @param playerList The list of players
+     * @param cards The game cards
      */
-    public ShowCard(List<Player> playerList) {
+    public CardInfo(List<Card> cards) {
         messageType = MessageType.MV;
-        this.playerList = playerList;
+        this.cards = cards;
     }
 
     /**
@@ -31,7 +31,7 @@ public class ShowCard implements Serializable, MVMessage {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.showCardAssignment(playerList);
+        view.showGameCards(cards);
     }
 
     /**
