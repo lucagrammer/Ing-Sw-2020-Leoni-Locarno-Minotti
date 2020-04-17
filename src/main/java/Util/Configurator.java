@@ -73,7 +73,7 @@ public class Configurator {
                 Element element = (Element) iterator.next();
                 String name = element.getChildText("name");
                 String description = element.getChildText("description");
-                Boolean threePlayerCompatible = Boolean.parseBoolean(element.getChildText("three-players-compatible"));
+                boolean threePlayerCompatible = Boolean.parseBoolean(element.getChildText("three-players-compatible"));
                 Rules rules = (Rules) Class.forName(element.getChildText("rules")).getDeclaredConstructor().newInstance();
                 EnemyRules enemyRules = (EnemyRules) Class.forName(element.getChildText("enemy-rules")).getDeclaredConstructor().newInstance();
                 cards.add(new Card(name, threePlayerCompatible, description, rules, enemyRules));

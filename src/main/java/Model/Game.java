@@ -50,12 +50,18 @@ public class Game implements Serializable {
     }
 
     /**
-     * Gets all the players of the game
+     * Gets all the connected players of the game
      *
-     * @return all the players of the game
+     * @return all the connected players of the game
      */
     public List<Player> getPlayers() {
-        return new ArrayList<>(players);
+        List<Player> returnedPlayers = new ArrayList<>();
+        for (Player player : players) {
+            if (player.isConnected() && !player.isLoser()) {
+                returnedPlayers.add(player);
+            }
+        }
+        return returnedPlayers;
     }
 
     /**
@@ -128,16 +134,30 @@ public class Game implements Serializable {
     }
 
     /**
-     * Gets the youngest player who is older than a specified player
+     * Gets the youngest connected player who is older than a specified player
      *
      * @param player the specified player
      * @return the youngest player who is older than the specified player
      */
     public Player getNextPlayer(Player player) {
+        Player chosenPlayer;
         if (player == null || !players.contains(player) || players.indexOf(player) == players.size() - 1)
-            return players.get(0);
+            chosenPlayer = players.get(0);
         else
-            return players.get(players.indexOf(player) + 1);
+            chosenPlayer = players.get(players.indexOf(player) + 1);
+        if (!chosenPlayer.isConnected() && !chosenPlayer.isLoser()) {
+            return getNextPlayer(chosenPlayer);
+        } else {
+            return chosenPlayer;
+        }
     }
 
+    public boolean hasWinner() {
+        for (Player player : players) {
+            if (player.isWinner()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

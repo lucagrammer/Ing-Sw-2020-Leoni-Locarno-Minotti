@@ -3,6 +3,7 @@ package Server;
 import Messages.Message;
 import Model.Card;
 import Model.Cell;
+import Util.Action;
 import Util.Genre;
 
 import java.util.ArrayList;
@@ -161,5 +162,19 @@ public class VirtualView {
      */
     public void setColor(String nickname, String color) {
         controller.setColor(nickname, color);
+    }
+
+    /**
+     * Notify the controller that a player has disconnected and remove the related client handler from the list
+     *
+     * @param nickname The nickname of the disconnected user
+     */
+    public void setDisconnected(String nickname) {
+        clientHandlers.removeIf(clientHandler -> clientHandler.getNickname().equalsIgnoreCase(nickname));
+        controller.hasDisconnected(nickname);
+    }
+
+    public void setAction(Action action, String player) {
+        controller.setAction(action, player);
     }
 }

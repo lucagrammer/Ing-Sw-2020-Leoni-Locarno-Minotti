@@ -63,6 +63,7 @@ class ClientHandler extends Thread {
                 isConnected = false;
                 System.out.println(Frmt.color('r', "> Warning: " + nickname + " has disconnected"));
                 e.printStackTrace();
+                virtualView.setDisconnected(nickname);
             }
         }
     }
@@ -78,8 +79,10 @@ class ClientHandler extends Thread {
             output.flush();
             output.reset();
         } catch (IOException e) {
-            System.out.println(Frmt.color('r', "> Error: Could not contact the client " + socket.getRemoteSocketAddress()));
+            isConnected = false;
+            System.out.println(Frmt.color('r', "> Warning: " + nickname + " has disconnected"));
             e.printStackTrace();
+            virtualView.setDisconnected(nickname);
         }
     }
 
@@ -131,6 +134,7 @@ class ClientHandler extends Thread {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println(Frmt.color('r', "> Error: connection rejected"));
             e.printStackTrace();
+            acceptPlayerConnection();
         }
     }
 

@@ -5,8 +5,7 @@ import Model.Card;
 import Model.Cell;
 import Model.Game;
 import Model.Player;
-import Util.Color;
-import Util.Genre;
+import Util.*;
 
 import java.util.Date;
 import java.util.List;
@@ -144,7 +143,6 @@ public class Controller {
      * @throws InterruptedException When the main thread is stopped
      */
     private void firstTurn() throws InterruptedException {
-        Player currentPlayer = this.currentPlayer;
         String currentPlayerNickname;
         List<String> availableColors = Color.allColorsToString();
         for (int i = 0; i < game.getPlayers().size(); i++) {
@@ -162,6 +160,50 @@ public class Controller {
             availableColors.remove(currentPlayer.getWorker(Genre.MALE).getColor().toString());
             currentPlayer = game.getNextPlayer(currentPlayer);
         }
+        game();
+    }
+
+    private void game() throws InterruptedException {
+        while (!game.hasWinner()) {
+            // Find the possible actions
+            RoundActions roundActions = currentPlayer.getCard().getRules().nextPossibleActions(currentPlayer, game);
+            for (Player player : game.getPlayers()) {
+                roundActions = player.getCard().getEnemyRules().fixEnemyActions(roundActions, game, player);
+            }
+
+            List<Action> roundActionsList = roundActions.getActionList();
+            if (roundActionsList.get(0).getActionType().equals(ActionType.LOSE)) {
+                removePlayer(currentPlayer);
+                currentPlayer = game.getNextPlayer(currentPlayer);
+                // Flush the actions of the next player
+                currentPlayer.setRoundActions(new RoundActions());
+            } else {
+                if (currentPlayer.getRoundActions().hasEnded() || (roundActionsList.size() == 1 &&
+                        roundActionsList.get(0).getActionType().equals(ActionType.END))) {
+                    currentPlayer = game.getNextPlayer(currentPlayer);
+                    // Flush the actions of the next player
+                    currentPlayer.setRoundActions(new RoundActions());
+                } else {
+                    virtualView.sendToEveryone(new ShowMap(game, currentPlayer.getNickname()));
+
+                    int currentActionsNumber = currentPlayer.getRoundActions().getActionList().size();
+                    virtualView.getClientHandlerByNickname(currentPlayer.getNickname()).send(new Turn(roundActions));
+                    synchronized (this) {
+                        while (currentPlayer.getRoundActions().getActionList().size() <= currentActionsNumber) {
+                            this.wait();
+                        }
+                    }
+                }
+            }
+        }
+        for (Player p : game.getPlayers()) {
+            virtualView.getClientHandlerByNickname(p.getNickname()).send(new WonGameMessage(currentPlayer.getNickname(), currentPlayer.equals(p)));
+        }
+
+    }
+
+    private void removePlayer(Player removedPlayer) {
+        removedPlayer.setLoser(true);
     }
 
     /**
@@ -170,7 +212,7 @@ public class Controller {
      * @return True if the cards have been chosen by the challenger
      */
     private boolean areCardsChosen() {
-        return game.getUsedCards().size() == game.getPlayers().size();
+        return game.getUsedCards().size() >= game.getPlayers().size();
     }
 
     /**
@@ -230,6 +272,29 @@ public class Controller {
      */
     public void setFirstPosition(String nickname, Genre genre, Cell position) {
         game.getPlayerByNickname(nickname).getWorker(genre).setPosition(position);
+        synchronized (this) {
+            notifyAll();
+        }
+    }
+
+    /**
+     * Removes the player from the game and notify the other users (or end the game)
+     *
+     * @param nickname The nickname of the disconnected user
+     */
+    public void hasDisconnected(String nickname) {
+        game.getPlayerByNickname(nickname).setConnected(false);
+        for (Player player : game.getPlayers()) {
+            virtualView.sendToEveryone(new NotifyDisconnection(nickname));
+        }
+    }
+
+    public void setAction(Action action, String nickname) {
+        Player thePlayer = game.getPlayerByNickname(nickname);
+        boolean isWinner = thePlayer.getCard().getRules().doAction(action, thePlayer, game);
+        if (isWinner) {
+            thePlayer.setWinner(true);
+        }
         synchronized (this) {
             notifyAll();
         }

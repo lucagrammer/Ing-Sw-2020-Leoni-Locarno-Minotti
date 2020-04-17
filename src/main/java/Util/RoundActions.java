@@ -171,4 +171,38 @@ public class RoundActions implements Serializable {
         }
         return false;
     }
+
+    public Action find(String action, String genre, String direction) {
+        if (genre.equalsIgnoreCase("M")) {
+            genre = "MALE";
+        } else {
+            genre = "FEMALE";
+        }
+        for (Action a : getActionList()) {
+            if (a.getActionType().name().equalsIgnoreCase(action) &&
+                    a.getGenre().name().equalsIgnoreCase(genre) &&
+                    a.getDirection().name().equalsIgnoreCase(direction)) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public Action canEnd() {
+        for (Action a : getActionList()) {
+            if (a.getActionType().equals(ActionType.END)) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public boolean hasEnded() {
+        for (Action a : getActionList()) {
+            if (a.getActionType().equals(ActionType.END)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

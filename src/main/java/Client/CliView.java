@@ -1,10 +1,7 @@
 package Client;
 
 import Model.*;
-import Util.Color;
-import Util.Configurator;
-import Util.Frmt;
-import Util.Genre;
+import Util.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -220,7 +217,7 @@ public class CliView implements View {
     public void chooseFirstPlayer(List<String> playersNicknames) {
         List<String> allNicknames = new ArrayList<>();
 
-        System.out.print(Frmt.style("bu", "\nChoose who will be the first player: "));
+        System.out.print(Frmt.style("bu", "\nChoose who will be the first player:") + " ");
         for (int i = 0; i < playersNicknames.size(); i++) {
             String name = playersNicknames.get(i);
             allNicknames.add(name.toLowerCase());
@@ -434,6 +431,63 @@ public class CliView implements View {
             System.out.print("\n");
         }
 
+    }
+
+    public void askAction(RoundActions roundActions) {
+        String action, genre, direction;
+        Action theAction;
+        boolean incorrect;
+        do {
+            incorrect = false;
+            System.out.print(Frmt.style("bu", "\nInsert your action type [MOVE/BUILD_FLOOR/BUILD_DOME/END]:") + " ");
+            action = scanner.next();
+            if (!action.equalsIgnoreCase("end")) {
+                System.out.print(Frmt.style("bu", "\nInsert the genre of the worker [M/F]:") + " ");
+                genre = scanner.next();
+                System.out.print(Frmt.style("bu", "\nInsert the direction [N/NE/E/SE/S/SW/W/NW]:") + " ");
+                direction = scanner.next();
+
+                theAction = roundActions.find(action, genre, direction);
+            } else {
+                theAction = roundActions.canEnd();
+            }
+            if (theAction == null) {
+                System.out.println(Frmt.color('r', "> Invalid action. Try again."));
+                incorrect = true;
+            }
+        } while (incorrect);
+        serverHandler.sendAction(theAction);
+    }
+
+    public void showGameEnd(String winnerNickname, boolean youWin) {
+        if (youWin) {
+            System.out.println(Frmt.color('g', Frmt.style("bu", "\n\n\tYOU WIN " + Frmt.CUP)));
+        } else {
+            System.out.println(Frmt.color('g', Frmt.style("bu", "\n\n\tYOU WIN " + Frmt.DEATH)));
+        }
+    }
+
+    public void showDisconnection(String nickname) {
+        System.out.println(Frmt.color('r', Frmt.style("ui", "GAME OVER: " +
+                nickname.toUpperCase() + " has disconnected.\n\n")));
+        System.out.println("\nDo you want to play again? [Yes/No]: ");
+
+        boolean incorrect;
+        String choice;
+        do {
+            incorrect = false;
+            choice = scanner.next();
+
+            if (!choice.equalsIgnoreCase("yes") && !choice.equalsIgnoreCase("no")) {
+                System.out.println(Frmt.color('r', "> Invalid choice. Try again."));
+                incorrect = true;
+            }
+        } while (incorrect);
+
+        serverHandler.closeConnection();
+        if (choice.equalsIgnoreCase("yes")) {
+            ClientLauncher.main(null);
+        }
     }
 
 }

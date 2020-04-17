@@ -43,3 +43,4 @@ public class CardInfo implements Serializable, MVMessage {
         return messageType;
     }
 }
+

@@ -17,7 +17,9 @@ public enum Frmt {
     DOME("◉"),
     NOT_DOME("◯"),
     MALE_ICON("M"),
-    FEMALE_ICON("F");
+    FEMALE_ICON("F"),
+    DEATH("☠️"),
+    CUP("\uD83C\uDFC6");
     private final String escape;
 
     /**
@@ -93,7 +95,7 @@ public enum Frmt {
     /**
      * Gets a string containing formatted text
      *
-     * @param style The styles
+     * @param style The two styles
      * @param text  The text to be formatted
      * @return The formatted string
      */

@@ -151,6 +151,9 @@ public class Rules implements Serializable {
                 return doBuild(action, player, game);
             case BUILD_DOME:
                 return doDome(action, player, game);
+            case END:
+                player.registerAction(action);
+                return false;
             default:
                 return false;
         }

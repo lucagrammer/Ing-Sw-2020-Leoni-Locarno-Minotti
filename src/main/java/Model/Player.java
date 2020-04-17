@@ -20,6 +20,9 @@ public class Player implements Serializable {
     private final Worker femaleWorker;
     private Card card;
     private RoundActions roundActions;
+    private boolean isConnected;
+    private boolean isWinner;
+    private boolean isLoser;
 
     /**
      * Constructor: build a player
@@ -33,6 +36,7 @@ public class Player implements Serializable {
         this.roundActions = new RoundActions();
         this.maleWorker = new Worker(Genre.MALE, this);
         this.femaleWorker = new Worker(Genre.FEMALE, this);
+        this.isConnected = true;
     }
 
     /**
@@ -175,4 +179,37 @@ public class Player implements Serializable {
         roundActions.add(action);
     }
 
+    /**
+     * Gets the connection status of the user
+     *
+     * @return True if the user is not connected, otherwise false
+     */
+    public boolean isConnected() {
+        return isConnected;
+    }
+
+    /**
+     * Sets the connection status of the player
+     *
+     * @param connected True if the user is connected, otherwise true;
+     */
+    public void setConnected(boolean connected) {
+        this.isConnected = connected;
+    }
+
+    public boolean isWinner() {
+        return isWinner;
+    }
+
+    public void setWinner(boolean isWinner) {
+        this.isWinner = isWinner;
+    }
+
+    public boolean isLoser() {
+        return isLoser;
+    }
+
+    public void setLoser(boolean isLoser) {
+        this.isLoser = isLoser;
+    }
 }

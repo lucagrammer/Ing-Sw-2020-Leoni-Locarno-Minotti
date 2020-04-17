@@ -7,6 +7,7 @@ import Messages.Message;
 import Messages.ServerToClient.*;
 import Model.Card;
 import Model.Cell;
+import Util.Action;
 import Util.Configurator;
 import Util.Frmt;
 import Util.MessageType;
@@ -27,12 +28,13 @@ class ServerHandler {
     private Socket socket;
     private View view;
     private String nickname;
+    private boolean running;
 
     /**
      * Starts listening for server messages and execute them client-side
      */
     public void startListening() {
-        boolean running = true;
+        running = true;
         while (running) {
             try {
                 Message serverMessage = (Message) input.readObject();
@@ -87,6 +89,7 @@ class ServerHandler {
     public void closeConnection() {
         try {
             socket.close();
+            running = false;
         } catch (IOException e) {
             System.out.println(Frmt.color('r', "Error: An error occurred when closing the connection"));
             e.printStackTrace();
@@ -176,5 +179,9 @@ class ServerHandler {
      */
     public String getNickname() {
         return nickname;
+    }
+
+    public void sendAction(Action theAction) {
+        send(new Turn(theAction, nickname));
     }
 }

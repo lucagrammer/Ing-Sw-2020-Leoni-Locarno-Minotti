@@ -3,6 +3,7 @@ package Client;
 import Model.Card;
 import Model.Game;
 import Model.Player;
+import Util.RoundActions;
 
 import java.util.List;
 
@@ -92,4 +93,10 @@ public interface View {
      * @param game The game
      */
     void showMap(Game game);
+
+    void askAction(RoundActions roundActions);
+
+    void showGameEnd(String winnerNickname, boolean youWin);
+
+    void showDisconnection(String nickname);
 }
