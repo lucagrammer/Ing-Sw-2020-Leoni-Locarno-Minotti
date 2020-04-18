@@ -16,7 +16,7 @@ import java.util.List;
 public class SelectFirst implements Serializable, CVMessage, VCMessage {
     private final MessageType messageType;
     private List<String> nicknames;
-    private String fistPlayerNickname;
+    private String firstPlayerNickname;
 
     /**
      * Server-side constructor: build a request message
@@ -33,9 +33,9 @@ public class SelectFirst implements Serializable, CVMessage, VCMessage {
      *
      * @param fistPlayerNickname The nickname of the chosen first player
      */
-    public SelectFirst(String fistPlayerNickname) {
+    public SelectFirst(String firstPlayerNickname) {
         messageType = MessageType.VC;
-        this.fistPlayerNickname = fistPlayerNickname;
+        this.firstPlayerNickname = firstPlayerNickname;
     }
 
     /**
@@ -53,7 +53,7 @@ public class SelectFirst implements Serializable, CVMessage, VCMessage {
      * @param virtualView The recipient component
      */
     public void execute(VirtualView virtualView) {
-        virtualView.setFirstPlayer(fistPlayerNickname);
+        virtualView.setFirstPlayer(firstPlayerNickname);
     }
 
     /**
