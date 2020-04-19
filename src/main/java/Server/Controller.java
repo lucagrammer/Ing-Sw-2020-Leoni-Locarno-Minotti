@@ -354,6 +354,7 @@ public class Controller {
      * Gets ready for a new game
      */
     private void reset() {
-        ServerLauncher.main(null);
+        System.out.println(Frmt.color('g', "\n> Getting ready for a new game..."));
+        ServerLauncher.newGame();
     }
 }

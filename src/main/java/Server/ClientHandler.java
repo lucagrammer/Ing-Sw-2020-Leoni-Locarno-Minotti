@@ -62,7 +62,7 @@ class ClientHandler extends Thread {
             } catch (IOException | ClassNotFoundException e) {
                 isConnected = false;
                 System.out.println(Frmt.color('r', "> Warning: " + nickname + " has disconnected"));
-                e.printStackTrace();
+                //e.printStackTrace();
                 virtualView.setDisconnected(nickname);
             }
         }
@@ -81,7 +81,7 @@ class ClientHandler extends Thread {
         } catch (IOException e) {
             isConnected = false;
             System.out.println(Frmt.color('r', "> Warning: " + nickname + " has disconnected"));
-            e.printStackTrace();
+            //e.printStackTrace();
             virtualView.setDisconnected(nickname);
         }
     }

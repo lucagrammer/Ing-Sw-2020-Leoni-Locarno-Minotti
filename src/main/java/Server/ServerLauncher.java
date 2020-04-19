@@ -10,43 +10,16 @@ import java.net.ServerSocket;
  * Manages the initial startup phase of the server
  */
 public class ServerLauncher {
-    private VirtualView virtualView;
-    private Controller controller;
-    private ServerSocket serverSocket;
-
-    /**
-     * Constructor: build the ServerLauncher
-     */
-    public ServerLauncher() {
-        controller = new Controller();
-        virtualView = new VirtualView();
-        controller.setVirtualView(virtualView);
-        virtualView.setController(controller);
-    }
+    private static ServerSocket serverSocket;
 
     public static void main(String[] args) {
         ServerLauncher serverLauncher = new ServerLauncher();
         serverLauncher.launch();
     }
 
-    /**
-     * ServerLauncher launcher. Starts the first ClientHandler thread.
-     */
-    public void launch() {
-        try {
-            serverSocket = new ServerSocket(Configurator.getDefaultPort());
-        } catch (IOException e) {
-            System.out.println(Frmt.color('r', "> Error: Could not start the server"));
-            e.printStackTrace();
-            return;
-        }
-        System.out.println(Frmt.color('g', "> Server started successfully"));
-        newGame();
-    }
-
-    public void newGame() {
-        controller = new Controller();
-        virtualView = new VirtualView();
+    public static void newGame() {
+        Controller controller = new Controller();
+        VirtualView virtualView = new VirtualView();
         controller.setVirtualView(virtualView);
         virtualView.setController(controller);
 
@@ -61,5 +34,20 @@ public class ServerLauncher {
             System.out.println(Frmt.color('r', "> Error: Server can't start the game"));
             e.printStackTrace();
         }
+    }
+
+    /**
+     * ServerLauncher launcher. Starts the first ClientHandler thread.
+     */
+    public void launch() {
+        try {
+            serverSocket = new ServerSocket(Configurator.getDefaultPort());
+        } catch (IOException e) {
+            System.out.println(Frmt.color('r', "> Error: Could not start the server"));
+            //e.printStackTrace();
+            return;
+        }
+        System.out.println(Frmt.color('g', "> Server started successfully"));
+        newGame();
     }
 }
