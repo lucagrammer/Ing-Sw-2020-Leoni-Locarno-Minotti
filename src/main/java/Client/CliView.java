@@ -536,7 +536,12 @@ public class CliView implements View {
             System.out.println("\n\t\t" + Frmt.style('b', "It's your turn. "));
             System.out.print("\t\t" + Frmt.style('b', "You can:  \n\t\t"));
             for (Action possibleAction : roundActions.getActionList()) {
-                System.out.print(possibleAction.getActionType().name() + " " + possibleAction.getGenre().name().charAt(0) + " " + possibleAction.getDirection().name() + "; ");
+                if (possibleAction.getActionType().name().equalsIgnoreCase("END")) {
+                    System.out.print("END; ");
+
+                } else {
+                    System.out.print(possibleAction.getActionType().name() + " " + possibleAction.getGenre().name().charAt(0) + " " + possibleAction.getDirection().name() + "; ");
+                }
             }
 
             System.out.print("\n\n\t\t" + Frmt.style('b', "Insert your action type [MOVE/FLOOR/DOME/END]:") + " ");
@@ -598,7 +603,7 @@ public class CliView implements View {
      * Asks to the player if he wants to start a new game
      */
     private void askNewGame() {
-        System.out.println("\n\n\tDo you want to play again? [Yes/No]: ");
+        System.out.print("\n\n\tDo you want to play again? [Yes/No]: ");
 
         boolean incorrect;
         String choice;

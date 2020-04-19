@@ -40,14 +40,15 @@ public class ServerLauncher {
      * ServerLauncher launcher. Starts the first ClientHandler thread.
      */
     public void launch() {
+        String padding = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
         try {
             serverSocket = new ServerSocket(Configurator.getDefaultPort());
         } catch (IOException e) {
-            System.out.println(Frmt.color('r', "> Error: Could not start the server"));
+            System.out.println(padding + Frmt.color('r', "> Error: Could not start the server"));
             //e.printStackTrace();
             return;
         }
-        System.out.println(Frmt.color('g', "> Server started successfully"));
+        System.out.println(padding + Frmt.color('g', "> Server started successfully"));
         newGame();
     }
 }

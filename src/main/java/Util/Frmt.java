@@ -111,7 +111,7 @@ public enum Frmt {
      * @return The formatted string
      */
     public static String headingText(String s) {
-        int max = 165;
+        int max = 167;
         StringBuilder padding = new StringBuilder();
         for (int i = 0; i < (max - s.length()) / 2; i++) {
             padding.append(" ");
