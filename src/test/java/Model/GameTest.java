@@ -2,6 +2,7 @@ package Model;
 
 import Server.Rules.EnemyRules;
 import Server.Rules.Rules;
+import Util.Color;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +53,7 @@ public class GameTest {
         assertEquals(index0, game.getPlayers().indexOf(player));
         assertEquals(index1, game.getPlayers().indexOf(player1));
         assertEquals(index2, game.getPlayers().indexOf(player2));
-        }
+    }
 
     @Test
     public void getNextPlayer_nextPlayer_correctNextPlayer() throws ParseException {
@@ -72,6 +73,9 @@ public class GameTest {
         assertEquals(player, game.getNextPlayer(null));
         assertEquals(player, game.getNextPlayer(player2));
         assertEquals(player, game.getNextPlayer(player3));
+        player2.setConnected(false);
+        player2.setLoser(false);
+        assertEquals(player, game.getNextPlayer(player1));
     }
 
     /*@Test
@@ -96,7 +100,7 @@ public class GameTest {
         assertEquals(board, game.getBoard());
     }*/
 
-   @Test
+    @Test
     public void isReady_game_readyToStart(){
         List<Card> usedCards = new ArrayList<>();
         Card card1 = new Card("Apollo", true, "Apollo", rules, enemyRules);
@@ -120,5 +124,89 @@ public class GameTest {
         Player player1 = new Player("Kate", new Date(1/5/1998));
         game.addPlayer(player1);
         assertFalse(game.isReady());
+    }
+
+    @Test
+    public void getPlayersNicknames_game_getCorrectPlayersNicknames() throws ParseException {
+        String birthDate = "02/01/1998";
+        Date dateOfBirth = dateFormat.parse(birthDate);
+        Player player1 = new Player("Kate", dateOfBirth);
+        String birthDate2 = "01/01/1998";
+        Date dateOfBirth2 = dateFormat.parse(birthDate2);
+        Player player2 = new Player("Julie", dateOfBirth2);
+        game.addPlayer(player1);
+        game.addPlayer(player2);
+        List<String> expectedNicknames= new ArrayList<>();
+        expectedNicknames.add("John");
+        expectedNicknames.add("Kate");
+        expectedNicknames.add("Julie");
+        assertEquals(expectedNicknames, game.getPlayersNickname());
+    }
+
+    @Test
+    public void getPlayerByColor_game_getCorrectPlayerByColor() throws ParseException {
+        String birthDate = "02/01/1998";
+        Date dateOfBirth = dateFormat.parse(birthDate);
+        Player player1 = new Player("Kate", dateOfBirth);
+        String birthDate2 = "01/01/1998";
+        Date dateOfBirth2 = dateFormat.parse(birthDate2);
+        Player player2 = new Player("Julie", dateOfBirth2);
+        game.addPlayer(player1);
+        game.addPlayer(player2);
+        player.chooseColor(Color.BLUE);
+        player1.chooseColor(Color.PURPLE);
+        assertEquals(player, game.getPlayerByColor(Color.BLUE));
+        assertEquals(player1, game.getPlayerByColor(Color.PURPLE));
+        assertNull(game.getPlayerByColor(Color.YELLOW));
+        player2.chooseColor(Color.YELLOW);
+        assertEquals(player2, game.getPlayerByColor(Color.YELLOW));
+    }
+
+    @Test
+    public void getPlayerByNickname_game_getCorrectPlayerByNickname() throws ParseException {
+        String birthDate = "02/01/1998";
+        Date dateOfBirth = dateFormat.parse(birthDate);
+        Player player1 = new Player("Kate", dateOfBirth);
+        String birthDate2 = "01/01/1998";
+        Date dateOfBirth2 = dateFormat.parse(birthDate2);
+        Player player2 = new Player("Julie", dateOfBirth2);
+        game.addPlayer(player1);
+        game.addPlayer(player2);
+        String nickname = player.getNickname();
+        String nickname1 = player1.getNickname();
+        String nickname2 = player2.getNickname();
+        String nickname3 = "Elisabeth";
+
+        assertEquals(player, game.getPlayerByNickname(nickname));
+        assertEquals(player1, game.getPlayerByNickname(nickname1));
+        assertEquals(player2, game.getPlayerByNickname(nickname2));
+        assertNull(game.getPlayerByNickname(nickname3));
+    }
+
+    @Test
+    public void hasWinner_game_itHasAWinner() throws ParseException {
+        String birthDate = "02/01/1998";
+        Date dateOfBirth = dateFormat.parse(birthDate);
+        Player player1 = new Player("Kate", dateOfBirth);
+        String birthDate2 = "01/01/1998";
+        Date dateOfBirth2 = dateFormat.parse(birthDate2);
+        Player player2 = new Player("Julie", dateOfBirth2);
+        game.addPlayer(player1);
+        game.addPlayer(player2);
+        player1.setWinner(true);
+        assertTrue(game.hasWinner());
+    }
+
+    @Test
+    public void hasWinner_game_itHasNotAWinner() throws ParseException {
+        String birthDate = "02/01/1998";
+        Date dateOfBirth = dateFormat.parse(birthDate);
+        Player player1 = new Player("Kate", dateOfBirth);
+        String birthDate2 = "01/01/1998";
+        Date dateOfBirth2 = dateFormat.parse(birthDate2);
+        Player player2 = new Player("Julie", dateOfBirth2);
+        game.addPlayer(player1);
+        game.addPlayer(player2);
+        assertFalse(game.hasWinner());
     }
 }
