@@ -3,6 +3,7 @@ package Server;
 import Messages.Message;
 import Model.Card;
 import Model.Cell;
+import Model.Player;
 import Util.Action;
 import Util.Genre;
 
@@ -174,7 +175,27 @@ public class VirtualView {
         controller.hasDisconnected(nickname);
     }
 
+    /**
+     * Notify the controller that a player has chosen an action
+     *
+     * @param action The chosen action
+     * @param player The nickname of the player
+     */
     public void setAction(Action action, String player) {
         controller.setAction(action, player);
+    }
+
+    /**
+     * Sends a message to every client handler except one
+     *
+     * @param message       The message to be sent
+     * @param avoidedPlayer The exception
+     */
+    public void sendToEveryoneExcept(Message message, Player avoidedPlayer) {
+        for (ClientHandler clientHandler : clientHandlers) {
+            if (!clientHandler.getNickname().equalsIgnoreCase(avoidedPlayer.getNickname())) {
+                clientHandler.send(message);
+            }
+        }
     }
 }

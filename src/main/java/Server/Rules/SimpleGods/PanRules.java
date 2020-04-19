@@ -7,8 +7,19 @@ import Model.Worker;
 import Server.Rules.Rules;
 import Util.Action;
 
+/**
+ * Pan Card
+ */
 public class PanRules extends Rules {
 
+    /**
+     * Performs a certain move-action
+     *
+     * @param action The move-action to be performed
+     * @param player The player who performs the move-action
+     * @param game   The game to which the player belongs
+     * @return True if the build-floor-action is a winning action, otherwise false
+     */
     protected boolean doMove(Action action, Player player, Game game) {
         Worker worker = player.getWorker(action.getGenre());
         Cell currentCell = worker.getPosition();

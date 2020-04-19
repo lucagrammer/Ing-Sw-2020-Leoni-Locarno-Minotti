@@ -22,7 +22,7 @@ public class ActionTest {
     @Test
     public void action_actionSetUp_correctSetUp() {
         Genre genre = Genre.FEMALE;
-        ActionType actionType = ActionType.BUILD_FLOOR;
+        ActionType actionType = ActionType.FLOOR;
         Direction direction = Direction.NE;
         int levelDifference = -2;
 
@@ -42,7 +42,7 @@ public class ActionTest {
 
     @Test
     public void actionInfo_setAction_getCorrectAction() {
-        ActionType type = ActionType.BUILD_DOME;
+        ActionType type = ActionType.DOME;
         action.setActionType(type);
         assertEquals(type, action.getActionType());
     }

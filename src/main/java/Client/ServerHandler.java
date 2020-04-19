@@ -181,6 +181,11 @@ class ServerHandler {
         return nickname;
     }
 
+    /**
+     * Prepares the response to the server Turn request
+     *
+     * @param theAction The chosen action
+     */
     public void sendAction(Action theAction) {
         send(new Turn(theAction, nickname));
     }

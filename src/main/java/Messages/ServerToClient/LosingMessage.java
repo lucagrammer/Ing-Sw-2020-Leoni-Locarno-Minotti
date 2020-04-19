@@ -7,20 +7,16 @@ import Util.MessageType;
 import java.io.Serializable;
 
 /**
- * Message to notify the player that another player has disconnected. Notify the end of the game.
+ * Message to notify the loser
  */
-public class NotifyDisconnection implements MVMessage, Serializable {
+public class LosingMessage implements Serializable, MVMessage {
     private final MessageType messageType;
-    private final String disconnectedNickname;
 
     /**
-     * Server-side constructor: build the message
-     *
-     * @param disconnectedNickname The nickname of the disconnected user
+     * Server-side constructor: build a request message
      */
-    public NotifyDisconnection(String disconnectedNickname) {
+    public LosingMessage() {
         messageType = MessageType.MV;
-        this.disconnectedNickname = disconnectedNickname;
     }
 
     /**
@@ -29,8 +25,7 @@ public class NotifyDisconnection implements MVMessage, Serializable {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.showDisconnection(disconnectedNickname);
-
+        view.showLosingMessage();
     }
 
     /**

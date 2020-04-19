@@ -111,12 +111,27 @@ public enum Frmt {
      * @return The formatted string
      */
     public static String headingText(String s) {
-        int max = 70;
-        String padding = "";
+        int max = 165;
+        StringBuilder padding = new StringBuilder();
         for (int i = 0; i < (max - s.length()) / 2; i++) {
-            padding += " ";
+            padding.append(" ");
         }
-        return BOLD + "" + REVERSED + padding + s + padding + RESET + "\n";
+        return BOLD + "" + REVERSED + padding + s + padding + RESET;
+    }
+
+    /**
+     * Clears the screen and print the default heading
+     */
+    public static void clearScreen() {
+        int height = 50;
+        StringBuilder clean = new StringBuilder();
+        for (int i = 0; i < height; i = i + 5) {
+            clean.append("\n\n\n\n\n");
+        }
+        System.out.print(clean);
+        System.out.println(Frmt.headingText(""));
+        System.out.println(Frmt.headingText("S A N T O R I N I "));
+        System.out.println(Frmt.headingText("") + "\n\n\n\n");
     }
 
     /**

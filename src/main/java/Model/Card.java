@@ -79,7 +79,12 @@ public class Card implements Serializable {
         return enemyRules;
     }
 
-    //TODO javadoc
+    /**
+     * Tests if the current object is equal to another object
+     *
+     * @param o The other object
+     * @return True if the objects are the same
+     */
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

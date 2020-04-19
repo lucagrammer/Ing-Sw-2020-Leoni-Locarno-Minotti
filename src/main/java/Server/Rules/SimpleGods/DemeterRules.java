@@ -10,8 +10,18 @@ import Util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Demeter Card
+ */
 public class DemeterRules extends Rules {
 
+    /**
+     * Gets a RoundActions object containing all the possible actions of the specified player according to the Rules
+     *
+     * @param player The player whose possible actions are to be analyzed
+     * @param game   The game to which the player belongs
+     * @return A RoundActions object containing all the possible actions
+     */
     public RoundActions nextPossibleActions(Player player, Game game) {
         RoundActions roundActions = player.getRoundActions();
         RoundActions nextPossibleActions = new RoundActions();
@@ -52,6 +62,13 @@ public class DemeterRules extends Rules {
         return nextPossibleActions;
     }
 
+    /**
+     * Gets a RoundActions object containing all the build-floor-actions of the specified worker according to the Rules
+     *
+     * @param worker The worker whose possible actions are to be analyzed
+     * @param game   The game to which the player belongs
+     * @return A RoundActions object containing all the possible build-floor-actions
+     */
     protected RoundActions getPossibleBuilds(Worker worker, Game game) {
         RoundActions roundBuilds = new RoundActions();
         Cell workerCell = worker.getPosition();
@@ -81,6 +98,13 @@ public class DemeterRules extends Rules {
         return roundBuilds;
     }
 
+    /**
+     * Gets a RoundActions object containing all the build-dome-actions of the specified worker according to the Rules
+     *
+     * @param worker The worker whose possible actions are to be analyzed
+     * @param game   The game to which the player belongs
+     * @return A RoundActions object containing all the possible build-dome-actions
+     */
     protected RoundActions getPossibleDomes(Worker worker, Game game) {
         RoundActions roundDomes = new RoundActions();
         Cell workerCell = worker.getPosition();

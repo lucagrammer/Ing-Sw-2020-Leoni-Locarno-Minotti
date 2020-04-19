@@ -13,8 +13,18 @@ import Util.RoundActions;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Prometheus Card
+ */
 public class PrometheusRules extends Rules {
 
+    /**
+     * Gets a RoundActions object containing all the possible actions of the specified player according to the Rules
+     *
+     * @param player The player whose possible actions are to be analyzed
+     * @param game   The game to which the player belongs
+     * @return A RoundActions object containing all the possible actions
+     */
     public RoundActions nextPossibleActions(Player player, Game game) {
         RoundActions roundActions = player.getRoundActions();
         RoundActions nextPossibleActions = new RoundActions();
@@ -36,8 +46,8 @@ public class PrometheusRules extends Rules {
             Genre workerGenre = roundActions.
                     getActionList().
                     stream().
-                    filter(x -> (x.getActionType() == ActionType.MOVE) || (x.getActionType() == ActionType.BUILD_DOME)
-                            || (x.getActionType() == ActionType.BUILD_FLOOR)).
+                    filter(x -> (x.getActionType() == ActionType.MOVE) || (x.getActionType() == ActionType.DOME)
+                            || (x.getActionType() == ActionType.FLOOR)).
                     collect(Collectors.toList()).
                     get(0).
                     getGenre();
@@ -54,7 +64,7 @@ public class PrometheusRules extends Rules {
                 ActionType firstAction = player.getRoundActions().getActionList().get(0).getActionType();
 
                 //Prometheus power
-                if ((firstAction == ActionType.BUILD_FLOOR || firstAction == ActionType.BUILD_DOME) && roundActions.hasMoved() == 1 && roundActions.hasBuildAnything() == 1) {
+                if ((firstAction == ActionType.FLOOR || firstAction == ActionType.DOME) && roundActions.hasMoved() == 1 && roundActions.hasBuildAnything() == 1) {
                     nextPossibleActions.add(getPossibleBuilds(player.getWorker(workerGenre), game));
                     nextPossibleActions.add(getPossibleDomes(player.getWorker(workerGenre), game));
 
@@ -80,6 +90,13 @@ public class PrometheusRules extends Rules {
         return nextPossibleActions;
     }
 
+    /**
+     * Gets the special moves of Prometheus
+     *
+     * @param worker The worker
+     * @param game   The game
+     * @return The special actions
+     */
     protected RoundActions getPrometheusMoves(Worker worker, Game game) {
         RoundActions roundMoves = new RoundActions();
         Cell workerCell = worker.getPosition();

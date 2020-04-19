@@ -10,9 +10,19 @@ import Util.RoundActions;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Athena Card
+ */
 public class AthenaEnemyRules extends EnemyRules {
 
-    @Override
+    /**
+     * Fixes the enemy actions according to the enemy rules
+     *
+     * @param enemyPossibleActions The enemy actions to be fixed
+     * @param game                 The game
+     * @param player               The owner of the card that fixed the actions
+     * @return The fixed enemy actions
+     */
     public RoundActions fixEnemyActions(RoundActions enemyPossibleActions, Game game, Player player) {
         RoundActions myActions = player.getRoundActions();
         RoundActions fixedActions = new RoundActions();

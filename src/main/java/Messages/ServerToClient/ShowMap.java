@@ -8,6 +8,9 @@ import Util.MessageType;
 
 import java.io.Serializable;
 
+/**
+ * Message to show the updated game map to the user
+ */
 public class ShowMap implements CVMessage, Serializable {
     private final MessageType messageType;
     private final Game game;
@@ -16,11 +19,13 @@ public class ShowMap implements CVMessage, Serializable {
     /**
      * Server-side constructor: build a request message
      *
+     * @param currentNickname The nickname of the current player
+     * @param game            The game
      */
     public ShowMap(Game game, String currentNickname) {
         messageType = MessageType.CV;
         this.currentNickname = currentNickname;
-        this.game=game;
+        this.game = game;
     }
 
     /**
@@ -29,8 +34,8 @@ public class ShowMap implements CVMessage, Serializable {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.showMap(game);
-        view.showMessage("\n\n\t"+ Frmt.style('b',"It's "+currentNickname.toUpperCase()+" turn."));
+        view.showMap(game, true);
+        view.showMessage("\n\n\t\t" + Frmt.style('b', "It's " + currentNickname.toUpperCase() + " turn."), false);
     }
 
     /**

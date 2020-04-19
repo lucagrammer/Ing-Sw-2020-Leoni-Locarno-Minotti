@@ -41,31 +41,49 @@ public class CliView implements View {
      */
     public void launch() {
         String defaultServerIP = Configurator.getDefaultIp();
-        System.out.print(Frmt.style('b', "Enter the server IP: "));
+
+        Frmt.clearScreen();
+        System.out.print(Frmt.style('b', " Enter the server IP [press enter for default IP]: "));
         String serverIP = scanner.nextLine();
         if (serverIP.equals("")) {
             serverIP = defaultServerIP;
-            System.out.println(Frmt.style('i', "> Default server IP will be applied, " + defaultServerIP));
+            System.out.println(Frmt.style('i', "  > Default server IP will be applied, " + defaultServerIP));
         }
+        Frmt.clearScreen();
+        System.out.println(Frmt.style('i', "  > You will be added to the first available game..."));
         serverHandler.setConnection(serverIP);
     }
+
 
     /**
      * Shows a specified message to the user
      *
-     * @param string The message to be shown
+     * @param string    The message to be shown
+     * @param newScreen True if it's necessary to clean the interface
      */
-    public void showMessage(String string) {
+    public void showMessage(String string, boolean newScreen) {
+        if (newScreen)
+            Frmt.clearScreen();
         System.out.println(string);
+    }
+
+    /**
+     * Shows a loading message to the user
+     */
+    public void showLoading() {
+        Frmt.clearScreen();
+        System.out.println(Frmt.style('i', "  > Loading..."));
     }
 
     /**
      * Asks a new nickname to the user and notify the choice to the serverHandler
      */
     public void askNewNickname() {
-        System.out.println(Frmt.color('r', "> Error: the chosen username is already taken."));
+        Frmt.clearScreen();
+        System.out.println(Frmt.color('r', "  > Error: the chosen username is already taken."));
         String newNickname = askNickname();
-        System.out.println(Frmt.style('i', "> Waiting for the other players to connect..."));
+        Frmt.clearScreen();
+        System.out.println(Frmt.style('i', "  > Waiting for the other players to connect..."));
         serverHandler.sendNewNickname(newNickname);
     }
 
@@ -77,35 +95,41 @@ public class CliView implements View {
      */
     public void gameSetUp(boolean newGame) {
         boolean incorrect;
+        Frmt.clearScreen();
         String nickname = askNickname();
 
         Date date = null;
+        Frmt.clearScreen();
         do {
-            System.out.print(Frmt.style('b', "Enter your birth date [dd/mm/yyyyy]: "));
+            System.out.print(Frmt.style('b', "\n Enter your birth date [dd/mm/yyyyy]: "));
             String fullDate = scanner.nextLine();
             try {
                 date = new SimpleDateFormat("dd/MM/yyyy").parse(fullDate);
                 incorrect = false;
             } catch (ParseException e) {
-                System.out.println(Frmt.color('r', "> Incorrect date format. Try again."));
+                Frmt.clearScreen();
+                System.out.println(Frmt.color('r', "  > Incorrect date format. Try again."));
                 incorrect = true;
             }
         } while (incorrect);
 
         int numPlayers = 0;
         if (newGame) {
+            Frmt.clearScreen();
             do {
-                System.out.print(Frmt.style('b', "Enter the number of competitors [2..3]: "));
+                System.out.print(Frmt.style('b', "\n Enter the number of competitors [2..3]: "));
                 numPlayers = scanner.nextInt();
                 if (numPlayers < 2 || numPlayers > 3) {
-                    System.out.println(Frmt.color('r', "> Invalid choice. Try again."));
+                    Frmt.clearScreen();
+                    System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
                     incorrect = true;
                 } else {
                     incorrect = false;
                 }
             } while (incorrect);
         }
-        System.out.println(Frmt.style('i', "> Waiting for the other players to connect..."));
+        Frmt.clearScreen();
+        System.out.println(Frmt.style('i', "\n  > Waiting for the other players to connect..."));
         serverHandler.sendGameInfo(nickname, date, numPlayers);
     }
 
@@ -120,10 +144,11 @@ public class CliView implements View {
         String nickname;
         do {
 
-            System.out.print(Frmt.style('b', "Enter your nickname: "));
+            System.out.print(Frmt.style('b', "\n Enter your nickname: "));
             nickname = scanner.nextLine();
             if (nickname.equals("")) {
-                System.out.println(Frmt.color('r', "> Invalid nickname. Try again."));
+                Frmt.clearScreen();
+                System.out.println(Frmt.color('r', "  > Invalid nickname. Try again."));
                 incorrect = true;
             } else {
                 incorrect = false;
@@ -142,26 +167,31 @@ public class CliView implements View {
         List<String> allCardNames = new ArrayList<>();
         List<Card> chosenCard = new ArrayList<>();
 
-        System.out.println(Frmt.style("bu", "\nChoose " + numCards + " cards between these:"));
-        for (Card card : allCardList) {
-            System.out.println(Frmt.style('b', "\t❖ " + card.getName()));
-            System.out.println(Frmt.style('i', "\t\t" + card.getDescription()));
-            allCardNames.add(card.getName().toLowerCase());
-        }
-
         boolean incorrect;
+        Frmt.clearScreen();
         do {
+            System.out.println("\n\n " + Frmt.style('b', "Choose " + (numCards - chosenCard.size()) + " card" + ((numCards - chosenCard.size() > 1) ? "s" : "") + " between these:"));
+            for (Card card : allCardList) {
+                if (!chosenCard.contains(card)) {
+                    System.out.println(Frmt.style('b', "\n   ❖ " + card.getName().toUpperCase()));
+                    System.out.println(Frmt.style('i', "      " + card.getDescription()));
+                }
+                allCardNames.add(card.getName().toLowerCase());
+            }
+            System.out.println();
+
             incorrect = false;
-            System.out.print("↳: ");
+            System.out.print("  ↳: ");
             String chosenCardName = scanner.next();
+            Frmt.clearScreen();
             if (!allCardNames.contains(chosenCardName.toLowerCase())) {
-                System.out.println(Frmt.color('r', "> Invalid choice. Try again."));
+                System.out.println(Frmt.color('r', "   > Invalid choice. Try again."));
                 incorrect = true;
             } else {
                 for (Card card : allCardList) {
                     if (card.getName().equalsIgnoreCase(chosenCardName)) {
                         if (chosenCard.contains(card)) {
-                            System.out.println(Frmt.color('r', "> Invalid choice. Try again."));
+                            System.out.println(Frmt.color('r', "   > The card has already been selected. Try again."));
                             incorrect = true;
                         } else {
                             chosenCard.add(card);
@@ -170,6 +200,8 @@ public class CliView implements View {
                 }
             }
         } while (incorrect || chosenCard.size() < numCards);
+
+        showLoading();
         serverHandler.sendCards(chosenCard);
     }
 
@@ -183,20 +215,22 @@ public class CliView implements View {
         String chosenCardName;
         List<String> allCardNames = new ArrayList<>();
 
-        System.out.println(Frmt.style("bu", "\nChoose your card between these:"));
-        for (Card card : possibleChoices) {
-            System.out.println(Frmt.style('b', "\t❖ " + card.getName()));
-            System.out.println(Frmt.style('i', "\t\t" + card.getDescription()));
-            allCardNames.add(card.getName().toLowerCase());
-        }
-
         boolean incorrect;
         do {
+            System.out.println("\n\n " + Frmt.style('b', "Choose your card between these:"));
+            for (Card card : possibleChoices) {
+                System.out.println(Frmt.style('b', "\n   ❖ " + card.getName().toUpperCase()));
+                System.out.println(Frmt.style('i', "      " + card.getDescription()));
+                allCardNames.add(card.getName().toLowerCase());
+            }
+            System.out.println();
+
             incorrect = false;
-            System.out.print("↳: ");
+            System.out.print("  ↳: ");
             chosenCardName = scanner.next();
             if (!allCardNames.contains(chosenCardName.toLowerCase())) {
-                System.out.println(Frmt.color('r', "> Invalid choice. Try again."));
+                Frmt.clearScreen();
+                System.out.println(Frmt.color('r', "   > Invalid choice. Try again."));
                 incorrect = true;
             }
         } while (incorrect);
@@ -206,6 +240,8 @@ public class CliView implements View {
                 chosenCard = card;
             }
         }
+
+        showLoading();
         serverHandler.sendCard(chosenCard);
     }
 
@@ -217,28 +253,32 @@ public class CliView implements View {
     public void chooseFirstPlayer(List<String> playersNicknames) {
         List<String> allNicknames = new ArrayList<>();
 
-        System.out.print(Frmt.style("bu", "\nChoose who will be the first player:") + " ");
-        for (int i = 0; i < playersNicknames.size(); i++) {
-            String name = playersNicknames.get(i);
-            allNicknames.add(name.toLowerCase());
-            if (i != playersNicknames.size() - 1) {
-                System.out.print(Frmt.style('b', name + ", "));
-            } else {
-                System.out.println(Frmt.style('b', name + "?"));
-            }
-        }
-
         String chosenNickname;
         boolean incorrect;
+        System.out.println("\n\n");
         do {
+            System.out.print(" " + Frmt.style('b', "Choose who will be the first player:") + " ");
+            for (int i = 0; i < playersNicknames.size(); i++) {
+                String name = playersNicknames.get(i);
+                allNicknames.add(name.toLowerCase());
+                if (i != playersNicknames.size() - 1) {
+                    System.out.print(Frmt.style('b', name + ", "));
+                } else {
+                    System.out.println(Frmt.style('b', name + "?"));
+                }
+            }
+
             incorrect = false;
-            System.out.print("↳: ");
+            System.out.print("  ↳: ");
             chosenNickname = scanner.next();
             if (!allNicknames.contains(chosenNickname.toLowerCase())) {
-                System.out.println(Frmt.color('r', "> Invalid choice. Try again."));
+                Frmt.clearScreen();
+                System.out.println(Frmt.color('r', "   > Invalid choice. Try again."));
                 incorrect = true;
             }
         } while (incorrect);
+
+        showLoading();
         serverHandler.sendFirstPlayerNickname(chosenNickname);
     }
 
@@ -250,11 +290,12 @@ public class CliView implements View {
     public void showGameCards(List<Card> cards) {
         List<Card> allCardList = Configurator.getAllCards();
 
-        System.out.println(Frmt.style("bu", "\nThe cards used in this match will be:"));
+        Frmt.clearScreen();
+        System.out.println(" " + Frmt.style('b', "The cards used in this match will be:"));
         for (Card card : allCardList) {
             if (cards.contains(card)) {
-                System.out.println(Frmt.style('b', "\t⚙︎ " + card.getName()));
-                System.out.println(Frmt.style('i', "\t\t" + card.getDescription()));
+                System.out.println(Frmt.style('b', "\n   ❖ " + card.getName().toUpperCase()));
+                System.out.println(Frmt.style('i', "      " + card.getDescription()));
             }
         }
     }
@@ -265,9 +306,10 @@ public class CliView implements View {
      * @param playerList The list of players of the game
      */
     public void showCardAssignment(List<Player> playerList) {
-        System.out.println(Frmt.style("bu", "\nCards assignment:"));
+        Frmt.clearScreen();
+        System.out.println(" " + Frmt.style('b', "Cards assignment:"));
         for (Player player : playerList) {
-            System.out.print(Frmt.style('b', "\t▷ " + player.getNickname()));
+            System.out.print(Frmt.style('b', "\n   ▷ " + player.getNickname()));
             System.out.println(Frmt.style('i', " will use " + player.getCard().getName()));
         }
     }
@@ -291,6 +333,8 @@ public class CliView implements View {
         forbiddenCells.add(maleCell);
         game.getPlayerByNickname(serverHandler.getNickname()).getWorker(MALE).setPosition(maleCell);
         Cell femaleCell = setPosition(FEMALE, forbiddenCells, game);
+        game.getPlayerByNickname(serverHandler.getNickname()).getWorker(FEMALE).setPosition(femaleCell);
+        showMap(game, true);
         serverHandler.sendColorAndPosition(myColor, maleCell, femaleCell);
     }
 
@@ -301,33 +345,35 @@ public class CliView implements View {
      * @return The selected color
      */
     private String chooseColor(List<String> availableColors) {
+        Frmt.clearScreen();
         if (availableColors.size() == 1) {
-            System.out.print(Frmt.style("bu", "\nYour color will be") + " ");
+            System.out.print("\n\n " + Frmt.style('b', "Your color will be") + " ");
             System.out.println(Frmt.color(availableColors.get(0).toLowerCase().charAt(0), availableColors.get(0).toLowerCase()));
             return availableColors.get(0);
+
         } else {
 
             String chosenColor;
             List<String> allColors = new ArrayList<>();
-
-            System.out.print(Frmt.style("bu", "\nChoose your color between:") + " ");
-            for (int i = 0; i < availableColors.size(); i++) {
-                String color = availableColors.get(i);
-                if (i != availableColors.size() - 1) {
-                    System.out.print(Frmt.color(color.toLowerCase().charAt(0), color.toLowerCase() + ", "));
-                } else {
-                    System.out.println(Frmt.color(color.toLowerCase().charAt(0), color.toLowerCase() + "?"));
-                }
-                allColors.add(color.toLowerCase());
-            }
-
             boolean incorrect;
             do {
+                System.out.print("\n\n " + Frmt.style('b', "Choose your color between:") + " ");
+                for (int i = 0; i < availableColors.size(); i++) {
+                    String color = availableColors.get(i);
+                    if (i != availableColors.size() - 1) {
+                        System.out.print(Frmt.color(color.toLowerCase().charAt(0), color.toLowerCase() + ", "));
+                    } else {
+                        System.out.println(Frmt.color(color.toLowerCase().charAt(0), color.toLowerCase() + "?"));
+                    }
+                    allColors.add(color.toLowerCase());
+                }
+
                 incorrect = false;
-                System.out.print("↳: ");
+                System.out.print("  ↳: ");
                 chosenColor = scanner.next();
                 if (!allColors.contains(chosenColor.toLowerCase())) {
-                    System.out.println(Frmt.color('r', "> Invalid choice. Try again."));
+                    Frmt.clearScreen();
+                    System.out.println(Frmt.color('r', "   > Invalid choice. Try again."));
                     incorrect = true;
                 }
             } while (incorrect);
@@ -344,28 +390,29 @@ public class CliView implements View {
      * @return The chosen position
      */
     private Cell setPosition(Genre genre, List<Cell> forbiddenCells, Game game) {
-        showMap(game);
-        System.out.println(Frmt.style("bu", "\nChoose the position of your " + ((genre == MALE) ? "male" : "female") + " worker [row,column]:") + " ");
-
         Cell chosenCell;
         String chosenPosition;
         int row = -1, column = -1;
         boolean incorrect;
+        Frmt.clearScreen();
         do {
+            showMap(game, false);
             incorrect = false;
-            System.out.print("↳: ");
+            System.out.print("\n " + Frmt.style('b', "Choose the position of your " + ((genre == MALE) ? "male" : "female") + " worker [row,column]:") + " ");
             chosenPosition = scanner.next();
             try {
                 row = Character.getNumericValue(chosenPosition.charAt(0));
                 column = Character.getNumericValue(chosenPosition.charAt(2));
             } catch (Exception e) {
-                System.out.println(Frmt.color('r', "> Invalid choice. Try again."));
+                Frmt.clearScreen();
+                System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
                 incorrect = true;
             }
 
             chosenCell = new Cell(row, column);
             if (!incorrect && (row < 0 || column < 0 || row > 4 || column > 4 || forbiddenCells.contains(chosenCell) || chosenPosition.length() != 3)) {
-                System.out.println(Frmt.color('r', "> Invalid choice. Try again."));
+                Frmt.clearScreen();
+                System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
                 incorrect = true;
             }
         } while (incorrect);
@@ -375,13 +422,15 @@ public class CliView implements View {
     /**
      * Shows the board of the game
      *
-     * @param game The game
+     * @param game      The game
+     * @param newScreen True if it's necessary to clean the interface
      */
-    public void showMap(Game game) {
-        List<Player> playerList = game.getPlayers();
+    public void showMap(Game game, boolean newScreen) {
         String[][] cellColorMatrix = new String[5][5];
         Genre[][] cellGenreMatrix = new Genre[5][5];
         Cell[][] cellsInfoMatrix = game.getBoard().getBoard();
+        List<String> playerNames = new ArrayList<>();
+        List<Character> colors = new ArrayList<>();    // players color in the same order of playerNames
 
         // Null initialization of the info matrix
         for (int i = 0; i < 5; i++) {
@@ -392,7 +441,7 @@ public class CliView implements View {
         }
 
         // Fill matrix with correct information
-        for (Player player : playerList) {
+        for (Player player : game.getPlayers()) {
             for (Genre genre : Genre.values()) {
                 Worker worker = player.getWorker(genre);
                 Cell position = worker.getPosition();
@@ -401,50 +450,101 @@ public class CliView implements View {
                     int column = position.getColumn();
                     cellColorMatrix[row][column] = worker.getColor().toString();
                     cellGenreMatrix[row][column] = genre;
+                    if (!colors.contains(cellColorMatrix[row][column].charAt(0))) {
+                        playerNames.add(player.getNickname());
+                        colors.add(cellColorMatrix[row][column].charAt(0));
+                    }
                 }
             }
         }
 
         // Show the map
-        System.out.print("\n\t\t");
+        if (newScreen)
+            Frmt.clearScreen();
+        System.out.println("\tNW\t\t                          N                             \tNE");
+        System.out.print("\n\t\t\t");
         for (int j = 0; j < 5; j++) {
-            System.out.print(Frmt.color('w', "    " + j + "    " + "  "));
+            System.out.print("    " + j + "    " + "  ");
         }
         System.out.println();
         for (int i = 0; i < 5; i++) {
-            System.out.print("\n\t\t");
+            System.out.print("\n\t\t\t");
             for (int j = 0; j < 5; j++) {
                 char color = (cellColorMatrix[i][j] == null) ? 'w' : cellColorMatrix[i][j].toLowerCase().charAt(0);
                 System.out.print(Frmt.color(color, Frmt.style('r', "         ")) + "  ");
             }
-            System.out.print("\n\t" + i + "\t");
+
+            // Legend
+            if (i == 1 && colors.size() > 0) {
+                System.out.print("\t\t\t  " + Frmt.color(colors.get(0), Frmt.style('r', "  "
+                        + playerNames.get(0).toUpperCase() + " - " + game.getPlayerByNickname(playerNames.get(0)).getCard().getName() + "  ")));
+            }
+
+            if (i == 2) {
+                System.out.print("\n\tS\t" + i + "\t");
+            } else {
+                System.out.print("\n\t\t" + i + "\t");
+            }
             for (int j = 0; j < 5; j++) {
                 Frmt domed = (cellsInfoMatrix[i][j].getDome()) ? Frmt.DOME : Frmt.NOT_DOME;
                 String genre = (cellGenreMatrix[i][j] == null) ? " " : Frmt.getGengreIcon(cellGenreMatrix[i][j]);
                 System.out.print(Frmt.color('w', Frmt.style('r', " " + domed + "    " + genre + "  ")) + "  ");
             }
-            System.out.print("\n\t\t");
+            if (i == 2) {
+                System.out.print("\t\tE");
+            }
+
+            // Legend
+            if (i == 1 && colors.size() > 1) {
+                System.out.print("\t\t\t  " + Frmt.color(colors.get(1), Frmt.style('r', "  " + playerNames.get(1).toUpperCase() + " - " + game.getPlayerByNickname(playerNames.get(1)).getCard().getName() + "  ")));
+            }
+
+            System.out.print("\n\t\t\t");
             for (int j = 0; j < 5; j++) {
                 int floor = cellsInfoMatrix[i][j].getFloor();
                 System.out.print(Frmt.color('w', Frmt.style('r', " " + floor + "       ")) + "  ");
             }
+
+            // Legend
+            if (i == 1 && colors.size() > 2) {
+                System.out.print("\t\t\t  " + Frmt.color(colors.get(2), Frmt.style('r', "  " + playerNames.get(2).toUpperCase() + " - " + game.getPlayerByNickname(playerNames.get(2)).getCard().getName() + "  ")));
+            }
+            if (i == 0 && colors.size() > 0) {
+                System.out.print("\t\t\t  " + Frmt.style("bi", "LEGEND:"));
+            }
             System.out.print("\n");
         }
-
+        System.out.println("\n\tSW\t\t                          S                             \tSE");
+        System.out.print("\n");
     }
 
-    public void askAction(RoundActions roundActions) {
+    /**
+     * Asks the action the player wants to perform
+     *
+     * @param roundActions All the possible actions
+     * @param game         The game
+     */
+    public void askAction(RoundActions roundActions, Game game) {
         String action, genre, direction;
         Action theAction;
         boolean incorrect;
+
+        Frmt.clearScreen();
         do {
+            showMap(game, false);
             incorrect = false;
-            System.out.print(Frmt.style("bu", "\nInsert your action type [MOVE/BUILD_FLOOR/BUILD_DOME/END]:") + " ");
+            System.out.println("\n\t\t" + Frmt.style('b', "It's your turn. "));
+            System.out.print("\t\t" + Frmt.style('b', "You can:  \n\t\t"));
+            for (Action possibleAction : roundActions.getActionList()) {
+                System.out.print(possibleAction.getActionType().name() + " " + possibleAction.getGenre().name().charAt(0) + " " + possibleAction.getDirection().name() + "; ");
+            }
+
+            System.out.print("\n\n\t\t" + Frmt.style('b', "Insert your action type [MOVE/FLOOR/DOME/END]:") + " ");
             action = scanner.next();
             if (!action.equalsIgnoreCase("end")) {
-                System.out.print(Frmt.style("bu", "\nInsert the genre of the worker [M/F]:") + " ");
+                System.out.print("\t\t" + Frmt.style('b', "Insert the genre of the worker [M/F]:") + " ");
                 genre = scanner.next();
-                System.out.print(Frmt.style("bu", "\nInsert the direction [N/NE/E/SE/S/SW/W/NW]:") + " ");
+                System.out.print("\t\t" + Frmt.style('b', "Insert the direction [N/NE/E/SE/S/SW/W/NW]:") + " ");
                 direction = scanner.next();
 
                 theAction = roundActions.find(action, genre, direction);
@@ -452,25 +552,53 @@ public class CliView implements View {
                 theAction = roundActions.canEnd();
             }
             if (theAction == null) {
-                System.out.println(Frmt.color('r', "> Invalid action. Try again."));
+                Frmt.clearScreen();
+                System.out.println(Frmt.color('r', "\t\t  > Invalid action. Try again.\n"));
                 incorrect = true;
             }
         } while (incorrect);
         serverHandler.sendAction(theAction);
     }
 
+    /**
+     * Notify the players that the game has ended and notify the winner
+     *
+     * @param winnerNickname The nickname of the winner
+     * @param youWin         True if the player has win
+     */
     public void showGameEnd(String winnerNickname, boolean youWin) {
         if (youWin) {
-            System.out.println(Frmt.color('g', Frmt.style("bu", "\n\n\tYOU WIN " + Frmt.CUP)));
+            System.out.println(Frmt.color('g', "\n\n\t" + Frmt.style('b', "If it seems to be true, probably it is: YOU WIN " + Frmt.CUP)));
         } else {
-            System.out.println(Frmt.color('g', Frmt.style("bu", "\n\n\tYOU WIN " + Frmt.DEATH)));
+            System.out.println(Frmt.color('r', "\n\n\t" + Frmt.style('b', "YOU LOSE " + Frmt.DEATH + " : the winner is " + winnerNickname.toUpperCase())));
         }
+        askNewGame();
     }
 
-    public void showDisconnection(String nickname) {
-        System.out.println(Frmt.color('r', Frmt.style("ui", "GAME OVER: " +
-                nickname.toUpperCase() + " has disconnected.\n\n")));
-        System.out.println("\nDo you want to play again? [Yes/No]: ");
+    /**
+     * Notify the players that a player has disconnected and the game has ended
+     *
+     * @param disconnectedNickname The nickname of the disconnected player
+     */
+    public void showDisconnection(String disconnectedNickname) {
+        Frmt.clearScreen();
+        System.out.println(Frmt.color('r', "\n\n\t" + Frmt.style("ui", "GAME OVER: " +
+                disconnectedNickname.toUpperCase() + " has disconnected.")));
+        askNewGame();
+    }
+
+    /**
+     * Notify the players that has lost
+     */
+    public void showLosingMessage() {
+        System.out.println(Frmt.color('r', "\n\n\t" + Frmt.style('b', "YOU LOSE : out of actions" + Frmt.DEATH)));
+    }
+
+    /**
+     * Asks to the player if he wants to start a new game
+     */
+    private void askNewGame() {
+        System.out.println("\n\n\tDo you want to play again? [Yes/No]: ");
 
         boolean incorrect;
         String choice;
@@ -489,5 +617,6 @@ public class CliView implements View {
             ClientLauncher.main(null);
         }
     }
+
 
 }

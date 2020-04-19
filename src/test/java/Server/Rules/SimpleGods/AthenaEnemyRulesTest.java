@@ -37,25 +37,25 @@ public class AthenaEnemyRulesTest {
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 1));
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.N, 1));
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
-        unfixedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SW, 1));
-        unfixedActions.add(new Action(ActionType.BUILD_DOME, Genre.MALE, Direction.S, 0));
+        unfixedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SW, 1));
+        unfixedActions.add(new Action(ActionType.DOME, Genre.MALE, Direction.S, 0));
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, -1));
         unfixedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.W, 2));
-        unfixedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, -1));
+        unfixedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.S, -1));
         unfixedActions.add(new Action(ActionType.END));
 
         player1.registerAction(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 1));
-        player1.registerAction(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.SW, 0));
+        player1.registerAction(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.SW, 0));
 
         RoundActions fixedActions = enemyRules.fixEnemyActions(unfixedActions, game, player1);
 
         // Expected actions
         RoundActions expectedFixedActions = new RoundActions();
         expectedFixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
-        expectedFixedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SW, 1));
-        expectedFixedActions.add(new Action(ActionType.BUILD_DOME, Genre.MALE, Direction.S, 0));
+        expectedFixedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SW, 1));
+        expectedFixedActions.add(new Action(ActionType.DOME, Genre.MALE, Direction.S, 0));
         expectedFixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, -1));
-        expectedFixedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, -1));
+        expectedFixedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.S, -1));
         expectedFixedActions.add(new Action(ActionType.END));
         assertEquals(expectedFixedActions, fixedActions);
     }
@@ -66,15 +66,15 @@ public class AthenaEnemyRulesTest {
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 1));
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.N, 1));
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
-        unfixedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SW, 1));
-        unfixedActions.add(new Action(ActionType.BUILD_DOME, Genre.MALE, Direction.S, 0));
+        unfixedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SW, 1));
+        unfixedActions.add(new Action(ActionType.DOME, Genre.MALE, Direction.S, 0));
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, -1));
         unfixedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.W, 2));
-        unfixedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, -1));
+        unfixedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.S, -1));
         unfixedActions.add(new Action(ActionType.END));
 
         player1.registerAction(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 0));
-        player1.registerAction(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.SW, 1));
+        player1.registerAction(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.SW, 1));
 
         RoundActions fixedActions = enemyRules.fixEnemyActions(unfixedActions, game, player1);
 
@@ -85,23 +85,23 @@ public class AthenaEnemyRulesTest {
     public void notAllowedEnemyActions_multipleAlreadyFixedActions_fixedActions() {
         RoundActions unfixedActions = new RoundActions();
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
-        unfixedActions.add(new Action(ActionType.BUILD_DOME, Genre.MALE, Direction.S, 0));
+        unfixedActions.add(new Action(ActionType.DOME, Genre.MALE, Direction.S, 0));
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, -1));
-        unfixedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 2));
-        unfixedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, -1));
+        unfixedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 2));
+        unfixedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.S, -1));
         unfixedActions.add(new Action(ActionType.END));
 
         player1.registerAction(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 2));
-        player1.registerAction(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.SW, -1));
+        player1.registerAction(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.SW, -1));
 
         RoundActions fixedActions = enemyRules.fixEnemyActions(unfixedActions, game, player1);
 
         RoundActions expectedFixedActions = new RoundActions();
         expectedFixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
-        expectedFixedActions.add(new Action(ActionType.BUILD_DOME, Genre.MALE, Direction.S, 0));
+        expectedFixedActions.add(new Action(ActionType.DOME, Genre.MALE, Direction.S, 0));
         expectedFixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, -1));
-        expectedFixedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 2));
-        expectedFixedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, -1));
+        expectedFixedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 2));
+        expectedFixedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.S, -1));
         expectedFixedActions.add(new Action(ActionType.END));
         assertEquals(expectedFixedActions, fixedActions);
     }
@@ -112,7 +112,7 @@ public class AthenaEnemyRulesTest {
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 1));
 
         player1.registerAction(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 2));
-        player1.registerAction(new Action(ActionType.BUILD_DOME, Genre.FEMALE, Direction.SW, 3));
+        player1.registerAction(new Action(ActionType.DOME, Genre.FEMALE, Direction.SW, 3));
 
         RoundActions fixedActions = enemyRules.fixEnemyActions(unfixedActions, game, player1);
 
@@ -128,7 +128,7 @@ public class AthenaEnemyRulesTest {
         unfixedActions.add(new Action(ActionType.END));
 
         player1.registerAction(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 2));
-        player1.registerAction(new Action(ActionType.BUILD_DOME, Genre.FEMALE, Direction.SW, 3));
+        player1.registerAction(new Action(ActionType.DOME, Genre.FEMALE, Direction.SW, 3));
 
         RoundActions fixedActions = enemyRules.fixEnemyActions(unfixedActions, game, player1);
 

@@ -27,9 +27,9 @@ public class EnemyRulesTest {
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 1));
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
         unfixedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, -1));
-        unfixedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SW, 1));
-        unfixedActions.add(new Action(ActionType.BUILD_DOME, Genre.MALE, Direction.S, 0));
-        unfixedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, -1));
+        unfixedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SW, 1));
+        unfixedActions.add(new Action(ActionType.DOME, Genre.MALE, Direction.S, 0));
+        unfixedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.S, -1));
         unfixedActions.add(new Action(ActionType.END));
         RoundActions fixedActions = enemyRules.fixEnemyActions(unfixedActions, game, player1);
         assertEquals(unfixedActions, fixedActions);

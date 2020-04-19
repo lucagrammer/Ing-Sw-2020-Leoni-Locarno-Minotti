@@ -1,5 +1,6 @@
 package Client;
 
+import Util.Configurator;
 import Util.Frmt;
 
 import java.util.Scanner;
@@ -21,10 +22,12 @@ public class ClientLauncher {
         ServerHandler serverHandler = new ServerHandler();
         View view;
 
+        Frmt.clearScreen();
         boolean incorrect;
         do {
-            System.out.print(Frmt.style('b', "Choose the interface you want to use [CLI or GUI]: "));
+            System.out.print(Frmt.style('b', " Choose the interface you want to use [CLI/GUI]: "));
             String preferredInterface = scanner.nextLine();
+            fastStart(preferredInterface);
             if ((preferredInterface.equalsIgnoreCase("CLI"))) {
                 view = new CliView();
                 serverHandler.setView(view);
@@ -38,13 +41,35 @@ public class ClientLauncher {
                     //view.addServerHandeler(serverHandler);
                     //incorrect = false;
                     //view.launch();
-                    System.out.println(Frmt.color('r', "> This functionality is not available. Try again."));
+                    Frmt.clearScreen();
+                    System.out.println(Frmt.color('r', "  > This functionality is not available. Try again."));
                     incorrect = true;
                 } else {
-                    System.out.println(Frmt.color('r', "> Invalid choice. Try again."));
+                    Frmt.clearScreen();
+                    System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
                     incorrect = true;
                 }
             }
         } while (incorrect);
+    }
+
+    /**
+     * DEBUG ONLY: Apply default settings if the flag fast-start is enabled
+     *
+     * @param preferredInterface The shortcut to be verified to enable the fastStart-mode
+     */
+    private void fastStart(String preferredInterface) {
+        // Debug mode?
+        if (!Configurator.getFastStartFlag()) {
+            return;
+        }
+        if (preferredInterface.equalsIgnoreCase("")) {
+            View view = new CliView();
+            ServerHandler serverHandler = new ServerHandler();
+            serverHandler.setView(view);
+            view.setServerHandler(serverHandler);
+            serverHandler.setConnection(Configurator.getDefaultIp());
+            System.out.println("Exiting FAST_MODE");
+        }
     }
 }

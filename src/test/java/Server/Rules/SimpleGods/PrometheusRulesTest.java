@@ -54,12 +54,12 @@ public class PrometheusRulesTest {
         expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.S, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.SE, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.E, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.NW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SE, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.E, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.NW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.S, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SE, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.E, 0));
 
         //expected female actions
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.NW, 0));
@@ -67,11 +67,11 @@ public class PrometheusRulesTest {
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SW, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.N, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.NW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.W, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.SW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.S, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.N, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.NW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.SW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.S, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.N, 0));
 
         assertEquals(expectedActions, nextPossibleActions);
     }
@@ -91,17 +91,17 @@ public class PrometheusRulesTest {
         expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.W, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.SW, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.SE, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SE, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SE, 0));
 
         //expected female actions
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.SE, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.E, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.S, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.SE, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.E, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.S, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.SE, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.E, 0));
 
         assertEquals(expectedActions, nextPossibleActions);
     }
@@ -158,12 +158,12 @@ public class PrometheusRulesTest {
 
         RoundActions expectedActions = new RoundActions();
         //expected male actions
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.NW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SE, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.E, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.NW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.S, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SE, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.E, 0));
         assertEquals(expectedActions, nextPossibleActions);
     }
 
@@ -189,8 +189,8 @@ public class PrometheusRulesTest {
 
         RoundActions expectedActions = new RoundActions();
         //expected male actions
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.S, 2));
-        expectedActions.add(new Action(ActionType.BUILD_DOME, Genre.FEMALE, Direction.SE, 3));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.S, 2));
+        expectedActions.add(new Action(ActionType.DOME, Genre.FEMALE, Direction.SE, 3));
         assertEquals(expectedActions, nextPossibleActions);
     }
 
@@ -232,7 +232,7 @@ public class PrometheusRulesTest {
 
         RoundActions roundActionWithMoveAndBuild = new RoundActions();
         roundActionWithMoveAndBuild.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.NW, -3));
-        roundActionWithMoveAndBuild.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.S, 0));
+        roundActionWithMoveAndBuild.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.S, 0));
         player2.setRoundActions(roundActionWithMoveAndBuild);
         RoundActions nextPossibleActions = rules.nextPossibleActions(player2, game);
 
@@ -252,7 +252,7 @@ public class PrometheusRulesTest {
 
         board.getCell(0,1).addFloor();
         RoundActions roundActionFirstBuild = new RoundActions();
-        roundActionFirstBuild.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 0));
+        roundActionFirstBuild.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 0));
 
 
         player2.setRoundActions(roundActionFirstBuild);
@@ -277,7 +277,7 @@ public class PrometheusRulesTest {
         board.getCell(0,1).addFloor();
         player2.getWorker(Genre.MALE).setPosition(board.getCell(1, 1));
         RoundActions roundActionBuildMove = new RoundActions();
-        roundActionBuildMove.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 0));
+        roundActionBuildMove.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 0));
         roundActionBuildMove.add(new Action(ActionType.MOVE, Genre.MALE, Direction.SW, 0));
 
         player2.setRoundActions(roundActionBuildMove);
@@ -285,13 +285,13 @@ public class PrometheusRulesTest {
 
         RoundActions expectedActions = new RoundActions();
         //Expected actions
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.N, 1));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.NE, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SE, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.NW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.N, 1));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.NE, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SE, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.S, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.NW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 0));
 
         assertEquals(expectedActions, nextPossibleActions);
     }
@@ -305,9 +305,9 @@ public class PrometheusRulesTest {
         player2.getWorker(Genre.FEMALE).setPosition(board.getCell(0, 3));
 
         RoundActions roundActionPrometheus = new RoundActions();
-        roundActionPrometheus.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 0));
+        roundActionPrometheus.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 0));
         roundActionPrometheus.add(new Action(ActionType.MOVE, Genre.MALE, Direction.SW, 0));
-        roundActionPrometheus.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, 0));
+        roundActionPrometheus.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.S, 0));
 
         player2.setRoundActions(roundActionPrometheus);
         RoundActions nextPossibleActions = rules.nextPossibleActions(player2, game);
@@ -331,7 +331,7 @@ public class PrometheusRulesTest {
         board.getCell(0,1).addFloor();
         player2.getWorker(Genre.MALE).setPosition(board.getCell(1, 1));
         RoundActions roundActionBuildMove = new RoundActions();
-        roundActionBuildMove.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 0));
+        roundActionBuildMove.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 0));
         roundActionBuildMove.add(new Action(ActionType.MOVE, Genre.MALE, Direction.SW, 0));
 
         player2.setRoundActions(roundActionBuildMove);
@@ -360,7 +360,7 @@ public class PrometheusRulesTest {
 
         board.getCell(0,1).addFloor();
         RoundActions roundActionBuildMove = new RoundActions();
-        roundActionBuildMove.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 0));
+        roundActionBuildMove.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 0));
         player2.setRoundActions(roundActionBuildMove);
         board.getCell(0,1).setDome(true);
         board.getCell(1,1).setDome(true);
@@ -386,7 +386,7 @@ public class PrometheusRulesTest {
         board.getCell(1, 3).addFloor();
         board.getCell(1, 3).addFloor();
 
-        Action domeAction = new Action(ActionType.BUILD_DOME, Genre.FEMALE, Direction.S, 3);
+        Action domeAction = new Action(ActionType.DOME, Genre.FEMALE, Direction.S, 3);
         boolean hasWin = rules.doAction(domeAction, player2, game);
 
         RoundActions playerActions = player2.getRoundActions();
@@ -408,7 +408,7 @@ public class PrometheusRulesTest {
 
         board.getCell(1, 3).addFloor();
 
-        Action buildAction = new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.S, 1);
+        Action buildAction = new Action(ActionType.FLOOR, Genre.FEMALE, Direction.S, 1);
         boolean hasWin = rules.doAction(buildAction, player2, game);
 
         RoundActions playerActions = player2.getRoundActions();

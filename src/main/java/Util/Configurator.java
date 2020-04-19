@@ -11,7 +11,6 @@ import org.jdom2.input.SAXBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -57,6 +56,24 @@ public class Configurator {
     }
 
     /**
+     * Gets the fast start flag for the debug mode
+     *
+     * @return The boolean value of the flag
+     */
+    public static boolean getFastStartFlag() {
+        String flag = "false";
+        try {
+            Document document = builder.build(new File("src/main/resources/ConnectionConfig.xml"));
+            Element rootElement = document.getRootElement();
+
+            flag = rootElement.getChildText("fast-start");
+        } catch (JDOMException | IOException e) {
+            e.printStackTrace();
+        }
+        return flag.equalsIgnoreCase("true");
+    }
+
+    /**
      * Gets the list of all the cards
      *
      * @return A list containing all the game cards
@@ -68,9 +85,8 @@ public class Configurator {
             Element rootElement = document.getRootElement();
 
             List children = rootElement.getChildren();
-            Iterator iterator = children.iterator();
-            while (iterator.hasNext()) {
-                Element element = (Element) iterator.next();
+            for (Object child : children) {
+                Element element = (Element) child;
                 String name = element.getChildText("name");
                 String description = element.getChildText("description");
                 boolean threePlayerCompatible = Boolean.parseBoolean(element.getChildText("three-players-compatible"));

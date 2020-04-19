@@ -191,24 +191,44 @@ public class Player implements Serializable {
     /**
      * Sets the connection status of the player
      *
-     * @param connected True if the user is connected, otherwise true;
+     * @param connected True if the user is connected, otherwise true
      */
     public void setConnected(boolean connected) {
         this.isConnected = connected;
     }
 
+    /**
+     * Tests if the player has won
+     *
+     * @return True if the player is a winner, otherwise false
+     */
     public boolean isWinner() {
         return isWinner;
     }
 
+    /**
+     * Sets the winner status of the player
+     *
+     * @param isWinner The winner status
+     */
     public void setWinner(boolean isWinner) {
         this.isWinner = isWinner;
     }
 
+    /**
+     * Tests if the player has lost
+     *
+     * @return True if the player has lost, otherwise false
+     */
     public boolean isLoser() {
         return isLoser;
     }
 
+    /**
+     * Sets the looser status of the player
+     *
+     * @param isLoser The loser status
+     */
     public void setLoser(boolean isLoser) {
         this.isLoser = isLoser;
     }

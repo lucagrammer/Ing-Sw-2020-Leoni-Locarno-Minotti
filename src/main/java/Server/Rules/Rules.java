@@ -13,6 +13,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The regular rules
+ */
 public class Rules implements Serializable {
     /**
      * Gets a RoundActions object containing all the possible actions of the specified player according to the Rules
@@ -147,9 +150,9 @@ public class Rules implements Serializable {
         switch (action.getActionType()) {
             case MOVE:
                 return doMove(action, player, game);
-            case BUILD_FLOOR:
+            case FLOOR:
                 return doBuild(action, player, game);
-            case BUILD_DOME:
+            case DOME:
                 return doDome(action, player, game);
             case END:
                 player.registerAction(action);

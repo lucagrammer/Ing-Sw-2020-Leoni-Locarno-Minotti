@@ -10,8 +10,9 @@ import java.net.ServerSocket;
  * Manages the initial startup phase of the server
  */
 public class ServerLauncher {
-    private final VirtualView virtualView;
-    private final Controller controller;
+    private VirtualView virtualView;
+    private Controller controller;
+    private ServerSocket serverSocket;
 
     /**
      * Constructor: build the ServerLauncher
@@ -32,7 +33,6 @@ public class ServerLauncher {
      * ServerLauncher launcher. Starts the first ClientHandler thread.
      */
     public void launch() {
-        ServerSocket serverSocket;
         try {
             serverSocket = new ServerSocket(Configurator.getDefaultPort());
         } catch (IOException e) {
@@ -41,6 +41,14 @@ public class ServerLauncher {
             return;
         }
         System.out.println(Frmt.color('g', "> Server started successfully"));
+        newGame();
+    }
+
+    public void newGame() {
+        controller = new Controller();
+        virtualView = new VirtualView();
+        controller.setVirtualView(virtualView);
+        virtualView.setController(controller);
 
         System.out.println("> Status: Waiting for the first player to connect");
         ClientHandler clientHandler = new ClientHandler(serverSocket, virtualView, true);

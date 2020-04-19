@@ -10,8 +10,18 @@ import Util.RoundActions;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Atlas Card
+ */
 public class AtlasRules extends Rules {
 
+    /**
+     * Gets a RoundActions object containing all the build-dome-actions of the specified worker according to the Rules
+     *
+     * @param worker The worker whose possible actions are to be analyzed
+     * @param game   The game to which the player belongs
+     * @return A RoundActions object containing all the possible build-dome-actions
+     */
     protected RoundActions getPossibleDomes(Worker worker, Game game) {
         RoundActions roundDomes = new RoundActions();
         Cell workerCell = worker.getPosition();

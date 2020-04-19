@@ -11,9 +11,18 @@ import Util.RoundActions;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Apollo Card
+ */
 public class ApolloRules extends Rules {
 
-    @Override
+    /**
+     * Gets a RoundActions object containing all the move-actions of the specified worker according to the Rules
+     *
+     * @param worker The worker whose possible moves are to be analyzed
+     * @param game   The game to which the player belongs
+     * @return A RoundActions object containing all the possible move-actions
+     */
     protected RoundActions getPossibleMoves(Worker worker, Game game) {
         RoundActions roundMoves = new RoundActions();
         Cell workerCell = worker.getPosition();
@@ -33,7 +42,14 @@ public class ApolloRules extends Rules {
         return roundMoves;
     }
 
-    @Override
+    /**
+     * Performs a certain move-action
+     *
+     * @param action The move-action to be performed
+     * @param player The player who performs the move-action
+     * @param game   The game to which the player belongs
+     * @return True if the build-floor-action is a winning action, otherwise false
+     */
     protected boolean doMove(Action action, Player player, Game game) {
         Worker worker = player.getWorker(action.getGenre());
         Cell currentCell = worker.getPosition();

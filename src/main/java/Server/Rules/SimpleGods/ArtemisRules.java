@@ -10,8 +10,18 @@ import Util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Artemis Card
+ */
 public class ArtemisRules extends Rules {
 
+    /**
+     * Gets a RoundActions object containing all the possible actions of the specified player according to the Rules
+     *
+     * @param player The player whose possible actions are to be analyzed
+     * @param game   The game to which the player belongs
+     * @return A RoundActions object containing all the possible actions
+     */
     public RoundActions nextPossibleActions(Player player, Game game) {
         RoundActions roundActions = player.getRoundActions();
         RoundActions nextPossibleActions = new RoundActions();
@@ -56,6 +66,13 @@ public class ArtemisRules extends Rules {
         return nextPossibleActions;
     }
 
+    /**
+     * Gets a RoundActions object containing all the move-actions of the specified worker according to the Rules
+     *
+     * @param worker The worker whose possible moves are to be analyzed
+     * @param game   The game to which the player belongs
+     * @return A RoundActions object containing all the possible move-actions
+     */
     protected RoundActions getPossibleMoves(Worker worker, Game game) {
         RoundActions roundMoves = new RoundActions();
         Cell workerCell = worker.getPosition();

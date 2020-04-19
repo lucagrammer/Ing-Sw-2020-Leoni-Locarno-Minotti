@@ -121,12 +121,12 @@ public class ArtemisRulesTest {
 
         RoundActions expectedActions = new RoundActions();
         //expected male actions
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.NW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SE, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.E, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.NW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.S, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SE, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.E, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.NW, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.W, 0));
         expectedActions.add(new Action(ActionType.MOVE, Genre.MALE, Direction.S, 0));
@@ -158,8 +158,8 @@ public class ArtemisRulesTest {
 
         RoundActions expectedActions = new RoundActions();
         //expected male actions
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.S, 2));
-        expectedActions.add(new Action(ActionType.BUILD_DOME, Genre.FEMALE, Direction.SE, 3));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.S, 2));
+        expectedActions.add(new Action(ActionType.DOME, Genre.FEMALE, Direction.SE, 3));
         assertEquals(expectedActions, nextPossibleActions);
     }
 
@@ -207,12 +207,12 @@ public class ArtemisRulesTest {
 
         RoundActions expectedActions = new RoundActions();
         //expected male actions
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.NW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.W, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SW, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.S, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.SE, 0));
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.MALE, Direction.E, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.NW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.W, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SW, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.S, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.SE, 0));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.MALE, Direction.E, 0));
         assertEquals(expectedActions, nextPossibleActions);
 
     }
@@ -240,8 +240,8 @@ public class ArtemisRulesTest {
 
         RoundActions expectedActions = new RoundActions();
         //expected male actions
-        expectedActions.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.S, 2));
-        expectedActions.add(new Action(ActionType.BUILD_DOME, Genre.FEMALE, Direction.SE, 3));
+        expectedActions.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.S, 2));
+        expectedActions.add(new Action(ActionType.DOME, Genre.FEMALE, Direction.SE, 3));
         assertEquals(expectedActions, nextPossibleActions);
     }
 
@@ -284,7 +284,7 @@ public class ArtemisRulesTest {
 
         RoundActions roundActionWithMoveAndBuild = new RoundActions();
         roundActionWithMoveAndBuild.add(new Action(ActionType.MOVE, Genre.FEMALE, Direction.NW, -3));
-        roundActionWithMoveAndBuild.add(new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.S, 0));
+        roundActionWithMoveAndBuild.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.S, 0));
         player2.setRoundActions(roundActionWithMoveAndBuild);
         RoundActions nextPossibleActions = rules.nextPossibleActions(player2, game);
 
@@ -306,7 +306,7 @@ public class ArtemisRulesTest {
         board.getCell(1, 3).addFloor();
         board.getCell(1, 3).addFloor();
 
-        Action domeAction = new Action(ActionType.BUILD_DOME, Genre.FEMALE, Direction.S, 3);
+        Action domeAction = new Action(ActionType.DOME, Genre.FEMALE, Direction.S, 3);
         boolean hasWin = rules.doAction(domeAction, player2, game);
 
         RoundActions playerActions = player2.getRoundActions();
@@ -328,7 +328,7 @@ public class ArtemisRulesTest {
 
         board.getCell(1, 3).addFloor();
 
-        Action buildAction = new Action(ActionType.BUILD_FLOOR, Genre.FEMALE, Direction.S, 1);
+        Action buildAction = new Action(ActionType.FLOOR, Genre.FEMALE, Direction.S, 1);
         boolean hasWin = rules.doAction(buildAction, player2, game);
 
         RoundActions playerActions = player2.getRoundActions();

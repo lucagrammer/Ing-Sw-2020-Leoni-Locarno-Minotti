@@ -51,7 +51,7 @@ public class RoundActions implements Serializable {
     public int hasBuildAnything() {
         int counter = 0;
         for (Action action : actionList) {
-            if (action.getActionType() == ActionType.BUILD_DOME || action.getActionType() == ActionType.BUILD_FLOOR)
+            if (action.getActionType() == ActionType.DOME || action.getActionType() == ActionType.FLOOR)
                 counter++;
         }
         return counter;
@@ -88,7 +88,7 @@ public class RoundActions implements Serializable {
      */
     public void addBuilds(List<Cell> cells, Cell origin, Genre genre) {
         for (Cell cell : cells) {
-            actionList.add(new Action(ActionType.BUILD_FLOOR, genre, origin.calculateDirection(cell), origin.getFloorDifference(cell)));
+            actionList.add(new Action(ActionType.FLOOR, genre, origin.calculateDirection(cell), origin.getFloorDifference(cell)));
         }
     }
 
@@ -101,7 +101,7 @@ public class RoundActions implements Serializable {
      */
     public void addDomes(List<Cell> cells, Cell origin, Genre genre) {
         for (Cell cell : cells) {
-            actionList.add(new Action(ActionType.BUILD_DOME, genre, origin.calculateDirection(cell), origin.getFloorDifference(cell)));
+            actionList.add(new Action(ActionType.DOME, genre, origin.calculateDirection(cell), origin.getFloorDifference(cell)));
         }
     }
 
@@ -113,7 +113,7 @@ public class RoundActions implements Serializable {
     public int hasBuildFloor() {
         int counter = 0;
         for (Action action : actionList) {
-            if (action.getActionType() == ActionType.BUILD_FLOOR)
+            if (action.getActionType() == ActionType.FLOOR)
                 counter++;
         }
         return counter;
@@ -172,12 +172,25 @@ public class RoundActions implements Serializable {
         return false;
     }
 
+    /**
+     * Finds the specified actions
+     *
+     * @param action    The action type of the action to be found
+     * @param genre     The genre of the action to be found
+     * @param direction The direction of the action to be found
+     * @return The action or null value
+     */
     public Action find(String action, String genre, String direction) {
         if (genre.equalsIgnoreCase("M")) {
             genre = "MALE";
         } else {
-            genre = "FEMALE";
+            if (genre.equalsIgnoreCase("F")) {
+                genre = "FEMALE";
+            } else {
+                return null;
+            }
         }
+
         for (Action a : getActionList()) {
             if (a.getActionType().name().equalsIgnoreCase(action) &&
                     a.getGenre().name().equalsIgnoreCase(genre) &&
@@ -188,6 +201,11 @@ public class RoundActions implements Serializable {
         return null;
     }
 
+    /**
+     * Tests if a player can end his turn
+     *
+     * @return The end action or the null value
+     */
     public Action canEnd() {
         for (Action a : getActionList()) {
             if (a.getActionType().equals(ActionType.END)) {
@@ -197,6 +215,11 @@ public class RoundActions implements Serializable {
         return null;
     }
 
+    /**
+     * Tests if a player ha ended his turn
+     *
+     * @return True if the player can end, otherwise false
+     */
     public boolean hasEnded() {
         for (Action a : getActionList()) {
             if (a.getActionType().equals(ActionType.END)) {

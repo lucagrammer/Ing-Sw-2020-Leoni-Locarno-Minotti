@@ -27,9 +27,10 @@ public interface View {
     /**
      * Shows a specified message to the user
      *
-     * @param string The message to be shown
+     * @param string    The message to be shown
+     * @param newScreen True if it's necessary to clean the interface
      */
-    void showMessage(String string);
+    void showMessage(String string, boolean newScreen);
 
     /**
      * Asks a new nickname to the user and notify the choice to the serverHandler
@@ -90,13 +91,36 @@ public interface View {
     /**
      * Shows the board of the game
      *
-     * @param game The game
+     * @param game      The game
+     * @param newScreen True if it's necessary to clean the interface
      */
-    void showMap(Game game);
+    void showMap(Game game, boolean newScreen);
 
-    void askAction(RoundActions roundActions);
+    /**
+     * Asks the action the player wants to perform
+     *
+     * @param roundActions All the possible actions
+     * @param game         The game
+     */
+    void askAction(RoundActions roundActions, Game game);
 
+    /**
+     * Notify the players that the game has ended and notify the winner
+     *
+     * @param winnerNickname The nickname of the winner
+     * @param youWin         True if the player has win
+     */
     void showGameEnd(String winnerNickname, boolean youWin);
 
-    void showDisconnection(String nickname);
+    /**
+     * Notify the players that a player has disconnected and the game has ended
+     *
+     * @param disconnectedNickname The nickname of the disconnected player
+     */
+    void showDisconnection(String disconnectedNickname);
+
+    /**
+     * Notify the players that has lost
+     */
+    void showLosingMessage();
 }
