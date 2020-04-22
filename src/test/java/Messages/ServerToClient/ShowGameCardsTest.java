@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static Util.MessageType.MV;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class CardInfoTest {
-    static CardInfo cardInfo;
+public class ShowGameCardsTest {
+    static ShowGameCards showGameCards;
     Rules rules;
     EnemyRules enemyRules;
 
@@ -25,7 +25,7 @@ public class CardInfoTest {
         cards.add(card1);
         cards.add(card2);
         cards.add(card3);
-        cardInfo= new CardInfo(cards);
-        assertEquals(MV, cardInfo.getType());
+        showGameCards = new ShowGameCards(cards);
+        assertEquals(MV, showGameCards.getType());
     }
 }

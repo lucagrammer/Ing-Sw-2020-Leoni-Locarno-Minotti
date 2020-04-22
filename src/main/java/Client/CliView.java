@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import static Util.Genre.FEMALE;
 import static Util.Genre.MALE;
 
 /**
@@ -54,7 +53,6 @@ public class CliView implements View {
         serverHandler.setConnection(serverIP);
     }
 
-
     /**
      * Shows a specified message to the user
      *
@@ -93,7 +91,7 @@ public class CliView implements View {
      *
      * @param newGame True if the it is a new game, otherwise false
      */
-    public void gameSetUp(boolean newGame) {
+    public void setUpGame(boolean newGame) {
         boolean incorrect;
         Frmt.clearScreen();
         String nickname = askNickname();
@@ -130,7 +128,7 @@ public class CliView implements View {
         }
         Frmt.clearScreen();
         System.out.println(Frmt.style('i', "\n  > Waiting for the other players to connect..."));
-        serverHandler.sendGameInfo(nickname, date, numPlayers);
+        serverHandler.sendSetUpGame(nickname, date, numPlayers);
     }
 
     /**
@@ -162,7 +160,7 @@ public class CliView implements View {
      *
      * @param numCards Number of cards to be selected
      */
-    public void chooseCards(int numCards) {
+    public void askGameCards(int numCards) {
         List<Card> allCardList = Configurator.getAllCards();
         List<String> allCardNames = new ArrayList<>();
         List<Card> chosenCard = new ArrayList<>();
@@ -202,7 +200,7 @@ public class CliView implements View {
         } while (incorrect || chosenCard.size() < numCards);
 
         showLoading();
-        serverHandler.sendCards(chosenCard);
+        serverHandler.sendGameCards(chosenCard);
     }
 
     /**
@@ -210,7 +208,7 @@ public class CliView implements View {
      *
      * @param possibleChoices All the possible cards
      */
-    public void chooseCard(List<Card> possibleChoices) {
+    public void askPlayerCard(List<Card> possibleChoices) {
         Card chosenCard = null;
         String chosenCardName;
         List<String> allCardNames = new ArrayList<>();
@@ -242,7 +240,7 @@ public class CliView implements View {
         }
 
         showLoading();
-        serverHandler.sendCard(chosenCard);
+        serverHandler.sendPlayerCard(chosenCard);
     }
 
     /**
@@ -250,7 +248,7 @@ public class CliView implements View {
      *
      * @param playersNicknames All the nicknames
      */
-    public void chooseFirstPlayer(List<String> playersNicknames) {
+    public void askFirstPlayer(List<String> playersNicknames) {
         List<String> allNicknames = new ArrayList<>();
 
         String chosenNickname;
@@ -279,7 +277,7 @@ public class CliView implements View {
         } while (incorrect);
 
         showLoading();
-        serverHandler.sendFirstPlayerNickname(chosenNickname);
+        serverHandler.sendFirstPlayer(chosenNickname);
     }
 
     /**
@@ -305,7 +303,7 @@ public class CliView implements View {
      *
      * @param playerList The list of players of the game
      */
-    public void showCardAssignment(List<Player> playerList) {
+    public void showCardAssignmentMessage(List<Player> playerList) {
         Frmt.clearScreen();
         System.out.println(" " + Frmt.style('b', "Cards assignment:"));
         for (Player player : playerList) {
@@ -315,45 +313,21 @@ public class CliView implements View {
     }
 
     /**
-     * Asks the color the player whats to choose and the first position for the male and female worker
-     *
-     * @param availableColors All the available colors
-     * @param game            The game
-     */
-    public void chooseColorAndPosition(List<String> availableColors, Game game) {
-        String myColor = chooseColor(availableColors);
-
-        List<Cell> forbiddenCells = new ArrayList<>();
-        for (Player player : game.getPlayers()) {
-            forbiddenCells.addAll(player.getOccupiedCells());
-        }
-
-        game.getPlayerByNickname(serverHandler.getNickname()).chooseColor(Color.getColorByName(myColor));
-        Cell maleCell = setPosition(MALE, forbiddenCells, game);
-        forbiddenCells.add(maleCell);
-        game.getPlayerByNickname(serverHandler.getNickname()).getWorker(MALE).setPosition(maleCell);
-        Cell femaleCell = setPosition(FEMALE, forbiddenCells, game);
-        game.getPlayerByNickname(serverHandler.getNickname()).getWorker(FEMALE).setPosition(femaleCell);
-        showMap(game, true);
-        serverHandler.sendColorAndPosition(myColor, maleCell, femaleCell);
-    }
-
-    /**
      * Asks the color the player whats to choose
      *
      * @param availableColors All the available colors
-     * @return The selected color
      */
-    private String chooseColor(List<String> availableColors) {
+    public void askPlayerColor(List<String> availableColors) {
+        String chosenColor;
+
         Frmt.clearScreen();
+        //There's only one color?
         if (availableColors.size() == 1) {
             System.out.print("\n\n " + Frmt.style('b', "Your color will be") + " ");
             System.out.println(Frmt.color(availableColors.get(0).toLowerCase().charAt(0), availableColors.get(0).toLowerCase()));
-            return availableColors.get(0);
+            chosenColor = availableColors.get(0);
 
         } else {
-
-            String chosenColor;
             List<String> allColors = new ArrayList<>();
             boolean incorrect;
             do {
@@ -377,9 +351,8 @@ public class CliView implements View {
                     incorrect = true;
                 }
             } while (incorrect);
-
-            return chosenColor;
         }
+        serverHandler.sendPlayerColor(chosenColor);
     }
 
     /**
@@ -387,9 +360,8 @@ public class CliView implements View {
      *
      * @param genre          The genre of the worker
      * @param forbiddenCells The forbidden cells
-     * @return The chosen position
      */
-    private Cell setPosition(Genre genre, List<Cell> forbiddenCells, Game game) {
+    public void askPlayerPosition(Genre genre, List<Cell> forbiddenCells, Game game) {
         Cell chosenCell;
         String chosenPosition;
         int row = -1, column = -1;
@@ -416,7 +388,7 @@ public class CliView implements View {
                 incorrect = true;
             }
         } while (incorrect);
-        return chosenCell;
+        serverHandler.sendPlayerPosition(genre, chosenCell);
     }
 
     /**
@@ -481,13 +453,13 @@ public class CliView implements View {
             }
 
             if (i == 2) {
-                System.out.print("\n\tS\t" + i + "\t");
+                System.out.print("\n\tW\t" + i + "\t");
             } else {
                 System.out.print("\n\t\t" + i + "\t");
             }
             for (int j = 0; j < 5; j++) {
                 Frmt domed = (cellsInfoMatrix[i][j].getDome()) ? Frmt.DOME : Frmt.NOT_DOME;
-                String genre = (cellGenreMatrix[i][j] == null) ? " " : Frmt.getGengreIcon(cellGenreMatrix[i][j]);
+                String genre = (cellGenreMatrix[i][j] == null) ? " " : Frmt.getGenreIcon(cellGenreMatrix[i][j]);
                 System.out.print(Frmt.color('w', Frmt.style('r', " " + domed + "    " + genre + "  ")) + "  ");
             }
             if (i == 2) {
@@ -521,10 +493,11 @@ public class CliView implements View {
     /**
      * Asks the action the player wants to perform
      *
-     * @param roundActions All the possible actions
-     * @param game         The game
+     * @param roundActions  All the possible actions
+     * @param game          The game
+     * @param loserNickname The nickname of the looser or null value
      */
-    public void askAction(RoundActions roundActions, Game game) {
+    public void askAction(RoundActions roundActions, Game game, String loserNickname) {
         String action, genre, direction;
         Action theAction;
         boolean incorrect;
@@ -533,15 +506,27 @@ public class CliView implements View {
         do {
             showMap(game, false);
             incorrect = false;
-            System.out.println("\n\t\t" + Frmt.style('b', "It's your turn. "));
+            System.out.print("\n\t\t");
+
+            // There's a loser?
+            if (loserNickname != null) {
+                System.out.println(Frmt.style('b', Frmt.color('r', Frmt.DEATH + "    " + loserNickname.toUpperCase() + " has lost")));
+            }
+            System.out.println(Frmt.style('b', "\t\tIt's your turn. "));
             System.out.print("\t\t" + Frmt.style('b', "You can:  \n\t\t"));
+            int counter = 0;
             for (Action possibleAction : roundActions.getActionList()) {
+                if (counter == 11) {
+                    System.out.println();
+                    counter = 0;
+                }
                 if (possibleAction.getActionType().name().equalsIgnoreCase("END")) {
                     System.out.print("END; ");
 
                 } else {
                     System.out.print(possibleAction.getActionType().name() + " " + possibleAction.getGenre().name().charAt(0) + " " + possibleAction.getDirection().name() + "; ");
                 }
+                counter++;
             }
 
             System.out.print("\n\n\t\t" + Frmt.style('b', "Insert your action type [MOVE/FLOOR/DOME/END]:") + " ");
@@ -571,7 +556,7 @@ public class CliView implements View {
      * @param winnerNickname The nickname of the winner
      * @param youWin         True if the player has win
      */
-    public void showGameEnd(String winnerNickname, boolean youWin) {
+    public void showGameEndMessage(String winnerNickname, boolean youWin) {
         if (youWin) {
             System.out.println(Frmt.color('g', "\n\n\t" + Frmt.style('b', "If it seems to be true, probably it is: YOU WIN " + Frmt.CUP)));
         } else {
@@ -585,7 +570,7 @@ public class CliView implements View {
      *
      * @param disconnectedNickname The nickname of the disconnected player
      */
-    public void showDisconnection(String disconnectedNickname) {
+    public void showDisconnectionMessage(String disconnectedNickname) {
         Frmt.clearScreen();
         System.out.println(Frmt.color('r', "\n\n\t" + Frmt.style("ui", "GAME OVER: " +
                 disconnectedNickname.toUpperCase() + " has disconnected.")));
@@ -617,11 +602,7 @@ public class CliView implements View {
             }
         } while (incorrect);
 
-        serverHandler.closeConnection();
-        if (choice.equalsIgnoreCase("yes")) {
-            ClientLauncher.main(null);
-        }
+        serverHandler.sendNewGame(choice.equalsIgnoreCase("yes"));
     }
-
 
 }

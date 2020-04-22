@@ -19,7 +19,7 @@ public class TurnTest {
     @Test
     public void setType_getCorrectType() {
         turn1 = new Turn(action, nickname);
-        turn2 = new Turn(roundActions, game);
+        turn2 = new Turn(roundActions, game, null);
         assertEquals(CV, turn2.getType());
         assertEquals(VC, turn1.getType());
     }

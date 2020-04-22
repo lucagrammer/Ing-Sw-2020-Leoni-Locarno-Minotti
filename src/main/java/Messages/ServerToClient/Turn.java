@@ -20,17 +20,20 @@ public class Turn implements Serializable, CVMessage, VCMessage {
     private Game game;
     private Action action;
     private String nickname;
+    private String loserNickname;
 
     /**
      * Server-side constructor: build a request message
      *
-     * @param roundActions The possible actions
-     * @param game         The game
+     * @param roundActions  The possible actions
+     * @param game          The game
+     * @param loserNickname The nickname of the looser or null value
      */
-    public Turn(RoundActions roundActions, Game game) {
+    public Turn(RoundActions roundActions, Game game, String loserNickname) {
         messageType = MessageType.CV;
         this.roundActions = roundActions;
         this.game = game;
+        this.loserNickname = loserNickname;
     }
 
     /**
@@ -51,7 +54,7 @@ public class Turn implements Serializable, CVMessage, VCMessage {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.askAction(roundActions, game);
+        view.askAction(roundActions, game, loserNickname);
     }
 
     /**

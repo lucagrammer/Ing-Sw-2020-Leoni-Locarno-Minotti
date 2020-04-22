@@ -6,6 +6,7 @@ import Client.View;
  * Message from Controller to View
  */
 public interface CVMessage extends Message {
+
     /**
      * Execute the request client-side
      *

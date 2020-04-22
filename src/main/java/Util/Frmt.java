@@ -135,12 +135,19 @@ public enum Frmt {
     }
 
     /**
+     * Clear the server log
+     */
+    public static void clearServerLog() {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    }
+
+    /**
      * Gets the icon of a specified genre
      *
      * @param genre The specified genre
      * @return The string icon
      */
-    public static String getGengreIcon(Genre genre) {
+    public static String getGenreIcon(Genre genre) {
         switch (genre) {
             case MALE:
                 return MALE_ICON.toString();

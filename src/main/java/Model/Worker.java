@@ -39,6 +39,7 @@ public class Worker implements Serializable {
         this.genre = genre;
         this.player = player;
         this.position = null;
+        this.color = null;
     }
 
     /**

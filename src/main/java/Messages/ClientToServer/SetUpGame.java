@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Server connection message and exchange of player and game information
  */
-public class ConnectionSetup implements Serializable, CVMessage, VCMessage {
+public class SetUpGame implements Serializable, CVMessage, VCMessage {
     private final MessageType messageType;
     private String nickname;
     private Date birthDate;
@@ -26,7 +26,7 @@ public class ConnectionSetup implements Serializable, CVMessage, VCMessage {
      * @param birthDate  The birth date of the player
      * @param numPlayers The number of the players for the game
      */
-    public ConnectionSetup(String nickname, Date birthDate, int numPlayers) {
+    public SetUpGame(String nickname, Date birthDate, int numPlayers) {
         this.messageType = MessageType.VC;
         this.nickname = nickname;
         this.birthDate = birthDate;
@@ -38,7 +38,7 @@ public class ConnectionSetup implements Serializable, CVMessage, VCMessage {
      *
      * @param newGame True if the player has to decide the number of players, otherwise false
      */
-    public ConnectionSetup(boolean newGame) {
+    public SetUpGame(boolean newGame) {
         this.messageType = MessageType.CV;
         this.newGame = newGame;
     }
@@ -85,7 +85,7 @@ public class ConnectionSetup implements Serializable, CVMessage, VCMessage {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.gameSetUp(newGame);
+        view.setUpGame(newGame);
     }
 
     /**

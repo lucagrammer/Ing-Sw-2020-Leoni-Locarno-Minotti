@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Message to notify the winner and to notify the end of the game
  */
-public class WonGameMessage implements Serializable, MVMessage {
+public class ShowGameEndMessage implements Serializable, MVMessage {
     private final MessageType messageType;
     private final String winnerNickname;
     private final boolean youWin;
@@ -20,7 +20,7 @@ public class WonGameMessage implements Serializable, MVMessage {
      * @param winnerNickname The nickname of the winner
      * @param youWin         True if the recipient is the winner
      */
-    public WonGameMessage(String winnerNickname, boolean youWin) {
+    public ShowGameEndMessage(String winnerNickname, boolean youWin) {
         messageType = MessageType.MV;
         this.winnerNickname = winnerNickname;
         this.youWin = youWin;
@@ -32,7 +32,7 @@ public class WonGameMessage implements Serializable, MVMessage {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.showGameEnd(winnerNickname, youWin);
+        view.showGameEndMessage(winnerNickname, youWin);
     }
 
     /**

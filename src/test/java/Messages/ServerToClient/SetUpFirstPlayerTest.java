@@ -1,6 +1,5 @@
 package Messages.ServerToClient;
 
-import Model.Card;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -8,10 +7,10 @@ import java.util.List;
 
 import static Util.MessageType.CV;
 import static Util.MessageType.VC;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class SelectFirstTest {
-    SelectFirst selectFirst1, selectFirst2;
+public class SetUpFirstPlayerTest {
+    SetUpFirstPlayer setUpFirstPlayer1, setUpFirstPlayer2;
     String firstPlayerNickname;
 
     @Test
@@ -23,9 +22,9 @@ public class SelectFirstTest {
         nicknames.add(nicknames1);
         nicknames.add(nicknames2);
         nicknames.add(nicknames3);
-        selectFirst1= new SelectFirst(nicknames);
-        selectFirst2= new SelectFirst(firstPlayerNickname);
-        assertEquals(CV, selectFirst1.getType());
-        assertEquals(VC, selectFirst2.getType());
+        setUpFirstPlayer1 = new SetUpFirstPlayer(nicknames);
+        setUpFirstPlayer2 = new SetUpFirstPlayer(firstPlayerNickname);
+        assertEquals(CV, setUpFirstPlayer1.getType());
+        assertEquals(VC, setUpFirstPlayer2.getType());
     }
 }

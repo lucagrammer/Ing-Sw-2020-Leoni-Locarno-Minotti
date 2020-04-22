@@ -27,7 +27,6 @@ public class ClientLauncher {
         do {
             System.out.print(Frmt.style('b', " Choose the interface you want to use [CLI/GUI]: "));
             String preferredInterface = scanner.nextLine();
-            fastStart(preferredInterface);
             if ((preferredInterface.equalsIgnoreCase("CLI"))) {
                 view = new CliView();
                 serverHandler.setView(view);
@@ -38,7 +37,7 @@ public class ClientLauncher {
                 if ((preferredInterface.equalsIgnoreCase("GUI"))) {
                     //view = new CliView();
                     //serverHandler.addView(view);
-                    //view.addServerHandeler(serverHandler);
+                    //view.addServerHandler(serverHandler);
                     //incorrect = false;
                     //view.launch();
                     Frmt.clearScreen();
@@ -48,6 +47,7 @@ public class ClientLauncher {
                     Frmt.clearScreen();
                     System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
                     incorrect = true;
+                    fastStart(preferredInterface); // DEBUG ONLY
                 }
             }
         } while (incorrect);

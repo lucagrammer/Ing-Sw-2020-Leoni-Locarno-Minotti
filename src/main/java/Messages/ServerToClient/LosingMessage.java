@@ -5,6 +5,7 @@ import Messages.MVMessage;
 import Util.MessageType;
 
 import java.io.Serializable;
+//TODO eliminare
 
 /**
  * Message to notify the loser

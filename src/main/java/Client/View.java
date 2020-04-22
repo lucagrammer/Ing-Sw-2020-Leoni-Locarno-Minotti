@@ -1,8 +1,10 @@
 package Client;
 
 import Model.Card;
+import Model.Cell;
 import Model.Game;
 import Model.Player;
+import Util.Genre;
 import Util.RoundActions;
 
 import java.util.List;
@@ -27,10 +29,10 @@ public interface View {
     /**
      * Shows a specified message to the user
      *
-     * @param string    The message to be shown
+     * @param message   The message to be shown
      * @param newScreen True if it's necessary to clean the interface
      */
-    void showMessage(String string, boolean newScreen);
+    void showMessage(String message, boolean newScreen);
 
     /**
      * Asks a new nickname to the user and notify the choice to the serverHandler
@@ -43,28 +45,28 @@ public interface View {
      *
      * @param newGame True if the it is a new game, otherwise false
      */
-    void gameSetUp(boolean newGame);
+    void setUpGame(boolean newGame);
 
     /**
      * Asks the game cards
      *
      * @param numCards Number of cards to be selected
      */
-    void chooseCards(int numCards);
+    void askGameCards(int numCards);
 
     /**
      * Asks the card the player whats to use during the game
      *
      * @param possibleChoices All the possible cards
      */
-    void chooseCard(List<Card> possibleChoices);
+    void askPlayerCard(List<Card> possibleChoices);
 
     /**
      * Asks the nickname of the first player
      *
      * @param playersNicknames All the nicknames
      */
-    void chooseFirstPlayer(List<String> playersNicknames);
+    void askFirstPlayer(List<String> playersNicknames);
 
     /**
      * Show all the cards of the game
@@ -78,15 +80,22 @@ public interface View {
      *
      * @param playerList The list of players of the game
      */
-    void showCardAssignment(List<Player> playerList);
+    void showCardAssignmentMessage(List<Player> playerList);
 
     /**
-     * Asks the color the player whats to choose and the first position for the male and female worker
+     * Asks the color the player whats to choose
      *
      * @param availableColors All the available colors
-     * @param game            The game
      */
-    void chooseColorAndPosition(List<String> availableColors, Game game);
+    void askPlayerColor(List<String> availableColors);
+
+    /**
+     * Asks the first position for the male and female worker
+     *
+     * @param genre          The genre of the worker
+     * @param forbiddenCells The forbidden cells
+     */
+    void askPlayerPosition(Genre genre, List<Cell> forbiddenCells, Game game);
 
     /**
      * Shows the board of the game
@@ -99,10 +108,11 @@ public interface View {
     /**
      * Asks the action the player wants to perform
      *
-     * @param roundActions All the possible actions
-     * @param game         The game
+     * @param roundActions  All the possible actions
+     * @param game          The game
+     * @param loserNickname The nickname of the looser or null value
      */
-    void askAction(RoundActions roundActions, Game game);
+    void askAction(RoundActions roundActions, Game game, String loserNickname);
 
     /**
      * Notify the players that the game has ended and notify the winner
@@ -110,14 +120,14 @@ public interface View {
      * @param winnerNickname The nickname of the winner
      * @param youWin         True if the player has win
      */
-    void showGameEnd(String winnerNickname, boolean youWin);
+    void showGameEndMessage(String winnerNickname, boolean youWin);
 
     /**
      * Notify the players that a player has disconnected and the game has ended
      *
      * @param disconnectedNickname The nickname of the disconnected player
      */
-    void showDisconnection(String disconnectedNickname);
+    void showDisconnectionMessage(String disconnectedNickname);
 
     /**
      * Notify the players that has lost

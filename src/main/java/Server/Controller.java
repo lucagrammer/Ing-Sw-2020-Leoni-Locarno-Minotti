@@ -6,7 +6,9 @@ import Model.Cell;
 import Model.Game;
 import Model.Player;
 import Util.*;
+import Util.exceptions.MustRestartException;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +20,220 @@ public class Controller {
     private VirtualView virtualView;
     private Player currentPlayer;
     private boolean mustReset = false;
+
+    /**
+     * Manages the cards setup process
+     *
+     * @throws InterruptedException When the main thread is stopped
+     * @throws MustRestartException When the game must restart
+     */
+    public void gameStarter() throws InterruptedException, MustRestartException {
+        synchronized (this) {
+            while (!isReady() && !mustReset) {
+                this.wait();
+            }
+        }
+        if (mustReset) {
+            reset();
+        }
+        System.out.println("> Status: Starting the game");
+
+        // Challenger chooses cards
+        List<Player> players = game.getPlayers();
+        int randomNumber = (int) (Math.random() * (players.size()));
+        Player challenger = players.get(randomNumber);
+        virtualView.getClientHandlerByNickname(challenger.getNickname()).send(new SetUpGameCards(players.size()));
+        System.out.println("> Status: Waiting for chosen cards");
+
+        synchronized (this) {
+            while (!(areCardsChosen()) && !mustReset) {
+                this.wait();
+            }
+        }
+        if (mustReset) {
+            reset();
+        }
+
+        System.out.println("> Status: Cards has been chosen");
+        List<Card> possibleChoices = game.getUsedCards();
+        virtualView.sendToEveryone(new ShowGameCards(possibleChoices));
+
+        // Players chose cards
+        Player currentPlayer = game.getNextPlayer(challenger);
+        String currentPlayerNickname;
+        for (int i = 0; i < game.getPlayers().size() - 1; i++) {
+            currentPlayerNickname = currentPlayer.getNickname();
+            virtualView.getClientHandlerByNickname(currentPlayerNickname).send(new SetUpPlayerCard(possibleChoices));
+            synchronized (this) {
+                while (null == currentPlayer.getCard() && !mustReset) {
+                    this.wait();
+                }
+            }
+            if (mustReset) {
+                reset();
+            }
+
+            System.out.println("> Status: " + currentPlayerNickname + " has chosen " + currentPlayer.getCard().getName() + " card");
+            possibleChoices.remove(currentPlayer.getCard());
+            currentPlayer = game.getNextPlayer(currentPlayer);
+        }
+        currentPlayerNickname = currentPlayer.getNickname();
+        currentPlayer.setCard(possibleChoices.get(0));
+        System.out.println("> Status: " + currentPlayerNickname + " has " + currentPlayer.getCard().getName() + " card");
+
+        // Show cards to everyone
+        virtualView.sendToEveryone(new ShowCardAssignment(game.getPlayers()));
+        if (mustReset) {
+            reset();
+        }
+
+        // Challenger chooses the first player
+        virtualView.getClientHandlerByNickname(challenger.getNickname()).send(new SetUpFirstPlayer(game.getPlayersNickname()));
+        synchronized (this) {
+            while (null == this.currentPlayer && !mustReset) {
+                this.wait();
+            }
+            if (mustReset) {
+                reset();
+            }
+        }
+        System.out.println("> Status: The first player will be " + this.currentPlayer.getNickname());
+
+        firstTurn();
+    }
+
+    /**
+     * Manages the first turn: color setup and positioning of the workers
+     *
+     * @throws InterruptedException When the main thread is stopped
+     * @throws MustRestartException When the game must restart
+     */
+    private void firstTurn() throws InterruptedException, MustRestartException {
+        String currentPlayerNickname;
+        ClientHandler currentPlayerClientHandler;
+        List<String> availableColors = Color.allColorsToString();
+
+        for (int i = 0; i < game.getPlayers().size(); i++) {
+            currentPlayerNickname = currentPlayer.getNickname();
+            currentPlayerClientHandler = virtualView.getClientHandlerByNickname(currentPlayerNickname);
+
+            // Color setup
+            currentPlayerClientHandler.send(new SetUpPlayerColor(availableColors));
+            synchronized (this) {
+                while (currentPlayer.getColor() == null && !mustReset) {
+                    this.wait();
+                }
+            }
+            if (mustReset) {
+                reset();
+            }
+            availableColors.remove(currentPlayer.getColor().toString());
+            System.out.println("> Player info: " + currentPlayerNickname.toUpperCase() +
+                    "\n\tcolor: " + currentPlayer.getColor());
+
+            // Position setup
+            for (Genre genre : Genre.values()) {
+                // Calculate forbidden cells
+                List<Cell> forbiddenCells = new ArrayList<>();
+                for (Player player : game.getPlayers()) {
+                    forbiddenCells.addAll(player.getOccupiedCells());
+                }
+
+                currentPlayerClientHandler.send(new SetUpPlayerPosition(genre, forbiddenCells, game));
+                synchronized (this) {
+                    while (currentPlayer.getWorker(genre).getPosition() == null && !mustReset) {
+                        this.wait();
+                    }
+                }
+                if (mustReset) {
+                    reset();
+                }
+                System.out.println("\t" + genre.name().toLowerCase() + " position: " + currentPlayer.getWorker(genre).getPosition());
+            }
+
+            currentPlayer = game.getNextPlayer(currentPlayer);
+        }
+        game();
+    }
+
+    /**
+     * Manages the turns and the actions
+     *
+     * @throws InterruptedException When the main thread is stopped
+     * @throws MustRestartException When the game must restart
+     */
+    private void game() throws InterruptedException, MustRestartException {
+        String loserNickname = null;
+
+        while (!game.hasWinner() && !mustReset) {
+            // Find the possible actions
+            RoundActions roundActions = currentPlayer.getCard().getRules().nextPossibleActions(currentPlayer, game);
+            for (Player player : game.getPlayers()) {
+                roundActions = player.getCard().getEnemyRules().fixEnemyActions(roundActions, game, player);
+            }
+
+            List<Action> roundActionsList = roundActions.getActionList();
+            // Contains the lose action?
+            if (roundActionsList.get(0).getActionType().equals(ActionType.LOSE)) {
+                loserNickname = currentPlayer.getNickname();
+                removePlayer(currentPlayer);
+
+                // The game must ended?
+                if (game.getPlayers().size() == 1) {
+                    game.getPlayers().get(0).setWinner(true);
+
+                } else {
+                    currentPlayer = game.getNextPlayer(currentPlayer);
+                    // Flush the actions of the next player
+                    currentPlayer.setRoundActions(new RoundActions());
+                }
+            } else {
+                // The player has ended his turn or can now only end his turn?
+                if (currentPlayer.getRoundActions().hasEnded() || (roundActionsList.size() == 1 &&
+                        roundActionsList.get(0).getActionType().equals(ActionType.END))) {
+                    currentPlayer = game.getNextPlayer(currentPlayer);
+                    // Flush the actions of the next player
+                    currentPlayer.setRoundActions(new RoundActions());
+                } else {
+                    // Update the map for everyone
+                    virtualView.sendToEveryoneExcept(new ShowMap(game, currentPlayer.getNickname(), loserNickname), currentPlayer);
+
+                    int currentActionsNumber = currentPlayer.getRoundActions().getActionList().size();
+                    virtualView.getClientHandlerByNickname(currentPlayer.getNickname()).send(new Turn(roundActions, game, loserNickname));
+                    loserNickname = null;
+                    synchronized (this) {
+                        while (currentPlayer.getRoundActions().getActionList().size() <= currentActionsNumber && !mustReset) {
+                            this.wait();
+                        }
+                        if (mustReset) {
+                            reset();
+                        }
+                    }
+                }
+            }
+        }
+        if (mustReset) {
+            reset();
+        }
+
+        // Update the final map for everyone
+        virtualView.sendToEveryoneExcept(new ShowMap(game, currentPlayer.getNickname(), null), currentPlayer);
+
+        // There's a winner: notify everyone
+        for (Player p : game.getPlayers()) {
+            virtualView.getClientHandlerByNickname(p.getNickname()).send(new ShowGameEndMessage(currentPlayer.getNickname(), currentPlayer.equals(p)));
+        }
+        reset();
+    }
+
+    /**
+     * Sets the virtual view
+     *
+     * @param virtualView The virtual view
+     */
+    public void setVirtualView(VirtualView virtualView) {
+        this.virtualView = virtualView;
+    }
 
     /**
      * Creates the game and adds the first player
@@ -43,15 +259,6 @@ public class Controller {
     }
 
     /**
-     * Sets the virtual view
-     *
-     * @param virtualView The virtual view
-     */
-    public void setVirtualView(VirtualView virtualView) {
-        this.virtualView = virtualView;
-    }
-
-    /**
      * Tests if the game has been created and it's ready to start
      *
      * @return True if the game is ready to start.
@@ -73,170 +280,6 @@ public class Controller {
             }
         }
         return true;
-    }
-
-    /**
-     * Manages the cards setup process
-     *
-     * @throws InterruptedException When the main thread is stopped
-     */
-    public void gameStarter() throws InterruptedException {
-        synchronized (this) {
-            while (!isReady() && !mustReset) {
-                this.wait();
-            }
-        }
-        if (mustReset) {
-            reset();
-        }
-        System.out.println("> Status: Starting the game");
-
-        // Challenger chooses cards
-        List<Player> players = game.getPlayers();
-        int randomNumber = (int) (Math.random() * (players.size()));
-        Player challenger = players.get(randomNumber);
-        virtualView.getClientHandlerByNickname(challenger.getNickname()).send(new ChooseCards(players.size()));
-        System.out.println("> Status: Waiting for chosen cards");
-
-        synchronized (this) {
-            while (!(areCardsChosen()) && !mustReset) {
-                this.wait();
-            }
-        }
-        if (mustReset) {
-            reset();
-        }
-
-        System.out.println("> Status: Cards has been chosen");
-        List<Card> possibleChoices = game.getUsedCards();
-        virtualView.sendToEveryone(new CardInfo(possibleChoices));
-
-        // Players chose cards
-        Player currentPlayer = game.getNextPlayer(challenger);
-        String currentPlayerNickname;
-        for (int i = 0; i < game.getPlayers().size() - 1; i++) {
-            currentPlayerNickname = currentPlayer.getNickname();
-            virtualView.getClientHandlerByNickname(currentPlayerNickname).send(new SelectCard(possibleChoices));
-            synchronized (this) {
-                while (null == currentPlayer.getCard() && !mustReset) {
-                    this.wait();
-                }
-            }
-            if (mustReset) {
-                reset();
-            }
-
-            System.out.println("> Status: " + currentPlayerNickname + " has chosen " + currentPlayer.getCard().getName());
-            possibleChoices.remove(currentPlayer.getCard());
-            currentPlayer = game.getNextPlayer(currentPlayer);
-        }
-        currentPlayerNickname = currentPlayer.getNickname();
-        currentPlayer.setCard(possibleChoices.get(0));
-        System.out.println("> Status: " + currentPlayerNickname + " has " + currentPlayer.getCard().getName());
-
-        // Notify all cards
-        virtualView.sendToEveryone(new ShowCard(game.getPlayers()));
-
-        // Challenger chooses the first player
-        virtualView.getClientHandlerByNickname(challenger.getNickname()).send(new SelectFirst(game.getPlayersNickname()));
-        synchronized (this) {
-            while (null == this.currentPlayer && !mustReset) {
-                this.wait();
-            }
-            if (mustReset) {
-                reset();
-            }
-        }
-        System.out.println("> Status: The first player will be " + this.currentPlayer.getNickname());
-
-        firstTurn();
-    }
-
-    /**
-     * Manages the first turn: color setup and positioning of the workers
-     *
-     * @throws InterruptedException When the main thread is stopped
-     */
-    private void firstTurn() throws InterruptedException {
-        String currentPlayerNickname;
-        List<String> availableColors = Color.allColorsToString();
-        for (int i = 0; i < game.getPlayers().size(); i++) {
-            currentPlayerNickname = currentPlayer.getNickname();
-            virtualView.getClientHandlerByNickname(currentPlayerNickname).send(new PlayerInit(game, availableColors));
-            synchronized (this) {
-                while (currentPlayer.getOccupiedCells().size() < 2 && !mustReset) {
-                    this.wait();
-                }
-            }
-            if (mustReset) {
-                reset();
-            }
-
-            System.out.println("> It's " + currentPlayerNickname.toUpperCase() + "'s turn:" +
-                    "\n\tColor: " + currentPlayer.getWorker(Genre.MALE).getColor() +
-                    "\n\tMale Position: " + currentPlayer.getWorker(Genre.MALE).getPosition() +
-                    "\n\tFemale Position: " + currentPlayer.getWorker(Genre.FEMALE).getPosition());
-            availableColors.remove(currentPlayer.getWorker(Genre.MALE).getColor().toString());
-            currentPlayer = game.getNextPlayer(currentPlayer);
-        }
-        game();
-    }
-
-    /**
-     * Manages the turns and the actions
-     *
-     * @throws InterruptedException When the main thread is stopped
-     */
-    private void game() throws InterruptedException {
-        while (!game.hasWinner() && !mustReset) {
-            // Find the possible actions
-            RoundActions roundActions = currentPlayer.getCard().getRules().nextPossibleActions(currentPlayer, game);
-
-            for (Player player : game.getPlayers()) {
-                roundActions = player.getCard().getEnemyRules().fixEnemyActions(roundActions, game, player);
-            }
-
-            List<Action> roundActionsList = roundActions.getActionList();
-            if (roundActionsList.get(0).getActionType().equals(ActionType.LOSE)) {
-                removePlayer(currentPlayer);
-                if (game.getPlayers().size() == 1) {
-                    game.getPlayers().get(0).setWinner(true);
-                } else {
-                    currentPlayer = game.getNextPlayer(currentPlayer);
-                    // Flush the actions of the next player
-                    currentPlayer.setRoundActions(new RoundActions());
-                }
-            } else {
-                if (currentPlayer.getRoundActions().hasEnded() || (roundActionsList.size() == 1 &&
-                        roundActionsList.get(0).getActionType().equals(ActionType.END))) {
-                    currentPlayer = game.getNextPlayer(currentPlayer);
-                    // Flush the actions of the next player
-                    currentPlayer.setRoundActions(new RoundActions());
-                } else {
-                    virtualView.sendToEveryoneExcept(new ShowMap(game, currentPlayer.getNickname()), currentPlayer);
-
-                    int currentActionsNumber = currentPlayer.getRoundActions().getActionList().size();
-                    virtualView.getClientHandlerByNickname(currentPlayer.getNickname()).send(new Turn(roundActions, game));
-                    synchronized (this) {
-                        while (currentPlayer.getRoundActions().getActionList().size() <= currentActionsNumber && !mustReset) {
-                            this.wait();
-                        }
-                        if (mustReset) {
-                            reset();
-                        }
-                    }
-                }
-            }
-        }
-        if (mustReset) {
-            reset();
-        }
-
-        // There's a winner: notify everyone
-        for (Player p : game.getPlayers()) {
-            virtualView.getClientHandlerByNickname(p.getNickname()).send(new WonGameMessage(currentPlayer.getNickname(), currentPlayer.equals(p)));
-        }
-        reset();
     }
 
     /**
@@ -303,6 +346,9 @@ public class Controller {
     public void setColor(String nickname, String color) {
         Color myColor = Color.getColorByName(color);
         game.getPlayerByNickname(nickname).chooseColor(myColor);
+        synchronized (this) {
+            notifyAll();
+        }
     }
 
     /**
@@ -320,16 +366,26 @@ public class Controller {
     }
 
     /**
-     * Removes the player from the game and notify the other users (or end the game)
+     * Notify the other users and end the game if the player is not a loser
      *
      * @param nickname The nickname of the disconnected user
      */
     public void hasDisconnected(String nickname) {
-        game.getPlayerByNickname(nickname).setConnected(false);
-        virtualView.sendToEveryone(new NotifyDisconnection(nickname));
-        mustReset = true;
-        synchronized (this) {
-            notifyAll();
+        // had the player lost? if so do nothing
+        if (game != null) {
+            Player disconnectedPlayer = game.getPlayerByNickname(nickname);
+            if (disconnectedPlayer != null && disconnectedPlayer.isLoser() /*&& !game.hasWinner()*/) {
+                return;
+            }
+        }
+
+        // already reset?
+        if (!mustReset) {
+            virtualView.sendToEveryone(new ShowDisconnection(nickname));
+            mustReset = true;
+            synchronized (this) {
+                notifyAll();
+            }
         }
     }
 
@@ -351,10 +407,13 @@ public class Controller {
     }
 
     /**
-     * Gets ready for a new game
+     * Prepares the server for a new game by completing the termination of the current game
+     *
+     * @throws MustRestartException When the server must restart
      */
-    private void reset() {
-        System.out.println(Frmt.color('g', "\n> Getting ready for a new game..."));
-        ServerLauncher.newGame();
+    private void reset() throws MustRestartException {
+        virtualView.closeAll();
+        System.out.println(Frmt.color('r', "> Status: Game controller has been stopped"));
+        throw new MustRestartException();
     }
 }

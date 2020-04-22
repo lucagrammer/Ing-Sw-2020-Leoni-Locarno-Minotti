@@ -6,51 +6,48 @@ import Messages.VCMessage;
 import Model.Cell;
 import Model.Game;
 import Server.VirtualView;
+import Util.Genre;
 import Util.MessageType;
 
 import java.io.Serializable;
 import java.util.List;
 
-import static Util.Genre.FEMALE;
-import static Util.Genre.MALE;
-
 /**
  * Message for the choice of the color and the position of the workers of the player
  */
-public class PlayerInit implements CVMessage, VCMessage, Serializable {
-    MessageType messageType;
-    Game game;
-    List<String> availableColors;
-    String color;
-    Cell malePosition;
-    Cell femalePosition;
-    String nickname;
+public class SetUpPlayerPosition implements CVMessage, VCMessage, Serializable {
+    private final MessageType messageType;
+    private final Genre genre;
+    private Game game;
+    private List<Cell> forbiddenCells;
+    private Cell chosenPosition;
+    private String nickname;
 
     /**
      * Server-side constructor: build a request message
      *
-     * @param game            The game
-     * @param availableColors The available colors
+     * @param genre          The genre of the worker
+     * @param forbiddenCells The forbidden cells
+     * @param game           The game
      */
-    public PlayerInit(Game game, List<String> availableColors) {
+    public SetUpPlayerPosition(Genre genre, List<Cell> forbiddenCells, Game game) {
         this.messageType = MessageType.CV;
         this.game = game;
-        this.availableColors = availableColors;
+        this.genre = genre;
+        this.forbiddenCells = forbiddenCells;
     }
 
     /**
      * Client-side constructor: build a response message
      *
-     * @param color          The chosen color
-     * @param malePosition   The position of the male
-     * @param femalePosition The position of the male
+     * @param genre          The genre of the worker
+     * @param chosenPosition The chosen position of the worker
      * @param nickname       The nickname of the player
      */
-    public PlayerInit(String color, Cell malePosition, Cell femalePosition, String nickname) {
+    public SetUpPlayerPosition(Genre genre, Cell chosenPosition, String nickname) {
         this.messageType = MessageType.VC;
-        this.malePosition = malePosition;
-        this.femalePosition = femalePosition;
-        this.color = color;
+        this.chosenPosition = chosenPosition;
+        this.genre = genre;
         this.nickname = nickname;
     }
 
@@ -69,7 +66,7 @@ public class PlayerInit implements CVMessage, VCMessage, Serializable {
      * @param view The recipient component
      */
     public void execute(View view) {
-        //view.chooseColorAndPosition(availableColors, game);
+        view.askPlayerPosition(genre, forbiddenCells, game);
     }
 
     /**
@@ -78,8 +75,6 @@ public class PlayerInit implements CVMessage, VCMessage, Serializable {
      * @param virtualView The recipient component
      */
     public void execute(VirtualView virtualView) {
-        virtualView.setPlayerColor(nickname, color);
-        virtualView.setPlayerPosition(nickname, MALE, malePosition);
-        virtualView.setPlayerPosition(nickname, FEMALE, femalePosition);
+        virtualView.setPlayerPosition(nickname, genre, chosenPosition);
     }
 }

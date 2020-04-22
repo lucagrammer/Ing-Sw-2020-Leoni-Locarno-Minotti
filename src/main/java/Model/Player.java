@@ -73,7 +73,7 @@ public class Player implements Serializable {
      * @return The color of the workers of the player
      */
     public Color getColor() {
-        return (femaleWorker == null) ? null : femaleWorker.getColor();
+        return femaleWorker.getColor();
     }
 
     /**

@@ -4,7 +4,7 @@ import Model.Game;
 import org.junit.Test;
 
 import static Util.MessageType.CV;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ShowMapTest {
     ShowMap showMap;
@@ -13,7 +13,7 @@ public class ShowMapTest {
 
     @Test
     public void setType_getCorrectType() {
-        showMap= new ShowMap(game, currentNickname);
+        showMap = new ShowMap(game, currentNickname, null);
         assertEquals(CV, showMap.getType());
     }
 }

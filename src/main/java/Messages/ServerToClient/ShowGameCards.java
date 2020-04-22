@@ -2,25 +2,27 @@ package Messages.ServerToClient;
 
 import Client.View;
 import Messages.MVMessage;
+import Model.Card;
 import Util.MessageType;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
- * Message to notify the player that another player has disconnected. Notify the end of the game.
+ * Message to inform users of the game cards selected by the challenger
  */
-public class NotifyDisconnection implements MVMessage, Serializable {
+public class ShowGameCards implements Serializable, MVMessage {
     private final MessageType messageType;
-    private final String disconnectedNickname;
+    private final List<Card> cards;
 
     /**
      * Server-side constructor: build the message
      *
-     * @param disconnectedNickname The nickname of the disconnected user
+     * @param cards The game cards
      */
-    public NotifyDisconnection(String disconnectedNickname) {
+    public ShowGameCards(List<Card> cards) {
         messageType = MessageType.MV;
-        this.disconnectedNickname = disconnectedNickname;
+        this.cards = cards;
     }
 
     /**
@@ -29,8 +31,7 @@ public class NotifyDisconnection implements MVMessage, Serializable {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.showDisconnection(disconnectedNickname);
-
+        view.showGameCards(cards);
     }
 
     /**
@@ -42,3 +43,4 @@ public class NotifyDisconnection implements MVMessage, Serializable {
         return messageType;
     }
 }
+

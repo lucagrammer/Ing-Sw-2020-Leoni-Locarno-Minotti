@@ -2,6 +2,7 @@ package Server;
 
 import Util.Configurator;
 import Util.Frmt;
+import Util.exceptions.MustRestartException;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,15 +14,31 @@ public class ServerLauncher {
     private static ServerSocket serverSocket;
 
     public static void main(String[] args) {
-        ServerLauncher serverLauncher = new ServerLauncher();
-        serverLauncher.launch();
+        launch();
     }
 
-    public static void newGame() {
+    /**
+     * ServerLauncher launcher. Starts the first ClientHandler thread.
+     */
+    public static void launch() {
+        Frmt.clearServerLog();
+        try {
+            serverSocket = new ServerSocket(Configurator.getDefaultPort());
+        } catch (IOException e) {
+            System.out.println(Frmt.color('r', "> Fatal error: Could not start the server"));
+            //e.printStackTrace();
+            return;
+        }
+        System.out.println(Frmt.color('g', "> Server started successfully"));
+
+        init();
+    }
+
+    public static void init() {
+        // Setup all the objects that the server will use
         Controller controller = new Controller();
-        VirtualView virtualView = new VirtualView();
+        VirtualView virtualView = new VirtualView(controller);
         controller.setVirtualView(virtualView);
-        virtualView.setController(controller);
 
         System.out.println("> Status: Waiting for the first player to connect");
         ClientHandler clientHandler = new ClientHandler(serverSocket, virtualView, true);
@@ -31,24 +48,12 @@ public class ServerLauncher {
         try {
             controller.gameStarter();
         } catch (InterruptedException e) {
-            System.out.println(Frmt.color('r', "> Error: Server can't start the game"));
+            System.out.println(Frmt.color('r', "> Fatal error: Server stopped suddenly"));
             e.printStackTrace();
+        } catch (MustRestartException e) {
+            // Game must be re-initialized
+            Frmt.clearServerLog();
+            init();
         }
-    }
-
-    /**
-     * ServerLauncher launcher. Starts the first ClientHandler thread.
-     */
-    public void launch() {
-        String padding = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-        try {
-            serverSocket = new ServerSocket(Configurator.getDefaultPort());
-        } catch (IOException e) {
-            System.out.println(padding + Frmt.color('r', "> Error: Could not start the server"));
-            //e.printStackTrace();
-            return;
-        }
-        System.out.println(padding + Frmt.color('g', "> Server started successfully"));
-        newGame();
     }
 }

@@ -3,7 +3,6 @@ package Messages.ServerToClient;
 import Client.View;
 import Messages.CVMessage;
 import Messages.VCMessage;
-import Model.Card;
 import Server.VirtualView;
 import Util.MessageType;
 
@@ -11,33 +10,33 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Message to manage the choice of the player's card
+ * Message for the choice of the color of the player
  */
-public class SelectCard implements Serializable, CVMessage, VCMessage {
-    private final MessageType messageType;
-    private List<Card> possibleChoices;
-    private Card choice;
-    private String nickname;
+public class SetUpPlayerColor implements CVMessage, VCMessage, Serializable {
+    MessageType messageType;
+    List<String> availableColors;
+    String color;
+    String nickname;
 
     /**
      * Server-side constructor: build a request message
      *
-     * @param possibleChoices The possible cards
+     * @param availableColors The available colors
      */
-    public SelectCard(List<Card> possibleChoices) {
-        messageType = MessageType.CV;
-        this.possibleChoices = possibleChoices;
+    public SetUpPlayerColor(List<String> availableColors) {
+        this.messageType = MessageType.CV;
+        this.availableColors = availableColors;
     }
 
     /**
      * Client-side constructor: build a response message
      *
-     * @param choice   The chosen card
+     * @param color    The chosen color
      * @param nickname The nickname of the player
      */
-    public SelectCard(Card choice, String nickname) {
-        messageType = MessageType.VC;
-        this.choice = choice;
+    public SetUpPlayerColor(String color, String nickname) {
+        this.messageType = MessageType.VC;
+        this.color = color;
         this.nickname = nickname;
     }
 
@@ -56,7 +55,7 @@ public class SelectCard implements Serializable, CVMessage, VCMessage {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.chooseCard(possibleChoices);
+        view.askPlayerColor(availableColors);
     }
 
     /**
@@ -65,6 +64,6 @@ public class SelectCard implements Serializable, CVMessage, VCMessage {
      * @param virtualView The recipient component
      */
     public void execute(VirtualView virtualView) {
-        virtualView.setCard(choice, nickname);
+        virtualView.setPlayerColor(nickname, color);
     }
 }

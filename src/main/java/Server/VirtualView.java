@@ -16,13 +16,16 @@ import java.util.List;
  */
 public class VirtualView {
     private final List<ClientHandler> clientHandlers;
-    private Controller controller;
+    private final Controller controller;
 
     /**
      * Constructor: build the VirtualView
+     *
+     * @param controller The controller
      */
-    public VirtualView() {
-        clientHandlers = new ArrayList<>();
+    public VirtualView(Controller controller) {
+        this.clientHandlers = new ArrayList<>();
+        this.controller = controller;
     }
 
     /**
@@ -35,21 +38,14 @@ public class VirtualView {
     }
 
     /**
-     * Sets the controller
-     *
-     * @param controller The controller
-     */
-    public void setController(Controller controller) {
-        this.controller = controller;
-    }
-
-    /**
      * Adds a clientHandler
      *
      * @param clientHandler The ClientHaldler to be added
      */
     public void addClientHandler(ClientHandler clientHandler) {
-        clientHandlers.add(clientHandler);
+        synchronized (clientHandlers) {
+            clientHandlers.add(clientHandler);
+        }
     }
 
     /**
@@ -60,7 +56,7 @@ public class VirtualView {
      */
     public ClientHandler getClientHandlerByNickname(String nickname) {
         for (ClientHandler clientHandler : clientHandlers) {
-            if (nickname.equals(clientHandler.getNickname())) {
+            if (nickname.equals(clientHandler.getNickname()) && clientHandler.isConnected()) {
                 return clientHandler;
             }
         }
@@ -120,7 +116,7 @@ public class VirtualView {
      * @param choice   The chosen card
      * @param nickname The nickname of the player
      */
-    public void setCard(Card choice, String nickname) {
+    public void setPlayerCard(Card choice, String nickname) {
         controller.setCard(choice, nickname);
     }
 
@@ -140,7 +136,8 @@ public class VirtualView {
      */
     public void sendToEveryone(Message message) {
         for (ClientHandler clientHandler : clientHandlers) {
-            clientHandler.send(message);
+            if (clientHandler.isConnected())
+                clientHandler.send(message);
         }
     }
 
@@ -151,7 +148,7 @@ public class VirtualView {
      * @param genre    The genre of the worker
      * @param position The position of the worker
      */
-    public void setPosition(String nickname, Genre genre, Cell position) {
+    public void setPlayerPosition(String nickname, Genre genre, Cell position) {
         controller.setFirstPosition(nickname, genre, position);
     }
 
@@ -161,7 +158,7 @@ public class VirtualView {
      * @param nickname The nickname of the player
      * @param color    The chosen color
      */
-    public void setColor(String nickname, String color) {
+    public void setPlayerColor(String nickname, String color) {
         controller.setColor(nickname, color);
     }
 
@@ -171,7 +168,6 @@ public class VirtualView {
      * @param nickname The nickname of the disconnected user
      */
     public void setDisconnected(String nickname) {
-        clientHandlers.removeIf(clientHandler -> clientHandler.getNickname().equalsIgnoreCase(nickname));
         controller.hasDisconnected(nickname);
     }
 
@@ -193,8 +189,19 @@ public class VirtualView {
      */
     public void sendToEveryoneExcept(Message message, Player avoidedPlayer) {
         for (ClientHandler clientHandler : clientHandlers) {
-            if (!clientHandler.getNickname().equalsIgnoreCase(avoidedPlayer.getNickname())) {
+            if (!clientHandler.getNickname().equalsIgnoreCase(avoidedPlayer.getNickname()) && clientHandler.isConnected()) {
                 clientHandler.send(message);
+            }
+        }
+    }
+
+    /**
+     * Closes all the connections
+     */
+    public void closeAll() {
+        for (ClientHandler clientHandler : clientHandlers) {
+            if (clientHandler.isConnected()) {
+                clientHandler.close();
             }
         }
     }

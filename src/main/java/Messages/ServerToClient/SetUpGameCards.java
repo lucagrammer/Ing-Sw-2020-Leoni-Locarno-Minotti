@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Message for the choice of the game cards by the challenger
  */
-public class ChooseCards implements CVMessage, VCMessage, Serializable {
+public class SetUpGameCards implements CVMessage, VCMessage, Serializable {
     MessageType messageType;
     int numCards;
     List<Card> chosenCards;
@@ -23,7 +23,7 @@ public class ChooseCards implements CVMessage, VCMessage, Serializable {
      *
      * @param numCards The number of cards to be selected
      */
-    public ChooseCards(int numCards) {
+    public SetUpGameCards(int numCards) {
         messageType = MessageType.CV;
         this.numCards = numCards;
     }
@@ -33,7 +33,7 @@ public class ChooseCards implements CVMessage, VCMessage, Serializable {
      *
      * @param chosenCards The chosen game cards
      */
-    public ChooseCards(List<Card> chosenCards) {
+    public SetUpGameCards(List<Card> chosenCards) {
         messageType = MessageType.VC;
         this.chosenCards = chosenCards;
     }
@@ -53,7 +53,7 @@ public class ChooseCards implements CVMessage, VCMessage, Serializable {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.chooseCards(numCards);
+        view.askGameCards(numCards);
     }
 
     /**

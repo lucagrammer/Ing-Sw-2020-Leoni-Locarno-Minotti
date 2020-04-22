@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Message requesting to reset the nickname because it is already in use. Response message to the reset request.
  */
-public class ResetNicknameProcess implements CVMessage, Serializable {
+public class SetUpNewNickname implements CVMessage, Serializable {
     private final MessageType messageType;
     private String nickname;
 
@@ -18,7 +18,7 @@ public class ResetNicknameProcess implements CVMessage, Serializable {
      *
      * @param nickname The new chosen nickname
      */
-    public ResetNicknameProcess(String nickname) {
+    public SetUpNewNickname(String nickname) {
         this.messageType = MessageType.CV;
         this.nickname = nickname;
     }
@@ -26,7 +26,7 @@ public class ResetNicknameProcess implements CVMessage, Serializable {
     /**
      * Server-side constructor: build a request message
      */
-    public ResetNicknameProcess() {
+    public SetUpNewNickname() {
         this.messageType = MessageType.CV;
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Message to manage the choice of the first player by the challenger
  */
-public class SelectFirst implements Serializable, CVMessage, VCMessage {
+public class SetUpFirstPlayer implements Serializable, CVMessage, VCMessage {
     private final MessageType messageType;
     private List<String> nicknames;
     private String firstPlayerNickname;
@@ -23,7 +23,7 @@ public class SelectFirst implements Serializable, CVMessage, VCMessage {
      *
      * @param nicknames All the nicknames
      */
-    public SelectFirst(List<String> nicknames) {
+    public SetUpFirstPlayer(List<String> nicknames) {
         messageType = MessageType.CV;
         this.nicknames = new ArrayList<>(nicknames);
     }
@@ -33,7 +33,7 @@ public class SelectFirst implements Serializable, CVMessage, VCMessage {
      *
      * @param fistPlayerNickname The nickname of the chosen first player
      */
-    public SelectFirst(String firstPlayerNickname) {
+    public SetUpFirstPlayer(String firstPlayerNickname) {
         messageType = MessageType.VC;
         this.firstPlayerNickname = firstPlayerNickname;
     }
@@ -44,7 +44,7 @@ public class SelectFirst implements Serializable, CVMessage, VCMessage {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.chooseFirstPlayer(nicknames);
+        view.askFirstPlayer(nicknames);
     }
 
     /**
