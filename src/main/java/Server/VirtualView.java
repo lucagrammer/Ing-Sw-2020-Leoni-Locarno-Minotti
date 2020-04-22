@@ -201,7 +201,8 @@ public class VirtualView {
     public void closeAll() {
         for (ClientHandler clientHandler : clientHandlers) {
             if (clientHandler.isConnected()) {
-                clientHandler.close();
+                clientHandler.close(); //TODO DISCONNESSIONE TOLTA
+                clientHandler.setDisconnected();
             }
         }
     }

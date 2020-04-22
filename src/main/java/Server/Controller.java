@@ -378,10 +378,10 @@ public class Controller {
                 return;
             }
         }
-
         // already reset?
         if (!mustReset) {
             virtualView.sendToEveryone(new ShowDisconnection(nickname));
+
             mustReset = true;
             synchronized (this) {
                 notifyAll();

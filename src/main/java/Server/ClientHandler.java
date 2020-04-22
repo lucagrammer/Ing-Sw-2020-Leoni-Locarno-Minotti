@@ -13,7 +13,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -28,7 +27,7 @@ class ClientHandler extends Thread {
     private ObjectInputStream input;
     private String nickname;
     private boolean isConnected;
-    private Date lastPing;
+    private final Object lock = new Object();
 
     /**
      * Constructor: build a ClientHandler
@@ -70,7 +69,7 @@ class ClientHandler extends Thread {
                 if (clientMessage.getType() == MessageType.VC) {
                     VCMessage vcMessage = (VCMessage) clientMessage;
                     if (clientMessage instanceof PingMessage) {
-                        lastPing = Date.from(Instant.now());
+                        System.out.println("Ricevo ping da " + nickname); //TODO
                     }
                     vcMessage.execute(virtualView);
                 }
@@ -94,13 +93,15 @@ class ClientHandler extends Thread {
      */
     public void send(Message message) {
         try {
-            output.writeUnshared(message);
-            output.flush();
-            output.reset();
+            synchronized (lock) {
+                output.writeUnshared(message);
+                output.flush();
+                output.reset();
+            }
         } catch (IOException e) {
             if (isConnected) {
                 System.out.println(Frmt.color('r', "> Warning: could not contact" + nickname + ": disconnected"));
-                //e.printStackTrace();
+                e.printStackTrace();
                 isConnected = false;
                 virtualView.setDisconnected(nickname);
             } else {
@@ -115,48 +116,67 @@ class ClientHandler extends Thread {
     private void acceptPlayerConnection() {
         try {
             socket = serverSocket.accept();
-            lastPing = Date.from(Instant.now());
-            (new Ping()).run();
 
             isConnected = true;
             output = new ObjectOutputStream(socket.getOutputStream());
             input = new ObjectInputStream(socket.getInputStream());
+
+            socket.setSoTimeout(20000);
+            (new Ping()).start();
+
             send(new SetUpGame(isFirstPlayer));
-            // start thread connessione
 
-            Message response = (Message) input.readObject();
-            if (response instanceof SetUpGame) {
-                SetUpGame setupGame = (SetUpGame) response;
-                String requestedNickname = setupGame.getNickname();
-                Date birthDate = setupGame.getBirthDate();
+            boolean isGameSetUp = false;
+            while (!isGameSetUp) {
+                Message response = (Message) input.readObject();
+                if (response instanceof SetUpGame) {
+                    isGameSetUp = true;
+                    SetUpGame setupGame = (SetUpGame) response;
+                    String requestedNickname = setupGame.getNickname();
+                    Date birthDate = setupGame.getBirthDate();
 
-                if (isFirstPlayer) {
-                    System.out.println(Frmt.color('g', nickname + "> Connected to " + socket.getRemoteSocketAddress() + " as " + requestedNickname.toUpperCase()));
+                    if (isFirstPlayer) {
+                        System.out.println(Frmt.color('g', nickname + "> Connected to " + socket.getRemoteSocketAddress() + " as " + requestedNickname.toUpperCase()));
 
-                    int playersNumber = setupGame.getNumPlayers();
-                    virtualView.requestAddPlayer(requestedNickname, birthDate, playersNumber);
-                    System.out.println("> Status: Waiting for the other players to connect");
-                    for (int i = 0; i < playersNumber - 1; i++) {
-                        ClientHandler clientHandler = new ClientHandler(serverSocket, virtualView, false);
-                        virtualView.addClientHandler(clientHandler);
-                        clientHandler.start();
-                    }
-                } else {
-                    boolean uniqueUsername;
-                    do {
-                        uniqueUsername = virtualView.requestAddPlayer(requestedNickname, birthDate);
-                        if (!uniqueUsername) {
-                            System.out.println(Frmt.color('y', "> Warning: " + socket.getRemoteSocketAddress() + " is trying to connect with a nickname already in use"));
-                            send(new SetUpNewNickname());
-                            response = (Message) input.readObject();
-                            requestedNickname = ((SetUpNewNickname) response).getNickname();
+                        int playersNumber = setupGame.getNumPlayers();
+                        virtualView.requestAddPlayer(requestedNickname, birthDate, playersNumber);
+                        System.out.println("> Status: Waiting for the other players to connect");
+                        for (int i = 0; i < playersNumber - 1; i++) {
+                            ClientHandler clientHandler = new ClientHandler(serverSocket, virtualView, false);
+                            virtualView.addClientHandler(clientHandler);
+                            clientHandler.start();
                         }
-                    } while (!uniqueUsername);
+                    } else {
+                        boolean uniqueUsername;
+                        do {
+                            uniqueUsername = virtualView.requestAddPlayer(requestedNickname, birthDate);
+                            if (!uniqueUsername) {
+                                System.out.println(Frmt.color('y', "> Warning: " + socket.getRemoteSocketAddress() + " is trying to connect with a nickname already in use"));
+                                send(new SetUpNewNickname());
 
-                    System.out.println(Frmt.color('g', nickname + "> Connected to " + socket.getRemoteSocketAddress() + " as " + requestedNickname.toUpperCase()));
+                                boolean hasRecievedNewNickname = false;
+                                while (!hasRecievedNewNickname) {
+                                    response = (Message) input.readObject();
+                                    if (response instanceof SetUpNewNickname) {
+                                        hasRecievedNewNickname = true;
+                                        requestedNickname = ((SetUpNewNickname) response).getNickname();
+                                    }
+                                    if (response instanceof PingMessage) {
+                                        System.out.println("Ricevo ping da " + nickname); //TODO
+                                    }
+                                }
+
+                            }
+                        } while (!uniqueUsername);
+
+                        System.out.println(Frmt.color('g', nickname + "> Connected to " + socket.getRemoteSocketAddress() + " as " + requestedNickname.toUpperCase()));
+                    }
+                    nickname = requestedNickname;
+                    virtualView.ready();
                 }
-                nickname = requestedNickname;
-                virtualView.ready();
+                if (response instanceof PingMessage) {
+                    System.out.println("Ricevo ping da " + nickname); //TODO
+                }
             }
         } catch (IOException | ClassNotFoundException e) {
             if (isConnected) {
@@ -202,19 +222,13 @@ class ClientHandler extends Thread {
         public void run() {
             while (isConnected) {
                 send(new PingMessage(true));
-
+                System.out.println("\n\n>SENDING PING TO " + nickname); //TODO
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-                Date now = Date.from(Instant.now());
-                long timeDifference = now.getTime() - lastPing.getTime();
-                if (timeDifference > 10000) {
-                    isConnected = false;
-                    return;
-                }
             }
         }
     }

@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +27,7 @@ class ServerHandler {
     private View view;
     private String nickname;
     private boolean isConnected = false;
-    private Date lastPing;
+    private final Object lock = new Object();
 
     /**
      * Starts listening for server messages and execute them client-side
@@ -43,12 +42,13 @@ class ServerHandler {
                         // Under control disconnection:
                         // The server will soon close the connection due to the disconnection of another player
                         isConnected = false;
+                        //closeConnection(); TODO DISCONNESIONE TOLTA
                     }
                     mvMessage.execute(view);
                 } else {
                     if (serverMessage.getType() == MessageType.CV) {
                         if (serverMessage instanceof PingMessage) {
-                            lastPing = Date.from(Instant.now());
+                            System.out.println("Ricevo ping"); //TODO
                         }
                         CVMessage cvMessage = (CVMessage) serverMessage;
                         cvMessage.execute(view);
@@ -91,7 +91,8 @@ class ServerHandler {
             output = new ObjectOutputStream(socket.getOutputStream());
             input = new ObjectInputStream(socket.getInputStream());
             isConnected = true;
-            lastPing = Date.from(Instant.now());
+
+            socket.setSoTimeout(20000);
             (new Ping()).start();
         } catch (Exception e) {
             isConnected = false;
@@ -124,10 +125,13 @@ class ServerHandler {
     public void send(Message message) {
         if (isConnected) {
             try {
-                output.writeUnshared(message);
-                output.flush();
-                output.reset();
+                synchronized (lock) {
+                    output.writeUnshared(message);
+                    output.flush();
+                    output.reset();
+                }
             } catch (IOException e) {
+                isConnected = false;
                 System.out.println(Frmt.color('r', "> Error: Could not contact the server"));
                 e.printStackTrace();
             }
@@ -229,18 +233,11 @@ class ServerHandler {
         public void run() {
             while (isConnected) {
                 send(new PingMessage(false));
-
+                System.out.println("\n\n>SENDING PING FROM " + nickname); //TODO
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
-
-                Date now = Date.from(Instant.now());
-                long timeDifference = now.getTime() - lastPing.getTime();
-                if (timeDifference > 10000) {
-                    isConnected = false;
-                    return;
                 }
             }
         }

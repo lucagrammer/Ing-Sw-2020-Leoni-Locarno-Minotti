@@ -268,7 +268,7 @@ public class CliView implements View {
 
             incorrect = false;
             System.out.print("  ↳: ");
-            chosenNickname = scanner.next();
+            chosenNickname = scanner.nextLine();
             if (!allNicknames.contains(chosenNickname.toLowerCase())) {
                 Frmt.clearScreen();
                 System.out.println(Frmt.color('r', "   > Invalid choice. Try again."));
