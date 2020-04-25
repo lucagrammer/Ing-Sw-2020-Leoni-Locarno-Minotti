@@ -21,13 +21,14 @@ import java.util.List;
  * Manages communication from and to the server
  */
 class ServerHandler {
+    private final Object lock = new Object();
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private Socket socket;
     private View view;
     private String nickname;
     private boolean isConnected = false;
-    private final Object lock = new Object();
+    private int connectionAttempts = 0;
 
     /**
      * Starts listening for server messages and execute them client-side
@@ -38,25 +39,27 @@ class ServerHandler {
                 Message serverMessage = (Message) input.readObject();
                 if (serverMessage.getType() == MessageType.MV) {
                     MVMessage mvMessage = (MVMessage) serverMessage;
-                    if (serverMessage instanceof ShowDisconnection) {
+                    if (serverMessage instanceof ShowDisconnection && isConnected) {
                         // Under control disconnection:
                         // The server will soon close the connection due to the disconnection of another player
+                        closeConnection();
                         isConnected = false;
-                        //closeConnection(); TODO DISCONNESIONE TOLTA
                     }
                     mvMessage.execute(view);
                 } else {
                     if (serverMessage.getType() == MessageType.CV) {
-                        if (serverMessage instanceof PingMessage) {
-                            System.out.println("Ricevo ping"); //TODO
+                        if (serverMessage instanceof PingMessage && Configurator.getPingFlag()) {
+                            System.out.println("Received ping from " + nickname);
                         }
                         CVMessage cvMessage = (CVMessage) serverMessage;
                         cvMessage.execute(view);
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
-                view.showMessage(Frmt.color('r', "> Error: Could not contact the server."), true);
-                //e.printStackTrace();
+                if (isConnected) {
+                    view.showMessage(Frmt.color('r', "> Error: Server unreachable during message reading."), true);
+                    closeConnection();
+                }
                 isConnected = false;
             }
         }
@@ -86,22 +89,33 @@ class ServerHandler {
      * @param serverIP IP address of the server
      */
     public void setConnection(String serverIP) {
-        try {
-            socket = new Socket(serverIP, Configurator.getDefaultPort());
-            output = new ObjectOutputStream(socket.getOutputStream());
-            input = new ObjectInputStream(socket.getInputStream());
-            isConnected = true;
+        // Try to connect until success
+        while (!isConnected) {
+            try {
+                connectionAttempts++;
+                socket = new Socket(serverIP, Configurator.getDefaultPort());
+                output = new ObjectOutputStream(socket.getOutputStream());
+                input = new ObjectInputStream(socket.getInputStream());
+                isConnected = true;
 
-            socket.setSoTimeout(20000);
-            (new Ping()).start();
-        } catch (Exception e) {
-            isConnected = false;
-            view.showMessage(Frmt.color('r', "> Error: Server unreachable."), true);
-            //e.printStackTrace();
+                // Sets the connection timeout to 20 seconds
+                socket.setSoTimeout(20000);
+                // Start sending pings to the server every 5 seconds
+                (new PingSender()).start();
+            } catch (IOException e) {
+                isConnected = false;
+                if (connectionAttempts == 1) {
+                    view.showMessage(Frmt.color('r', "> Error: Server unreachable during connection setup. Reconnecting..."), true);
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignored) {
+                }
+            }
         }
-        if (isConnected) {
-            startListening();
-        }
+
+        view.showQueuedMessage();
+        startListening();
     }
 
     /**
@@ -132,8 +146,8 @@ class ServerHandler {
                 }
             } catch (IOException e) {
                 isConnected = false;
-                System.out.println(Frmt.color('r', "> Error: Could not contact the server"));
-                e.printStackTrace();
+                view.showMessage(Frmt.color('r', "> Error: Server unreachable during message sending."), true);
+                closeConnection();
             }
         }
     }
@@ -222,18 +236,27 @@ class ServerHandler {
      */
     public void sendNewGame(boolean choice) {
         isConnected = false;
+        closeConnection();
         if (choice) {
             ClientLauncher.main(null);
         }
     }
 
+    /**
+     * Class that continuously sends ping messages to the client
+     */
+    class PingSender extends Thread {
 
-    class Ping extends Thread {
-
+        /**
+         * Sends ping messages at regular intervals
+         */
         public void run() {
             while (isConnected) {
+                if (Configurator.getPingFlag()) {
+                    System.out.println("\n\t>Sending ping from " + nickname);
+                }
                 send(new PingMessage(false));
-                System.out.println("\n\n>SENDING PING FROM " + nickname); //TODO
+
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {

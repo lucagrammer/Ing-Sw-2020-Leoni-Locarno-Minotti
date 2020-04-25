@@ -27,6 +27,12 @@ public interface View {
     void launch();
 
     /**
+     * Shows a message to say to the user that is connected to
+     * the server and will be added to the next available game
+     */
+    void showQueuedMessage();
+
+    /**
      * Shows a specified message to the user
      *
      * @param message   The message to be shown
@@ -129,8 +135,4 @@ public interface View {
      */
     void showDisconnectionMessage(String disconnectedNickname);
 
-    /**
-     * Notify the players that has lost
-     */
-    void showLosingMessage();
 }

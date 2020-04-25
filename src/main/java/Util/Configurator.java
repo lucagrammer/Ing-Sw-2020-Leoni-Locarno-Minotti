@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class Configurator {
     private static final SAXBuilder builder = new SAXBuilder();
+    private static final Object connectionConfigLock = new Object();
+    private static final Object cardsConfigLock = new Object();
 
     /**
      * Gets the default IP of the server
@@ -27,7 +29,10 @@ public class Configurator {
     public static String getDefaultIp() {
         String ip = null;
         try {
-            Document document = builder.build(new File("src/main/resources/ConnectionConfig.xml"));
+            Document document;
+            synchronized (connectionConfigLock) {
+                document = builder.build(new File("src/main/resources/ConnectionConfig.xml"));
+            }
             Element rootElement = document.getRootElement();
 
             ip = rootElement.getChildText("server-ip-default");
@@ -45,7 +50,10 @@ public class Configurator {
     public static int getDefaultPort() {
         int port = 0;
         try {
-            Document document = builder.build(new File("src/main/resources/ConnectionConfig.xml"));
+            Document document;
+            synchronized (connectionConfigLock) {
+                document = builder.build(new File("src/main/resources/ConnectionConfig.xml"));
+            }
             Element rootElement = document.getRootElement();
 
             port = Integer.parseInt(rootElement.getChildText("server-port-default"));
@@ -56,24 +64,6 @@ public class Configurator {
     }
 
     /**
-     * Gets the fast start flag for the debug mode
-     *
-     * @return The boolean value of the flag
-     */
-    public static boolean getFastStartFlag() {
-        String flag = "false";
-        try {
-            Document document = builder.build(new File("src/main/resources/ConnectionConfig.xml"));
-            Element rootElement = document.getRootElement();
-
-            flag = rootElement.getChildText("fast-start");
-        } catch (JDOMException | IOException e) {
-            e.printStackTrace();
-        }
-        return flag.equalsIgnoreCase("true");
-    }
-
-    /**
      * Gets the list of all the cards
      *
      * @return A list containing all the game cards
@@ -81,7 +71,10 @@ public class Configurator {
     public static List<Card> getAllCards() {
         List<Card> cards = new ArrayList<>();
         try {
-            Document document = builder.build(new File("src/main/resources/SimpleGodsConfig.xml"));
+            Document document;
+            synchronized (cardsConfigLock) {
+                document = builder.build(new File("src/main/resources/SimpleGodsConfig.xml"));
+            }
             Element rootElement = document.getRootElement();
 
             List children = rootElement.getChildren();
@@ -99,4 +92,14 @@ public class Configurator {
         }
         return cards;
     }
+
+    /**
+     * Gets the show-ping flag
+     *
+     * @return True if the pings must be shown, otherwise false
+     */
+    public static boolean getPingFlag() {
+        return false;
+    }
 }
+

@@ -21,7 +21,7 @@ public class GameTest {
     Game game;
     Rules rules;
     EnemyRules enemyRules;
-    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Before
     public void setUp() throws ParseException {

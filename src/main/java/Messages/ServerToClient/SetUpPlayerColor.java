@@ -13,7 +13,7 @@ import java.util.List;
  * Message for the choice of the color of the player
  */
 public class SetUpPlayerColor implements CVMessage, VCMessage, Serializable {
-    MessageType messageType;
+    final MessageType messageType;
     List<String> availableColors;
     String color;
     String nickname;

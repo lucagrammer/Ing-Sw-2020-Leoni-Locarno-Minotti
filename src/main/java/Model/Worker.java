@@ -22,7 +22,7 @@ public class Worker implements Serializable {
      * @param player The player who owns this worker
      */
     public Worker(Genre genre, Color color, Player player) {
-        //TODO RIMUOVERE
+        //TODO: REMOVE THIS UNUSED CONSTRUCTOR
         this.genre = genre;
         this.color = color;
         this.player = player;

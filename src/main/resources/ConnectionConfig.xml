@@ -2,5 +2,4 @@
 <connection-config>
     <server-ip-default>127.0.0.1</server-ip-default>
     <server-port-default>9838</server-port-default>
-    <fast-start>false</fast-start>
 </connection-config>

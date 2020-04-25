@@ -14,11 +14,22 @@ public class ServerLauncher {
     private static ServerSocket serverSocket;
 
     public static void main(String[] args) {
-        launch();
+        try {
+            launch();
+        } catch (Exception e) {
+            Frmt.clearServerLog();
+            System.out.println(Frmt.color('r', "> Fatal error: An unknown error has occurred. Server has been restarted."));
+            e.printStackTrace();
+            if (drop()) {
+                launch();
+            } else {
+                System.out.println(Frmt.color('r', "> Fatal error: Server cannot be restarted"));
+            }
+        }
     }
 
     /**
-     * ServerLauncher launcher. Starts the first ClientHandler thread.
+     * ServerLauncher launcher. Starts the server socket.
      */
     public static void launch() {
         Frmt.clearServerLog();
@@ -34,6 +45,9 @@ public class ServerLauncher {
         init();
     }
 
+    /**
+     * Initializes the game objects
+     */
     public static void init() {
         // Setup all the objects that the server will use
         Controller controller = new Controller();
@@ -51,9 +65,27 @@ public class ServerLauncher {
             System.out.println(Frmt.color('r', "> Fatal error: Server stopped suddenly"));
             e.printStackTrace();
         } catch (MustRestartException e) {
-            // Game must be re-initialized
+            // Game must be re-initialized: drop and restart
             Frmt.clearServerLog();
-            init();
+            if (drop()) {
+                launch();
+            } else {
+                System.out.println(Frmt.color('r', "> Fatal error: Server cannot be restarted"));
+            }
         }
+    }
+
+    /**
+     * Drops the server connection
+     *
+     * @return True if the operation was successful, otherwise false
+     */
+    public static boolean drop() {
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
     }
 }

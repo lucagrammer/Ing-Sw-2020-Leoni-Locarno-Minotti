@@ -48,9 +48,17 @@ public class CliView implements View {
             serverIP = defaultServerIP;
             System.out.println(Frmt.style('i', "  > Default server IP will be applied, " + defaultServerIP));
         }
+        showQueuedMessage();
+        serverHandler.setConnection(serverIP);
+    }
+
+    /**
+     * Shows a message to say to the user that is connected to
+     * the server and will be added to the next available game
+     */
+    public void showQueuedMessage() {
         Frmt.clearScreen();
         System.out.println(Frmt.style('i', "  > You will be added to the first available game..."));
-        serverHandler.setConnection(serverIP);
     }
 
     /**
@@ -144,7 +152,7 @@ public class CliView implements View {
 
             System.out.print(Frmt.style('b', "\n Enter your nickname: "));
             nickname = scanner.nextLine();
-            if (nickname.equals("")) {
+            if (nickname.equals("") || nickname.contains(" ")) {
                 Frmt.clearScreen();
                 System.out.println(Frmt.color('r', "  > Invalid nickname. Try again."));
                 incorrect = true;
@@ -268,7 +276,7 @@ public class CliView implements View {
 
             incorrect = false;
             System.out.print("  ↳: ");
-            chosenNickname = scanner.nextLine();
+            chosenNickname = scanner.next();
             if (!allNicknames.contains(chosenNickname.toLowerCase())) {
                 Frmt.clearScreen();
                 System.out.println(Frmt.color('r', "   > Invalid choice. Try again."));
@@ -506,18 +514,17 @@ public class CliView implements View {
         do {
             showMap(game, false);
             incorrect = false;
-            System.out.print("\n\t\t");
 
             // There's a loser?
             if (loserNickname != null) {
-                System.out.println(Frmt.style('b', Frmt.color('r', Frmt.DEATH + "    " + loserNickname.toUpperCase() + " has lost")));
+                System.out.println(Frmt.color('r', "\n\t\t" + Frmt.style('b', "" + loserNickname.toUpperCase() + " has lost " + Frmt.DEATH)));
             }
             System.out.println(Frmt.style('b', "\t\tIt's your turn. "));
-            System.out.print("\t\t" + Frmt.style('b', "You can:  \n\t\t"));
+            System.out.print("\n\t\t" + Frmt.style('b', "You can:  \n\t\t"));
             int counter = 0;
             for (Action possibleAction : roundActions.getActionList()) {
                 if (counter == 11) {
-                    System.out.println();
+                    System.out.print("\n\t\t");
                     counter = 0;
                 }
                 if (possibleAction.getActionType().name().equalsIgnoreCase("END")) {
@@ -575,13 +582,6 @@ public class CliView implements View {
         System.out.println(Frmt.color('r', "\n\n\t" + Frmt.style("ui", "GAME OVER: " +
                 disconnectedNickname.toUpperCase() + " has disconnected.")));
         askNewGame();
-    }
-
-    /**
-     * Notify the players that has lost
-     */
-    public void showLosingMessage() {
-        System.out.println(Frmt.color('r', "\n\n\t" + Frmt.style('b', "YOU LOSE : out of actions" + Frmt.DEATH)));
     }
 
     /**

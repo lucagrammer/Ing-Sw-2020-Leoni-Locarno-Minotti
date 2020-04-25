@@ -29,18 +29,9 @@ public class VirtualView {
     }
 
     /**
-     * Gets the controller
-     *
-     * @return The controller
-     */
-    public Controller getController() {
-        return controller;
-    }
-
-    /**
      * Adds a clientHandler
      *
-     * @param clientHandler The ClientHaldler to be added
+     * @param clientHandler The ClientHandler to be added
      */
     public void addClientHandler(ClientHandler clientHandler) {
         synchronized (clientHandlers) {
@@ -200,8 +191,8 @@ public class VirtualView {
      */
     public void closeAll() {
         for (ClientHandler clientHandler : clientHandlers) {
-            if (clientHandler.isConnected()) {
-                clientHandler.close(); //TODO DISCONNESSIONE TOLTA
+            if (clientHandler.isConnected() || clientHandler.isDaemonHandler()) {
+                //clientHandler.close(); // removed socket close: already closed
                 clientHandler.setDisconnected();
             }
         }

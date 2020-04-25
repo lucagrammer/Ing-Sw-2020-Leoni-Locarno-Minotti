@@ -39,7 +39,7 @@ public class ShowMap implements CVMessage, Serializable {
     public void execute(View view) {
         view.showMap(game, true);
         if (loserNickname != null) {
-            view.showMessage("\n\n\t\t" + Frmt.style('b', Frmt.color('r', Frmt.DEATH + " " + loserNickname.toUpperCase() + " has lost")), false);
+            view.showMessage("\n\n\t\t" + Frmt.style('b', Frmt.color('r', loserNickname.toUpperCase() + " has lost " + Frmt.DEATH)), false);
         }
         view.showMessage(((loserNickname == null) ? "\n\n\t\t" : "\t\t") + Frmt.style('b', "It's " + currentNickname.toUpperCase() + " turn."), false);
     }

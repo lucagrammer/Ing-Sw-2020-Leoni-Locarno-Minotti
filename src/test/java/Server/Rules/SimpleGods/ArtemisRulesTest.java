@@ -59,7 +59,7 @@ public class ArtemisRulesTest {
     }
 
     @Test
-    public void nextPossibleActions_myWorkersArroundFirstAction_moveToAllFreeCells() {
+    public void nextPossibleActions_myWorkersAroundFirstAction_moveToAllFreeCells() {
         player1.getWorker(Genre.MALE).setPosition(board.getCell(1, 2));
         player1.getWorker(Genre.FEMALE).setPosition(board.getCell(3, 4));
 

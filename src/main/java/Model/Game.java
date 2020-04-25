@@ -65,6 +65,21 @@ public class Game implements Serializable {
     }
 
     /**
+     * Gets all the players of the game
+     *
+     * @return All the players of the game
+     */
+    public List<Player> getAllPlayers() {
+        List<Player> returnedPlayers = new ArrayList<>();
+        for (Player player : players) {
+            if (player.isConnected()) {
+                returnedPlayers.add(player);
+            }
+        }
+        return returnedPlayers;
+    }
+
+    /**
      * Gets all the nickname of the players
      *
      * @return All the nicknames

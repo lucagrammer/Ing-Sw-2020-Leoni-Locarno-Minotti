@@ -14,7 +14,7 @@ import java.util.List;
  * Message for the choice of the game cards by the challenger
  */
 public class SetUpGameCards implements CVMessage, VCMessage, Serializable {
-    MessageType messageType;
+    final MessageType messageType;
     int numCards;
     List<Card> chosenCards;
 

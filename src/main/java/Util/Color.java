@@ -9,7 +9,7 @@ import java.util.List;
 public enum Color {
     PURPLE("Purple"), YELLOW("Yellow"), BLUE("Blue");
 
-    String name;
+    final String name;
 
     /**
      * Constructor: build a Color

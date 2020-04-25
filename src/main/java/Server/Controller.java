@@ -117,6 +117,8 @@ public class Controller {
             currentPlayerNickname = currentPlayer.getNickname();
             currentPlayerClientHandler = virtualView.getClientHandlerByNickname(currentPlayerNickname);
 
+            virtualView.sendToEveryoneExcept(new ShowMap(game, currentPlayerNickname, null), currentPlayer);
+
             // Color setup
             currentPlayerClientHandler.send(new SetUpPlayerColor(availableColors));
             synchronized (this) {
@@ -176,14 +178,16 @@ public class Controller {
             // Contains the lose action?
             if (roundActionsList.get(0).getActionType().equals(ActionType.LOSE)) {
                 loserNickname = currentPlayer.getNickname();
+                System.out.println("> Status: " + loserNickname + " has lost");
                 removePlayer(currentPlayer);
+
+                currentPlayer = game.getNextPlayer(currentPlayer);
 
                 // The game must ended?
                 if (game.getPlayers().size() == 1) {
+                    System.out.println("> Status: " + game.getPlayers().get(0).getNickname() + " has won");
                     game.getPlayers().get(0).setWinner(true);
-
                 } else {
-                    currentPlayer = game.getNextPlayer(currentPlayer);
                     // Flush the actions of the next player
                     currentPlayer.setRoundActions(new RoundActions());
                 }
@@ -217,10 +221,11 @@ public class Controller {
         }
 
         // Update the final map for everyone
-        virtualView.sendToEveryoneExcept(new ShowMap(game, currentPlayer.getNickname(), null), currentPlayer);
+        virtualView.sendToEveryone(new ShowMap(game, currentPlayer.getNickname(), null));
 
+        System.out.println("> Game ended: " + currentPlayer.getNickname() + " has won");
         // There's a winner: notify everyone
-        for (Player p : game.getPlayers()) {
+        for (Player p : game.getAllPlayers()) {
             virtualView.getClientHandlerByNickname(p.getNickname()).send(new ShowGameEndMessage(currentPlayer.getNickname(), currentPlayer.equals(p)));
         }
         reset();
@@ -371,10 +376,11 @@ public class Controller {
      * @param nickname The nickname of the disconnected user
      */
     public void hasDisconnected(String nickname) {
-        // had the player lost? if so do nothing
+        // had the player lost? if so do nothing (set disconnected)
         if (game != null) {
             Player disconnectedPlayer = game.getPlayerByNickname(nickname);
             if (disconnectedPlayer != null && disconnectedPlayer.isLoser() /*&& !game.hasWinner()*/) {
+                disconnectedPlayer.setConnected(false);
                 return;
             }
         }
@@ -390,7 +396,7 @@ public class Controller {
     }
 
     /**
-     * Permorms an action of a player
+     * Performs an action of a player
      *
      * @param action   The action to be performed
      * @param nickname The player that performs the action

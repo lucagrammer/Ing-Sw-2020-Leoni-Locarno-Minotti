@@ -30,8 +30,6 @@ public class SetUpFirstPlayer implements Serializable, CVMessage, VCMessage {
 
     /**
      * Client-side constructor: build a response message
-     *
-     * @param fistPlayerNickname The nickname of the chosen first player
      */
     public SetUpFirstPlayer(String firstPlayerNickname) {
         messageType = MessageType.VC;
