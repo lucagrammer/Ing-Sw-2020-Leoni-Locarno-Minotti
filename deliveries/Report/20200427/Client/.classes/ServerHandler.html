@@ -1,0 +1,378 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ServerHandler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">Client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ServerHandler (Client)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ServerHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 75)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ServerHandler$PingSender</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 84)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package Client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import Messages.CVMessage;
+<i>4</i>&nbsp;import Messages.ClientToServer.SetUpGame;
+<i>5</i>&nbsp;import Messages.MVMessage;
+<i>6</i>&nbsp;import Messages.Message;
+<i>7</i>&nbsp;import Messages.PingMessage;
+<i>8</i>&nbsp;import Messages.ServerToClient.*;
+<i>9</i>&nbsp;import Model.Card;
+<i>10</i>&nbsp;import Model.Cell;
+<i>11</i>&nbsp;import Util.*;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import java.io.IOException;
+<i>14</i>&nbsp;import java.io.ObjectInputStream;
+<i>15</i>&nbsp;import java.io.ObjectOutputStream;
+<i>16</i>&nbsp;import java.net.Socket;
+<i>17</i>&nbsp;import java.util.Date;
+<i>18</i>&nbsp;import java.util.List;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * Manages communication from and to the server
+<i>22</i>&nbsp; */
+<b class="nc"><i>23</i>&nbsp;class ServerHandler {</b>
+<b class="nc"><i>24</i>&nbsp;    private final Object lock = new Object();</b>
+<i>25</i>&nbsp;    private ObjectInputStream input;
+<i>26</i>&nbsp;    private ObjectOutputStream output;
+<i>27</i>&nbsp;    private Socket socket;
+<i>28</i>&nbsp;    private View view;
+<i>29</i>&nbsp;    private String nickname;
+<b class="nc"><i>30</i>&nbsp;    private boolean isConnected = false;</b>
+<b class="nc"><i>31</i>&nbsp;    private int connectionAttempts = 0;</b>
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * Starts listening for server messages and execute them client-side
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    public void startListening() {
+<b class="nc"><i>37</i>&nbsp;        while (isConnected) {</b>
+<i>38</i>&nbsp;            try {
+<b class="nc"><i>39</i>&nbsp;                Message serverMessage = (Message) input.readObject();</b>
+<b class="nc"><i>40</i>&nbsp;                if (serverMessage.getType() == MessageType.MV) {</b>
+<b class="nc"><i>41</i>&nbsp;                    MVMessage mvMessage = (MVMessage) serverMessage;</b>
+<b class="nc"><i>42</i>&nbsp;                    if (serverMessage instanceof ShowDisconnection &amp;&amp; isConnected) {</b>
+<i>43</i>&nbsp;                        // Under control disconnection:
+<i>44</i>&nbsp;                        // The server will soon close the connection due to the disconnection of another player
+<b class="nc"><i>45</i>&nbsp;                        closeConnection();</b>
+<b class="nc"><i>46</i>&nbsp;                        isConnected = false;</b>
+<i>47</i>&nbsp;                    }
+<b class="nc"><i>48</i>&nbsp;                    mvMessage.execute(view);</b>
+<b class="nc"><i>49</i>&nbsp;                } else {</b>
+<b class="nc"><i>50</i>&nbsp;                    if (serverMessage.getType() == MessageType.CV) {</b>
+<b class="nc"><i>51</i>&nbsp;                        if (serverMessage instanceof PingMessage &amp;&amp; Configurator.getPingFlag()) {</b>
+<b class="nc"><i>52</i>&nbsp;                            System.out.println(&quot;Received ping from &quot; + nickname);</b>
+<i>53</i>&nbsp;                        }
+<b class="nc"><i>54</i>&nbsp;                        CVMessage cvMessage = (CVMessage) serverMessage;</b>
+<b class="nc"><i>55</i>&nbsp;                        cvMessage.execute(view);</b>
+<i>56</i>&nbsp;                    }
+<i>57</i>&nbsp;                }
+<b class="nc"><i>58</i>&nbsp;            } catch (IOException | ClassNotFoundException e) {</b>
+<b class="nc"><i>59</i>&nbsp;                if (isConnected) {</b>
+<b class="nc"><i>60</i>&nbsp;                    view.showMessage(Frmt.color(&#39;r&#39;, &quot;&gt; Error: Server unreachable during message reading.&quot;), true);</b>
+<b class="nc"><i>61</i>&nbsp;                    closeConnection();</b>
+<i>62</i>&nbsp;                }
+<b class="nc"><i>63</i>&nbsp;                isConnected = false;</b>
+<b class="nc"><i>64</i>&nbsp;            }</b>
+<i>65</i>&nbsp;        }
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * Sets the view
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @param view The view
+<i>72</i>&nbsp;     */
+<i>73</i>&nbsp;    public void setView(View view) {
+<b class="nc"><i>74</i>&nbsp;        this.view = view;</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    /**
+<i>78</i>&nbsp;     * Gets the nickname of the player
+<i>79</i>&nbsp;     *
+<i>80</i>&nbsp;     * @return The nickname of the player
+<i>81</i>&nbsp;     */
+<i>82</i>&nbsp;    public String getNickname() {
+<b class="nc"><i>83</i>&nbsp;        return nickname;</b>
+<i>84</i>&nbsp;    }
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    /**
+<i>87</i>&nbsp;     * Sets connection to the specified server
+<i>88</i>&nbsp;     *
+<i>89</i>&nbsp;     * @param serverIP IP address of the server
+<i>90</i>&nbsp;     */
+<i>91</i>&nbsp;    public void setConnection(String serverIP) {
+<i>92</i>&nbsp;        // Try to connect until success
+<b class="nc"><i>93</i>&nbsp;        while (!isConnected) {</b>
+<i>94</i>&nbsp;            try {
+<b class="nc"><i>95</i>&nbsp;                connectionAttempts++;</b>
+<b class="nc"><i>96</i>&nbsp;                socket = new Socket(serverIP, Configurator.getDefaultPort());</b>
+<b class="nc"><i>97</i>&nbsp;                output = new ObjectOutputStream(socket.getOutputStream());</b>
+<b class="nc"><i>98</i>&nbsp;                input = new ObjectInputStream(socket.getInputStream());</b>
+<b class="nc"><i>99</i>&nbsp;                isConnected = true;</b>
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;                // Sets the connection timeout to 20 seconds
+<b class="nc"><i>102</i>&nbsp;                socket.setSoTimeout(20000);</b>
+<i>103</i>&nbsp;                // Start sending pings to the server every 5 seconds
+<b class="nc"><i>104</i>&nbsp;                (new PingSender()).start();</b>
+<b class="nc"><i>105</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>106</i>&nbsp;                isConnected = false;</b>
+<b class="nc"><i>107</i>&nbsp;                if (connectionAttempts == 1) {</b>
+<b class="nc"><i>108</i>&nbsp;                    view.showMessage(Frmt.color(&#39;r&#39;, &quot;&gt; Error: Server unreachable during connection setup. Reconnecting...&quot;), true);</b>
+<i>109</i>&nbsp;                }
+<i>110</i>&nbsp;                try {
+<b class="nc"><i>111</i>&nbsp;                    Thread.sleep(1000);</b>
+<b class="nc"><i>112</i>&nbsp;                } catch (InterruptedException ignored) {</b>
+<b class="nc"><i>113</i>&nbsp;                }</b>
+<b class="nc"><i>114</i>&nbsp;            }</b>
+<i>115</i>&nbsp;        }
+<i>116</i>&nbsp;
+<b class="nc"><i>117</i>&nbsp;        view.showQueuedMessage();</b>
+<b class="nc"><i>118</i>&nbsp;        startListening();</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * Closes the connection to the server
+<i>123</i>&nbsp;     */
+<i>124</i>&nbsp;    public void closeConnection() {
+<i>125</i>&nbsp;        try {
+<b class="nc"><i>126</i>&nbsp;            socket.close();</b>
+<b class="nc"><i>127</i>&nbsp;            isConnected = false;</b>
+<b class="nc"><i>128</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>129</i>&nbsp;            System.out.println(Frmt.color(&#39;r&#39;, &quot;Error: An error occurred when closing the connection&quot;));</b>
+<b class="nc"><i>130</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>131</i>&nbsp;        }</b>
+<i>132</i>&nbsp;    }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    /**
+<i>135</i>&nbsp;     * Sends a message to connected the server
+<i>136</i>&nbsp;     *
+<i>137</i>&nbsp;     * @param message The message to be sent
+<i>138</i>&nbsp;     */
+<i>139</i>&nbsp;    public void send(Message message) {
+<b class="nc"><i>140</i>&nbsp;        if (isConnected) {</b>
+<i>141</i>&nbsp;            try {
+<b class="nc"><i>142</i>&nbsp;                synchronized (lock) {</b>
+<b class="nc"><i>143</i>&nbsp;                    output.writeUnshared(message);</b>
+<b class="nc"><i>144</i>&nbsp;                    output.flush();</b>
+<b class="nc"><i>145</i>&nbsp;                    output.reset();</b>
+<b class="nc"><i>146</i>&nbsp;                }</b>
+<b class="nc"><i>147</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>148</i>&nbsp;                isConnected = false;</b>
+<b class="nc"><i>149</i>&nbsp;                view.showMessage(Frmt.color(&#39;r&#39;, &quot;&gt; Error: Server unreachable during message sending.&quot;), true);</b>
+<b class="nc"><i>150</i>&nbsp;                closeConnection();</b>
+<b class="nc"><i>151</i>&nbsp;            }</b>
+<i>152</i>&nbsp;        }
+<i>153</i>&nbsp;    }
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    /**
+<i>156</i>&nbsp;     * Prepares the request of SetUpGame with information about the player and the game
+<i>157</i>&nbsp;     *
+<i>158</i>&nbsp;     * @param nickname   The requested username
+<i>159</i>&nbsp;     * @param date       The date of birth
+<i>160</i>&nbsp;     * @param numPlayers The number of players of the game to be created (irrelevant if the player is joining an existing game)
+<i>161</i>&nbsp;     */
+<i>162</i>&nbsp;    public void sendSetUpGame(String nickname, Date date, int numPlayers) {
+<b class="nc"><i>163</i>&nbsp;        this.nickname = nickname;</b>
+<b class="nc"><i>164</i>&nbsp;        send(new SetUpGame(nickname, date, numPlayers));</b>
+<i>165</i>&nbsp;    }
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;    /**
+<i>168</i>&nbsp;     * Prepares the response to the server ResetUsernameProcess request
+<i>169</i>&nbsp;     *
+<i>170</i>&nbsp;     * @param newNickname The new requested nickname
+<i>171</i>&nbsp;     */
+<i>172</i>&nbsp;    public void sendNewNickname(String newNickname) {
+<b class="nc"><i>173</i>&nbsp;        this.nickname = newNickname;</b>
+<b class="nc"><i>174</i>&nbsp;        send(new SetUpNewNickname(newNickname));</b>
+<i>175</i>&nbsp;    }
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    /**
+<i>178</i>&nbsp;     * Prepares the response to the server SetUpGameCards request
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @param chosenCards The chosen cards
+<i>181</i>&nbsp;     */
+<i>182</i>&nbsp;    public void sendGameCards(List&lt;Card&gt; chosenCards) {
+<b class="nc"><i>183</i>&nbsp;        send(new SetUpGameCards(chosenCards));</b>
+<i>184</i>&nbsp;    }
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    /**
+<i>187</i>&nbsp;     * Prepares the response to the server SetUpPlayerCard request
+<i>188</i>&nbsp;     *
+<i>189</i>&nbsp;     * @param chosenCard The chosen card
+<i>190</i>&nbsp;     */
+<i>191</i>&nbsp;    public void sendPlayerCard(Card chosenCard) {
+<b class="nc"><i>192</i>&nbsp;        send(new SetUpPlayerCard(chosenCard, nickname));</b>
+<i>193</i>&nbsp;    }
+<i>194</i>&nbsp;
+<i>195</i>&nbsp;    /**
+<i>196</i>&nbsp;     * Prepares the response to the server SetUpFirstPlayer request
+<i>197</i>&nbsp;     *
+<i>198</i>&nbsp;     * @param chosenNickname The first player&#39;s nickname
+<i>199</i>&nbsp;     */
+<i>200</i>&nbsp;    public void sendFirstPlayer(String chosenNickname) {
+<b class="nc"><i>201</i>&nbsp;        send(new SetUpFirstPlayer(chosenNickname));</b>
+<i>202</i>&nbsp;    }
+<i>203</i>&nbsp;
+<i>204</i>&nbsp;    /**
+<i>205</i>&nbsp;     * Prepares the response to the server SetUpPlayerColor request
+<i>206</i>&nbsp;     *
+<i>207</i>&nbsp;     * @param chosenColor The chosen color
+<i>208</i>&nbsp;     */
+<i>209</i>&nbsp;    public void sendPlayerColor(String chosenColor) {
+<b class="nc"><i>210</i>&nbsp;        send(new SetUpPlayerColor(chosenColor, nickname));</b>
+<i>211</i>&nbsp;    }
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;    /**
+<i>214</i>&nbsp;     * Prepares the response to the server SetUpPlayerPosition request
+<i>215</i>&nbsp;     *
+<i>216</i>&nbsp;     * @param genre      The genre of the worker
+<i>217</i>&nbsp;     * @param chosenCell The position of the worker
+<i>218</i>&nbsp;     */
+<i>219</i>&nbsp;    public void sendPlayerPosition(Genre genre, Cell chosenCell) {
+<b class="nc"><i>220</i>&nbsp;        send(new SetUpPlayerPosition(genre, chosenCell, nickname));</b>
+<i>221</i>&nbsp;    }
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;    /**
+<i>224</i>&nbsp;     * Prepares the response to the server Turn request
+<i>225</i>&nbsp;     *
+<i>226</i>&nbsp;     * @param theAction The chosen action
+<i>227</i>&nbsp;     */
+<i>228</i>&nbsp;    public void sendAction(Action theAction) {
+<b class="nc"><i>229</i>&nbsp;        send(new Turn(theAction, nickname));</b>
+<i>230</i>&nbsp;    }
+<i>231</i>&nbsp;
+<i>232</i>&nbsp;    /**
+<i>233</i>&nbsp;     * Prepare a new game or terminate the program
+<i>234</i>&nbsp;     *
+<i>235</i>&nbsp;     * @param choice The choice of the user
+<i>236</i>&nbsp;     */
+<i>237</i>&nbsp;    public void sendNewGame(boolean choice) {
+<b class="nc"><i>238</i>&nbsp;        isConnected = false;</b>
+<b class="nc"><i>239</i>&nbsp;        closeConnection();</b>
+<b class="nc"><i>240</i>&nbsp;        if (choice) {</b>
+<b class="nc"><i>241</i>&nbsp;            ClientLauncher.main(null);</b>
+<i>242</i>&nbsp;        }
+<i>243</i>&nbsp;    }
+<i>244</i>&nbsp;
+<i>245</i>&nbsp;    /**
+<i>246</i>&nbsp;     * Class that continuously sends ping messages to the client
+<i>247</i>&nbsp;     */
+<b class="nc"><i>248</i>&nbsp;    class PingSender extends Thread {</b>
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;        /**
+<i>251</i>&nbsp;         * Sends ping messages at regular intervals
+<i>252</i>&nbsp;         */
+<i>253</i>&nbsp;        public void run() {
+<b class="nc"><i>254</i>&nbsp;            while (isConnected) {</b>
+<b class="nc"><i>255</i>&nbsp;                if (Configurator.getPingFlag()) {</b>
+<b class="nc"><i>256</i>&nbsp;                    System.out.println(&quot;\n\t&gt;Sending ping from &quot; + nickname);</b>
+<i>257</i>&nbsp;                }
+<b class="nc"><i>258</i>&nbsp;                send(new PingMessage(false));</b>
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;                try {
+<b class="nc"><i>261</i>&nbsp;                    Thread.sleep(5000);</b>
+<b class="nc"><i>262</i>&nbsp;                } catch (InterruptedException e) {</b>
+<b class="nc"><i>263</i>&nbsp;                    e.printStackTrace();</b>
+<b class="nc"><i>264</i>&nbsp;                }</b>
+<i>265</i>&nbsp;            }
+<i>266</i>&nbsp;        }
+<i>267</i>&nbsp;    }
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 21:16</div>
+</div>
+</body>
+</html>

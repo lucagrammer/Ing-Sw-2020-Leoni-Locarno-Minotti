@@ -1,0 +1,331 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Rules</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">Server.Rules</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Rules (Server.Rules)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Rules</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98,9%
+  </span>
+  <span class="absValue">
+    (86/ 87)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Rules$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98,9%
+  </span>
+  <span class="absValue">
+    (87/ 88)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package Server.Rules;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import Model.Cell;
+<i>4</i>&nbsp;import Model.Game;
+<i>5</i>&nbsp;import Model.Player;
+<i>6</i>&nbsp;import Model.Worker;
+<i>7</i>&nbsp;import Util.Action;
+<i>8</i>&nbsp;import Util.ActionType;
+<i>9</i>&nbsp;import Util.Genre;
+<i>10</i>&nbsp;import Util.RoundActions;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.io.Serializable;
+<i>13</i>&nbsp;import java.util.List;
+<i>14</i>&nbsp;import java.util.stream.Collectors;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;/**
+<i>17</i>&nbsp; * The regular rules
+<i>18</i>&nbsp; */
+<b class="fc"><i>19</i>&nbsp;public class Rules implements Serializable {</b>
+<i>20</i>&nbsp;    /**
+<i>21</i>&nbsp;     * Gets a RoundActions object containing all the possible actions of the specified player according to the Rules
+<i>22</i>&nbsp;     *
+<i>23</i>&nbsp;     * @param player The player whose possible actions are to be analyzed
+<i>24</i>&nbsp;     * @param game   The game to which the player belongs
+<i>25</i>&nbsp;     * @return A RoundActions object containing all the possible actions
+<i>26</i>&nbsp;     */
+<i>27</i>&nbsp;    public RoundActions nextPossibleActions(Player player, Game game) {
+<b class="fc"><i>28</i>&nbsp;        RoundActions roundActions = player.getRoundActions();</b>
+<b class="fc"><i>29</i>&nbsp;        RoundActions nextPossibleActions = new RoundActions();</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;        // Has already moved?
+<b class="fc"><i>32</i>&nbsp;        if (roundActions.hasMoved() == 0) {</b>
+<b class="fc"><i>33</i>&nbsp;            nextPossibleActions.add(getPossibleMoves(player.getWorker(Genre.MALE), game));</b>
+<b class="fc"><i>34</i>&nbsp;            nextPossibleActions.add(getPossibleMoves(player.getWorker(Genre.FEMALE), game));</b>
+<i>35</i>&nbsp;            //Can&#39;t move?
+<b class="fc"><i>36</i>&nbsp;            if (nextPossibleActions.isEmpty())</b>
+<b class="fc"><i>37</i>&nbsp;                nextPossibleActions.add(new Action(ActionType.LOSE));</b>
+<i>38</i>&nbsp;        } else {
+<i>39</i>&nbsp;            // Has already build?
+<b class="fc"><i>40</i>&nbsp;            if (roundActions.hasBuildAnything() == 0) {</b>
+<b class="fc"><i>41</i>&nbsp;                Genre movedWorkerGenre = roundActions.</b>
+<b class="fc"><i>42</i>&nbsp;                        getActionList().</b>
+<b class="fc"><i>43</i>&nbsp;                        stream().</b>
+<b class="fc"><i>44</i>&nbsp;                        filter(x -&gt; x.getActionType() == ActionType.MOVE).</b>
+<b class="fc"><i>45</i>&nbsp;                        collect(Collectors.toList()).</b>
+<b class="fc"><i>46</i>&nbsp;                        get(0).</b>
+<b class="fc"><i>47</i>&nbsp;                        getGenre();</b>
+<b class="fc"><i>48</i>&nbsp;                nextPossibleActions.add(getPossibleBuilds(player.getWorker(movedWorkerGenre), game));</b>
+<b class="fc"><i>49</i>&nbsp;                nextPossibleActions.add(getPossibleDomes(player.getWorker(movedWorkerGenre), game));</b>
+<i>50</i>&nbsp;                //Can&#39;t build anything?
+<b class="fc"><i>51</i>&nbsp;                if (nextPossibleActions.isEmpty())</b>
+<b class="fc"><i>52</i>&nbsp;                    nextPossibleActions.add(new Action(ActionType.LOSE));</b>
+<b class="fc"><i>53</i>&nbsp;            } else {</b>
+<b class="fc"><i>54</i>&nbsp;                nextPossibleActions.add(new Action(ActionType.END));</b>
+<i>55</i>&nbsp;            }
+<i>56</i>&nbsp;        }
+<b class="fc"><i>57</i>&nbsp;        return nextPossibleActions;</b>
+<i>58</i>&nbsp;    }
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    /**
+<i>61</i>&nbsp;     * Gets a RoundActions object containing all the move-actions of the specified worker according to the Rules
+<i>62</i>&nbsp;     *
+<i>63</i>&nbsp;     * @param worker The worker whose possible moves are to be analyzed
+<i>64</i>&nbsp;     * @param game   The game to which the player belongs
+<i>65</i>&nbsp;     * @return A RoundActions object containing all the possible move-actions
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    protected RoundActions getPossibleMoves(Worker worker, Game game) {
+<b class="fc"><i>68</i>&nbsp;        RoundActions roundMoves = new RoundActions();</b>
+<b class="fc"><i>69</i>&nbsp;        Cell workerCell = worker.getPosition();</b>
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;        // Add all the adjacent cells that don&#39;t have a dome and are reachable from the current positions of the worker
+<b class="fc"><i>72</i>&nbsp;        List&lt;Cell&gt; cells = game.</b>
+<b class="fc"><i>73</i>&nbsp;                getBoard().</b>
+<b class="fc"><i>74</i>&nbsp;                getAdjacents(workerCell).</b>
+<b class="fc"><i>75</i>&nbsp;                stream().</b>
+<b class="fc"><i>76</i>&nbsp;                filter(x -&gt; !x.getDome() &amp;&amp; workerCell.getFloorDifference(x) &lt;= 1).</b>
+<b class="fc"><i>77</i>&nbsp;                collect(Collectors.toList());</b>
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;        // Remove all the cells that are already occupied
+<b class="fc"><i>80</i>&nbsp;        for (Player gamePlayer : game.getPlayers()) {</b>
+<b class="fc"><i>81</i>&nbsp;            cells.removeAll(gamePlayer.getOccupiedCells());</b>
+<b class="fc"><i>82</i>&nbsp;        }</b>
+<b class="fc"><i>83</i>&nbsp;        roundMoves.addMoves(cells, workerCell, worker.getGenre());</b>
+<b class="fc"><i>84</i>&nbsp;        return roundMoves;</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    /**
+<i>88</i>&nbsp;     * Gets a RoundActions object containing all the build-floor-actions of the specified worker according to the Rules
+<i>89</i>&nbsp;     *
+<i>90</i>&nbsp;     * @param worker The worker whose possible actions are to be analyzed
+<i>91</i>&nbsp;     * @param game   The game to which the player belongs
+<i>92</i>&nbsp;     * @return A RoundActions object containing all the possible build-floor-actions
+<i>93</i>&nbsp;     */
+<i>94</i>&nbsp;    protected RoundActions getPossibleBuilds(Worker worker, Game game) {
+<b class="fc"><i>95</i>&nbsp;        RoundActions roundBuilds = new RoundActions();</b>
+<b class="fc"><i>96</i>&nbsp;        Cell workerCell = worker.getPosition();</b>
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;        // Add all the adjacent cells that don&#39;t have a dome and don&#39;t have 3 floors: here you can build a floor
+<b class="fc"><i>99</i>&nbsp;        List&lt;Cell&gt; cells = game.</b>
+<b class="fc"><i>100</i>&nbsp;                getBoard().</b>
+<b class="fc"><i>101</i>&nbsp;                getAdjacents(workerCell).</b>
+<b class="fc"><i>102</i>&nbsp;                stream().</b>
+<b class="fc"><i>103</i>&nbsp;                filter(x -&gt; !x.getDome() &amp;&amp; x.getFloor() &lt;= 2).</b>
+<b class="fc"><i>104</i>&nbsp;                collect(Collectors.toList());</b>
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;        // Remove all the cells that are already occupied
+<b class="fc"><i>107</i>&nbsp;        for (Player gamePlayer : game.getPlayers()) {</b>
+<b class="fc"><i>108</i>&nbsp;            cells.removeAll(gamePlayer.getOccupiedCells());</b>
+<b class="fc"><i>109</i>&nbsp;        }</b>
+<b class="fc"><i>110</i>&nbsp;        roundBuilds.addBuilds(cells, workerCell, worker.getGenre());</b>
+<b class="fc"><i>111</i>&nbsp;        return roundBuilds;</b>
+<i>112</i>&nbsp;    }
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    /**
+<i>115</i>&nbsp;     * Gets a RoundActions object containing all the build-dome-actions of the specified worker according to the Rules
+<i>116</i>&nbsp;     *
+<i>117</i>&nbsp;     * @param worker The worker whose possible actions are to be analyzed
+<i>118</i>&nbsp;     * @param game   The game to which the player belongs
+<i>119</i>&nbsp;     * @return A RoundActions object containing all the possible build-dome-actions
+<i>120</i>&nbsp;     */
+<i>121</i>&nbsp;    protected RoundActions getPossibleDomes(Worker worker, Game game) {
+<b class="fc"><i>122</i>&nbsp;        RoundActions roundDomes = new RoundActions();</b>
+<b class="fc"><i>123</i>&nbsp;        Cell workerCell = worker.getPosition();</b>
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;        // Add all the adjacent cells that don&#39;t have a dome and have 3 floors: here you can build a dome
+<b class="fc"><i>126</i>&nbsp;        List&lt;Cell&gt; cells = game.</b>
+<b class="fc"><i>127</i>&nbsp;                getBoard().</b>
+<b class="fc"><i>128</i>&nbsp;                getAdjacents(workerCell).</b>
+<b class="fc"><i>129</i>&nbsp;                stream().</b>
+<b class="fc"><i>130</i>&nbsp;                filter(x -&gt; !x.getDome() &amp;&amp; x.getFloor() == 3).</b>
+<b class="fc"><i>131</i>&nbsp;                collect(Collectors.toList());</b>
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;        // Remove all the cells that are already occupied
+<b class="fc"><i>134</i>&nbsp;        for (Player gamePlayer : game.getPlayers()) {</b>
+<b class="fc"><i>135</i>&nbsp;            cells.removeAll(gamePlayer.getOccupiedCells());</b>
+<b class="fc"><i>136</i>&nbsp;        }</b>
+<b class="fc"><i>137</i>&nbsp;        roundDomes.addDomes(cells, workerCell, worker.getGenre());</b>
+<b class="fc"><i>138</i>&nbsp;        return roundDomes;</b>
+<i>139</i>&nbsp;    }
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    /**
+<i>142</i>&nbsp;     * Performs a certain allowed action
+<i>143</i>&nbsp;     *
+<i>144</i>&nbsp;     * @param action The action to be performed
+<i>145</i>&nbsp;     * @param player The player who performs the action
+<i>146</i>&nbsp;     * @param game   The game to which the player belongs
+<i>147</i>&nbsp;     * @return True if the action is a winning action, otherwise false
+<i>148</i>&nbsp;     */
+<i>149</i>&nbsp;    public boolean doAction(Action action, Player player, Game game) {
+<b class="fc"><i>150</i>&nbsp;        switch (action.getActionType()) {</b>
+<i>151</i>&nbsp;            case MOVE:
+<b class="fc"><i>152</i>&nbsp;                return doMove(action, player, game);</b>
+<i>153</i>&nbsp;            case FLOOR:
+<b class="fc"><i>154</i>&nbsp;                return doBuild(action, player, game);</b>
+<i>155</i>&nbsp;            case DOME:
+<b class="fc"><i>156</i>&nbsp;                return doDome(action, player, game);</b>
+<i>157</i>&nbsp;            case END:
+<b class="fc"><i>158</i>&nbsp;                player.registerAction(action);</b>
+<b class="fc"><i>159</i>&nbsp;                return false;</b>
+<i>160</i>&nbsp;            default:
+<b class="nc"><i>161</i>&nbsp;                return false;</b>
+<i>162</i>&nbsp;        }
+<i>163</i>&nbsp;    }
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    /**
+<i>166</i>&nbsp;     * Performs a certain build-dome-action
+<i>167</i>&nbsp;     *
+<i>168</i>&nbsp;     * @param action The build-dome-action to be performed
+<i>169</i>&nbsp;     * @param player The player who performs the build-dome-action
+<i>170</i>&nbsp;     * @param game   The game to which the player belongs
+<i>171</i>&nbsp;     * @return True if the build-dome-action is a winning action, otherwise false
+<i>172</i>&nbsp;     */
+<i>173</i>&nbsp;    protected boolean doDome(Action action, Player player, Game game) {
+<b class="fc"><i>174</i>&nbsp;        Worker worker = player.getWorker(action.getGenre());</b>
+<b class="fc"><i>175</i>&nbsp;        Cell currentCell = worker.getPosition();</b>
+<b class="fc"><i>176</i>&nbsp;        Cell position = game.getBoard().getNextCell(currentCell, action.getDirection());</b>
+<b class="fc"><i>177</i>&nbsp;        position.setDome(true);</b>
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;        // Update the actions of the player
+<b class="fc"><i>180</i>&nbsp;        player.registerAction(action);</b>
+<b class="fc"><i>181</i>&nbsp;        return false;</b>
+<i>182</i>&nbsp;    }
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;    /**
+<i>185</i>&nbsp;     * Performs a certain build-floor-action
+<i>186</i>&nbsp;     *
+<i>187</i>&nbsp;     * @param action The build-floor-action to be performed
+<i>188</i>&nbsp;     * @param player The player who performs the build-floor-action
+<i>189</i>&nbsp;     * @param game   The game to which the player belongs
+<i>190</i>&nbsp;     * @return True if the build-floor-action is a winning action, otherwise false
+<i>191</i>&nbsp;     */
+<i>192</i>&nbsp;    protected boolean doBuild(Action action, Player player, Game game) {
+<b class="fc"><i>193</i>&nbsp;        Worker worker = player.getWorker(action.getGenre());</b>
+<b class="fc"><i>194</i>&nbsp;        Cell currentCell = worker.getPosition();</b>
+<b class="fc"><i>195</i>&nbsp;        Cell position = game.getBoard().getNextCell(currentCell, action.getDirection());</b>
+<b class="fc"><i>196</i>&nbsp;        position.addFloor();</b>
+<i>197</i>&nbsp;
+<i>198</i>&nbsp;        // Update the actions of the player
+<b class="fc"><i>199</i>&nbsp;        player.registerAction(action);</b>
+<b class="fc"><i>200</i>&nbsp;        return false;</b>
+<i>201</i>&nbsp;    }
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    /**
+<i>204</i>&nbsp;     * Performs a certain move-action
+<i>205</i>&nbsp;     *
+<i>206</i>&nbsp;     * @param action The move-action to be performed
+<i>207</i>&nbsp;     * @param player The player who performs the move-action
+<i>208</i>&nbsp;     * @param game   The game to which the player belongs
+<i>209</i>&nbsp;     * @return True if the build-floor-action is a winning action, otherwise false
+<i>210</i>&nbsp;     */
+<i>211</i>&nbsp;    protected boolean doMove(Action action, Player player, Game game) {
+<b class="fc"><i>212</i>&nbsp;        Worker worker = player.getWorker(action.getGenre());</b>
+<b class="fc"><i>213</i>&nbsp;        Cell currentCell = worker.getPosition();</b>
+<b class="fc"><i>214</i>&nbsp;        Cell nexCell = game.getBoard().getNextCell(currentCell, action.getDirection());</b>
+<b class="fc"><i>215</i>&nbsp;        worker.setPosition(nexCell);</b>
+<i>216</i>&nbsp;
+<i>217</i>&nbsp;        // Update the actions of the player
+<b class="fc"><i>218</i>&nbsp;        player.registerAction(action);</b>
+<b class="fc"><i>219</i>&nbsp;        return currentCell.getFloor() == 2 &amp;&amp; nexCell.getFloor() == 3;</b>
+<i>220</i>&nbsp;    }
+<i>221</i>&nbsp;
+<i>222</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 21:16</div>
+</div>
+</body>
+</html>

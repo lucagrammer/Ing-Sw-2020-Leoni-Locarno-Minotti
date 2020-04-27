@@ -209,4 +209,14 @@ public class GameTest {
         game.addPlayer(player2);
         assertFalse(game.hasWinner());
     }
+
+    @Test
+    public void getBoard_game_getCorrectBoard(){
+        Board board = new Board();
+        for (int i=0; i<5; i++){
+            for (int j=0; j<5; j++){
+                assertEquals(board.getCell(i,j), game.getBoard().getCell(i,j));
+            }
+        }
+    }
 }
