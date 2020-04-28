@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import Util.Color;
 import Util.Genre;
@@ -14,20 +14,6 @@ public class Worker implements Serializable {
     private final Player player;
     private Color color;
     private Cell position;
-
-    /**
-     * Constructor: build a Worker
-     *
-     * @param genre  The genre of the worker
-     * @param player The player who owns this worker
-     */
-    public Worker(Genre genre, Color color, Player player) {
-        //TODO: REMOVE THIS UNUSED CONSTRUCTOR
-        this.genre = genre;
-        this.color = color;
-        this.player = player;
-        this.position = null;
-    }
 
     /**
      * Constructor: build a Worker

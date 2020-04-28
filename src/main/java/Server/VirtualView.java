@@ -1,9 +1,9 @@
 package Server;
 
 import Messages.Message;
-import Model.Card;
-import Model.Cell;
-import Model.Player;
+import model.Card;
+import model.Cell;
+import model.Player;
 import Util.Action;
 import Util.Genre;
 

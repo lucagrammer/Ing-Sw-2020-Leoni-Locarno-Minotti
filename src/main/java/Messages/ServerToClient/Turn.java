@@ -3,7 +3,7 @@ package Messages.ServerToClient;
 import Client.View;
 import Messages.CVMessage;
 import Messages.VCMessage;
-import Model.Game;
+import model.Game;
 import Server.VirtualView;
 import Util.Action;
 import Util.MessageType;

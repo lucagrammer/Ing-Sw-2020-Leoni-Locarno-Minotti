@@ -1,6 +1,6 @@
 package Messages.ServerToClient;
 
-import Model.Card;
+import model.Card;
 import Server.Rules.EnemyRules;
 import Server.Rules.Rules;
 import org.junit.Test;

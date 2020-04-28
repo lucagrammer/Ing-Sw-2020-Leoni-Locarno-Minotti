@@ -1,9 +1,9 @@
 package Server.Rules.SimpleGods;
 
-import Model.Cell;
-import Model.Game;
-import Model.Player;
-import Model.Worker;
+import model.Cell;
+import model.Game;
+import model.Player;
+import model.Worker;
 import Server.Rules.Rules;
 import Util.Action;
 

@@ -6,8 +6,8 @@ import Messages.MVMessage;
 import Messages.Message;
 import Messages.PingMessage;
 import Messages.ServerToClient.*;
-import Model.Card;
-import Model.Cell;
+import model.Card;
+import model.Cell;
 import Util.*;
 
 import java.io.IOException;

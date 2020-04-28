@@ -1,9 +1,9 @@
 package Client;
 
-import Model.Card;
-import Model.Cell;
-import Model.Game;
-import Model.Player;
+import model.Card;
+import model.Cell;
+import model.Game;
+import model.Player;
 import Util.Genre;
 import Util.RoundActions;
 

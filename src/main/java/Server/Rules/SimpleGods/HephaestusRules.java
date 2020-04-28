@@ -1,8 +1,8 @@
 package Server.Rules.SimpleGods;
 
-import Model.Game;
-import Model.Player;
-import Model.Worker;
+import model.Game;
+import model.Player;
+import model.Worker;
 import Server.Rules.Rules;
 import Util.*;
 

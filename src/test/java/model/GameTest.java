@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import Server.Rules.EnemyRules;
 import Server.Rules.Rules;

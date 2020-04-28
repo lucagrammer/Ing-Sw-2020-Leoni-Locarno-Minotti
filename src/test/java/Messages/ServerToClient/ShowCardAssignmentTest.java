@@ -1,6 +1,6 @@
 package Messages.ServerToClient;
 
-import Model.Player;
+import model.Player;
 import org.junit.Test;
 
 import java.util.List;

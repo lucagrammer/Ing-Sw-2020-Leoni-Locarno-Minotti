@@ -1,9 +1,9 @@
 package Server.Rules;
 
-import Model.Cell;
-import Model.Game;
-import Model.Player;
-import Model.Worker;
+import model.Cell;
+import model.Game;
+import model.Player;
+import model.Worker;
 import Util.Action;
 import Util.ActionType;
 import Util.Genre;

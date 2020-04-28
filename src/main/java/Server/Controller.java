@@ -1,10 +1,10 @@
 package Server;
 
 import Messages.ServerToClient.*;
-import Model.Card;
-import Model.Cell;
-import Model.Game;
-import Model.Player;
+import model.Card;
+import model.Cell;
+import model.Game;
+import model.Player;
 import Util.*;
 import Util.exceptions.MustRestartException;
 

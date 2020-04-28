@@ -1,8 +1,8 @@
 package Server.Rules.SimpleGods;
 
-import Model.Board;
-import Model.Game;
-import Model.Player;
+import model.Board;
+import model.Game;
+import model.Player;
 import Server.Rules.Rules;
 import Util.*;
 import org.junit.Before;

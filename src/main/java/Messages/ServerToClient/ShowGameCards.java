@@ -2,7 +2,7 @@ package Messages.ServerToClient;
 
 import Client.View;
 import Messages.MVMessage;
-import Model.Card;
+import model.Card;
 import Util.MessageType;
 
 import java.io.Serializable;

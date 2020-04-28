@@ -1,6 +1,6 @@
 package Client;
 
-import Model.*;
+import model.*;
 import Util.*;
 
 import java.text.ParseException;

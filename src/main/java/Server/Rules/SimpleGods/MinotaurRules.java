@@ -1,6 +1,6 @@
 package Server.Rules.SimpleGods;
 
-import Model.*;
+import model.*;
 import Server.Rules.Rules;
 import Util.Action;
 import Util.RoundActions;

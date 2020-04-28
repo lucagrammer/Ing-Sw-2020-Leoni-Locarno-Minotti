@@ -1,6 +1,6 @@
 package Messages.ServerToClient;
 
-import Model.Game;
+import model.Game;
 import org.junit.Test;
 
 import static Util.MessageType.CV;

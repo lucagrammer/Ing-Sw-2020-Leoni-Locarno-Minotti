@@ -1,6 +1,6 @@
 package Util;
 
-import Model.Card;
+import model.Card;
 import Server.Rules.EnemyRules;
 import Server.Rules.Rules;
 import org.jdom2.Document;

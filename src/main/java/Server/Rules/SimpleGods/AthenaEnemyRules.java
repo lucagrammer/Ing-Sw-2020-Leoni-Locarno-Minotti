@@ -1,7 +1,7 @@
 package Server.Rules.SimpleGods;
 
-import Model.Game;
-import Model.Player;
+import model.Game;
+import model.Player;
 import Server.Rules.EnemyRules;
 import Util.Action;
 import Util.ActionType;

@@ -1,6 +1,6 @@
 package Util;
 
-import Model.Cell;
+import model.Cell;
 
 import java.io.Serializable;
 import java.util.ArrayList;

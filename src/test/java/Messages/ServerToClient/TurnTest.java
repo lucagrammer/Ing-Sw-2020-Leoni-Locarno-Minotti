@@ -1,6 +1,6 @@
 package Messages.ServerToClient;
 
-import Model.Game;
+import model.Game;
 import Util.Action;
 import Util.RoundActions;
 import org.junit.Test;

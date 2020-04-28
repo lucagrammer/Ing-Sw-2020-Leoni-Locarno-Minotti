@@ -2,7 +2,7 @@ package Messages.ServerToClient;
 
 import Client.View;
 import Messages.CVMessage;
-import Model.Game;
+import model.Game;
 import Util.Frmt;
 import Util.MessageType;
 

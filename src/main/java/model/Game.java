@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import Util.Color;
 import Util.Genre;

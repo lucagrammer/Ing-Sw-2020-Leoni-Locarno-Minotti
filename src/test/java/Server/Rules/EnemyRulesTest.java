@@ -1,7 +1,7 @@
 package Server.Rules;
 
-import Model.Game;
-import Model.Player;
+import model.Game;
+import model.Player;
 import Util.*;
 import org.junit.Before;
 import org.junit.Test;

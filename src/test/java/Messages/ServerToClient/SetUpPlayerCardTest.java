@@ -1,6 +1,6 @@
 package Messages.ServerToClient;
 
-import Model.Card;
+import model.Card;
 import org.junit.Test;
 
 import java.util.List;
