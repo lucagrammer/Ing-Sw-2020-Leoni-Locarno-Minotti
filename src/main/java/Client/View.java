@@ -1,11 +1,11 @@
 package Client;
 
+import Util.Genre;
+import Util.RoundActions;
 import model.Card;
 import model.Cell;
 import model.Game;
 import model.Player;
-import Util.Genre;
-import Util.RoundActions;
 
 import java.util.List;
 
@@ -100,6 +100,7 @@ public interface View {
      *
      * @param genre          The genre of the worker
      * @param forbiddenCells The forbidden cells
+     * @param game           The game
      */
     void askPlayerPosition(Genre genre, List<Cell> forbiddenCells, Game game);
 

@@ -1,5 +1,6 @@
 package Client;
 
+import Client.gui.GuiView;
 import Util.Frmt;
 
 import java.util.Scanner;
@@ -34,14 +35,17 @@ public class ClientLauncher {
                 view.launch();
             } else {
                 if ((preferredInterface.equalsIgnoreCase("GUI"))) {
-                    //view = new CliView();
-                    //serverHandler.addView(view);
-                    //view.addServerHandler(serverHandler);
-                    //incorrect = false;
-                    //view.launch();
+                    view = new GuiView();
+                    serverHandler.setView(view);
+                    view.setServerHandler(serverHandler);
+                    incorrect = false;
+                    view.launch();
+
+                    /*
                     Frmt.clearScreen();
                     System.out.println(Frmt.color('r', "  > This functionality is not available. Try again."));
                     incorrect = true;
+                    */
                 } else {
                     Frmt.clearScreen();
                     System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));

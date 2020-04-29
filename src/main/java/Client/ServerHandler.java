@@ -6,9 +6,9 @@ import Messages.MVMessage;
 import Messages.Message;
 import Messages.PingMessage;
 import Messages.ServerToClient.*;
+import Util.*;
 import model.Card;
 import model.Cell;
-import Util.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Manages communication from and to the server
  */
-class ServerHandler {
+public class ServerHandler {
     private final Object lock = new Object();
     private ObjectInputStream input;
     private ObjectOutputStream output;

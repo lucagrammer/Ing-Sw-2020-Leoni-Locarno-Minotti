@@ -1,7 +1,7 @@
 package Client;
 
-import model.*;
 import Util.*;
+import model.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -107,7 +107,7 @@ public class CliView implements View {
         Date date = null;
         Frmt.clearScreen();
         do {
-            System.out.print(Frmt.style('b', "\n Enter your birth date [dd/mm/yyyyy]: "));
+            System.out.print(Frmt.style('b', "\n Enter your birth date [dd/mm/yyyy]: "));
             String fullDate = scanner.nextLine();
             try {
                 date = new SimpleDateFormat("dd/MM/yyyy").parse(fullDate);
@@ -368,6 +368,7 @@ public class CliView implements View {
      *
      * @param genre          The genre of the worker
      * @param forbiddenCells The forbidden cells
+     * @param game           The game
      */
     public void askPlayerPosition(Genre genre, List<Cell> forbiddenCells, Game game) {
         Cell chosenCell;
