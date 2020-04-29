@@ -224,3 +224,183 @@ public class GuiView implements View {
             bodyContainer.repaint();
         });
     }
+
+    /**
+     * Asks a new nickname to the user and notify the choice to the serverHandler
+     */
+    public void askNewNickname() {
+        SwingUtilities.invokeLater(() -> {
+            // Flush body components
+            bodyContainer.removeAll();
+
+            // New Nickname
+            JLabel nicknameLabel = new JLabel();
+            nicknameLabel.setText("Nickname: ");
+            nicknameLabel.setBounds(10, 30, 400, 40);
+            nicknameLabel.setHorizontalAlignment(JLabel.RIGHT);
+            nicknameLabel.setVerticalAlignment(JLabel.CENTER);
+            nicknameLabel.setForeground(Color.WHITE);
+            nicknameLabel.setFont(new Font("LeGourmetScript", Font.PLAIN, 30));
+            bodyContainer.add(nicknameLabel);
+
+            PTextField nicknameTextField = new PTextField(null);
+            nicknameTextField.setBounds(430, 30, 250, 40);
+            bodyContainer.add(nicknameTextField);
+
+            // Error label
+            JLabel errorLabel = new JLabel();
+            errorLabel.setText("The chosen username is already taken.");
+            errorLabel.setBounds(0, 240, 840, 40);
+            errorLabel.setHorizontalAlignment(JLabel.CENTER);
+            errorLabel.setVerticalAlignment(JLabel.CENTER);
+            errorLabel.setForeground(Color.RED);
+            errorLabel.setFont(new Font("LeGourmetScript", Font.PLAIN, 25));
+            bodyContainer.add(errorLabel);
+
+            Image scaledImage = new ImageIcon("src/main/resources/GuiResources/btn_blue_next.png").getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);
+            JButton button = new JButton(new ImageIcon(scaledImage));
+            button.setBounds(420 - 98, 300, 197, 50);
+            button.setBackground(new Color(0, 0, 0, 0));
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent ev) {
+                    new Thread(() -> {
+                        String nickname;
+
+                        nickname = nicknameTextField.getTextFieldText();
+                        if (nickname.equals("") || nickname.contains(" ")) {
+                            errorLabel.setText("Invalid nickname. Try again.");
+                            return;
+                        }
+
+                        // No errors
+                        errorLabel.setText("");
+
+                        serverHandler.sendNewNickname(nickname);
+                        showMessage("Waiting for the other players to connect...", true);
+                    }).start();
+                }
+            });
+            bodyContainer.add(button);
+
+            // Apply
+            bodyContainer.revalidate();
+            bodyContainer.repaint();
+        });
+    }
+
+    /**
+     * Asks nickname, birth date and if it's a new game the number of players
+     * for the game and notify the information to the serverHandler
+     *
+     * @param newGame True if the it is a new game, otherwise false
+     */
+    public void setUpGame(boolean newGame) {
+        SwingUtilities.invokeLater(() -> {
+            // Flush body components
+            bodyContainer.removeAll();
+            //bodyContainer.setOpaque(true);
+            bodyContainer.setBackground(new Color(0, 0, 0, 0));
+
+            // Nickname
+            JLabel nicknameLabel = new JLabel();
+            nicknameLabel.setText("Nickname: ");
+            nicknameLabel.setBounds(10, 30, 400, 40);
+            nicknameLabel.setHorizontalAlignment(JLabel.RIGHT);
+            nicknameLabel.setVerticalAlignment(JLabel.CENTER);
+            nicknameLabel.setForeground(Color.WHITE);
+            nicknameLabel.setFont(new Font("LeGourmetScript", Font.PLAIN, 30));
+            bodyContainer.add(nicknameLabel);
+
+            PTextField nicknameTextField = new PTextField(null);
+            nicknameTextField.setBounds(430, 30, 250, 40);
+            bodyContainer.add(nicknameTextField);
+
+            // Date of birth
+            JLabel dateLabel = new JLabel();
+            dateLabel.setText("Date of birth [dd/mm/yyyy]: ");
+            dateLabel.setBounds(10, 100, 400, 40);
+            dateLabel.setHorizontalAlignment(JLabel.RIGHT);
+            dateLabel.setVerticalAlignment(JLabel.CENTER);
+            dateLabel.setForeground(Color.WHITE);
+            dateLabel.setFont(new Font("LeGourmetScript", Font.PLAIN, 30));
+            bodyContainer.add(dateLabel);
+
+            PTextField dateTextField = new PTextField(null);
+            dateTextField.setBounds(430, 100, 250, 40);
+            bodyContainer.add(dateTextField);
+
+            // Number of competitors
+            JLabel playersNumberLabel = new JLabel();
+            playersNumberLabel.setText("Number of competitors [2..3]: ");
+            playersNumberLabel.setBounds(10, 170, 400, 40);
+            playersNumberLabel.setHorizontalAlignment(JLabel.RIGHT);
+            playersNumberLabel.setVerticalAlignment(JLabel.CENTER);
+            playersNumberLabel.setForeground(Color.WHITE);
+            playersNumberLabel.setFont(new Font("LeGourmetScript", Font.PLAIN, 30));
+            if (newGame) {
+                bodyContainer.add(playersNumberLabel);
+            }
+
+            PTextField playersNumberTextField = new PTextField(null);
+            playersNumberTextField.setBounds(430, 170, 250, 40);
+            if (newGame) {
+                bodyContainer.add(playersNumberTextField);
+            }
+
+
+            // Error label
+            JLabel errorLabel = new JLabel();
+            errorLabel.setText("");
+            errorLabel.setBounds(0, 240, 840, 40);
+            errorLabel.setHorizontalAlignment(JLabel.CENTER);
+            errorLabel.setVerticalAlignment(JLabel.CENTER);
+            errorLabel.setForeground(Color.RED);
+            errorLabel.setFont(new Font("LeGourmetScript", Font.PLAIN, 25));
+            bodyContainer.add(errorLabel);
+
+            Image scaledImage = new ImageIcon("src/main/resources/GuiResources/btn_blue_next.png").getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);
+            JButton button = new JButton(new ImageIcon(scaledImage));
+            button.setBounds(420 - 98, 300, 197, 50);
+            //button.setOpaque(true);
+            button.setBackground(new Color(0, 0, 0, 0));
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent ev) {
+                    new Thread(() -> {
+                        Date date;
+                        String nickname;
+                        int playersNumber;
+
+                        nickname = nicknameTextField.getTextFieldText();
+                        if (nickname.equals("") || nickname.contains(" ")) {
+                            errorLabel.setText("Invalid nickname. Try again.");
+                            return;
+                        }
+
+                        try {
+                            date = new SimpleDateFormat("dd/MM/yyyy").parse(dateTextField.getTextFieldText());
+                        } catch (ParseException e) {
+                            errorLabel.setText("Invalid date. Try again.");
+                            return;
+                        }
+
+                        if (newGame) {
+                            playersNumber = Integer.parseInt(playersNumberTextField.getTextFieldText());
+                            if (playersNumber < 2 || playersNumber > 3) {
+                                errorLabel.setText("Invalid choice. Try again.");
+                                return;
+                            }
+                        } else {
+                            playersNumber = 0;
+                        }
+
+                        serverHandler.sendSetUpGame(nickname, date, playersNumber);
+                    }).start();
+                }
+            });
+            bodyContainer.add(button);
+
+            // Apply
+            bodyContainer.revalidate();
+            bodyContainer.repaint();
+        });
+    }
