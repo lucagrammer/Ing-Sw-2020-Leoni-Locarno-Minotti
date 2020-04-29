@@ -85,7 +85,7 @@ public class GameTest {
         game.addPlayer(player1);
         game.addPlayer(player2);
         assertEquals(players, game.getPlayers());
-    }*/ // TODO ALREADY CHECKED IN GET_NEXT_PLAYER
+    }*/
 
     @Test
     public void card_setUsedCards_getUsedCards(){
