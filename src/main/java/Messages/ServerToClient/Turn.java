@@ -1,6 +1,6 @@
 package Messages.ServerToClient;
 
-import Client.View;
+import client.View;
 import Messages.CVMessage;
 import Messages.VCMessage;
 import model.Game;

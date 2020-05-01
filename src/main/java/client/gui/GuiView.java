@@ -1,7 +1,7 @@
-package Client.gui;
+package client.gui;
 
-import Client.ServerHandler;
-import Client.View;
+import client.ServerHandler;
+import client.View;
 import Util.Configurator;
 import Util.Genre;
 import Util.RoundActions;

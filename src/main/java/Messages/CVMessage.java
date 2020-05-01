@@ -1,6 +1,6 @@
 package Messages;
 
-import Client.View;
+import client.View;
 
 /**
  * Message from Controller to View

@@ -1,6 +1,6 @@
-package Client;
+package client;
 
-import Client.gui.GuiView;
+import client.gui.GuiView;
 import Util.Frmt;
 
 import java.util.Scanner;

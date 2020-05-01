@@ -1,4 +1,4 @@
-package Client;
+package client;
 
 import Messages.CVMessage;
 import Messages.ClientToServer.SetUpGame;

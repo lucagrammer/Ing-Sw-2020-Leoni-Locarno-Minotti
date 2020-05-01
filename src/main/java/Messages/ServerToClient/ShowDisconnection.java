@@ -1,6 +1,6 @@
 package Messages.ServerToClient;
 
-import Client.View;
+import client.View;
 import Messages.MVMessage;
 import Util.MessageType;
 

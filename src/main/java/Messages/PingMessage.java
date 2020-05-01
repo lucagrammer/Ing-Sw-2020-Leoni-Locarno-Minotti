@@ -1,6 +1,6 @@
 package Messages;
 
-import Client.View;
+import client.View;
 import Server.VirtualView;
 import Util.MessageType;
 
