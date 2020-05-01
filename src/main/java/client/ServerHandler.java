@@ -64,11 +64,6 @@ public class ServerHandler {
                     view.showErrorMessage(errorMessage, true);
                     closeConnection();
                 }
-            } catch (IOException | ClassNotFoundException e) {
-                if (isConnected) {
-                    view.showMessage(Frmt.color('r', "> Error: Server unreachable during message reading."), true);
-                    closeConnection();
-                }
                 isConnected = false;
             }
         }
@@ -132,7 +127,8 @@ public class ServerHandler {
             socket.close();
             isConnected = false;
         } catch (IOException e) {
-            System.out.println(Frmt.color('r', "Error: An error occurred when closing the connection"));
+            String errorMessage = "An error occurred " + (Configurator.getErrorDetailsFlag() ? "  when closing the connection" : "") + ".";
+            view.showErrorMessage(errorMessage, true);
             e.printStackTrace();
         }
     }
@@ -152,7 +148,8 @@ public class ServerHandler {
                 }
             } catch (IOException e) {
                 isConnected = false;
-                view.showMessage(Frmt.color('r', "> Error: Server unreachable during message sending."), true);
+                String errorMessage = "Server unreachable" + (Configurator.getErrorDetailsFlag() ? " during message sending" : "") + ".";
+                view.showErrorMessage(errorMessage, true);
                 closeConnection();
             }
         }
