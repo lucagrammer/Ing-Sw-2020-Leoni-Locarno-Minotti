@@ -124,7 +124,12 @@ public class CliView implements View {
             Frmt.clearScreen();
             do {
                 System.out.print(Frmt.style('b', "\n Enter the number of competitors [2..3]: "));
-                numPlayers = scanner.nextInt();
+                String numPlayersString = scanner.nextLine();
+                try {
+                    numPlayers = Integer.parseInt(numPlayersString);
+                } catch (Exception e) {
+                    numPlayers = 0;
+                }
                 if (numPlayers < 2 || numPlayers > 3) {
                     Frmt.clearScreen();
                     System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
@@ -491,7 +496,7 @@ public class CliView implements View {
                 System.out.print("\t\t\t  " + Frmt.color(colors.get(2), Frmt.style('r', "  " + playerNames.get(2).toUpperCase() + " - " + game.getPlayerByNickname(playerNames.get(2)).getCard().getName() + "  ")));
             }
             if (i == 0 && colors.size() > 0) {
-                System.out.print("\t\t\t  " + Frmt.style("bi", "LEGEND:"));
+                System.out.print("\t\t\t  " + Frmt.style("bi", "KEY:"));
             }
             System.out.print("\n");
         }
@@ -583,6 +588,18 @@ public class CliView implements View {
         System.out.println(Frmt.color('r', "\n\n\t" + Frmt.style("ui", "GAME OVER: " +
                 disconnectedNickname.toUpperCase() + " has disconnected.")));
         askNewGame();
+    }
+
+    /**
+     * Shows an error message to the user
+     *
+     * @param errorMessage The message to be shown
+     * @param newScreen    True if it's necessary to clean the interface
+     */
+    public void showErrorMessage(String errorMessage, boolean newScreen) {
+        if (newScreen)
+            Frmt.clearScreen();
+        System.out.println(Frmt.color('r', "> Error: " + errorMessage));
     }
 
     /**

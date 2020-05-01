@@ -1,13 +1,15 @@
 package Util;
 
-import model.Card;
 import Server.Rules.EnemyRules;
 import Server.Rules.Rules;
+import model.Card;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,10 +30,11 @@ public class Configurator {
      */
     public static String getDefaultIp() {
         String ip = null;
+
         try {
             Document document;
             synchronized (connectionConfigLock) {
-                document = builder.build(new File("src/main/resources/ConnectionConfig.xml"));
+                document = builder.build(new File(Configurator.class.getResource("/ConnectionConfig.xml").getFile()));
             }
             Element rootElement = document.getRootElement();
 
@@ -52,7 +55,7 @@ public class Configurator {
         try {
             Document document;
             synchronized (connectionConfigLock) {
-                document = builder.build(new File("src/main/resources/ConnectionConfig.xml"));
+                document = builder.build(new File(Configurator.class.getResource("/ConnectionConfig.xml").getFile()));
             }
             Element rootElement = document.getRootElement();
 
@@ -73,7 +76,7 @@ public class Configurator {
         try {
             Document document;
             synchronized (cardsConfigLock) {
-                document = builder.build(new File("src/main/resources/SimpleGodsConfig.xml"));
+                document = builder.build(new File(Configurator.class.getResource("/SimpleGodsConfig.xml").getFile()));
             }
             Element rootElement = document.getRootElement();
 
@@ -93,12 +96,21 @@ public class Configurator {
         return cards;
     }
 
-    /**
-     * Gets the show-ping flag
-     *
-     * @return True if the pings must be shown, otherwise false
-     */
+    public static Image getCardImage(String cardName) {
+        Image image = null;
+        try {
+            image = (new ImageIcon(Configurator.class.getResource("/GuiResources/" + cardName.toLowerCase() + "Card.png"))).getImage();
+        } catch (Exception ignored) {
+        }
+
+        return image;
+    }
+
     public static boolean getPingFlag() {
+        return false;
+    }
+
+    public static boolean getErrorDetailsFlag() {
         return false;
     }
 }

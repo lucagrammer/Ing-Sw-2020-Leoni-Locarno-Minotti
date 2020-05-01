@@ -3,15 +3,12 @@ package client.gui;
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelWithBackground extends JPanel {
+public class PPanelBackground extends JPanel {
 
     Image image;
 
-    public PanelWithBackground(Image image) {
+    public PPanelBackground(Image image) {
         this.image = image;
-    }
-
-    public static void main(String[] args) {
     }
 
     public void paintComponent(Graphics graphics) {

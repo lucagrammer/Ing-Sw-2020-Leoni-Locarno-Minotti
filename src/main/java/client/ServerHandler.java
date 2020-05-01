@@ -6,7 +6,10 @@ import Messages.MVMessage;
 import Messages.Message;
 import Messages.PingMessage;
 import Messages.ServerToClient.*;
-import Util.*;
+import Util.Action;
+import Util.Configurator;
+import Util.Genre;
+import Util.MessageType;
 import model.Card;
 import model.Cell;
 
@@ -54,6 +57,12 @@ public class ServerHandler {
                         CVMessage cvMessage = (CVMessage) serverMessage;
                         cvMessage.execute(view);
                     }
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                if (isConnected) {
+                    String errorMessage = "Server unreachable" + (Configurator.getErrorDetailsFlag() ? " during message reading" : "") + ".";
+                    view.showErrorMessage(errorMessage, true);
+                    closeConnection();
                 }
             } catch (IOException | ClassNotFoundException e) {
                 if (isConnected) {
@@ -105,11 +114,8 @@ public class ServerHandler {
             } catch (IOException e) {
                 isConnected = false;
                 if (connectionAttempts == 1) {
-                    view.showMessage(Frmt.color('r', "> Error: Server unreachable during connection setup. Reconnecting..."), true);
-                }
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ignored) {
+                    String errorMessage = "Server unreachable" + (Configurator.getErrorDetailsFlag() ? " during connection setup" : "") + ". Reconnecting...";
+                    view.showErrorMessage(errorMessage, true);
                 }
             }
         }

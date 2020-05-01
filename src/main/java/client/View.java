@@ -82,7 +82,7 @@ public interface View {
     void showGameCards(List<Card> cards);
 
     /**
-     * Shows th cards assignment of the game
+     * Shows the cards assignment of the game
      *
      * @param playerList The list of players of the game
      */
@@ -136,4 +136,11 @@ public interface View {
      */
     void showDisconnectionMessage(String disconnectedNickname);
 
+    /**
+     * Shows an error message to the user
+     *
+     * @param errorMessage The message to be shown
+     * @param newScreen    True if it's necessary to clean the interface
+     */
+    void showErrorMessage(String errorMessage, boolean newScreen);
 }

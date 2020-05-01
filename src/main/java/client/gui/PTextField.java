@@ -20,7 +20,7 @@ public class PTextField extends JLabel {
         textField.setHorizontalAlignment(JTextField.CENTER);
         textField.setBorder(null);
         textField.setOpaque(false);
-        textField.setFont(new Font("LeGourmetScript", Font.PLAIN, 30));
+        textField.setFont(new Font("LeGourmetScript", Font.PLAIN, 28));
         textField.setCaretColor(Color.WHITE);
         textField.setForeground(Color.WHITE);
     }
