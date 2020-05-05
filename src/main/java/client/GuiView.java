@@ -1,8 +1,6 @@
 package client;
 
-import Util.Configurator;
-import Util.Genre;
-import Util.RoundActions;
+import Util.*;
 import client.gui.*;
 import model.Card;
 import model.Cell;
@@ -351,7 +349,47 @@ public class GuiView implements View {
      * @param possibleChoices All the possible cards
      */
     public void askPlayerCard(List<Card> possibleChoices) {
+        SwingUtilities.invokeLater(() -> {
+            // Flush body components
+            this.bodyContainer.removeAll();
 
+            PLabel label = new PLabel("Choose your card between these:");
+            label.setFontSize(30);
+            label.setBounds(0, 0, 840, 40);
+            bodyContainer.add(label);
+
+            PPanelContainer cardContainer = new PPanelContainer();
+            cardContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);
+            cardContainer.setLayout(new GridLayout(1, 9, 10, 0));
+            bodyContainer.add(cardContainer);
+
+            PPanelContainer descriptionBackground = new PPanelContainer();
+            descriptionBackground.setBounds(0, 280, bodyContainer.getWidth(), 150);
+            descriptionBackground.setLayout(null);
+            bodyContainer.add(descriptionBackground);
+
+            PLabel nameLabel = new PLabel("");
+            nameLabel.setFontSize(30);
+            nameLabel.setForeground(new Color(186, 164, 154));
+            nameLabel.setBounds(0, 20, descriptionBackground.getWidth(), 35);
+            descriptionBackground.add(nameLabel);
+
+            PLabel descriptionLabel = new PLabel("");
+            descriptionLabel.setFont(new Font("Helvetica", Font.PLAIN, 17));
+            descriptionLabel.setBounds(90, 50, descriptionBackground.getWidth() - 180, 80);
+            descriptionBackground.add(descriptionLabel);
+
+            for (Card card : possibleChoices) {
+                Image scaledImage = Configurator.getCardImage(card.getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);
+                PButton cardButton = new PButton(scaledImage);
+                cardContainer.add(cardButton);
+                cardButton.addMouseListener(new GuiView.CardMouseListener(card, nameLabel, descriptionLabel,true));
+            }
+
+            // Apply
+            bodyContainer.revalidate();
+            bodyContainer.repaint();
+        });
     }
 
     /**
@@ -360,7 +398,74 @@ public class GuiView implements View {
      * @param playersNicknames All the nicknames
      */
     public void askFirstPlayer(List<String> playersNicknames) {
+        SwingUtilities.invokeLater(() -> {
+            // Flush body components
+            bodyContainer.removeAll();
 
+            // Nickname
+            PLabel nicknameLabel = new PLabelForm("Nickname of the first player: ");
+            nicknameLabel.setBounds(10, 30, 400, 40);
+            bodyContainer.add(nicknameLabel);
+
+            PTextField nicknameTextField = new PTextField(null);
+            nicknameTextField.setBounds(430, 30, 250, 40);
+            bodyContainer.add(nicknameTextField);
+
+            // Error label
+            PLabel errorLabel = new PLabelError("");
+            errorLabel.setBounds(0, 240, 840, 40);
+            bodyContainer.add(errorLabel);
+            Image scaledImage = (new ImageIcon(getClass().getResource("/GuiResources/btn_blue_next.png"))).getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);
+            PButton button = new PButton(scaledImage);
+            button.setBounds(322, 300, 197, 50);
+            /* TODO
+            button.addActionListener((ev) -> (new Thread(() -> {
+                String nickname = nicknameTextField.getTextFieldText();
+                if (!nickname.equals("") && !nickname.contains(" ")) {
+                    // No errors
+                    errorLabel.setText("");
+
+                    showMessage("Waiting for the other players to connect...", true);
+                    serverHandler.sendNewNickname(nickname);
+                } else {
+                    errorLabel.setText("Invalid nickname. Try again.");
+                }
+            })).start());
+            button.addActionListener((ev) -> (new Thread(() -> {
+                String chosenNickname;
+                boolean incorrect;
+                System.out.println("\n\n");
+                do {
+                    System.out.print(" " + Frmt.style('b', "Choose who will be the first player:") + " ");
+                    for (int i = 0; i < playersNicknames.size(); i++) {
+                        String name = playersNicknames.get(i);
+                        allNicknames.add(name.toLowerCase());
+                        if (i != playersNicknames.size() - 1) {
+                            System.out.print(Frmt.style('b', name + ", "));
+                        } else {
+                            System.out.println(Frmt.style('b', name + "?"));
+                        }
+                    }
+
+                    incorrect = false;
+                    System.out.print("  ↳: ");
+                    chosenNickname = scanner.next();
+                    if (!allNicknames.contains(chosenNickname.toLowerCase())) {
+                        Frmt.clearScreen();
+                        System.out.println(Frmt.color('r', "   > Invalid choice. Try again."));
+                        incorrect = true;
+                    }
+                } while (incorrect);
+
+                showLoading();
+                serverHandler.sendFirstPlayer(chosenNickname);
+            })).start());*/
+            bodyContainer.add(button);
+
+            // Apply
+            bodyContainer.revalidate();
+            bodyContainer.repaint();
+        });
     }
 
     /**
@@ -369,7 +474,47 @@ public class GuiView implements View {
      * @param cards All the cards of the game
      */
     public void showGameCards(List<Card> cards) {
+        SwingUtilities.invokeLater(() -> {
+            // Flush body components
+            this.bodyContainer.removeAll();
 
+            PLabel label = new PLabel("The cards used in this match will be:");
+            label.setFontSize(30);
+            label.setBounds(0, 0, 840, 40);
+            bodyContainer.add(label);
+
+            PPanelContainer cardContainer = new PPanelContainer();
+            cardContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);
+            cardContainer.setLayout(new GridLayout(1, 9, 10, 0));
+            bodyContainer.add(cardContainer);
+
+            PPanelContainer descriptionBackground = new PPanelContainer();
+            descriptionBackground.setBounds(0, 280, bodyContainer.getWidth(), 150);
+            descriptionBackground.setLayout(null);
+            bodyContainer.add(descriptionBackground);
+
+            PLabel nameLabel = new PLabel("");
+            nameLabel.setFontSize(30);
+            nameLabel.setForeground(new Color(186, 164, 154));
+            nameLabel.setBounds(0, 20, descriptionBackground.getWidth(), 35);
+            descriptionBackground.add(nameLabel);
+
+            PLabel descriptionLabel = new PLabel("");
+            descriptionLabel.setFont(new Font("Helvetica", Font.PLAIN, 17));
+            descriptionLabel.setBounds(90, 50, descriptionBackground.getWidth() - 180, 80);
+            descriptionBackground.add(descriptionLabel);
+
+            for (Card card : cards) {
+                Image scaledImage = Configurator.getCardImage(card.getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);
+                PButton cardButton = new PButton(scaledImage);
+                cardContainer.add(cardButton);
+                cardButton.addMouseListener(new GuiView.CardMouseListener(card, nameLabel, descriptionLabel,false));
+            }
+
+            // Apply
+            bodyContainer.revalidate();
+            bodyContainer.repaint();
+        });
     }
 
     /**
@@ -378,7 +523,40 @@ public class GuiView implements View {
      * @param playerList The list of players of the game
      */
     public void showCardAssignmentMessage(List<Player> playerList) {
+        SwingUtilities.invokeLater(() -> {
+            // Flush body components
+            this.bodyContainer.removeAll();
 
+            PLabel label = new PLabel("Cards assignment:");
+            label.setFontSize(30);
+            label.setBounds(0, 0, 840, 40);
+            bodyContainer.add(label);
+
+            PPanelContainer cardContainer = new PPanelContainer();
+            cardContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);
+            cardContainer.setLayout(new GridLayout(1, 9, 10, 0));
+            bodyContainer.add(cardContainer);
+
+            PPanelContainer assignmentContainer = new PPanelContainer();
+            assignmentContainer.setBounds(0, 228, bodyContainer.getWidth(), 40);
+            assignmentContainer.setLayout(new GridLayout(1, 9, 10, 0));
+            bodyContainer.add(assignmentContainer);
+
+            for (Player player : playerList) {
+                Image scaledImage = Configurator.getCardImage(player.getCard().getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);
+                PButton cardButton = new PButton(scaledImage);
+                cardContainer.add(cardButton);
+
+                PLabel nameLabel = new PLabel(player.getNickname());
+                nameLabel.setFontSize(25);
+                nameLabel.setForeground(new Color(186, 164, 154));
+                assignmentContainer.add(nameLabel);
+            }
+
+            // Apply
+            bodyContainer.revalidate();
+            bodyContainer.repaint();
+        });
     }
 
     /**
@@ -387,7 +565,32 @@ public class GuiView implements View {
      * @param availableColors All the available colors
      */
     public void askPlayerColor(List<String> availableColors) {
+        SwingUtilities.invokeLater(() -> {
+            // Flush body components
+            this.bodyContainer.removeAll();
 
+            PLabel label = new PLabel("Choose your color between these:");
+            label.setFontSize(30);
+            label.setBounds(0, 0, 840, 40);
+            bodyContainer.add(label);
+
+            PPanelContainer colorContainer = new PPanelContainer();
+            colorContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);
+            colorContainer.setLayout(new GridLayout(1, 3, 10, 0));
+            bodyContainer.add(colorContainer);
+
+            for (String color : availableColors) {
+                PButton cardButton = new PButton(PlayerColor.getColorCodeByName(color));
+                colorContainer.add(cardButton);
+                cardButton.addActionListener((ev) -> (new Thread(() -> {
+                    serverHandler.sendPlayerColor(color);
+                })).start());
+            }
+
+            // Apply
+            bodyContainer.revalidate();
+            bodyContainer.repaint();
+        });
     }
 
     /**
@@ -438,7 +641,20 @@ public class GuiView implements View {
      * @param disconnectedNickname The nickname of the disconnected player
      */
     public void showDisconnectionMessage(String disconnectedNickname) {
+        SwingUtilities.invokeLater(() -> {
+            // Flush body components
+            bodyContainer.removeAll();
 
+            PLabel label = new PLabel("GAME OVER: " + disconnectedNickname.toUpperCase() + " has disconnected.");
+            label.setBounds(0, 0, 840, 450);
+            bodyContainer.add(label);
+            // TODO: mettere new game
+            //serverHandler.sendNewGame(choice.equalsIgnoreCase("yes"));
+
+            // Apply
+            bodyContainer.revalidate();
+            bodyContainer.repaint();
+        });
     }
 
     /**
@@ -467,10 +683,14 @@ public class GuiView implements View {
         private final Card card;
         private final PLabel nameLabel;
         private final PLabel descriptionLabel;
-        private final int numCards;
-        private final List<Card> chosenCards;
+        private int numCards;
+        private List<Card> chosenCards;
+        private final boolean gameCardsSetUp;
+        private final boolean selectionEnabled;
 
         public CardMouseListener(Card card, PLabel nameLabel, PLabel descriptionLabel, List<Card> chosenCards, int numCards) {
+            this.gameCardsSetUp=true;
+            this.selectionEnabled=true;
             this.card = card;
             this.nameLabel = nameLabel;
             this.descriptionLabel = descriptionLabel;
@@ -478,9 +698,24 @@ public class GuiView implements View {
             this.numCards = numCards;
         }
 
+        public CardMouseListener(Card card, PLabel nameLabel, PLabel descriptionLabel, boolean selectionEnabled) {
+            this.gameCardsSetUp=false;
+            this.selectionEnabled=selectionEnabled;
+            this.card = card;
+            this.nameLabel = nameLabel;
+            this.descriptionLabel = descriptionLabel;
+        }
+
         public void mouseClicked(MouseEvent e) {
-            chosenCards.add(card);
-            printCards(chosenCards, numCards);
+            if(gameCardsSetUp) {
+                chosenCards.add(card);
+                printCards(chosenCards, numCards);
+            }else{
+                if(selectionEnabled){
+                    showLoading();
+                    serverHandler.sendPlayerCard(card);
+                }
+            }
         }
 
         public void mousePressed(MouseEvent e) {
