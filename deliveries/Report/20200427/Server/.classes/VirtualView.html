@@ -208,33 +208,34 @@
 <i>134</i>&nbsp;
 <i>135</i>&nbsp;    /**
 <i>136</i>&nbsp;     * Send to the controller the chosen first position for the specified worker
-<i>137</i>&nbsp;     *
-<i>138</i>&nbsp;     * @param nickname The nickname of the player
-<i>139</i>&nbsp;     * @param genre    The genre of the worker
-<i>140</i>&nbsp;     * @param position The position of the worker
-<i>141</i>&nbsp;     */
-<i>142</i>&nbsp;    public void setPlayerPosition(String nickname, Genre genre, Cell position) {
-<b class="nc"><i>143</i>&nbsp;        controller.setFirstPosition(nickname, genre, position);</b>
-<i>144</i>&nbsp;    }
-<i>145</i>&nbsp;
-<i>146</i>&nbsp;    /**
-<i>147</i>&nbsp;     * Send to the controller the chosen color of the player
-<i>148</i>&nbsp;     *
-<i>149</i>&nbsp;     * @param nickname The nickname of the player
-<i>150</i>&nbsp;     * @param color    The chosen color
-<i>151</i>&nbsp;     */
-<i>152</i>&nbsp;    public void setPlayerColor(String nickname, String color) {
-<b class="nc"><i>153</i>&nbsp;        controller.setColor(nickname, color);</b>
-<i>154</i>&nbsp;    }
-<i>155</i>&nbsp;
-<i>156</i>&nbsp;    /**
-<i>157</i>&nbsp;     * Notify the controller that a player has disconnected and remove the related client handler from the list
-<i>158</i>&nbsp;     *
-<i>159</i>&nbsp;     * @param nickname The nickname of the disconnected user
-<i>160</i>&nbsp;     */
-<i>161</i>&nbsp;    public void setDisconnected(String nickname) {
-<b class="nc"><i>162</i>&nbsp;        controller.hasDisconnected(nickname);</b>
-<i>163</i>&nbsp;    }
+<i>137</i>&nbsp; *
+    <i>138</i>&nbsp; * @param nickname The nickname of the player
+    <i>139</i>&nbsp; * @param genre The genre of the worker
+    <i>140</i>&nbsp; * @param position The position of the worker
+    <i>141</i>&nbsp; */
+    <i>142</i>&nbsp; public void setPlayerPosition(String nickname, Genre genre, Cell position) {
+    <b class="nc"><i>143</i>&nbsp; controller.setFirstPosition(nickname, genre, position);</b>
+    <i>144</i>&nbsp; }
+    <i>145</i>&nbsp;
+    <i>146</i>&nbsp; /**
+    <i>147</i>&nbsp; * Send to the controller the chosen playerColor of the player
+    <i>148</i>&nbsp; *
+    <i>149</i>&nbsp; * @param nickname The nickname of the player
+    <i>150</i>&nbsp; * @param playerColor The chosen playerColor
+    <i>151</i>&nbsp; */
+    <i>152</i>&nbsp; public void setPlayerColor(String nickname, String playerColor) {
+    <b class="nc"><i>153</i>&nbsp; controller.setColor(nickname, playerColor);</b>
+    <i>154</i>&nbsp; }
+    <i>155</i>&nbsp;
+    <i>156</i>&nbsp; /**
+    <i>157</i>&nbsp; * Notify the controller that a player has disconnected and remove the related client handler from
+    the list
+    <i>158</i>&nbsp; *
+    <i>159</i>&nbsp; * @param nickname The nickname of the disconnected user
+    <i>160</i>&nbsp; */
+    <i>161</i>&nbsp; public void setDisconnected(String nickname) {
+    <b class="nc"><i>162</i>&nbsp; controller.hasDisconnected(nickname);</b>
+    <i>163</i>&nbsp; }
 <i>164</i>&nbsp;
 <i>165</i>&nbsp;    /**
 <i>166</i>&nbsp;     * Notify the controller that a player has chosen an action

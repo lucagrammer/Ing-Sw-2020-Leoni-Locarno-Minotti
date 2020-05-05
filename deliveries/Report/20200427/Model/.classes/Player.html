@@ -73,19 +73,19 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package model;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import Util.Action;
-<i>4</i>&nbsp;import Util.Color;
-<i>5</i>&nbsp;import Util.Genre;
-<i>6</i>&nbsp;import Util.RoundActions;
-<i>7</i>&nbsp;
-<i>8</i>&nbsp;import java.io.Serializable;
-<i>9</i>&nbsp;import java.util.ArrayList;
-<i>10</i>&nbsp;import java.util.Date;
-<i>11</i>&nbsp;import java.util.List;
-<i>12</i>&nbsp;
-<i>13</i>&nbsp;/**
-<i>14</i>&nbsp; * Stores information about a player
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import Util.Action;
+    <i>4</i>&nbsp;import Util.PlayerColor;
+    <i>5</i>&nbsp;import Util.Genre;
+    <i>6</i>&nbsp;import Util.RoundActions;
+    <i>7</i>&nbsp;
+    <i>8</i>&nbsp;import java.io.Serializable;
+    <i>9</i>&nbsp;import java.util.ArrayList;
+    <i>10</i>&nbsp;import java.util.Date;
+    <i>11</i>&nbsp;import java.util.List;
+    <i>12</i>&nbsp;
+    <i>13</i>&nbsp;/**
+    <i>14</i>&nbsp; * Stores information about a player
 <i>15</i>&nbsp; */
 <i>16</i>&nbsp;public class Player implements Serializable {
 <i>17</i>&nbsp;    private final String nickname;
@@ -122,39 +122,39 @@
 <b class="fc"><i>48</i>&nbsp;        return nickname;</b>
 <i>49</i>&nbsp;    }
 <i>50</i>&nbsp;
-<i>51</i>&nbsp;    /**
-<i>52</i>&nbsp;     * Gets the date of birth of the player
-<i>53</i>&nbsp;     *
-<i>54</i>&nbsp;     * @return Player&#39;s date of birth
-<i>55</i>&nbsp;     */
-<i>56</i>&nbsp;    public Date getDateOfBirth() {
-<b class="fc"><i>57</i>&nbsp;        return dateOfBirth;</b>
-<i>58</i>&nbsp;    }
-<i>59</i>&nbsp;
-<i>60</i>&nbsp;    /**
-<i>61</i>&nbsp;     * The player chooses his color
-<i>62</i>&nbsp;     *
-<i>63</i>&nbsp;     * @param color The color chosen by the player
-<i>64</i>&nbsp;     */
-<i>65</i>&nbsp;    public void chooseColor(Color color) {
-<b class="fc"><i>66</i>&nbsp;        this.maleWorker.setColor(color);</b>
-<b class="fc"><i>67</i>&nbsp;        this.femaleWorker.setColor(color);</b>
-<b class="fc"><i>68</i>&nbsp;    }</b>
-<i>69</i>&nbsp;
-<i>70</i>&nbsp;    /**
-<i>71</i>&nbsp;     * Gets the color of the player&#39;s workers
-<i>72</i>&nbsp;     *
-<i>73</i>&nbsp;     * @return The color of the workers of the player
-<i>74</i>&nbsp;     */
-<i>75</i>&nbsp;    public Color getColor() {
-<b class="fc"><i>76</i>&nbsp;        return femaleWorker.getColor();</b>
-<i>77</i>&nbsp;    }
-<i>78</i>&nbsp;
-<i>79</i>&nbsp;    /**
-<i>80</i>&nbsp;     * Get a specific worker of the player
-<i>81</i>&nbsp;     *
-<i>82</i>&nbsp;     * @param genre The genre of the worker
-<i>83</i>&nbsp;     * @return The worker
+    <i>51</i>&nbsp; /**
+    <i>52</i>&nbsp; * Gets the date of birth of the player
+    <i>53</i>&nbsp; *
+    <i>54</i>&nbsp; * @return Player&#39;s date of birth
+    <i>55</i>&nbsp; */
+    <i>56</i>&nbsp; public Date getDateOfBirth() {
+    <b class="fc"><i>57</i>&nbsp; return dateOfBirth;</b>
+    <i>58</i>&nbsp; }
+    <i>59</i>&nbsp;
+    <i>60</i>&nbsp; /**
+    <i>61</i>&nbsp; * The player chooses his playerColor
+    <i>62</i>&nbsp; *
+    <i>63</i>&nbsp; * @param playerColor The playerColor chosen by the player
+    <i>64</i>&nbsp; */
+    <i>65</i>&nbsp; public void chooseColor(Color playerColor) {
+    <b class="fc"><i>66</i>&nbsp; this.maleWorker.setColor(playerColor);</b>
+    <b class="fc"><i>67</i>&nbsp; this.femaleWorker.setColor(playerColor);</b>
+    <b class="fc"><i>68</i>&nbsp; }</b>
+    <i>69</i>&nbsp;
+    <i>70</i>&nbsp; /**
+    <i>71</i>&nbsp; * Gets the playerColor of the player&#39;s workers
+    <i>72</i>&nbsp; *
+    <i>73</i>&nbsp; * @return The playerColor of the workers of the player
+    <i>74</i>&nbsp; */
+    <i>75</i>&nbsp; public Color getColor() {
+    <b class="fc"><i>76</i>&nbsp; return femaleWorker.getColor();</b>
+    <i>77</i>&nbsp; }
+    <i>78</i>&nbsp;
+    <i>79</i>&nbsp; /**
+    <i>80</i>&nbsp; * Get a specific worker of the player
+    <i>81</i>&nbsp; *
+    <i>82</i>&nbsp; * @param genre The genre of the worker
+    <i>83</i>&nbsp; * @return The worker
 <i>84</i>&nbsp;     */
 <i>85</i>&nbsp;    public Worker getWorker(Genre genre) {
 <b class="fc"><i>86</i>&nbsp;        if (genre == Genre.MALE)</b>

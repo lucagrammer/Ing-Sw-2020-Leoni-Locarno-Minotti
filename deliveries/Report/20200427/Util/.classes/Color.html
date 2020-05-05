@@ -79,60 +79,60 @@
 <i>5</i>&nbsp;
 <i>6</i>&nbsp;/**
 <i>7</i>&nbsp; * All possible colors of the players/workers
-<i>8</i>&nbsp; */
-<b class="fc"><i>9</i>&nbsp;public enum Color {</b>
-<b class="fc"><i>10</i>&nbsp;    PURPLE(&quot;Purple&quot;), YELLOW(&quot;Yellow&quot;), BLUE(&quot;Blue&quot;);</b>
-<i>11</i>&nbsp;
-<i>12</i>&nbsp;    final String name;
-<i>13</i>&nbsp;
-<i>14</i>&nbsp;    /**
-<i>15</i>&nbsp;     * Constructor: build a Color
-<i>16</i>&nbsp;     *
-<i>17</i>&nbsp;     * @param name The name of the color
-<i>18</i>&nbsp;     */
-<b class="fc"><i>19</i>&nbsp;    Color(String name) {</b>
-<b class="fc"><i>20</i>&nbsp;        this.name = name;</b>
-<b class="fc"><i>21</i>&nbsp;    }</b>
-<i>22</i>&nbsp;
-<i>23</i>&nbsp;    /**
-<i>24</i>&nbsp;     * Gets a Color by its name
-<i>25</i>&nbsp;     *
-<i>26</i>&nbsp;     * @param color The name of the color
-<i>27</i>&nbsp;     * @return The appropriate Color
-<i>28</i>&nbsp;     */
-<i>29</i>&nbsp;    public static Color getColorByName(String color) {
-<b class="nc"><i>30</i>&nbsp;        if (color.equalsIgnoreCase(PURPLE.toString()))</b>
-<b class="nc"><i>31</i>&nbsp;            return PURPLE;</b>
-<b class="nc"><i>32</i>&nbsp;        if (color.equalsIgnoreCase(YELLOW.toString()))</b>
-<b class="nc"><i>33</i>&nbsp;            return YELLOW;</b>
-<b class="nc"><i>34</i>&nbsp;        if (color.equalsIgnoreCase(BLUE.toString()))</b>
-<b class="nc"><i>35</i>&nbsp;            return BLUE;</b>
-<b class="nc"><i>36</i>&nbsp;        return null;</b>
-<i>37</i>&nbsp;    }
-<i>38</i>&nbsp;
-<i>39</i>&nbsp;    /**
-<i>40</i>&nbsp;     * Returns all the possible colors
+    <i>8</i>&nbsp; */
+    <b class="fc"><i>9</i>&nbsp;public enum Color {</b>
+    <b class="fc"><i>10</i>&nbsp; PURPLE(&quot;Purple&quot;), YELLOW(&quot;Yellow&quot;), BLUE(&quot;Blue&quot;);</b>
+    <i>11</i>&nbsp;
+    <i>12</i>&nbsp; final String name;
+    <i>13</i>&nbsp;
+    <i>14</i>&nbsp; /**
+    <i>15</i>&nbsp; * Constructor: build a Color
+    <i>16</i>&nbsp; *
+    <i>17</i>&nbsp; * @param name The name of the playerColor
+    <i>18</i>&nbsp; */
+    <b class="fc"><i>19</i>&nbsp; Color(String name) {</b>
+    <b class="fc"><i>20</i>&nbsp; this.name = name;</b>
+    <b class="fc"><i>21</i>&nbsp; }</b>
+    <i>22</i>&nbsp;
+    <i>23</i>&nbsp; /**
+    <i>24</i>&nbsp; * Gets a Color by its name
+    <i>25</i>&nbsp; *
+    <i>26</i>&nbsp; * @param playerColor The name of the playerColor
+    <i>27</i>&nbsp; * @return The appropriate Color
+    <i>28</i>&nbsp; */
+    <i>29</i>&nbsp; public static Color getColorByName(String playerColor) {
+    <b class="nc"><i>30</i>&nbsp; if (playerColor.equalsIgnoreCase(PURPLE.toString()))</b>
+    <b class="nc"><i>31</i>&nbsp; return PURPLE;</b>
+    <b class="nc"><i>32</i>&nbsp; if (playerColor.equalsIgnoreCase(YELLOW.toString()))</b>
+    <b class="nc"><i>33</i>&nbsp; return YELLOW;</b>
+    <b class="nc"><i>34</i>&nbsp; if (playerColor.equalsIgnoreCase(BLUE.toString()))</b>
+    <b class="nc"><i>35</i>&nbsp; return BLUE;</b>
+    <b class="nc"><i>36</i>&nbsp; return null;</b>
+    <i>37</i>&nbsp; }
+    <i>38</i>&nbsp;
+    <i>39</i>&nbsp; /**
+    <i>40</i>&nbsp; * Returns all the possible colors
 <i>41</i>&nbsp;     *
 <i>42</i>&nbsp;     * @return A list containing all the possible colors
-<i>43</i>&nbsp;     */
-<i>44</i>&nbsp;    public static List&lt;String&gt; allColorsToString() {
-<b class="nc"><i>45</i>&nbsp;        List&lt;String&gt; allColors = new ArrayList&lt;&gt;();</b>
-<b class="nc"><i>46</i>&nbsp;        allColors.add(PURPLE.toString());</b>
-<b class="nc"><i>47</i>&nbsp;        allColors.add(YELLOW.toString());</b>
-<b class="nc"><i>48</i>&nbsp;        allColors.add(BLUE.toString());</b>
-<b class="nc"><i>49</i>&nbsp;        return allColors;</b>
-<i>50</i>&nbsp;    }
-<i>51</i>&nbsp;
-<i>52</i>&nbsp;    /**
-<i>53</i>&nbsp;     * Gets the name of the color
-<i>54</i>&nbsp;     *
-<i>55</i>&nbsp;     * @return The name of the color
-<i>56</i>&nbsp;     */
-<i>57</i>&nbsp;    public String toString() {
-<b class="nc"><i>58</i>&nbsp;        return name;</b>
-<i>59</i>&nbsp;    }
-<i>60</i>&nbsp;
-<i>61</i>&nbsp;}
+    <i>43</i>&nbsp; */
+    <i>44</i>&nbsp; public static List&lt;String&gt; allColorsToString() {
+    <b class="nc"><i>45</i>&nbsp; List&lt;String&gt; allColors = new ArrayList&lt;&gt;();</b>
+    <b class="nc"><i>46</i>&nbsp; allColors.add(PURPLE.toString());</b>
+    <b class="nc"><i>47</i>&nbsp; allColors.add(YELLOW.toString());</b>
+    <b class="nc"><i>48</i>&nbsp; allColors.add(BLUE.toString());</b>
+    <b class="nc"><i>49</i>&nbsp; return allColors;</b>
+    <i>50</i>&nbsp; }
+    <i>51</i>&nbsp;
+    <i>52</i>&nbsp; /**
+    <i>53</i>&nbsp; * Gets the name of the playerColor
+    <i>54</i>&nbsp; *
+    <i>55</i>&nbsp; * @return The name of the playerColor
+    <i>56</i>&nbsp; */
+    <i>57</i>&nbsp; public String toString() {
+    <b class="nc"><i>58</i>&nbsp; return name;</b>
+    <i>59</i>&nbsp; }
+    <i>60</i>&nbsp;
+    <i>61</i>&nbsp;}
 </div>
 </div>
 

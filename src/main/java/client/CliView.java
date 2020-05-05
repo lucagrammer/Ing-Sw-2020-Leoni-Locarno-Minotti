@@ -434,7 +434,7 @@ public class CliView implements View {
                 if (position != null) {
                     int row = position.getRow();
                     int column = position.getColumn();
-                    cellColorMatrix[row][column] = worker.getColor().toString();
+                    cellColorMatrix[row][column] = worker.getPlayerColor().toString();
                     cellGenreMatrix[row][column] = genre;
                     if (!colors.contains(cellColorMatrix[row][column].charAt(0))) {
                         playerNames.add(player.getNickname());

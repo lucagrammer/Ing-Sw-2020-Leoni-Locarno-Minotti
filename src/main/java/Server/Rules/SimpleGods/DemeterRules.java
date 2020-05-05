@@ -1,11 +1,11 @@
 package Server.Rules.SimpleGods;
 
+import Server.Rules.Rules;
+import Util.*;
 import model.Cell;
 import model.Game;
 import model.Player;
 import model.Worker;
-import Server.Rules.Rules;
-import Util.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -87,7 +87,7 @@ public class DemeterRules extends Rules {
         }
 
         // Remove the cell occupied by the previous build/dome, if any
-        Player player = game.getPlayerByColor(worker.getColor());
+        Player player = game.getPlayerByColor(worker.getPlayerColor());
         RoundActions roundActions = player.getRoundActions();
         if (roundActions.hasBuildAnything() > 0) {
             Direction previouslyBuildDirection = roundActions.getActionList().get(1).getDirection();
@@ -123,7 +123,7 @@ public class DemeterRules extends Rules {
         }
 
         // Remove the cell occupied by the previous build/dome, if any
-        Player player = game.getPlayerByColor(worker.getColor());
+        Player player = game.getPlayerByColor(worker.getPlayerColor());
         RoundActions roundActions = player.getRoundActions();
         if (roundActions.hasBuildAnything() > 0) {
             Direction previouslyBuildDirection = roundActions.getActionList().get(1).getDirection();

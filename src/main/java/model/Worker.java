@@ -1,7 +1,7 @@
 package model;
 
-import Util.Color;
 import Util.Genre;
+import Util.PlayerColor;
 
 import java.io.Serializable;
 
@@ -12,7 +12,7 @@ public class Worker implements Serializable {
 
     private final Genre genre;
     private final Player player;
-    private Color color;
+    private PlayerColor playerColor;
     private Cell position;
 
     /**
@@ -25,7 +25,7 @@ public class Worker implements Serializable {
         this.genre = genre;
         this.player = player;
         this.position = null;
-        this.color = null;
+        this.playerColor = null;
     }
 
     /**
@@ -47,21 +47,21 @@ public class Worker implements Serializable {
     }
 
     /**
-     * Gets the color of the worker
+     * Gets the playerColor of the worker
      *
-     * @return The color of the worker
+     * @return The playerColor of the worker
      */
-    public Color getColor() {
-        return color;
+    public PlayerColor getPlayerColor() {
+        return playerColor;
     }
 
     /**
-     * Sets the color of the player
+     * Sets the playerColor of the player
      *
-     * @param color The color of the player
+     * @param playerColor The playerColor of the player
      */
-    public void setColor(Color color) {
-        this.color = color;
+    public void setPlayerColor(PlayerColor playerColor) {
+        this.playerColor = playerColor;
     }
 
     /**

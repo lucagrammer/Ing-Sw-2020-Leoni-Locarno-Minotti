@@ -73,32 +73,32 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package model;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import Util.Color;
-<i>4</i>&nbsp;import Util.Genre;
-<i>5</i>&nbsp;
-<i>6</i>&nbsp;import java.io.Serializable;
-<i>7</i>&nbsp;
-<i>8</i>&nbsp;/**
-<i>9</i>&nbsp; * Stores information about a worker
-<i>10</i>&nbsp; */
-<i>11</i>&nbsp;public class Worker implements Serializable {
-<i>12</i>&nbsp;
-<i>13</i>&nbsp;    private final Genre genre;
-<i>14</i>&nbsp;    private final Player player;
-<i>15</i>&nbsp;    private Color color;
-<i>16</i>&nbsp;    private Cell position;
-<i>17</i>&nbsp;
-<i>18</i>&nbsp;    /**
-<i>19</i>&nbsp;     * Constructor: build a Worker
-<i>20</i>&nbsp;     *
-<i>21</i>&nbsp;     * @param genre  The genre of the worker
-<i>22</i>&nbsp;     * @param player The player who owns this worker
-<i>23</i>&nbsp;     */
-<b class="fc"><i>24</i>&nbsp;    public Worker(Genre genre, Color color, Player player) {</b>
-<i>25</i>&nbsp;        //TODO: REMOVE THIS UNUSED CONSTRUCTOR
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import Util.PlayerColor;
+    <i>4</i>&nbsp;import Util.Genre;
+    <i>5</i>&nbsp;
+    <i>6</i>&nbsp;import java.io.Serializable;
+    <i>7</i>&nbsp;
+    <i>8</i>&nbsp;/**
+    <i>9</i>&nbsp; * Stores information about a worker
+    <i>10</i>&nbsp; */
+    <i>11</i>&nbsp;public class Worker implements Serializable {
+    <i>12</i>&nbsp;
+    <i>13</i>&nbsp; private final Genre genre;
+    <i>14</i>&nbsp; private final Player player;
+    <i>15</i>&nbsp; private Color playerColor;
+    <i>16</i>&nbsp; private Cell position;
+    <i>17</i>&nbsp;
+    <i>18</i>&nbsp; /**
+    <i>19</i>&nbsp; * Constructor: build a Worker
+    <i>20</i>&nbsp; *
+    <i>21</i>&nbsp; * @param genre The genre of the worker
+    <i>22</i>&nbsp; * @param player The player who owns this worker
+    <i>23</i>&nbsp; */
+    <b class="fc"><i>24</i>&nbsp; public Worker(Genre genre, Color playerColor, Player player) {</b>
+    <i>25</i>&nbsp; //TODO: REMOVE THIS UNUSED CONSTRUCTOR
 <b class="fc"><i>26</i>&nbsp;        this.genre = genre;</b>
-<b class="fc"><i>27</i>&nbsp;        this.color = color;</b>
+    <b class="fc"><i>27</i>&nbsp; this.playerColor = playerColor;</b>
 <b class="fc"><i>28</i>&nbsp;        this.player = player;</b>
 <b class="fc"><i>29</i>&nbsp;        this.position = null;</b>
 <b class="fc"><i>30</i>&nbsp;    }</b>
@@ -113,7 +113,7 @@
 <b class="fc"><i>39</i>&nbsp;        this.genre = genre;</b>
 <b class="fc"><i>40</i>&nbsp;        this.player = player;</b>
 <b class="fc"><i>41</i>&nbsp;        this.position = null;</b>
-<b class="fc"><i>42</i>&nbsp;        this.color = null;</b>
+    <b class="fc"><i>42</i>&nbsp; this.playerColor = null;</b>
 <b class="fc"><i>43</i>&nbsp;    }</b>
 <i>44</i>&nbsp;
 <i>45</i>&nbsp;    /**
@@ -125,41 +125,41 @@
 <b class="fc"><i>51</i>&nbsp;        return position;</b>
 <i>52</i>&nbsp;    }
 <i>53</i>&nbsp;
-<i>54</i>&nbsp;    /**
-<i>55</i>&nbsp;     * Sets the position of the worker
-<i>56</i>&nbsp;     *
-<i>57</i>&nbsp;     * @param position The new position
-<i>58</i>&nbsp;     */
-<i>59</i>&nbsp;    public void setPosition(Cell position) {
-<b class="fc"><i>60</i>&nbsp;        this.position = position;</b>
-<b class="fc"><i>61</i>&nbsp;    }</b>
-<i>62</i>&nbsp;
-<i>63</i>&nbsp;    /**
-<i>64</i>&nbsp;     * Gets the color of the worker
-<i>65</i>&nbsp;     *
-<i>66</i>&nbsp;     * @return The color of the worker
-<i>67</i>&nbsp;     */
-<i>68</i>&nbsp;    public Color getColor() {
-<b class="fc"><i>69</i>&nbsp;        return color;</b>
-<i>70</i>&nbsp;    }
-<i>71</i>&nbsp;
-<i>72</i>&nbsp;    /**
-<i>73</i>&nbsp;     * Sets the color of the player
-<i>74</i>&nbsp;     *
-<i>75</i>&nbsp;     * @param color The color of the player
-<i>76</i>&nbsp;     */
-<i>77</i>&nbsp;    public void setColor(Color color) {
-<b class="fc"><i>78</i>&nbsp;        this.color = color;</b>
-<b class="fc"><i>79</i>&nbsp;    }</b>
-<i>80</i>&nbsp;
-<i>81</i>&nbsp;    /**
-<i>82</i>&nbsp;     * Gets the genre of the worker
-<i>83</i>&nbsp;     *
-<i>84</i>&nbsp;     * @return The genre of the worker
-<i>85</i>&nbsp;     */
-<i>86</i>&nbsp;    public Genre getGenre() {
-<b class="fc"><i>87</i>&nbsp;        return genre;</b>
-<i>88</i>&nbsp;    }
+    <i>54</i>&nbsp; /**
+    <i>55</i>&nbsp; * Sets the position of the worker
+    <i>56</i>&nbsp; *
+    <i>57</i>&nbsp; * @param position The new position
+    <i>58</i>&nbsp; */
+    <i>59</i>&nbsp; public void setPosition(Cell position) {
+    <b class="fc"><i>60</i>&nbsp; this.position = position;</b>
+    <b class="fc"><i>61</i>&nbsp; }</b>
+    <i>62</i>&nbsp;
+    <i>63</i>&nbsp; /**
+    <i>64</i>&nbsp; * Gets the playerColor of the worker
+    <i>65</i>&nbsp; *
+    <i>66</i>&nbsp; * @return The playerColor of the worker
+    <i>67</i>&nbsp; */
+    <i>68</i>&nbsp; public Color getColor() {
+    <b class="fc"><i>69</i>&nbsp; return playerColor;</b>
+    <i>70</i>&nbsp; }
+    <i>71</i>&nbsp;
+    <i>72</i>&nbsp; /**
+    <i>73</i>&nbsp; * Sets the playerColor of the player
+    <i>74</i>&nbsp; *
+    <i>75</i>&nbsp; * @param playerColor The playerColor of the player
+    <i>76</i>&nbsp; */
+    <i>77</i>&nbsp; public void setColor(Color playerColor) {
+    <b class="fc"><i>78</i>&nbsp; this.playerColor = playerColor;</b>
+    <b class="fc"><i>79</i>&nbsp; }</b>
+    <i>80</i>&nbsp;
+    <i>81</i>&nbsp; /**
+    <i>82</i>&nbsp; * Gets the genre of the worker
+    <i>83</i>&nbsp; *
+    <i>84</i>&nbsp; * @return The genre of the worker
+    <i>85</i>&nbsp; */
+    <i>86</i>&nbsp; public Genre getGenre() {
+    <b class="fc"><i>87</i>&nbsp; return genre;</b>
+    <i>88</i>&nbsp; }
 <i>89</i>&nbsp;
 <i>90</i>&nbsp;    /**
 <i>91</i>&nbsp;     * Gets the player who owns this worker

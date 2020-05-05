@@ -124,43 +124,43 @@
 <i>24</i>&nbsp;
 <i>25</i>&nbsp;    /**
 <i>26</i>&nbsp;     * Constructor: build an escape character
-<i>27</i>&nbsp;     *
-<i>28</i>&nbsp;     * @param escape The escape
-<i>29</i>&nbsp;     */
-<b class="nc"><i>30</i>&nbsp;    Frmt(String escape) {</b>
-<b class="nc"><i>31</i>&nbsp;        this.escape = escape;</b>
-<i>32</i>&nbsp;    }
-<i>33</i>&nbsp;
-<i>34</i>&nbsp;    /**
-<i>35</i>&nbsp;     * Gets a string containing colored text
-<i>36</i>&nbsp;     *
-<i>37</i>&nbsp;     * @param color The color
-<i>38</i>&nbsp;     * @param text  The text to be colored
-<i>39</i>&nbsp;     * @return The colored string
-<i>40</i>&nbsp;     */
-<i>41</i>&nbsp;    public static String color(char color, String text) {
-<b class="nc"><i>42</i>&nbsp;        color = Character.toLowerCase(color);</b>
-<i>43</i>&nbsp;        Frmt myColor;
-<b class="nc"><i>44</i>&nbsp;        switch (color) {</b>
-<i>45</i>&nbsp;            case &#39;r&#39;:
-<b class="nc"><i>46</i>&nbsp;                myColor = RED;</b>
-<b class="nc"><i>47</i>&nbsp;                break;</b>
-<i>48</i>&nbsp;            case &#39;b&#39;:
-<b class="nc"><i>49</i>&nbsp;                myColor = BLUE;</b>
-<b class="nc"><i>50</i>&nbsp;                break;</b>
-<i>51</i>&nbsp;            case &#39;g&#39;:
-<b class="nc"><i>52</i>&nbsp;                myColor = GREEN;</b>
-<b class="nc"><i>53</i>&nbsp;                break;</b>
-<i>54</i>&nbsp;            case &#39;y&#39;:
-<b class="nc"><i>55</i>&nbsp;                myColor = YELLOW;</b>
+<i>27</i>&nbsp; *
+    <i>28</i>&nbsp; * @param escape The escape
+    <i>29</i>&nbsp; */
+    <b class="nc"><i>30</i>&nbsp; Frmt(String escape) {</b>
+    <b class="nc"><i>31</i>&nbsp; this.escape = escape;</b>
+    <i>32</i>&nbsp; }
+    <i>33</i>&nbsp;
+    <i>34</i>&nbsp; /**
+    <i>35</i>&nbsp; * Gets a string containing colored text
+    <i>36</i>&nbsp; *
+    <i>37</i>&nbsp; * @param playerColor The playerColor
+    <i>38</i>&nbsp; * @param text The text to be colored
+    <i>39</i>&nbsp; * @return The colored string
+    <i>40</i>&nbsp; */
+    <i>41</i>&nbsp; public static String playerColor(char playerColor, String text) {
+    <b class="nc"><i>42</i>&nbsp; playerColor = Character.toLowerCase(playerColor);</b>
+    <i>43</i>&nbsp; Frmt myPlayerColor;
+    <b class="nc"><i>44</i>&nbsp; switch (playerColor) {</b>
+    <i>45</i>&nbsp; case &#39;r&#39;:
+    <b class="nc"><i>46</i>&nbsp; myPlayerColor = RED;</b>
+    <b class="nc"><i>47</i>&nbsp; break;</b>
+    <i>48</i>&nbsp; case &#39;b&#39;:
+    <b class="nc"><i>49</i>&nbsp; myPlayerColor = BLUE;</b>
+    <b class="nc"><i>50</i>&nbsp; break;</b>
+    <i>51</i>&nbsp; case &#39;g&#39;:
+    <b class="nc"><i>52</i>&nbsp; myPlayerColor = GREEN;</b>
+    <b class="nc"><i>53</i>&nbsp; break;</b>
+    <i>54</i>&nbsp; case &#39;y&#39;:
+    <b class="nc"><i>55</i>&nbsp; myPlayerColor = YELLOW;</b>
 <b class="nc"><i>56</i>&nbsp;                break;</b>
 <i>57</i>&nbsp;            case &#39;p&#39;:
-<b class="nc"><i>58</i>&nbsp;                myColor = PURPLE;</b>
+    <b class="nc"><i>58</i>&nbsp; myPlayerColor = PURPLE;</b>
 <b class="nc"><i>59</i>&nbsp;                break;</b>
 <i>60</i>&nbsp;            default:
-<b class="nc"><i>61</i>&nbsp;                myColor = RESET;</b>
+    <b class="nc"><i>61</i>&nbsp; myPlayerColor = RESET;</b>
 <i>62</i>&nbsp;        }
-<b class="nc"><i>63</i>&nbsp;        return myColor + text + RESET;</b>
+    <b class="nc"><i>63</i>&nbsp; return myPlayerColor + text + RESET;</b>
 <i>64</i>&nbsp;    }
 <i>65</i>&nbsp;
 <i>66</i>&nbsp;    /**

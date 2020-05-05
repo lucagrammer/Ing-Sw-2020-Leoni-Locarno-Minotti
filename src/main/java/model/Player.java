@@ -1,8 +1,8 @@
 package model;
 
 import Util.Action;
-import Util.Color;
 import Util.Genre;
+import Util.PlayerColor;
 import Util.RoundActions;
 
 import java.io.Serializable;
@@ -58,13 +58,13 @@ public class Player implements Serializable {
     }
 
     /**
-     * The player chooses his color
+     * The player chooses his playerColor
      *
-     * @param color The color chosen by the player
+     * @param playerColor The playerColor chosen by the player
      */
-    public void chooseColor(Color color) {
-        this.maleWorker.setColor(color);
-        this.femaleWorker.setColor(color);
+    public void chooseColor(PlayerColor playerColor) {
+        this.maleWorker.setPlayerColor(playerColor);
+        this.femaleWorker.setPlayerColor(playerColor);
     }
 
     /**
@@ -72,8 +72,8 @@ public class Player implements Serializable {
      *
      * @return The color of the workers of the player
      */
-    public Color getColor() {
-        return femaleWorker.getColor();
+    public PlayerColor getColor() {
+        return femaleWorker.getPlayerColor();
     }
 
     /**

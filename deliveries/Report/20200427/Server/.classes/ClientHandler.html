@@ -185,12 +185,14 @@
 <b class="nc"><i>85</i>&nbsp;            } catch (IOException | ClassNotFoundException e) {</b>
 <b class="nc"><i>86</i>&nbsp;                if (isConnected) {</b>
 <i>87</i>&nbsp;                    // This player has disconnected
-<b class="nc"><i>88</i>&nbsp;                    System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Warning: &quot; + nickname + &quot; has disconnected during message receiving&quot;));</b>
+<b class="nc"><i>88</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Warning: &quot; + nickname +
+    &quot; has disconnected during message receiving&quot;));</b>
 <b class="nc"><i>89</i>&nbsp;                    isConnected = false;</b>
 <b class="nc"><i>90</i>&nbsp;                    virtualView.setDisconnected(nickname);</b>
 <i>91</i>&nbsp;                } else {
 <i>92</i>&nbsp;                    // Another player has disconnected
-<b class="nc"><i>93</i>&nbsp;                    System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Status: &quot; + nickname + &quot; was forced to stop during message receiving&quot;));</b>
+    <b class="nc"><i>93</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Status: &quot; + nickname
+        + &quot; was forced to stop during message receiving&quot;));</b>
 <i>94</i>&nbsp;                }
 <b class="nc"><i>95</i>&nbsp;                close();</b>
 <b class="nc"><i>96</i>&nbsp;            }</b>
@@ -213,12 +215,14 @@
 <b class="nc"><i>113</i>&nbsp;            } catch (IOException e) {</b>
 <b class="nc"><i>114</i>&nbsp;                if (isConnected) {</b>
 <i>115</i>&nbsp;                    // This player has disconnected
-<b class="nc"><i>116</i>&nbsp;                    System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Warning: &quot; + nickname + &quot; has disconnected during message sending&quot;));</b>
+    <b class="nc"><i>116</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Warning: &quot; +
+        nickname + &quot; has disconnected during message sending&quot;));</b>
 <b class="nc"><i>117</i>&nbsp;                    isConnected = false;</b>
 <b class="nc"><i>118</i>&nbsp;                    virtualView.setDisconnected(nickname);</b>
 <i>119</i>&nbsp;                } else {
 <i>120</i>&nbsp;                    // Another player has disconnected
-<b class="nc"><i>121</i>&nbsp;                    System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Status: &quot; + nickname + &quot; was forced to stop during message sending&quot;));</b>
+    <b class="nc"><i>121</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Status: &quot; + nickname
+        + &quot; was forced to stop during message sending&quot;));</b>
 <i>122</i>&nbsp;                }
 <b class="nc"><i>123</i>&nbsp;                close();</b>
 <b class="nc"><i>124</i>&nbsp;            }</b>
@@ -254,7 +258,8 @@
 <b class="nc"><i>154</i>&nbsp;                    Date birthDate = setupGame.getBirthDate();</b>
 <i>155</i>&nbsp;
 <b class="nc"><i>156</i>&nbsp;                    if (isFirstPlayer) {</b>
-<b class="nc"><i>157</i>&nbsp;                        System.out.println(Frmt.color(&#39;g&#39;, nickname + &quot;&gt; Connected to &quot; + socket.getRemoteSocketAddress() + &quot; as &quot; + requestedNickname.toUpperCase()));</b>
+    <b class="nc"><i>157</i>&nbsp; System.out.println(Frmt.playerColor(&#39;g&#39;, nickname + &quot;&gt; Connected to
+        &quot; + socket.getRemoteSocketAddress() + &quot; as &quot; + requestedNickname.toUpperCase()));</b>
 <i>158</i>&nbsp;
 <b class="nc"><i>159</i>&nbsp;                        int playersNumber = setupGame.getNumPlayers();</b>
 <b class="nc"><i>160</i>&nbsp;                        virtualView.requestAddPlayer(requestedNickname, birthDate, playersNumber);</b>
@@ -269,7 +274,8 @@
 <i>169</i>&nbsp;                        do {
 <b class="nc"><i>170</i>&nbsp;                            uniqueUsername = virtualView.requestAddPlayer(requestedNickname, birthDate);</b>
 <b class="nc"><i>171</i>&nbsp;                            if (!uniqueUsername) {</b>
-<b class="nc"><i>172</i>&nbsp;                                System.out.println(Frmt.color(&#39;y&#39;, &quot;&gt; Warning: &quot; + socket.getRemoteSocketAddress() + &quot; is trying to connect with a nickname already in use&quot;));</b>
+    <b class="nc"><i>172</i>&nbsp; System.out.println(Frmt.playerColor(&#39;y&#39;, &quot;&gt; Warning: &quot; +
+        socket.getRemoteSocketAddress() + &quot; is trying to connect with a nickname already in use&quot;));</b>
 <b class="nc"><i>173</i>&nbsp;                                send(new SetUpNewNickname());</b>
 <i>174</i>&nbsp;
 <b class="nc"><i>175</i>&nbsp;                                boolean hasRecievedNewNickname = false;</b>
@@ -287,7 +293,8 @@
 <i>187</i>&nbsp;                            }
 <b class="nc"><i>188</i>&nbsp;                        } while (!uniqueUsername);</b>
 <i>189</i>&nbsp;
-<b class="nc"><i>190</i>&nbsp;                        System.out.println(Frmt.color(&#39;g&#39;, nickname + &quot;&gt; Connected to &quot; + socket.getRemoteSocketAddress() + &quot; as &quot; + requestedNickname.toUpperCase()));</b>
+    <b class="nc"><i>190</i>&nbsp; System.out.println(Frmt.playerColor(&#39;g&#39;, nickname + &quot;&gt; Connected to
+        &quot; + socket.getRemoteSocketAddress() + &quot; as &quot; + requestedNickname.toUpperCase()));</b>
 <i>191</i>&nbsp;                    }
 <b class="nc"><i>192</i>&nbsp;                    nickname = requestedNickname;</b>
 <b class="nc"><i>193</i>&nbsp;                    virtualView.ready();</b>
@@ -299,13 +306,15 @@
 <b class="nc"><i>199</i>&nbsp;        } catch (IOException | ClassNotFoundException e) {</b>
 <b class="nc"><i>200</i>&nbsp;            if (isConnected) {</b>
 <i>201</i>&nbsp;                // This player has disconnected
-<b class="nc"><i>202</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Warning: &quot; + nickname + &quot; has disconnected during connection setup&quot;));</b>
+    <b class="nc"><i>202</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Warning: &quot; +
+        nickname + &quot; has disconnected during connection setup&quot;));</b>
 <b class="nc"><i>203</i>&nbsp;                isConnected = false;</b>
 <b class="nc"><i>204</i>&nbsp;                virtualView.setDisconnected(nickname);</b>
 <b class="nc"><i>205</i>&nbsp;                close();</b>
 <i>206</i>&nbsp;            } else {
 <i>207</i>&nbsp;                // Another player has disconnected
-<b class="nc"><i>208</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Status: &quot; + nickname + &quot; was forced to stop during connection setup &quot;));</b>
+    <b class="nc"><i>208</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Status: &quot; + nickname
+        + &quot; was forced to stop during connection setup &quot;));</b>
 <i>209</i>&nbsp;            }
 <b class="nc"><i>210</i>&nbsp;        }</b>
 <i>211</i>&nbsp;    }
@@ -344,7 +353,8 @@
 <i>244</i>&nbsp;        try {
 <b class="nc"><i>245</i>&nbsp;            socket.close();</b>
 <b class="nc"><i>246</i>&nbsp;        } catch (IOException e) {</b>
-<b class="nc"><i>247</i>&nbsp;            System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Error:  can&#39;t close the socket of &quot; + nickname));</b>
+    <b class="nc"><i>247</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Error: can&#39;t close
+        the socket of &quot; + nickname));</b>
 <b class="nc"><i>248</i>&nbsp;        }</b>
 <i>249</i>&nbsp;    }
 <i>250</i>&nbsp;
@@ -366,7 +376,8 @@
 <i>266</i>&nbsp;                try {
 <b class="nc"><i>267</i>&nbsp;                    Thread.sleep(5000);</b>
 <b class="nc"><i>268</i>&nbsp;                } catch (InterruptedException e) {</b>
-<b class="nc"><i>269</i>&nbsp;                    System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Error:  Ping timer error &quot; + socket.getRemoteSocketAddress() + &quot; (&quot; + nickname + &quot;)&quot;));</b>
+    <b class="nc"><i>269</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Error: Ping timer error
+        &quot; + socket.getRemoteSocketAddress() + &quot; (&quot; + nickname + &quot;)&quot;));</b>
 <b class="nc"><i>270</i>&nbsp;                    e.printStackTrace();</b>
 <b class="nc"><i>271</i>&nbsp;                }</b>
 <i>272</i>&nbsp;

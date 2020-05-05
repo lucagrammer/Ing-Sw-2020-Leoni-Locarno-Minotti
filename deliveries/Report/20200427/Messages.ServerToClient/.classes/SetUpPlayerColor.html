@@ -75,47 +75,47 @@
 <div class="sourceCode"><i>1</i>&nbsp;package Messages.ServerToClient;
 <i>2</i>&nbsp;
 <i>3</i>&nbsp;import client.View;
-<i>4</i>&nbsp;import Messages.CVMessage;
-<i>5</i>&nbsp;import Messages.VCMessage;
-<i>6</i>&nbsp;import Server.VirtualView;
-<i>7</i>&nbsp;import Util.MessageType;
-<i>8</i>&nbsp;
-<i>9</i>&nbsp;import java.io.Serializable;
-<i>10</i>&nbsp;import java.util.List;
-<i>11</i>&nbsp;
-<i>12</i>&nbsp;/**
-<i>13</i>&nbsp; * Message for the choice of the color of the player
-<i>14</i>&nbsp; */
-<i>15</i>&nbsp;public class SetUpPlayerColor implements CVMessage, VCMessage, Serializable {
-<i>16</i>&nbsp;    final MessageType messageType;
-<i>17</i>&nbsp;    List&lt;String&gt; availableColors;
-<i>18</i>&nbsp;    String color;
-<i>19</i>&nbsp;    String nickname;
-<i>20</i>&nbsp;
-<i>21</i>&nbsp;    /**
-<i>22</i>&nbsp;     * Server-side constructor: build a request message
-<i>23</i>&nbsp;     *
-<i>24</i>&nbsp;     * @param availableColors The available colors
-<i>25</i>&nbsp;     */
-<b class="nc"><i>26</i>&nbsp;    public SetUpPlayerColor(List&lt;String&gt; availableColors) {</b>
-<b class="nc"><i>27</i>&nbsp;        this.messageType = MessageType.CV;</b>
-<b class="nc"><i>28</i>&nbsp;        this.availableColors = availableColors;</b>
-<i>29</i>&nbsp;    }
-<i>30</i>&nbsp;
-<i>31</i>&nbsp;    /**
-<i>32</i>&nbsp;     * client-side constructor: build a response message
-<i>33</i>&nbsp;     *
-<i>34</i>&nbsp;     * @param color    The chosen color
-<i>35</i>&nbsp;     * @param nickname The nickname of the player
-<i>36</i>&nbsp;     */
-<b class="nc"><i>37</i>&nbsp;    public SetUpPlayerColor(String color, String nickname) {</b>
-<b class="nc"><i>38</i>&nbsp;        this.messageType = MessageType.VC;</b>
-<b class="nc"><i>39</i>&nbsp;        this.color = color;</b>
-<b class="nc"><i>40</i>&nbsp;        this.nickname = nickname;</b>
-<i>41</i>&nbsp;    }
-<i>42</i>&nbsp;
-<i>43</i>&nbsp;    /**
-<i>44</i>&nbsp;     * Gets the message type
+    <i>4</i>&nbsp;import Messages.CVMessage;
+    <i>5</i>&nbsp;import Messages.VCMessage;
+    <i>6</i>&nbsp;import Server.VirtualView;
+    <i>7</i>&nbsp;import Util.MessageType;
+    <i>8</i>&nbsp;
+    <i>9</i>&nbsp;import java.io.Serializable;
+    <i>10</i>&nbsp;import java.util.List;
+    <i>11</i>&nbsp;
+    <i>12</i>&nbsp;/**
+    <i>13</i>&nbsp; * Message for the choice of the playerColor of the player
+    <i>14</i>&nbsp; */
+    <i>15</i>&nbsp;public class SetUpPlayerColor implements CVMessage, VCMessage, Serializable {
+    <i>16</i>&nbsp; final MessageType messageType;
+    <i>17</i>&nbsp; List&lt;String&gt; availableColors;
+    <i>18</i>&nbsp; String playerColor;
+    <i>19</i>&nbsp; String nickname;
+    <i>20</i>&nbsp;
+    <i>21</i>&nbsp; /**
+    <i>22</i>&nbsp; * Server-side constructor: build a request message
+    <i>23</i>&nbsp; *
+    <i>24</i>&nbsp; * @param availableColors The available colors
+    <i>25</i>&nbsp; */
+    <b class="nc"><i>26</i>&nbsp; public SetUpPlayerColor(List&lt;String&gt; availableColors) {</b>
+    <b class="nc"><i>27</i>&nbsp; this.messageType = MessageType.CV;</b>
+    <b class="nc"><i>28</i>&nbsp; this.availableColors = availableColors;</b>
+    <i>29</i>&nbsp; }
+    <i>30</i>&nbsp;
+    <i>31</i>&nbsp; /**
+    <i>32</i>&nbsp; * client-side constructor: build a response message
+    <i>33</i>&nbsp; *
+    <i>34</i>&nbsp; * @param playerColor The chosen playerColor
+    <i>35</i>&nbsp; * @param nickname The nickname of the player
+    <i>36</i>&nbsp; */
+    <b class="nc"><i>37</i>&nbsp; public SetUpPlayerColor(String playerColor, String nickname) {</b>
+    <b class="nc"><i>38</i>&nbsp; this.messageType = MessageType.VC;</b>
+    <b class="nc"><i>39</i>&nbsp; this.playerColor = playerColor;</b>
+    <b class="nc"><i>40</i>&nbsp; this.nickname = nickname;</b>
+    <i>41</i>&nbsp; }
+    <i>42</i>&nbsp;
+    <i>43</i>&nbsp; /**
+    <i>44</i>&nbsp; * Gets the message type
 <i>45</i>&nbsp;     *
 <i>46</i>&nbsp;     * @return The message type
 <i>47</i>&nbsp;     */
@@ -138,7 +138,7 @@
 <i>64</i>&nbsp;     * @param virtualView The recipient component
 <i>65</i>&nbsp;     */
 <i>66</i>&nbsp;    public void execute(VirtualView virtualView) {
-<b class="nc"><i>67</i>&nbsp;        virtualView.setPlayerColor(nickname, color);</b>
+    <b class="nc"><i>67</i>&nbsp; virtualView.setPlayerColor(nickname, playerColor);</b>
 <i>68</i>&nbsp;    }
 <i>69</i>&nbsp;}
 </div>

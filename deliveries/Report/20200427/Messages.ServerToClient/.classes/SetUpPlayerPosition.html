@@ -78,26 +78,26 @@
 <i>4</i>&nbsp;import Messages.CVMessage;
 <i>5</i>&nbsp;import Messages.VCMessage;
 <i>6</i>&nbsp;import model.Cell;
-<i>7</i>&nbsp;import model.Game;
-<i>8</i>&nbsp;import Server.VirtualView;
-<i>9</i>&nbsp;import Util.Genre;
-<i>10</i>&nbsp;import Util.MessageType;
-<i>11</i>&nbsp;
-<i>12</i>&nbsp;import java.io.Serializable;
-<i>13</i>&nbsp;import java.util.List;
-<i>14</i>&nbsp;
-<i>15</i>&nbsp;/**
-<i>16</i>&nbsp; * Message for the choice of the color and the position of the workers of the player
-<i>17</i>&nbsp; */
-<i>18</i>&nbsp;public class SetUpPlayerPosition implements CVMessage, VCMessage, Serializable {
-<i>19</i>&nbsp;    private final MessageType messageType;
-<i>20</i>&nbsp;    private final Genre genre;
-<i>21</i>&nbsp;    private Game game;
-<i>22</i>&nbsp;    private List&lt;Cell&gt; forbiddenCells;
-<i>23</i>&nbsp;    private Cell chosenPosition;
-<i>24</i>&nbsp;    private String nickname;
-<i>25</i>&nbsp;
-<i>26</i>&nbsp;    /**
+    <i>7</i>&nbsp;import model.Game;
+    <i>8</i>&nbsp;import Server.VirtualView;
+    <i>9</i>&nbsp;import Util.Genre;
+    <i>10</i>&nbsp;import Util.MessageType;
+    <i>11</i>&nbsp;
+    <i>12</i>&nbsp;import java.io.Serializable;
+    <i>13</i>&nbsp;import java.util.List;
+    <i>14</i>&nbsp;
+    <i>15</i>&nbsp;/**
+    <i>16</i>&nbsp; * Message for the choice of the playerColor and the position of the workers of the player
+    <i>17</i>&nbsp; */
+    <i>18</i>&nbsp;public class SetUpPlayerPosition implements CVMessage, VCMessage, Serializable {
+    <i>19</i>&nbsp; private final MessageType messageType;
+    <i>20</i>&nbsp; private final Genre genre;
+    <i>21</i>&nbsp; private Game game;
+    <i>22</i>&nbsp; private List&lt;Cell&gt; forbiddenCells;
+    <i>23</i>&nbsp; private Cell chosenPosition;
+    <i>24</i>&nbsp; private String nickname;
+    <i>25</i>&nbsp;
+    <i>26</i>&nbsp; /**
 <i>27</i>&nbsp;     * Server-side constructor: build a request message
 <i>28</i>&nbsp;     *
 <i>29</i>&nbsp;     * @param genre          The genre of the worker

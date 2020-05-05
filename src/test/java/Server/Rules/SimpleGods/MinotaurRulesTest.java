@@ -1,10 +1,10 @@
 package Server.Rules.SimpleGods;
 
+import Server.Rules.Rules;
+import Util.*;
 import model.Board;
 import model.Game;
 import model.Player;
-import Server.Rules.Rules;
-import Util.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,8 +25,8 @@ public class MinotaurRulesTest {
         game = new Game(player1, 2);
         game.addPlayer(player2);
         board = game.getBoard();
-        player1.chooseColor(Color.PURPLE);
-        player2.chooseColor(Color.YELLOW);
+        player1.chooseColor(PlayerColor.PURPLE);
+        player2.chooseColor(PlayerColor.YELLOW);
         rules = new MinotaurRules();
     }
 

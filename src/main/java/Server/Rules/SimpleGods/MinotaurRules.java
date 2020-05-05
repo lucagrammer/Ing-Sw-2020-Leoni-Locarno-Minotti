@@ -1,9 +1,9 @@
 package Server.Rules.SimpleGods;
 
-import model.*;
 import Server.Rules.Rules;
 import Util.Action;
 import Util.RoundActions;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class MinotaurRules extends Rules {
                 collect(Collectors.toList());
 
         // Remove all the cells that are already occupied by player's workers
-        Player myPlayer = game.getPlayerByColor(worker.getColor());
+        Player myPlayer = game.getPlayerByColor(worker.getPlayerColor());
         cells.removeAll(myPlayer.getOccupiedCells());
 
         // Remove all the cells that are already occupied by other enemy workers if the next cell in the same direction is full

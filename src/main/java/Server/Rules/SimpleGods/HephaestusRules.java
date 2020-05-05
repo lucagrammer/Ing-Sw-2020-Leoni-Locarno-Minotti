@@ -1,10 +1,10 @@
 package Server.Rules.SimpleGods;
 
+import Server.Rules.Rules;
+import Util.*;
 import model.Game;
 import model.Player;
 import model.Worker;
-import Server.Rules.Rules;
-import Util.*;
 
 import java.util.stream.Collectors;
 
@@ -68,7 +68,7 @@ public class HephaestusRules extends Rules {
      */
     protected RoundActions getDoubleFloorAction(Worker worker, Game game) {
         // Find the cell-direction of the previous build-floor-action
-        Player player = game.getPlayerByColor(worker.getColor());
+        Player player = game.getPlayerByColor(worker.getPlayerColor());
         RoundActions roundActions = player.getRoundActions();
         RoundActions nextPossibleActions = new RoundActions();
 

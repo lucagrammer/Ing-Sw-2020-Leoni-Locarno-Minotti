@@ -1,7 +1,7 @@
 package model;
 
-import Util.Color;
 import Util.Genre;
+import Util.PlayerColor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -93,14 +93,14 @@ public class Game implements Serializable {
     }
 
     /**
-     * Gets a player by his color
+     * Gets a player by his playerColor
      *
-     * @param color The color of the player
-     * @return The player associated to the color or null value if there isn't a player with that color
+     * @param playerColor The playerColor of the player
+     * @return The player associated to the playerColor or null value if there isn't a player with that playerColor
      */
-    public Player getPlayerByColor(Color color) {
+    public Player getPlayerByColor(PlayerColor playerColor) {
         for (Player player : players) {
-            if (player.getWorker(Genre.MALE).getColor() == color)
+            if (player.getWorker(Genre.MALE).getPlayerColor() == playerColor)
                 return player;
         }
         return null;

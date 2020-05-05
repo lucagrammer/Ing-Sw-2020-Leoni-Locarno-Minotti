@@ -1,12 +1,12 @@
 package model;
 
-import Util.Color;
 import Util.Genre;
+import Util.PlayerColor;
 import org.junit.Test;
 
 import java.util.Date;
 
-import static Util.Color.BLUE;
+import static Util.PlayerColor.BLUE;
 import static org.junit.Assert.assertEquals;
 
 public class WorkerTest {
@@ -14,7 +14,7 @@ public class WorkerTest {
     Worker worker;
     Cell cell;
     Player player;
-    Color color;
+    PlayerColor playerColor;
 
     @Test
     public void positionInfo_setPosition_getCorrectPosition() {
@@ -27,9 +27,9 @@ public class WorkerTest {
     @Test
     public void setColor_getCorrectColor() {
         worker = new Worker(Genre.FEMALE, player);
-        color= BLUE;
-        worker.setColor(color);
-        assertEquals(BLUE, worker.getColor());
+        playerColor = BLUE;
+        worker.setPlayerColor(playerColor);
+        assertEquals(BLUE, worker.getPlayerColor());
     }
 
     @Test

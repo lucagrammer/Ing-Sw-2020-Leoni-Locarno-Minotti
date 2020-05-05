@@ -1,12 +1,12 @@
 package Server;
 
 import Messages.ServerToClient.*;
+import Util.*;
+import Util.exceptions.MustRestartException;
 import model.Card;
 import model.Cell;
 import model.Game;
 import model.Player;
-import Util.*;
-import Util.exceptions.MustRestartException;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -111,7 +111,7 @@ public class Controller {
     private void firstTurn() throws InterruptedException, MustRestartException {
         String currentPlayerNickname;
         ClientHandler currentPlayerClientHandler;
-        List<String> availableColors = Color.allColorsToString();
+        List<String> availableColors = PlayerColor.allColorsToString();
 
         for (int i = 0; i < game.getPlayers().size(); i++) {
             currentPlayerNickname = currentPlayer.getNickname();
@@ -119,7 +119,7 @@ public class Controller {
 
             virtualView.sendToEveryoneExcept(new ShowMap(game, currentPlayerNickname, null), currentPlayer);
 
-            // Color setup
+            // PlayerColor setup
             currentPlayerClientHandler.send(new SetUpPlayerColor(availableColors));
             synchronized (this) {
                 while (currentPlayer.getColor() == null && !mustReset) {
@@ -349,8 +349,8 @@ public class Controller {
      * @param color    The chosen color
      */
     public void setColor(String nickname, String color) {
-        Color myColor = Color.getColorByName(color);
-        game.getPlayerByNickname(nickname).chooseColor(myColor);
+        PlayerColor myPlayerColor = PlayerColor.getColorByName(color);
+        game.getPlayerByNickname(nickname).chooseColor(myPlayerColor);
         synchronized (this) {
             notifyAll();
         }

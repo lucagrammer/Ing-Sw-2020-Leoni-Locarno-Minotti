@@ -1,12 +1,12 @@
 package Server.Rules.SimpleGods;
 
+import Server.Rules.Rules;
+import Util.Action;
+import Util.RoundActions;
 import model.Cell;
 import model.Game;
 import model.Player;
 import model.Worker;
-import Server.Rules.Rules;
-import Util.Action;
-import Util.RoundActions;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +36,7 @@ public class ApolloRules extends Rules {
                 collect(Collectors.toList());
 
         // Remove all the cells that are already occupied by player's workers
-        cells.removeAll(game.getPlayerByColor(worker.getColor()).getOccupiedCells());
+        cells.removeAll(game.getPlayerByColor(worker.getPlayerColor()).getOccupiedCells());
 
         roundMoves.addMoves(cells, workerCell, worker.getGenre());
         return roundMoves;

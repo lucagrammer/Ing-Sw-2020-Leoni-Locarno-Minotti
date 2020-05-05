@@ -113,7 +113,8 @@
 <i>39</i>&nbsp;    public void execute(View view) {
 <b class="nc"><i>40</i>&nbsp;        view.showMap(game, true);</b>
 <b class="nc"><i>41</i>&nbsp;        if (loserNickname != null) {</b>
-<b class="nc"><i>42</i>&nbsp;            view.showMessage(&quot;\n\n\t\t&quot; + Frmt.style(&#39;b&#39;, Frmt.color(&#39;r&#39;, loserNickname.toUpperCase() + &quot; has lost &quot; + Frmt.DEATH)), false);</b>
+<b class="nc"><i>42</i>&nbsp; view.showMessage(&quot;\n\n\t\t&quot; + Frmt.style(&#39;b&#39;, Frmt.playerColor(&#39;r&#39;,
+    loserNickname.toUpperCase() + &quot; has lost &quot; + Frmt.DEATH)), false);</b>
 <i>43</i>&nbsp;        }
 <b class="nc"><i>44</i>&nbsp;        view.showMessage(((loserNickname == null) ? &quot;\n\n\t\t&quot; : &quot;\t\t&quot;) + Frmt.style(&#39;b&#39;, &quot;It&#39;s &quot; + currentNickname.toUpperCase() + &quot; turn.&quot;), false);</b>
 <b class="nc"><i>45</i>&nbsp;    }</b>

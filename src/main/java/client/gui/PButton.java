@@ -20,4 +20,17 @@ public class PButton extends JButton {
         setContentAreaFilled(false);
         setBorderPainted(false);
     }
+
+    /**
+     * Constructor: build a colored button
+     *
+     * @param color The color of the button
+     */
+    public PButton(Color color) {
+        super();
+        setBackground(color);
+        //setOpaque(false);
+        //setContentAreaFilled(false);
+        setBorderPainted(false);
+    }
 }

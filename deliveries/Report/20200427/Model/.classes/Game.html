@@ -73,18 +73,18 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package model;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import Util.Color;
-<i>4</i>&nbsp;import Util.Genre;
-<i>5</i>&nbsp;
-<i>6</i>&nbsp;import java.io.Serializable;
-<i>7</i>&nbsp;import java.util.ArrayList;
-<i>8</i>&nbsp;import java.util.List;
-<i>9</i>&nbsp;import java.util.stream.Collectors;
-<i>10</i>&nbsp;
-<i>11</i>&nbsp;public class Game implements Serializable {
-<i>12</i>&nbsp;    private final int numPlayer;
-<i>13</i>&nbsp;    private final Board board;
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import Util.PlayerColor;
+    <i>4</i>&nbsp;import Util.Genre;
+    <i>5</i>&nbsp;
+    <i>6</i>&nbsp;import java.io.Serializable;
+    <i>7</i>&nbsp;import java.util.ArrayList;
+    <i>8</i>&nbsp;import java.util.List;
+    <i>9</i>&nbsp;import java.util.stream.Collectors;
+    <i>10</i>&nbsp;
+    <i>11</i>&nbsp;public class Game implements Serializable {
+    <i>12</i>&nbsp; private final int numPlayer;
+    <i>13</i>&nbsp; private final Board board;
 <i>14</i>&nbsp;    private final List&lt;Card&gt; usedCards;
 <i>15</i>&nbsp;    private List&lt;Player&gt; players;
 <i>16</i>&nbsp;
@@ -157,44 +157,46 @@
 <i>83</i>&nbsp;     * Gets all the nickname of the players
 <i>84</i>&nbsp;     *
 <i>85</i>&nbsp;     * @return All the nicknames
-<i>86</i>&nbsp;     */
-<i>87</i>&nbsp;    public List&lt;String&gt; getPlayersNickname() {
-<b class="fc"><i>88</i>&nbsp;        List&lt;String&gt; nicknames = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i>89</i>&nbsp;        for (Player player : players) {</b>
-<b class="fc"><i>90</i>&nbsp;            nicknames.add(player.getNickname());</b>
-<b class="fc"><i>91</i>&nbsp;        }</b>
-<b class="fc"><i>92</i>&nbsp;        return nicknames;</b>
-<i>93</i>&nbsp;    }
-<i>94</i>&nbsp;
-<i>95</i>&nbsp;    /**
-<i>96</i>&nbsp;     * Gets a player by his color
-<i>97</i>&nbsp;     *
-<i>98</i>&nbsp;     * @param color The color of the player
-<i>99</i>&nbsp;     * @return The player associated to the color or null value if there isn&#39;t a player with that color
-<i>100</i>&nbsp;     */
-<i>101</i>&nbsp;    public Player getPlayerByColor(Color color) {
-<b class="fc"><i>102</i>&nbsp;        for (Player player : players) {</b>
-<b class="fc"><i>103</i>&nbsp;            if (player.getWorker(Genre.MALE).getColor() == color)</b>
-<b class="fc"><i>104</i>&nbsp;                return player;</b>
-<b class="fc"><i>105</i>&nbsp;        }</b>
-<b class="fc"><i>106</i>&nbsp;        return null;</b>
-<i>107</i>&nbsp;    }
-<i>108</i>&nbsp;
-<i>109</i>&nbsp;    /**
-<i>110</i>&nbsp;     * Gets a player by his nickname
-<i>111</i>&nbsp;     *
-<i>112</i>&nbsp;     * @param nickname The nickname of the player
-<i>113</i>&nbsp;     * @return The player associated to the color or null value if there isn&#39;t a player with that color
-<i>114</i>&nbsp;     */
-<i>115</i>&nbsp;    public Player getPlayerByNickname(String nickname) {
-<b class="fc"><i>116</i>&nbsp;        for (Player player : players) {</b>
-<b class="fc"><i>117</i>&nbsp;            if (player.getNickname().equalsIgnoreCase(nickname))</b>
-<b class="fc"><i>118</i>&nbsp;                return player;</b>
-<b class="fc"><i>119</i>&nbsp;        }</b>
-<b class="fc"><i>120</i>&nbsp;        return null;</b>
-<i>121</i>&nbsp;    }
-<i>122</i>&nbsp;
-<i>123</i>&nbsp;    /**
+    <i>86</i>&nbsp; */
+    <i>87</i>&nbsp; public List&lt;String&gt; getPlayersNickname() {
+    <b class="fc"><i>88</i>&nbsp; List&lt;String&gt; nicknames = new ArrayList&lt;&gt;();</b>
+    <b class="fc"><i>89</i>&nbsp; for (Player player : players) {</b>
+    <b class="fc"><i>90</i>&nbsp; nicknames.add(player.getNickname());</b>
+    <b class="fc"><i>91</i>&nbsp; }</b>
+    <b class="fc"><i>92</i>&nbsp; return nicknames;</b>
+    <i>93</i>&nbsp; }
+    <i>94</i>&nbsp;
+    <i>95</i>&nbsp; /**
+    <i>96</i>&nbsp; * Gets a player by his playerColor
+    <i>97</i>&nbsp; *
+    <i>98</i>&nbsp; * @param playerColor The playerColor of the player
+    <i>99</i>&nbsp; * @return The player associated to the playerColor or null value if there isn&#39;t a player with
+    that playerColor
+    <i>100</i>&nbsp; */
+    <i>101</i>&nbsp; public Player getPlayerByColor(Color playerColor) {
+    <b class="fc"><i>102</i>&nbsp; for (Player player : players) {</b>
+    <b class="fc"><i>103</i>&nbsp; if (player.getWorker(Genre.MALE).getColor() == playerColor)</b>
+    <b class="fc"><i>104</i>&nbsp; return player;</b>
+    <b class="fc"><i>105</i>&nbsp; }</b>
+    <b class="fc"><i>106</i>&nbsp; return null;</b>
+    <i>107</i>&nbsp; }
+    <i>108</i>&nbsp;
+    <i>109</i>&nbsp; /**
+    <i>110</i>&nbsp; * Gets a player by his nickname
+    <i>111</i>&nbsp; *
+    <i>112</i>&nbsp; * @param nickname The nickname of the player
+    <i>113</i>&nbsp; * @return The player associated to the playerColor or null value if there isn&#39;t a player with
+    that playerColor
+    <i>114</i>&nbsp; */
+    <i>115</i>&nbsp; public Player getPlayerByNickname(String nickname) {
+    <b class="fc"><i>116</i>&nbsp; for (Player player : players) {</b>
+    <b class="fc"><i>117</i>&nbsp; if (player.getNickname().equalsIgnoreCase(nickname))</b>
+    <b class="fc"><i>118</i>&nbsp; return player;</b>
+    <b class="fc"><i>119</i>&nbsp; }</b>
+    <b class="fc"><i>120</i>&nbsp; return null;</b>
+    <i>121</i>&nbsp; }
+    <i>122</i>&nbsp;
+    <i>123</i>&nbsp; /**
 <i>124</i>&nbsp;     * Gets all the cards that will be used during the game
 <i>125</i>&nbsp;     *
 <i>126</i>&nbsp;     * @return The cards

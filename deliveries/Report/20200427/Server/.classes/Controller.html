@@ -167,27 +167,28 @@
 <b class="nc"><i>93</i>&nbsp;            while (null == this.currentPlayer &amp;&amp; !mustReset) {</b>
 <b class="nc"><i>94</i>&nbsp;                this.wait();</b>
 <i>95</i>&nbsp;            }
-<b class="nc"><i>96</i>&nbsp;            if (mustReset) {</b>
-<b class="nc"><i>97</i>&nbsp;                reset();</b>
-<i>98</i>&nbsp;            }
-<b class="nc"><i>99</i>&nbsp;        }</b>
-<b class="nc"><i>100</i>&nbsp;        System.out.println(&quot;&gt; Status: The first player will be &quot; + this.currentPlayer.getNickname());</b>
-<i>101</i>&nbsp;
-<b class="nc"><i>102</i>&nbsp;        firstTurn();</b>
-<i>103</i>&nbsp;    }
-<i>104</i>&nbsp;
-<i>105</i>&nbsp;    /**
-<i>106</i>&nbsp;     * Manages the first turn: color setup and positioning of the workers
-<i>107</i>&nbsp;     *
-<i>108</i>&nbsp;     * @throws InterruptedException When the main thread is stopped
-<i>109</i>&nbsp;     * @throws MustRestartException When the game must restart
-<i>110</i>&nbsp;     */
-<i>111</i>&nbsp;    private void firstTurn() throws InterruptedException, MustRestartException {
-<i>112</i>&nbsp;        String currentPlayerNickname;
-<i>113</i>&nbsp;        ClientHandler currentPlayerClientHandler;
-<b class="nc"><i>114</i>&nbsp;        List&lt;String&gt; availableColors = Color.allColorsToString();</b>
-<i>115</i>&nbsp;
-<b class="nc"><i>116</i>&nbsp;        for (int i = 0; i &lt; game.getPlayers().size(); i++) {</b>
+<b class="nc"><i>96</i>&nbsp; if (mustReset) {</b>
+    <b class="nc"><i>97</i>&nbsp; reset();</b>
+    <i>98</i>&nbsp; }
+    <b class="nc"><i>99</i>&nbsp; }</b>
+    <b class="nc"><i>100</i>&nbsp; System.out.println(&quot;&gt; Status: The first player will be &quot; +
+        this.currentPlayer.getNickname());</b>
+    <i>101</i>&nbsp;
+    <b class="nc"><i>102</i>&nbsp; firstTurn();</b>
+    <i>103</i>&nbsp; }
+    <i>104</i>&nbsp;
+    <i>105</i>&nbsp; /**
+    <i>106</i>&nbsp; * Manages the first turn: playerColor setup and positioning of the workers
+    <i>107</i>&nbsp; *
+    <i>108</i>&nbsp; * @throws InterruptedException When the main thread is stopped
+    <i>109</i>&nbsp; * @throws MustRestartException When the game must restart
+    <i>110</i>&nbsp; */
+    <i>111</i>&nbsp; private void firstTurn() throws InterruptedException, MustRestartException {
+    <i>112</i>&nbsp; String currentPlayerNickname;
+    <i>113</i>&nbsp; ClientHandler currentPlayerClientHandler;
+    <b class="nc"><i>114</i>&nbsp; List&lt;String&gt; availableColors = Color.allColorsToString();</b>
+    <i>115</i>&nbsp;
+    <b class="nc"><i>116</i>&nbsp; for (int i = 0; i &lt; game.getPlayers().size(); i++) {</b>
 <b class="nc"><i>117</i>&nbsp;            currentPlayerNickname = currentPlayer.getNickname();</b>
 <b class="nc"><i>118</i>&nbsp;            currentPlayerClientHandler = virtualView.getClientHandlerByNickname(currentPlayerNickname);</b>
 <i>119</i>&nbsp;
@@ -407,34 +408,34 @@
 <i>333</i>&nbsp;    /**
 <i>334</i>&nbsp;     * Sets who will be the first player
 <i>335</i>&nbsp;     *
-<i>336</i>&nbsp;     * @param fistPlayerNickname The nickname of the first player
-<i>337</i>&nbsp;     */
-<i>338</i>&nbsp;    public void setFirstPlayer(String fistPlayerNickname) {
-<b class="nc"><i>339</i>&nbsp;        currentPlayer = game.getPlayerByNickname(fistPlayerNickname);</b>
-<b class="nc"><i>340</i>&nbsp;        synchronized (this) {</b>
-<b class="nc"><i>341</i>&nbsp;            this.notifyAll();</b>
-<b class="nc"><i>342</i>&nbsp;        }</b>
-<i>343</i>&nbsp;    }
-<i>344</i>&nbsp;
-<i>345</i>&nbsp;    /**
-<i>346</i>&nbsp;     * Sets the color of a specified player
-<i>347</i>&nbsp;     *
-<i>348</i>&nbsp;     * @param nickname The player&#39;s nickname
-<i>349</i>&nbsp;     * @param color    The chosen color
-<i>350</i>&nbsp;     */
-<i>351</i>&nbsp;    public void setColor(String nickname, String color) {
-<b class="nc"><i>352</i>&nbsp;        Color myColor = Color.getColorByName(color);</b>
-<b class="nc"><i>353</i>&nbsp;        game.getPlayerByNickname(nickname).chooseColor(myColor);</b>
-<b class="nc"><i>354</i>&nbsp;        synchronized (this) {</b>
-<b class="nc"><i>355</i>&nbsp;            notifyAll();</b>
-<b class="nc"><i>356</i>&nbsp;        }</b>
-<i>357</i>&nbsp;    }
-<i>358</i>&nbsp;
-<i>359</i>&nbsp;    /**
-<i>360</i>&nbsp;     * Sets the first position of a specified worker of a specified player
-<i>361</i>&nbsp;     *
-<i>362</i>&nbsp;     * @param nickname The player&#39;s nickname
-<i>363</i>&nbsp;     * @param genre    The genre of the worker
+    <i>336</i>&nbsp; * @param fistPlayerNickname The nickname of the first player
+    <i>337</i>&nbsp; */
+    <i>338</i>&nbsp; public void setFirstPlayer(String fistPlayerNickname) {
+    <b class="nc"><i>339</i>&nbsp; currentPlayer = game.getPlayerByNickname(fistPlayerNickname);</b>
+    <b class="nc"><i>340</i>&nbsp; synchronized (this) {</b>
+    <b class="nc"><i>341</i>&nbsp; this.notifyAll();</b>
+    <b class="nc"><i>342</i>&nbsp; }</b>
+    <i>343</i>&nbsp; }
+    <i>344</i>&nbsp;
+    <i>345</i>&nbsp; /**
+    <i>346</i>&nbsp; * Sets the playerColor of a specified player
+    <i>347</i>&nbsp; *
+    <i>348</i>&nbsp; * @param nickname The player&#39;s nickname
+    <i>349</i>&nbsp; * @param playerColor The chosen playerColor
+    <i>350</i>&nbsp; */
+    <i>351</i>&nbsp; public void setColor(String nickname, String playerColor) {
+    <b class="nc"><i>352</i>&nbsp; Color myPlayerColor = Color.getColorByName(playerColor);</b>
+    <b class="nc"><i>353</i>&nbsp; game.getPlayerByNickname(nickname).chooseColor(myPlayerColor);</b>
+    <b class="nc"><i>354</i>&nbsp; synchronized (this) {</b>
+    <b class="nc"><i>355</i>&nbsp; notifyAll();</b>
+    <b class="nc"><i>356</i>&nbsp; }</b>
+    <i>357</i>&nbsp; }
+    <i>358</i>&nbsp;
+    <i>359</i>&nbsp; /**
+    <i>360</i>&nbsp; * Sets the first position of a specified worker of a specified player
+    <i>361</i>&nbsp; *
+    <i>362</i>&nbsp; * @param nickname The player&#39;s nickname
+    <i>363</i>&nbsp; * @param genre The genre of the worker
 <i>364</i>&nbsp;     * @param position The chosen position
 <i>365</i>&nbsp;     */
 <i>366</i>&nbsp;    public void setFirstPosition(String nickname, Genre genre, Cell position) {
@@ -493,7 +494,8 @@
 <i>419</i>&nbsp;     */
 <i>420</i>&nbsp;    private void reset() throws MustRestartException {
 <b class="nc"><i>421</i>&nbsp;        virtualView.closeAll();</b>
-<b class="nc"><i>422</i>&nbsp;        System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Status: Game controller has been stopped&quot;));</b>
+    <b class="nc"><i>422</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Status: Game controller
+        has been stopped&quot;));</b>
 <b class="nc"><i>423</i>&nbsp;        throw new MustRestartException();</b>
 <i>424</i>&nbsp;    }
 <i>425</i>&nbsp;}

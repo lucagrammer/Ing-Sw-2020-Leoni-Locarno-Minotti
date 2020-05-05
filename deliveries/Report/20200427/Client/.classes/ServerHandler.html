@@ -157,7 +157,8 @@
 <i>57</i>&nbsp;                }
 <b class="nc"><i>58</i>&nbsp;            } catch (IOException | ClassNotFoundException e) {</b>
 <b class="nc"><i>59</i>&nbsp;                if (isConnected) {</b>
-<b class="nc"><i>60</i>&nbsp;                    view.showMessage(Frmt.color(&#39;r&#39;, &quot;&gt; Error: Server unreachable during message reading.&quot;), true);</b>
+<b class="nc"><i>60</i>&nbsp; view.showMessage(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Error: Server unreachable during
+    message reading.&quot;), true);</b>
 <b class="nc"><i>61</i>&nbsp;                    closeConnection();</b>
 <i>62</i>&nbsp;                }
 <b class="nc"><i>63</i>&nbsp;                isConnected = false;</b>
@@ -205,7 +206,8 @@
 <b class="nc"><i>105</i>&nbsp;            } catch (IOException e) {</b>
 <b class="nc"><i>106</i>&nbsp;                isConnected = false;</b>
 <b class="nc"><i>107</i>&nbsp;                if (connectionAttempts == 1) {</b>
-<b class="nc"><i>108</i>&nbsp;                    view.showMessage(Frmt.color(&#39;r&#39;, &quot;&gt; Error: Server unreachable during connection setup. Reconnecting...&quot;), true);</b>
+    <b class="nc"><i>108</i>&nbsp; view.showMessage(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Error: Server unreachable
+        during connection setup. Reconnecting...&quot;), true);</b>
 <i>109</i>&nbsp;                }
 <i>110</i>&nbsp;                try {
 <b class="nc"><i>111</i>&nbsp;                    Thread.sleep(1000);</b>
@@ -226,7 +228,8 @@
 <b class="nc"><i>126</i>&nbsp;            socket.close();</b>
 <b class="nc"><i>127</i>&nbsp;            isConnected = false;</b>
 <b class="nc"><i>128</i>&nbsp;        } catch (IOException e) {</b>
-<b class="nc"><i>129</i>&nbsp;            System.out.println(Frmt.color(&#39;r&#39;, &quot;Error: An error occurred when closing the connection&quot;));</b>
+    <b class="nc"><i>129</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;Error: An error occurred when
+        closing the connection&quot;));</b>
 <b class="nc"><i>130</i>&nbsp;            e.printStackTrace();</b>
 <b class="nc"><i>131</i>&nbsp;        }</b>
 <i>132</i>&nbsp;    }
@@ -246,7 +249,8 @@
 <b class="nc"><i>146</i>&nbsp;                }</b>
 <b class="nc"><i>147</i>&nbsp;            } catch (IOException e) {</b>
 <b class="nc"><i>148</i>&nbsp;                isConnected = false;</b>
-<b class="nc"><i>149</i>&nbsp;                view.showMessage(Frmt.color(&#39;r&#39;, &quot;&gt; Error: Server unreachable during message sending.&quot;), true);</b>
+    <b class="nc"><i>149</i>&nbsp; view.showMessage(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Error: Server unreachable
+        during message sending.&quot;), true);</b>
 <b class="nc"><i>150</i>&nbsp;                closeConnection();</b>
 <b class="nc"><i>151</i>&nbsp;            }</b>
 <i>152</i>&nbsp;        }
@@ -294,27 +298,27 @@
 <i>194</i>&nbsp;
 <i>195</i>&nbsp;    /**
 <i>196</i>&nbsp;     * Prepares the response to the server SetUpFirstPlayer request
-<i>197</i>&nbsp;     *
-<i>198</i>&nbsp;     * @param chosenNickname The first player&#39;s nickname
-<i>199</i>&nbsp;     */
-<i>200</i>&nbsp;    public void sendFirstPlayer(String chosenNickname) {
-<b class="nc"><i>201</i>&nbsp;        send(new SetUpFirstPlayer(chosenNickname));</b>
-<i>202</i>&nbsp;    }
-<i>203</i>&nbsp;
-<i>204</i>&nbsp;    /**
-<i>205</i>&nbsp;     * Prepares the response to the server SetUpPlayerColor request
-<i>206</i>&nbsp;     *
-<i>207</i>&nbsp;     * @param chosenColor The chosen color
-<i>208</i>&nbsp;     */
-<i>209</i>&nbsp;    public void sendPlayerColor(String chosenColor) {
-<b class="nc"><i>210</i>&nbsp;        send(new SetUpPlayerColor(chosenColor, nickname));</b>
-<i>211</i>&nbsp;    }
-<i>212</i>&nbsp;
-<i>213</i>&nbsp;    /**
-<i>214</i>&nbsp;     * Prepares the response to the server SetUpPlayerPosition request
-<i>215</i>&nbsp;     *
-<i>216</i>&nbsp;     * @param genre      The genre of the worker
-<i>217</i>&nbsp;     * @param chosenCell The position of the worker
+    <i>197</i>&nbsp; *
+    <i>198</i>&nbsp; * @param chosenNickname The first player&#39;s nickname
+    <i>199</i>&nbsp; */
+    <i>200</i>&nbsp; public void sendFirstPlayer(String chosenNickname) {
+    <b class="nc"><i>201</i>&nbsp; send(new SetUpFirstPlayer(chosenNickname));</b>
+    <i>202</i>&nbsp; }
+    <i>203</i>&nbsp;
+    <i>204</i>&nbsp; /**
+    <i>205</i>&nbsp; * Prepares the response to the server SetUpPlayerColor request
+    <i>206</i>&nbsp; *
+    <i>207</i>&nbsp; * @param chosenColor The chosen playerColor
+    <i>208</i>&nbsp; */
+    <i>209</i>&nbsp; public void sendPlayerColor(String chosenColor) {
+    <b class="nc"><i>210</i>&nbsp; send(new SetUpPlayerColor(chosenColor, nickname));</b>
+    <i>211</i>&nbsp; }
+    <i>212</i>&nbsp;
+    <i>213</i>&nbsp; /**
+    <i>214</i>&nbsp; * Prepares the response to the server SetUpPlayerPosition request
+    <i>215</i>&nbsp; *
+    <i>216</i>&nbsp; * @param genre The genre of the worker
+    <i>217</i>&nbsp; * @param chosenCell The position of the worker
 <i>218</i>&nbsp;     */
 <i>219</i>&nbsp;    public void sendPlayerPosition(Genre genre, Cell chosenCell) {
 <b class="nc"><i>220</i>&nbsp;        send(new SetUpPlayerPosition(genre, chosenCell, nickname));</b>

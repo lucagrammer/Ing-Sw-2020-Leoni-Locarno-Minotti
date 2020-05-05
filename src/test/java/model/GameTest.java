@@ -2,7 +2,7 @@ package model;
 
 import Server.Rules.EnemyRules;
 import Server.Rules.Rules;
-import Util.Color;
+import Util.PlayerColor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -153,13 +153,13 @@ public class GameTest {
         Player player2 = new Player("Julie", dateOfBirth2);
         game.addPlayer(player1);
         game.addPlayer(player2);
-        player.chooseColor(Color.BLUE);
-        player1.chooseColor(Color.PURPLE);
-        assertEquals(player, game.getPlayerByColor(Color.BLUE));
-        assertEquals(player1, game.getPlayerByColor(Color.PURPLE));
-        assertNull(game.getPlayerByColor(Color.YELLOW));
-        player2.chooseColor(Color.YELLOW);
-        assertEquals(player2, game.getPlayerByColor(Color.YELLOW));
+        player.chooseColor(PlayerColor.BLUE);
+        player1.chooseColor(PlayerColor.PURPLE);
+        assertEquals(player, game.getPlayerByColor(PlayerColor.BLUE));
+        assertEquals(player1, game.getPlayerByColor(PlayerColor.PURPLE));
+        assertNull(game.getPlayerByColor(PlayerColor.YELLOW));
+        player2.chooseColor(PlayerColor.YELLOW);
+        assertEquals(player2, game.getPlayerByColor(PlayerColor.YELLOW));
     }
 
     @Test

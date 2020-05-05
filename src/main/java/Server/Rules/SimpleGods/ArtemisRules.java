@@ -1,11 +1,11 @@
 package Server.Rules.SimpleGods;
 
+import Server.Rules.Rules;
+import Util.*;
 import model.Cell;
 import model.Game;
 import model.Player;
 import model.Worker;
-import Server.Rules.Rules;
-import Util.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,7 +91,7 @@ public class ArtemisRules extends Rules {
         }
 
         // Remove the cell occupied by the previous move, if any
-        Player player = game.getPlayerByColor(worker.getColor());
+        Player player = game.getPlayerByColor(worker.getPlayerColor());
         RoundActions roundActions = player.getRoundActions();
         if (!roundActions.isEmpty()) {
             Direction previouslyMoveDirection = roundActions.getActionList().get(0).getDirection();

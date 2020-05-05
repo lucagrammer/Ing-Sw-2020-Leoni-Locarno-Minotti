@@ -58,17 +58,17 @@ public class PlayerTest {
 
     @Test
     public void chooseColor_color_getWorker(){
-        Color color = Color.PURPLE;
-        player.chooseColor(color);
-        assertEquals(color, player.getWorker(Genre.FEMALE).getColor());
-        assertEquals(color, player.getWorker(Genre.MALE).getColor());
+        PlayerColor playerColor = PlayerColor.PURPLE;
+        player.chooseColor(playerColor);
+        assertEquals(playerColor, player.getWorker(Genre.FEMALE).getPlayerColor());
+        assertEquals(playerColor, player.getWorker(Genre.MALE).getPlayerColor());
     }
 
     @Test
-    public void chooseColor_color_getColor(){
-        Color color = Color.PURPLE;
-        player.chooseColor(color);
-        assertEquals(color, player.getColor());
+    public void chooseColor_color_getColor() {
+        PlayerColor playerColor = PlayerColor.PURPLE;
+        player.chooseColor(playerColor);
+        assertEquals(playerColor, player.getColor());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class PlayerTest {
 
     @Test
     public void player_action_registerActions(){
-        player.chooseColor(Color.PURPLE);
+        player.chooseColor(PlayerColor.PURPLE);
         Action firstMove = new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0);
         player.registerAction(firstMove);
         Action firstBuild = new Action(ActionType.FLOOR, Genre.FEMALE, Direction.S, 1);
