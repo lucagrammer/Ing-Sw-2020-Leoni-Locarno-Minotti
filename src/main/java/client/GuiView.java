@@ -403,67 +403,27 @@ public class GuiView implements View {
     public void askFirstPlayer(List<String> playersNicknames) {
         SwingUtilities.invokeLater(() -> {
             // Flush body components
-            bodyContainer.removeAll();
+            this.bodyContainer.removeAll();
 
-            // Nickname
-            PLabel nicknameLabel = new PLabelForm("Nickname of the first player: ");
-            nicknameLabel.setBounds(10, 30, 400, 40);
-            bodyContainer.add(nicknameLabel);
+            PLabel label = new PLabel("Choose the first player:");
+            label.setFontSize(30);
+            label.setBounds(0, 0, 840, 40);
+            bodyContainer.add(label);
 
-            PTextField nicknameTextField = new PTextField(null);
-            nicknameTextField.setBounds(430, 30, 250, 40);
-            bodyContainer.add(nicknameTextField);
+            PPanelContainer playerContainer = new PPanelContainer();
+            playerContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);
+            playerContainer.setLayout(new GridLayout(1, playersNicknames.size(), 10, 0));
+            bodyContainer.add(playerContainer);
 
-            // Error label
-            PLabel errorLabel = new PLabelError("");
-            errorLabel.setBounds(0, 240, 840, 40);
-            bodyContainer.add(errorLabel);
-            Image scaledImage = (new ImageIcon(getClass().getResource("/GuiResources/btn_blue_next.png"))).getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);
-            PButton button = new PButton(scaledImage);
-            button.setBounds(322, 300, 197, 50);
-            /* TODO
-            button.addActionListener((ev) -> (new Thread(() -> {
-                String nickname = nicknameTextField.getTextFieldText();
-                if (!nickname.equals("") && !nickname.contains(" ")) {
-                    // No errors
-                    errorLabel.setText("");
-
-                    showMessage("Waiting for the other players to connect...", true);
-                    serverHandler.sendNewNickname(nickname);
-                } else {
-                    errorLabel.setText("Invalid nickname. Try again.");
-                }
-            })).start());
-            button.addActionListener((ev) -> (new Thread(() -> {
-                String chosenNickname;
-                boolean incorrect;
-                System.out.println("\n\n");
-                do {
-                    System.out.print(" " + Frmt.style('b', "Choose who will be the first player:") + " ");
-                    for (int i = 0; i < playersNicknames.size(); i++) {
-                        String name = playersNicknames.get(i);
-                        allNicknames.add(name.toLowerCase());
-                        if (i != playersNicknames.size() - 1) {
-                            System.out.print(Frmt.style('b', name + ", "));
-                        } else {
-                            System.out.println(Frmt.style('b', name + "?"));
-                        }
-                    }
-
-                    incorrect = false;
-                    System.out.print("  ↳: ");
-                    chosenNickname = scanner.next();
-                    if (!allNicknames.contains(chosenNickname.toLowerCase())) {
-                        Frmt.clearScreen();
-                        System.out.println(Frmt.color('r', "   > Invalid choice. Try again."));
-                        incorrect = true;
-                    }
-                } while (incorrect);
-
-                showLoading();
-                serverHandler.sendFirstPlayer(chosenNickname);
-            })).start());*/
-            bodyContainer.add(button);
+            for (String name : playersNicknames) {
+                Image scaledImage = (new ImageIcon(getClass().getResource("/GuiResources/btn_blue.png"))).getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);
+                PButtonSigned button = new PButtonSigned(scaledImage,name);
+                button.addActionListener((ev) -> (new Thread(() -> {
+                    showLoading();
+                    serverHandler.sendFirstPlayer(button.getSign());
+                })).start());
+                playerContainer.add(button);
+            }
 
             // Apply
             bodyContainer.revalidate();
@@ -583,10 +543,11 @@ public class GuiView implements View {
             bodyContainer.add(colorContainer);
 
             for (String color : availableColors) {
-                PButton cardButton = new PButton(PlayerColor.getColorCodeByName(color));
-                colorContainer.add(cardButton);
-                cardButton.addActionListener((ev) -> (new Thread(() -> {
+                PButton button = new PButton(PlayerColor.getColorCodeByName(color));
+                colorContainer.add(button);
+                button.addActionListener((ev) -> (new Thread(() -> {
                     serverHandler.sendPlayerColor(color);
+                    System.out.println("OK");
                 })).start());
             }
 
@@ -604,7 +565,37 @@ public class GuiView implements View {
      * @param game           The game
      */
     public void askPlayerPosition(Genre genre, List<Cell> forbiddenCells, Game game) {
+        // Flush body components
+        this.bodyContainer.removeAll();
+        showMap(game, false);
 
+        /*Cell chosenCell;
+        String chosenPosition;
+        int row = -1, column = -1;
+        boolean incorrect;
+        Frmt.clearScreen();
+        do {
+            showMap(game, false);
+            incorrect = false;
+            System.out.print("\n " + Frmt.style('b', "Choose the position of your " + ((genre == MALE) ? "male" : "female") + " worker [row,column]:") + " ");
+            chosenPosition = scanner.next();
+            try {
+                row = Character.getNumericValue(chosenPosition.charAt(0));
+                column = Character.getNumericValue(chosenPosition.charAt(2));
+            } catch (Exception e) {
+                Frmt.clearScreen();
+                System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
+                incorrect = true;
+            }
+
+            chosenCell = new Cell(row, column);
+            if (!incorrect && (row < 0 || column < 0 || row > 4 || column > 4 || forbiddenCells.contains(chosenCell) || chosenPosition.length() != 3)) {
+                Frmt.clearScreen();
+                System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
+                incorrect = true;
+            }
+        } while (incorrect);
+        serverHandler.sendPlayerPosition(genre, chosenCell);*/
     }
 
     /**
@@ -614,7 +605,42 @@ public class GuiView implements View {
      * @param newScreen True if it's necessary to clean the interface
      */
     public void showMap(Game game, boolean newScreen) {
+        SwingUtilities.invokeLater(() -> {
+            if(newScreen) {
+                // Flush body components
+                this.bodyContainer.removeAll();
+            }
 
+            Image islandImg = (new ImageIcon(GuiView.this.getClass().getResource("/GuiResources/SantoriniBoard.png"))).getImage();
+            JPanel island = new PPanelBackground(islandImg);
+            island.setBounds(50,0,446,450);
+            island.repaint();
+            island.setLayout(null);
+            bodyContainer.add(island);
+
+            PPanelContainer mapContainer= new PPanelContainer();
+            mapContainer.setBounds(54,50,348,348);
+            mapContainer.setLayout(new GridLayout(5,5,9,9));
+            island.add(mapContainer);
+
+            PPanelContainer sideBar= new PPanelContainer();
+            sideBar.setBounds(50+mapContainer.getWidth()+50,0,420,450);
+            sideBar.setLayout(null);
+            bodyContainer.add(sideBar);
+
+            PLabel commandLabel = new PLabel("Choose the position of your worker:");
+            commandLabel.setFontSize(20);
+            commandLabel.setBounds(0, 0, 420, 40);
+            sideBar.add(commandLabel);
+
+            PButton button = new PButton(PlayerColor.getColorCodeByName("yellow"));
+            button.setSize(60,60);
+            mapContainer.add(button);
+
+            // Apply
+            bodyContainer.revalidate();
+            bodyContainer.repaint();
+        });
     }
 
     /**

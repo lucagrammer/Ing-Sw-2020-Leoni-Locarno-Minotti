@@ -15,7 +15,7 @@ public class PTextField extends JLabel {
      * @param defaultText The default text of the text-field or null value
      */
     public PTextField(String defaultText) {
-        Image scaledTextFieldIcon = new ImageIcon("src/main/resources/GuiResources/textfield_bg.png").getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
+        Image scaledTextFieldIcon = new ImageIcon(this.getClass().getResource("/GuiResources/textfield_bg.png")).getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
 
         setIcon(new ImageIcon(scaledTextFieldIcon));
         setLayout(new BorderLayout());

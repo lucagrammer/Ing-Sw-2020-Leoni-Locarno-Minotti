@@ -2,26 +2,21 @@
 <simple-gods>
     <simple-god>
         <name>Apollo</name>
-        <description>Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the
-            space yours just vacated.
-        </description>
+        <description>Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated.</description>
         <three-players-compatible>true</three-players-compatible>
         <rules>server.rules.simpleGods.ApolloRules</rules>
         <enemy-rules>server.rules.EnemyRules</enemy-rules>
     </simple-god>
     <simple-god>
         <name>Artemis</name>
-        <description>Your Move: Your Worker may move one additional time, but not back to its initial space.
-        </description>
+        <description>Your Move: Your Worker may move one additional time, but not back to its initial space.</description>
         <three-players-compatible>true</three-players-compatible>
         <rules>server.rules.simpleGods.ArtemisRules</rules>
         <enemy-rules>server.rules.EnemyRules</enemy-rules>
     </simple-god>
     <simple-god>
         <name>Athena</name>
-        <description>Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up
-            this turn.
-        </description>
+        <description>Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up this turn.</description>
         <three-players-compatible>true</three-players-compatible>
         <rules>server.rules.Rules</rules>
         <enemy-rules>server.rules.simpleGods.AthenaEnemyRules</enemy-rules>
@@ -42,17 +37,14 @@
     </simple-god>
     <simple-god>
         <name>Hephaestus</name>
-        <description>Your Build: Your Worker may build one additional block (not dome) on top of your first block.
-        </description>
+        <description>Your Build: Your Worker may build one additional block (not dome) on top of your first block.</description>
         <three-players-compatible>true</three-players-compatible>
         <rules>server.rules.simpleGods.HephaestusRules</rules>
         <enemy-rules>server.rules.EnemyRules</enemy-rules>
     </simple-god>
     <simple-god>
         <name>Minotaur</name>
-        <description>Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced one
-            space straight backwards to an unoccupied space at any level.
-        </description>
+        <description>Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced one space straight backwards to an unoccupied space at any level.</description>
         <three-players-compatible>true</three-players-compatible>
         <rules>server.rules.simpleGods.MinotaurRules</rules>
         <enemy-rules>server.rules.EnemyRules</enemy-rules>
@@ -66,8 +58,7 @@
     </simple-god>
     <simple-god>
         <name>Prometheus</name>
-        <description>Your Turn: If your Worker does not move up, it may build both before and after moving.
-        </description>
+        <description>Your Turn: If your Worker does not move up, it may build both before and after moving.</description>
         <three-players-compatible>true</three-players-compatible>
         <rules>server.rules.simpleGods.PrometheusRules</rules>
         <enemy-rules>server.rules.EnemyRules</enemy-rules>
