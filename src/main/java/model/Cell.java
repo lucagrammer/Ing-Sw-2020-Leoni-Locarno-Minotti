@@ -1,6 +1,6 @@
 package model;
 
-import Util.Direction;
+import util.Direction;
 
 import java.io.Serializable;
 
@@ -125,45 +125,19 @@ public class Cell implements Serializable {
         int rowDifference = adjacentCell.getRow() - row;
         int columnDifference = adjacentCell.getColumn() - column;
 
-        switch (rowDifference) {
-            case 0:
-                switch (columnDifference) {
-                    case -1:
-                        return Direction.W;
-                    case 1:
-                        return Direction.E;
-                }
-            case -1:
-                switch (columnDifference) {
-                    case 0:
-                        return Direction.N;
-                    case -1:
-                        return Direction.NW;
-                    case 1:
-                        return Direction.NE;
-                }
-            default:
-                switch (columnDifference) {
-                    case 0:
-                        return Direction.S;
-                    case -1:
-                        return Direction.SW;
-                    default:
-                        return Direction.SE;
-                }
-        }
+        return Direction.fromDiff(rowDifference, columnDifference);
     }
 
     /**
      * Tests if the current object is equal to another object
      *
-     * @param o The other object
+     * @param obj The other object
      * @return True if the objects are the same
      */
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Cell cell = (Cell) o;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Cell cell = (Cell) obj;
         return row == cell.row &&
                 column == cell.column;
     }

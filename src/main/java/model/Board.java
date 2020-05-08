@@ -1,12 +1,14 @@
 package model;
 
-import Util.Direction;
+import util.Direction;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static util.Direction.*;
 
 /**
  * Stores information about the game board
@@ -75,49 +77,29 @@ public class Board implements Serializable {
      * @return The next cell
      */
     public Cell getNextCell(Cell cell, Direction direction) {
-        Cell nextCell = null;
+        Direction[][] possibleDirections = {{NW, N, NE}, {W, null, E}, {SW, S, SE}};
 
-        switch (direction) {
-            case N:
-                nextCell = getCell(cell.getRow() - 1, cell.getColumn());
-                break;
-            case NE:
-                nextCell = getCell(cell.getRow() - 1, cell.getColumn() + 1);
-                break;
-            case E:
-                nextCell = getCell(cell.getRow(), cell.getColumn() + 1);
-                break;
-            case SE:
-                nextCell = getCell(cell.getRow() + 1, cell.getColumn() + 1);
-                break;
-            case S:
-                nextCell = getCell(cell.getRow() + 1, cell.getColumn());
-                break;
-            case SW:
-                nextCell = getCell(cell.getRow() + 1, cell.getColumn() - 1);
-                break;
-            case W:
-                nextCell = getCell(cell.getRow(), cell.getColumn() - 1);
-                break;
-            case NW:
-                nextCell = getCell(cell.getRow() - 1, cell.getColumn() - 1);
-                break;
+        for (int rowInc = 0; rowInc < 3; rowInc++) {
+            for (int columnInc = 0; columnInc < 3; columnInc++) {
+                if (possibleDirections[rowInc][columnInc] == direction) {
+                    return getCell(cell.getRow() + (rowInc - 1), cell.getColumn() + (columnInc - 1));
+                }
+            }
         }
-
-        return nextCell;
+        return null;
     }
 
     /**
      * Gets the cell from which you moved to reach the current cell
      *
-     * @param currentCell             The current cell
-     * @param previouslyMoveDirection The direction of the movement
+     * @param currentCell         The current cell
+     * @param previouslyDirection The direction of the movement
      * @return The cell from which you moved or null value
      */
-    public Cell getPrevCell(Cell currentCell, Direction previouslyMoveDirection) {
+    public Cell getPrevCell(Cell currentCell, Direction previouslyDirection) {
         List<Cell> cells = getAdjacents(currentCell).
                 stream().
-                filter(cell -> currentCell.equals(getNextCell(cell, previouslyMoveDirection))).
+                filter(cell -> currentCell.equals(getNextCell(cell, previouslyDirection))).
                 collect(Collectors.toList());
         if (cells.size() > 0)
             return cells.get(0);

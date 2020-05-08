@@ -1,7 +1,7 @@
 package model;
 
-import Util.Genre;
-import Util.PlayerColor;
+import util.Genre;
+import util.PlayerColor;
 
 import java.io.Serializable;
 

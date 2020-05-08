@@ -1,11 +1,11 @@
 package client;
 
-import Util.Genre;
-import Util.RoundActions;
 import model.Card;
 import model.Cell;
 import model.Game;
 import model.Player;
+import util.Genre;
+import util.RoundActions;
 
 import java.util.List;
 

@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Messages</a> ]
+    [ <a href="../index.html">network</a> ]
 </div>
 
-<h1>Coverage Summary for Class: PingMessage (Messages)</h1>
+    <h1>Coverage Summary for Class: PingMessage (network)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,21 +72,21 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Messages;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import client.View;
-<i>4</i>&nbsp;import Server.VirtualView;
-<i>5</i>&nbsp;import Util.MessageType;
-<i>6</i>&nbsp;
-<i>7</i>&nbsp;import java.io.Serializable;
-<i>8</i>&nbsp;
-<i>9</i>&nbsp;public class PingMessage implements VCMessage, CVMessage, Serializable {
-<i>10</i>&nbsp;    private final MessageType messageType;
-<i>11</i>&nbsp;
-<b class="nc"><i>12</i>&nbsp;    public PingMessage(boolean fromServer) {</b>
-<b class="nc"><i>13</i>&nbsp;        if (fromServer) {</b>
-<b class="nc"><i>14</i>&nbsp;            messageType = MessageType.CV;</b>
-<i>15</i>&nbsp;        } else {
+    <div class="sourceCode"><i>1</i>&nbsp;package network;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import client.View;
+        <i>4</i>&nbsp;import server.VirtualView;
+        <i>5</i>&nbsp;import util.MessageType;
+        <i>6</i>&nbsp;
+        <i>7</i>&nbsp;import java.io.Serializable;
+        <i>8</i>&nbsp;
+        <i>9</i>&nbsp;public class PingMessage implements VCMessage, CVMessage, Serializable {
+        <i>10</i>&nbsp; private final MessageType messageType;
+        <i>11</i>&nbsp;
+        <b class="nc"><i>12</i>&nbsp; public PingMessage(boolean fromServer) {</b>
+        <b class="nc"><i>13</i>&nbsp; if (fromServer) {</b>
+        <b class="nc"><i>14</i>&nbsp; messageType = MessageType.CV;</b>
+        <i>15</i>&nbsp; } else {
 <b class="nc"><i>16</i>&nbsp;            messageType = MessageType.VC;</b>
 <i>17</i>&nbsp;        }
 <i>18</i>&nbsp;    }

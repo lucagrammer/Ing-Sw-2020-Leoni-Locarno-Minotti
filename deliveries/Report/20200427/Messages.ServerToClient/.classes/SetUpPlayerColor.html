@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Messages.ServerToClient</a> ]
+    [ <a href="../index.html">network.messages</a> ]
 </div>
 
-<h1>Coverage Summary for Class: SetUpPlayerColor (Messages.ServerToClient)</h1>
+    <h1>Coverage Summary for Class: SetUpPlayerColor (network.ServerToClient)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,38 +72,38 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Messages.ServerToClient;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import client.View;
-    <i>4</i>&nbsp;import Messages.CVMessage;
-    <i>5</i>&nbsp;import Messages.VCMessage;
-    <i>6</i>&nbsp;import Server.VirtualView;
-    <i>7</i>&nbsp;import Util.MessageType;
-    <i>8</i>&nbsp;
-    <i>9</i>&nbsp;import java.io.Serializable;
-    <i>10</i>&nbsp;import java.util.List;
-    <i>11</i>&nbsp;
-    <i>12</i>&nbsp;/**
-    <i>13</i>&nbsp; * Message for the choice of the playerColor of the player
-    <i>14</i>&nbsp; */
-    <i>15</i>&nbsp;public class SetUpPlayerColor implements CVMessage, VCMessage, Serializable {
-    <i>16</i>&nbsp; final MessageType messageType;
-    <i>17</i>&nbsp; List&lt;String&gt; availableColors;
-    <i>18</i>&nbsp; String playerColor;
-    <i>19</i>&nbsp; String nickname;
-    <i>20</i>&nbsp;
-    <i>21</i>&nbsp; /**
-    <i>22</i>&nbsp; * Server-side constructor: build a request message
-    <i>23</i>&nbsp; *
-    <i>24</i>&nbsp; * @param availableColors The available colors
-    <i>25</i>&nbsp; */
-    <b class="nc"><i>26</i>&nbsp; public SetUpPlayerColor(List&lt;String&gt; availableColors) {</b>
-    <b class="nc"><i>27</i>&nbsp; this.messageType = MessageType.CV;</b>
-    <b class="nc"><i>28</i>&nbsp; this.availableColors = availableColors;</b>
-    <i>29</i>&nbsp; }
-    <i>30</i>&nbsp;
-    <i>31</i>&nbsp; /**
-    <i>32</i>&nbsp; * client-side constructor: build a response message
+    <div class="sourceCode"><i>1</i>&nbsp;package network.messages;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import client.View;
+        <i>4</i>&nbsp;import network.CVMessage;
+        <i>5</i>&nbsp;import network.VCMessage;
+        <i>6</i>&nbsp;import server.VirtualView;
+        <i>7</i>&nbsp;import util.MessageType;
+        <i>8</i>&nbsp;
+        <i>9</i>&nbsp;import java.io.Serializable;
+        <i>10</i>&nbsp;import java.util.List;
+        <i>11</i>&nbsp;
+        <i>12</i>&nbsp;/**
+        <i>13</i>&nbsp; * Message for the choice of the playerColor of the player
+        <i>14</i>&nbsp; */
+        <i>15</i>&nbsp;public class SetUpPlayerColor implements CVMessage, VCMessage, Serializable {
+        <i>16</i>&nbsp; final MessageType messageType;
+        <i>17</i>&nbsp; List&lt;String&gt; availableColors;
+        <i>18</i>&nbsp; String playerColor;
+        <i>19</i>&nbsp; String nickname;
+        <i>20</i>&nbsp;
+        <i>21</i>&nbsp; /**
+        <i>22</i>&nbsp; * server-side constructor: build a request message
+        <i>23</i>&nbsp; *
+        <i>24</i>&nbsp; * @param availableColors The available colors
+        <i>25</i>&nbsp; */
+        <b class="nc"><i>26</i>&nbsp; public SetUpPlayerColor(List&lt;String&gt; availableColors) {</b>
+        <b class="nc"><i>27</i>&nbsp; this.messageType = MessageType.CV;</b>
+        <b class="nc"><i>28</i>&nbsp; this.availableColors = availableColors;</b>
+        <i>29</i>&nbsp; }
+        <i>30</i>&nbsp;
+        <i>31</i>&nbsp; /**
+        <i>32</i>&nbsp; * client-side constructor: build a response message
     <i>33</i>&nbsp; *
     <i>34</i>&nbsp; * @param playerColor The chosen playerColor
     <i>35</i>&nbsp; * @param nickname The nickname of the player

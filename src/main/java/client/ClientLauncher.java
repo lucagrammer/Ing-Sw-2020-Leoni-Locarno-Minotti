@@ -1,6 +1,6 @@
 package client;
 
-import Util.Frmt;
+import util.Frmt;
 
 import java.util.Scanner;
 
@@ -8,6 +8,7 @@ import java.util.Scanner;
  * Manages the initial startup phase of the client
  */
 public class ClientLauncher {
+
     public static void main(String[] args) {
         ClientLauncher clientLauncher = new ClientLauncher();
         clientLauncher.launch();

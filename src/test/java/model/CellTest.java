@@ -1,13 +1,13 @@
 package model;
 
-import Util.Direction;
 import org.junit.Test;
+import util.Direction;
 
 import static org.junit.Assert.*;
 
 public class CellTest {
-    Cell cell;
-    Cell nextCell;
+    private Cell cell;
+    private Cell nextCell;
 
     @Test
     public void columnInfo_getCorrectColumn() {
@@ -28,7 +28,6 @@ public class CellTest {
         assertTrue(cell.isAdjacent(nextCell));
     }
 
-
     @Test
     public void CalculateFloorDifference_getCorrectFloorDifference() {
         cell = new Cell(3, 4);
@@ -37,7 +36,6 @@ public class CellTest {
         assertEquals(-1, cell.getFloorDifference(nextCell));
         assertEquals(1, nextCell.getFloorDifference(cell));
     }
-
 
     @Test
     public void domeInfo_setDome_getCorrectValue() {
@@ -80,7 +78,6 @@ public class CellTest {
         assertEquals(Direction.SW, cell.calculateDirection(new Cell(4, 2)));
         assertEquals(Direction.W, cell.calculateDirection(new Cell(3, 2)));
         assertEquals(Direction.NW, cell.calculateDirection(new Cell(2, 2)));
-
     }
 }
 

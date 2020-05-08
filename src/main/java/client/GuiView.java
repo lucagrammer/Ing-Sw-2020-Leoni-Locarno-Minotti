@@ -1,11 +1,14 @@
 package client;
 
-import Util.*;
-import client.gui.*;
+import client.guiComponents.*;
 import model.Card;
 import model.Cell;
 import model.Game;
 import model.Player;
+import util.Configurator;
+import util.Genre;
+import util.PlayerColor;
+import util.RoundActions;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,7 +48,7 @@ public class GuiView implements View {
             mainFrame.setSize(1000, 730);
             mainFrame.setResizable(false);
 
-            Image backgroundImage = (new ImageIcon(getClass().getResource("/GuiResources/background.png"))).getImage();
+            Image backgroundImage = (new ImageIcon(GuiView.this.getClass().getResource("/GuiResources/background.png"))).getImage();
             JPanel background = new PPanelBackground(backgroundImage);
             mainFrame.repaint();
             background.setLayout(null);
@@ -58,7 +61,7 @@ public class GuiView implements View {
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             try {
-                ge.registerFont(Font.createFont(0, new File(getClass().getResource("/GuiResources/LeGourmetScript.otf").getFile())));
+                ge.registerFont(Font.createFont(0, new File(GuiView.this.getClass().getResource("/GuiResources/LeGourmetScript.otf").getFile())));
             } catch (FontFormatException | IOException e) {
                 e.printStackTrace();
             }
@@ -71,11 +74,11 @@ public class GuiView implements View {
             textField.setBounds(430, 30, 250, 40);
             bodyContainer.add(textField);
 
-            Image scaledImage = (new ImageIcon(getClass().getResource("/GuiResources/btn_blue_next.png"))).getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);
+            Image scaledImage = (new ImageIcon(GuiView.this.getClass().getResource("/GuiResources/btn_blue_next.png"))).getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);
             PButton button = new PButton(scaledImage);
             button.setBounds(322, 300, 197, 50);
             button.addActionListener((ev) -> (new Thread(() -> {
-                showQueuedMessage();
+                GuiView.this.showQueuedMessage();
                 serverHandler.setConnection(textField.getTextFieldText());
             })).start());
             bodyContainer.add(button);
@@ -220,10 +223,10 @@ public class GuiView implements View {
                 bodyContainer.add(playersNumberLabel);
             }
 
-            PTextField playersNumberTextField = new PTextField(null);
-            playersNumberTextField.setBounds(430, 170, 250, 40);
+            PTextField playersNumTextField = new PTextField(null);
+            playersNumTextField.setBounds(430, 170, 250, 40);
             if (newGame) {
-                bodyContainer.add(playersNumberTextField);
+                bodyContainer.add(playersNumTextField);
             }
 
 
@@ -248,7 +251,7 @@ public class GuiView implements View {
                     int playersNumber;
                     if (newGame) {
                         try {
-                            playersNumber = Integer.parseInt(playersNumberTextField.getTextFieldText());
+                            playersNumber = Integer.parseInt(playersNumTextField.getTextFieldText());
                         } catch (Exception e) {
                             errorLabel.setText("Invalid choice. Try again.");
                             return;
@@ -383,7 +386,7 @@ public class GuiView implements View {
                 Image scaledImage = Configurator.getCardImage(card.getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);
                 PButton cardButton = new PButton(scaledImage);
                 cardContainer.add(cardButton);
-                cardButton.addMouseListener(new GuiView.CardMouseListener(card, nameLabel, descriptionLabel,true));
+                cardButton.addMouseListener(new GuiView.CardMouseListener(card, nameLabel, descriptionLabel, true));
             }
 
             // Apply
@@ -508,7 +511,7 @@ public class GuiView implements View {
                 Image scaledImage = Configurator.getCardImage(card.getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);
                 PButton cardButton = new PButton(scaledImage);
                 cardContainer.add(cardButton);
-                cardButton.addMouseListener(new GuiView.CardMouseListener(card, nameLabel, descriptionLabel,false));
+                cardButton.addMouseListener(new GuiView.CardMouseListener(card, nameLabel, descriptionLabel, false));
             }
 
             // Apply
@@ -683,14 +686,14 @@ public class GuiView implements View {
         private final Card card;
         private final PLabel nameLabel;
         private final PLabel descriptionLabel;
-        private int numCards;
-        private List<Card> chosenCards;
         private final boolean gameCardsSetUp;
         private final boolean selectionEnabled;
+        private int numCards;
+        private List<Card> chosenCards;
 
         public CardMouseListener(Card card, PLabel nameLabel, PLabel descriptionLabel, List<Card> chosenCards, int numCards) {
-            this.gameCardsSetUp=true;
-            this.selectionEnabled=true;
+            this.gameCardsSetUp = true;
+            this.selectionEnabled = true;
             this.card = card;
             this.nameLabel = nameLabel;
             this.descriptionLabel = descriptionLabel;
@@ -699,19 +702,19 @@ public class GuiView implements View {
         }
 
         public CardMouseListener(Card card, PLabel nameLabel, PLabel descriptionLabel, boolean selectionEnabled) {
-            this.gameCardsSetUp=false;
-            this.selectionEnabled=selectionEnabled;
+            this.gameCardsSetUp = false;
+            this.selectionEnabled = selectionEnabled;
             this.card = card;
             this.nameLabel = nameLabel;
             this.descriptionLabel = descriptionLabel;
         }
 
         public void mouseClicked(MouseEvent e) {
-            if(gameCardsSetUp) {
+            if (gameCardsSetUp) {
                 chosenCards.add(card);
                 printCards(chosenCards, numCards);
-            }else{
-                if(selectionEnabled){
+            } else {
+                if (selectionEnabled) {
                     showLoading();
                     serverHandler.sendPlayerCard(card);
                 }

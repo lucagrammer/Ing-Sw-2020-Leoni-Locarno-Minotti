@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Messages.ServerToClient</a> ]
+    [ <a href="../index.html">network.messages</a> ]
 </div>
 
-<h1>Coverage Summary for Class: ShowDisconnection (Messages.ServerToClient)</h1>
+    <h1>Coverage Summary for Class: ShowDisconnection (network.ServerToClient)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,33 +72,33 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Messages.ServerToClient;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import client.View;
-<i>4</i>&nbsp;import Messages.MVMessage;
-<i>5</i>&nbsp;import Util.MessageType;
-<i>6</i>&nbsp;
-<i>7</i>&nbsp;import java.io.Serializable;
-<i>8</i>&nbsp;
-<i>9</i>&nbsp;/**
-<i>10</i>&nbsp; * Message to notify the player that another player has disconnected. Notify the end of the game.
-<i>11</i>&nbsp; */
-<i>12</i>&nbsp;public class ShowDisconnection implements MVMessage, Serializable {
-<i>13</i>&nbsp;    private final MessageType messageType;
-<i>14</i>&nbsp;    private final String disconnectedNickname;
-<i>15</i>&nbsp;
-<i>16</i>&nbsp;    /**
-<i>17</i>&nbsp;     * Server-side constructor: build the message
-<i>18</i>&nbsp;     *
-<i>19</i>&nbsp;     * @param disconnectedNickname The nickname of the disconnected user
-<i>20</i>&nbsp;     */
-<b class="fc"><i>21</i>&nbsp;    public ShowDisconnection(String disconnectedNickname) {</b>
-<b class="fc"><i>22</i>&nbsp;        messageType = MessageType.MV;</b>
-<b class="fc"><i>23</i>&nbsp;        this.disconnectedNickname = disconnectedNickname;</b>
-<b class="fc"><i>24</i>&nbsp;    }</b>
-<i>25</i>&nbsp;
-<i>26</i>&nbsp;    /**
-<i>27</i>&nbsp;     * Execute the request client-side
+    <div class="sourceCode"><i>1</i>&nbsp;package network.messages;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import client.View;
+        <i>4</i>&nbsp;import network.MVMessage;
+        <i>5</i>&nbsp;import util.MessageType;
+        <i>6</i>&nbsp;
+        <i>7</i>&nbsp;import java.io.Serializable;
+        <i>8</i>&nbsp;
+        <i>9</i>&nbsp;/**
+        <i>10</i>&nbsp; * Message to notify the player that another player has disconnected. Notify the end of the game.
+        <i>11</i>&nbsp; */
+        <i>12</i>&nbsp;public class ShowDisconnection implements MVMessage, Serializable {
+        <i>13</i>&nbsp; private final MessageType messageType;
+        <i>14</i>&nbsp; private final String disconnectedNickname;
+        <i>15</i>&nbsp;
+        <i>16</i>&nbsp; /**
+        <i>17</i>&nbsp; * server-side constructor: build the message
+        <i>18</i>&nbsp; *
+        <i>19</i>&nbsp; * @param disconnectedNickname The nickname of the disconnected user
+        <i>20</i>&nbsp; */
+        <b class="fc"><i>21</i>&nbsp; public ShowDisconnection(String disconnectedNickname) {</b>
+        <b class="fc"><i>22</i>&nbsp; messageType = MessageType.MV;</b>
+        <b class="fc"><i>23</i>&nbsp; this.disconnectedNickname = disconnectedNickname;</b>
+        <b class="fc"><i>24</i>&nbsp; }</b>
+        <i>25</i>&nbsp;
+        <i>26</i>&nbsp; /**
+        <i>27</i>&nbsp; * Execute the request client-side
 <i>28</i>&nbsp;     *
 <i>29</i>&nbsp;     * @param view The recipient component
 <i>30</i>&nbsp;     */

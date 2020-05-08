@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Server</a> ]
+    [ <a href="../index.html">server</a> ]
 </div>
 
-<h1>Coverage Summary for Class: ClientHandler (Server)</h1>
+    <h1>Coverage Summary for Class: ClientHandler (server)</h1>
 
 <table class="coverageStats">
 
@@ -98,26 +98,26 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Server;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import Messages.ClientToServer.SetUpGame;
-<i>4</i>&nbsp;import Messages.Message;
-<i>5</i>&nbsp;import Messages.PingMessage;
-<i>6</i>&nbsp;import Messages.ServerToClient.SetUpNewNickname;
-<i>7</i>&nbsp;import Messages.VCMessage;
-<i>8</i>&nbsp;import Util.Configurator;
-<i>9</i>&nbsp;import Util.Frmt;
-<i>10</i>&nbsp;import Util.MessageType;
-<i>11</i>&nbsp;
-<i>12</i>&nbsp;import java.io.IOException;
-<i>13</i>&nbsp;import java.io.ObjectInputStream;
-<i>14</i>&nbsp;import java.io.ObjectOutputStream;
-<i>15</i>&nbsp;import java.net.ServerSocket;
-<i>16</i>&nbsp;import java.net.Socket;
-<i>17</i>&nbsp;import java.util.Date;
-<i>18</i>&nbsp;
-<i>19</i>&nbsp;/**
-<i>20</i>&nbsp; * Manages communication from and to a client
+    <div class="sourceCode"><i>1</i>&nbsp;package server;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import network.messages.SetUpGame;
+        <i>4</i>&nbsp;import network.Message;
+        <i>5</i>&nbsp;import network.ping.PingMessage;
+        <i>6</i>&nbsp;import network.messages.SetUpNewNickname;
+        <i>7</i>&nbsp;import network.VCMessage;
+        <i>8</i>&nbsp;import util.Configurator;
+        <i>9</i>&nbsp;import util.Frmt;
+        <i>10</i>&nbsp;import util.MessageType;
+        <i>11</i>&nbsp;
+        <i>12</i>&nbsp;import java.io.IOException;
+        <i>13</i>&nbsp;import java.io.ObjectInputStream;
+        <i>14</i>&nbsp;import java.io.ObjectOutputStream;
+        <i>15</i>&nbsp;import java.net.ServerSocket;
+        <i>16</i>&nbsp;import java.net.Socket;
+        <i>17</i>&nbsp;import java.util.Date;
+        <i>18</i>&nbsp;
+        <i>19</i>&nbsp;/**
+        <i>20</i>&nbsp; * Manages communication from and to a client
 <i>21</i>&nbsp; */
 <b class="nc"><i>22</i>&nbsp;class ClientHandler extends Thread {</b>
 <i>23</i>&nbsp;    private final ServerSocket serverSocket;

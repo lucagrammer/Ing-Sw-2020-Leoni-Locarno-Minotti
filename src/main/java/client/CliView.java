@@ -1,7 +1,7 @@
 package client;
 
-import Util.*;
 import model.*;
+import util.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import static Util.Genre.MALE;
+import static util.Genre.MALE;
 
 /**
  * Manages the command line interface to the user
@@ -64,13 +64,13 @@ public class CliView implements View {
     /**
      * Shows a specified message to the user
      *
-     * @param string    The message to be shown
+     * @param message   The message to be shown
      * @param newScreen True if it's necessary to clean the interface
      */
-    public void showMessage(String string, boolean newScreen) {
+    public void showMessage(String message, boolean newScreen) {
         if (newScreen)
             Frmt.clearScreen();
-        System.out.println(string);
+        System.out.println(message);
     }
 
     /**
@@ -104,20 +104,7 @@ public class CliView implements View {
         Frmt.clearScreen();
         String nickname = askNickname();
 
-        Date date = null;
-        Frmt.clearScreen();
-        do {
-            System.out.print(Frmt.style('b', "\n Enter your birth date [dd/mm/yyyy]: "));
-            String fullDate = scanner.nextLine();
-            try {
-                date = new SimpleDateFormat("dd/MM/yyyy").parse(fullDate);
-                incorrect = false;
-            } catch (ParseException e) {
-                Frmt.clearScreen();
-                System.out.println(Frmt.color('r', "  > Incorrect date format. Try again."));
-                incorrect = true;
-            }
-        } while (incorrect);
+        Date date = askDate();
 
         int numPlayers = 0;
         if (newGame) {
@@ -144,6 +131,31 @@ public class CliView implements View {
         serverHandler.sendSetUpGame(nickname, date, numPlayers);
     }
 
+
+    /**
+     * Asks nickname
+     *
+     * @return The chosen nickname
+     */
+    private Date askDate() {
+        boolean incorrect;
+        Date date = null;
+        Frmt.clearScreen();
+        do {
+            System.out.print(Frmt.style('b', "\n Enter your birth date [dd/mm/yyyy]: "));
+            String fullDate = scanner.nextLine();
+            try {
+                date = new SimpleDateFormat("dd/MM/yyyy").parse(fullDate);
+                incorrect = false;
+            } catch (ParseException e) {
+                Frmt.clearScreen();
+                System.out.println(Frmt.color('r', "  > Incorrect date format. Try again."));
+                incorrect = true;
+            }
+        } while (incorrect);
+        return date;
+    }
+
     /**
      * Asks nickname
      *
@@ -151,7 +163,6 @@ public class CliView implements View {
      */
     private String askNickname() {
         boolean incorrect;
-        Scanner scanner = new Scanner(System.in);
         String nickname;
         do {
 
@@ -182,14 +193,7 @@ public class CliView implements View {
         Frmt.clearScreen();
         do {
             System.out.println("\n\n " + Frmt.style('b', "Choose " + (numCards - chosenCard.size()) + " card" + ((numCards - chosenCard.size() > 1) ? "s" : "") + " between these:"));
-            for (Card card : allCardList) {
-                if (!chosenCard.contains(card)) {
-                    System.out.println(Frmt.style('b', "\n   ❖ " + card.getName().toUpperCase()));
-                    System.out.println(Frmt.style('i', "      " + card.getDescription()));
-                }
-                allCardNames.add(card.getName().toLowerCase());
-            }
-            System.out.println();
+            allCardNames = printCards(allCardList, chosenCard);
 
             incorrect = false;
             System.out.print("  ↳: ");
@@ -214,6 +218,26 @@ public class CliView implements View {
 
         showLoading();
         serverHandler.sendGameCards(chosenCard);
+    }
+
+    /**
+     * Print all the available cards
+     *
+     * @param allCardList All the cards
+     * @param chosenCard  The unavailable cards
+     * @return A list containing all the names of the printed available cards
+     */
+    private List<String> printCards(List<Card> allCardList, List<Card> chosenCard) {
+        List<String> allCardNames = new ArrayList<>();
+        for (Card card : allCardList) {
+            if (!chosenCard.contains(card)) {
+                System.out.println(Frmt.style('b', "\n   ❖ " + card.getName().toUpperCase()));
+                System.out.println(Frmt.style('i', "      " + card.getDescription()));
+            }
+            allCardNames.add(card.getName().toLowerCase());
+        }
+        System.out.println();
+        return allCardNames;
     }
 
     /**
@@ -586,7 +610,7 @@ public class CliView implements View {
     public void showDisconnectionMessage(String disconnectedNickname) {
         Frmt.clearScreen();
         System.out.println(Frmt.color('r', "\n\n\t" + Frmt.style("ui", "GAME OVER: " +
-                disconnectedNickname.toUpperCase() + " has disconnected.")));
+                disconnectedNickname + " has disconnected.")));
         askNewGame();
     }
 

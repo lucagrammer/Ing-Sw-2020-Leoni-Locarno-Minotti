@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Server.Rules.SimpleGods</a> ]
+    [ <a href="../index.html">server.rules.simpleGods</a> ]
 </div>
 
-    <h1>Coverage Summary for Class: AthenaEnemyRules (Server.Rules.SimpleGods)</h1>
+    <h1>Coverage Summary for Class: AthenaEnemyRules (server.rules.SimpleGods)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,24 +72,25 @@
 <br/>
 
 
-    <div class="sourceCode"><i>1</i>&nbsp;package Server.Rules.SimpleGods;
+    <div class="sourceCode"><i>1</i>&nbsp;package server.rules.simpleGods;
         <i>2</i>&nbsp;
-        <i>3</i>&nbsp;import Server.Rules.EnemyRules;
+        <i>3</i>&nbsp;import server.rules.EnemyRules;
         <i>4</i>&nbsp;import model.Game;
         <i>5</i>&nbsp;import model.Player;
-        <i>6</i>&nbsp;import Util.Action;
-        <i>7</i>&nbsp;import Util.ActionType;
-        <i>8</i>&nbsp;import Util.RoundActions;
+        <i>6</i>&nbsp;import util.Action;
+        <i>7</i>&nbsp;import util.ActionType;
+        <i>8</i>&nbsp;import util.RoundActions;
         <i>9</i>&nbsp;
         <i>10</i>&nbsp;import java.util.List;
         <i>11</i>&nbsp;import java.util.stream.Collectors;
         <i>12</i>&nbsp;
         <b class="fc"><i>13</i>&nbsp;public class AthenaEnemyRules extends EnemyRules {</b>
-<i>14</i>&nbsp;
-<i>15</i>&nbsp;    @Override
-<i>16</i>&nbsp;    public RoundActions fixEnemyActions(RoundActions enemyPossibleActions, Game game, Player player) {
-<b class="fc"><i>17</i>&nbsp;        RoundActions myActions = player.getRoundActions();</b>
-<b class="fc"><i>18</i>&nbsp;        RoundActions fixedActions = new RoundActions();</b>
+        <i>14</i>&nbsp;
+        <i>15</i>&nbsp; @Override
+        <i>16</i>&nbsp; public RoundActions fixEnemyActions(RoundActions enemyPossibleActions, Game game, Player player)
+        {
+        <b class="fc"><i>17</i>&nbsp; RoundActions myActions = player.getRoundActions();</b>
+        <b class="fc"><i>18</i>&nbsp; RoundActions fixedActions = new RoundActions();</b>
 <i>19</i>&nbsp;
 <b class="fc"><i>20</i>&nbsp;        if (myActions.hasMovedUp()) {</b>
 <b class="fc"><i>21</i>&nbsp;            List&lt;Action&gt; allowedActionList = enemyPossibleActions.</b>

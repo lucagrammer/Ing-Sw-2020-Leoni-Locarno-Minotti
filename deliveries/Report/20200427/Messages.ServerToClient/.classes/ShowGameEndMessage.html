@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Messages.ServerToClient</a> ]
+    [ <a href="../index.html">network.messages</a> ]
 </div>
 
-<h1>Coverage Summary for Class: ShowGameEndMessage (Messages.ServerToClient)</h1>
+    <h1>Coverage Summary for Class: ShowGameEndMessage (network.ServerToClient)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,34 +72,34 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Messages.ServerToClient;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import client.View;
-<i>4</i>&nbsp;import Messages.MVMessage;
-<i>5</i>&nbsp;import Util.MessageType;
-<i>6</i>&nbsp;
-<i>7</i>&nbsp;import java.io.Serializable;
-<i>8</i>&nbsp;
-<i>9</i>&nbsp;/**
-<i>10</i>&nbsp; * Message to notify the winner and to notify the end of the game
-<i>11</i>&nbsp; */
-<i>12</i>&nbsp;public class ShowGameEndMessage implements Serializable, MVMessage {
-<i>13</i>&nbsp;    private final MessageType messageType;
-<i>14</i>&nbsp;    private final String winnerNickname;
-<i>15</i>&nbsp;    private final boolean youWin;
-<i>16</i>&nbsp;
-<i>17</i>&nbsp;    /**
-<i>18</i>&nbsp;     * Server-side constructor: build a request message
-<i>19</i>&nbsp;     *
-<i>20</i>&nbsp;     * @param winnerNickname The nickname of the winner
-<i>21</i>&nbsp;     * @param youWin         True if the recipient is the winner
-<i>22</i>&nbsp;     */
-<b class="fc"><i>23</i>&nbsp;    public ShowGameEndMessage(String winnerNickname, boolean youWin) {</b>
-<b class="fc"><i>24</i>&nbsp;        messageType = MessageType.MV;</b>
-<b class="fc"><i>25</i>&nbsp;        this.winnerNickname = winnerNickname;</b>
-<b class="fc"><i>26</i>&nbsp;        this.youWin = youWin;</b>
-<b class="fc"><i>27</i>&nbsp;    }</b>
-<i>28</i>&nbsp;
+    <div class="sourceCode"><i>1</i>&nbsp;package network.messages;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import client.View;
+        <i>4</i>&nbsp;import network.MVMessage;
+        <i>5</i>&nbsp;import util.MessageType;
+        <i>6</i>&nbsp;
+        <i>7</i>&nbsp;import java.io.Serializable;
+        <i>8</i>&nbsp;
+        <i>9</i>&nbsp;/**
+        <i>10</i>&nbsp; * Message to notify the winner and to notify the end of the game
+        <i>11</i>&nbsp; */
+        <i>12</i>&nbsp;public class ShowGameEndMessage implements Serializable, MVMessage {
+        <i>13</i>&nbsp; private final MessageType messageType;
+        <i>14</i>&nbsp; private final String winnerNickname;
+        <i>15</i>&nbsp; private final boolean youWin;
+        <i>16</i>&nbsp;
+        <i>17</i>&nbsp; /**
+        <i>18</i>&nbsp; * server-side constructor: build a request message
+        <i>19</i>&nbsp; *
+        <i>20</i>&nbsp; * @param winnerNickname The nickname of the winner
+        <i>21</i>&nbsp; * @param youWin True if the recipient is the winner
+        <i>22</i>&nbsp; */
+        <b class="fc"><i>23</i>&nbsp; public ShowGameEndMessage(String winnerNickname, boolean youWin) {</b>
+        <b class="fc"><i>24</i>&nbsp; messageType = MessageType.MV;</b>
+        <b class="fc"><i>25</i>&nbsp; this.winnerNickname = winnerNickname;</b>
+        <b class="fc"><i>26</i>&nbsp; this.youWin = youWin;</b>
+        <b class="fc"><i>27</i>&nbsp; }</b>
+        <i>28</i>&nbsp;
 <i>29</i>&nbsp;    /**
 <i>30</i>&nbsp;     * Execute the request client-side
 <i>31</i>&nbsp;     *

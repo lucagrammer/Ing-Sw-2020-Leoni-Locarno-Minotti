@@ -1,11 +1,11 @@
 package model;
 
-import Server.Rules.EnemyRules;
-import Server.Rules.Rules;
-import Util.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import server.rules.EnemyRules;
+import server.rules.Rules;
+import util.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,50 +14,53 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class PlayerTest {
-    Player player;
-    Date date;
-    Rules rules;
-    EnemyRules enemyRules;
+    private Player player;
+    private Rules rules;
+    private EnemyRules enemyRules;
 
     @Before
-    public void setUp(){
-        date = new Date(3/2/1998);
-        player = new Player("John", date);
+    public void setUp() {
+        player = new Player("John", new Date(3 / 2 / 1998), false);
+        rules = new Rules();
+        enemyRules = new EnemyRules();
     }
 
     @After
-    public void tearDown(){ player = null;
+    public void tearDown() {
+        player = null;
+        rules = null;
+        enemyRules = null;
     }
 
     @Test
-    public void getNickname_nickname_getCorrectNickname(){
+    public void getNickname_nickname_getCorrectNickname() {
         String nickname = "John";
         assertEquals(nickname, player.getNickname());
     }
 
     @Test
-    public void getDateOfBirth_dateOfBirth_getCorrectDateOfBirth(){
-        Date dateOfBirth = new Date(3/2/1998);
+    public void getDateOfBirth_dateOfBirth_getCorrectDateOfBirth() {
+        Date dateOfBirth = new Date(3 / 2 / 1998);
         assertEquals(dateOfBirth, player.getDateOfBirth());
     }
 
     @Test
-    public void equals_player_CorrectEquals(){
-        Player newPlayer = new Player("John", new Date(3/2/1998));
-        Player newPlayer1 = new Player("Jonah", new Date(7/12/1998));
+    public void equals_player_CorrectEquals() {
+        Player newPlayer = new Player("John", new Date(3 / 2 / 1998), false);
+        Player newPlayer1 = new Player("Jonah", new Date(7 / 12 / 1998), false);
         assertTrue(player.equals(newPlayer));
         assertFalse(player.equals(newPlayer1));
     }
 
     @Test
-    public void card_setCard_getCorrectCard(){
+    public void card_setCard_getCorrectCard() {
         Card card = new Card("Apollo", true, "Description Apollo", rules, enemyRules);
         player.setCard(card);
         assertEquals(card, player.getCard());
     }
 
     @Test
-    public void chooseColor_color_getWorker(){
+    public void chooseColor_color_getWorker() {
         PlayerColor playerColor = PlayerColor.PURPLE;
         player.chooseColor(playerColor);
         assertEquals(playerColor, player.getWorker(Genre.FEMALE).getPlayerColor());
@@ -72,33 +75,33 @@ public class PlayerTest {
     }
 
     @Test
-    public void occupiedCell_setOccupiedCell_getOccupiedCell(){
-        player.getWorker(Genre.MALE).setPosition(new Cell(1,3));
-        player.getWorker(Genre.FEMALE).setPosition(new Cell(2,3));
+    public void occupiedCell_setOccupiedCell_getOccupiedCell() {
+        player.getWorker(Genre.MALE).setPosition(new Cell(1, 3));
+        player.getWorker(Genre.FEMALE).setPosition(new Cell(2, 3));
 
         List<Cell> expected = new ArrayList<>();
-        expected.add(new Cell(2,3));
-        expected.add(new Cell(1,3));
+        expected.add(new Cell(2, 3));
+        expected.add(new Cell(1, 3));
         assertEquals(expected, player.getOccupiedCells());
     }
 
     @Test
-    public void roundActions_setRoundActions_getRoundActions(){
+    public void roundActions_setRoundActions_getRoundActions() {
         RoundActions expectedRoundActions = new RoundActions();
         player.setRoundActions(expectedRoundActions);
         assertEquals(expectedRoundActions, player.getRoundActions());
     }
 
     @Test
-    public void worker_position_getWorkerByPosition(){
-        player.getWorker(Genre.MALE).setPosition(new Cell(1,3));
-        player.getWorker(Genre.FEMALE).setPosition(new Cell(2,3));
+    public void worker_position_getWorkerByPosition() {
+        player.getWorker(Genre.MALE).setPosition(new Cell(1, 3));
+        player.getWorker(Genre.FEMALE).setPosition(new Cell(2, 3));
 
         Worker expectedMale = new Worker(Genre.MALE, player);
         Worker expectedFemale = new Worker(Genre.FEMALE, player);
-        Cell maleCell = new Cell(1,3);
-        Cell femaleCell = new Cell(2,3);
-        Cell nullCell = new Cell(3,3);
+        Cell maleCell = new Cell(1, 3);
+        Cell femaleCell = new Cell(2, 3);
+        Cell nullCell = new Cell(3, 3);
         expectedFemale.setPosition(femaleCell);
         expectedMale.setPosition(maleCell);
         assertEquals(expectedFemale.getPlayer().getNickname(), player.getWorkerByPosition(femaleCell).getPlayer().getNickname());
@@ -107,7 +110,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void player_action_registerActions(){
+    public void player_action_registerActions() {
         player.chooseColor(PlayerColor.PURPLE);
         Action firstMove = new Action(ActionType.MOVE, Genre.FEMALE, Direction.S, 0);
         player.registerAction(firstMove);

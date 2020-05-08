@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Messages.ServerToClient</a> ]
+    [ <a href="../index.html">network.messages</a> ]
 </div>
 
-<h1>Coverage Summary for Class: SetUpNewNickname (Messages.ServerToClient)</h1>
+    <h1>Coverage Summary for Class: SetUpNewNickname (network.ServerToClient)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,43 +72,44 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Messages.ServerToClient;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import client.View;
-<i>4</i>&nbsp;import Messages.CVMessage;
-<i>5</i>&nbsp;import Util.MessageType;
-<i>6</i>&nbsp;
-<i>7</i>&nbsp;import java.io.Serializable;
-<i>8</i>&nbsp;
-<i>9</i>&nbsp;/**
-<i>10</i>&nbsp; * Message requesting to reset the nickname because it is already in use. Response message to the reset request.
-<i>11</i>&nbsp; */
-<i>12</i>&nbsp;public class SetUpNewNickname implements CVMessage, Serializable {
-<i>13</i>&nbsp;    private final MessageType messageType;
-<i>14</i>&nbsp;    private String nickname;
-<i>15</i>&nbsp;
+    <div class="sourceCode"><i>1</i>&nbsp;package network.messages;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import client.View;
+        <i>4</i>&nbsp;import network.CVMessage;
+        <i>5</i>&nbsp;import util.MessageType;
+        <i>6</i>&nbsp;
+        <i>7</i>&nbsp;import java.io.Serializable;
+        <i>8</i>&nbsp;
+        <i>9</i>&nbsp;/**
+        <i>10</i>&nbsp; * Message requesting to reset the nickname because it is already in use. Response message to the
+        reset request.
+        <i>11</i>&nbsp; */
+        <i>12</i>&nbsp;public class SetUpNewNickname implements CVMessage, Serializable {
+        <i>13</i>&nbsp; private final MessageType messageType;
+        <i>14</i>&nbsp; private String nickname;
+        <i>15</i>&nbsp;
 <i>16</i>&nbsp;    /**
-<i>17</i>&nbsp;     * client-side constructor: build a response message
-<i>18</i>&nbsp;     *
-<i>19</i>&nbsp;     * @param nickname The new chosen nickname
-<i>20</i>&nbsp;     */
-<b class="fc"><i>21</i>&nbsp;    public SetUpNewNickname(String nickname) {</b>
-<b class="fc"><i>22</i>&nbsp;        this.messageType = MessageType.CV;</b>
-<b class="fc"><i>23</i>&nbsp;        this.nickname = nickname;</b>
-<b class="fc"><i>24</i>&nbsp;    }</b>
-<i>25</i>&nbsp;
-<i>26</i>&nbsp;    /**
-<i>27</i>&nbsp;     * Server-side constructor: build a request message
-<i>28</i>&nbsp;     */
-<b class="nc"><i>29</i>&nbsp;    public SetUpNewNickname() {</b>
-<b class="nc"><i>30</i>&nbsp;        this.messageType = MessageType.CV;</b>
-<b class="nc"><i>31</i>&nbsp;    }</b>
-<i>32</i>&nbsp;
-<i>33</i>&nbsp;    /**
-<i>34</i>&nbsp;     * Gets the message type
-<i>35</i>&nbsp;     *
-<i>36</i>&nbsp;     * @return The message type
-<i>37</i>&nbsp;     */
+        <i>17</i>&nbsp; * client-side constructor: build a response message
+        <i>18</i>&nbsp; *
+        <i>19</i>&nbsp; * @param nickname The new chosen nickname
+        <i>20</i>&nbsp; */
+        <b class="fc"><i>21</i>&nbsp; public SetUpNewNickname(String nickname) {</b>
+        <b class="fc"><i>22</i>&nbsp; this.messageType = MessageType.CV;</b>
+        <b class="fc"><i>23</i>&nbsp; this.nickname = nickname;</b>
+        <b class="fc"><i>24</i>&nbsp; }</b>
+        <i>25</i>&nbsp;
+        <i>26</i>&nbsp; /**
+        <i>27</i>&nbsp; * server-side constructor: build a request message
+        <i>28</i>&nbsp; */
+        <b class="nc"><i>29</i>&nbsp; public SetUpNewNickname() {</b>
+        <b class="nc"><i>30</i>&nbsp; this.messageType = MessageType.CV;</b>
+        <b class="nc"><i>31</i>&nbsp; }</b>
+        <i>32</i>&nbsp;
+        <i>33</i>&nbsp; /**
+        <i>34</i>&nbsp; * Gets the message type
+        <i>35</i>&nbsp; *
+        <i>36</i>&nbsp; * @return The message type
+        <i>37</i>&nbsp; */
 <i>38</i>&nbsp;    public MessageType getType() {
 <b class="fc"><i>39</i>&nbsp;        return messageType;</b>
 <i>40</i>&nbsp;    }

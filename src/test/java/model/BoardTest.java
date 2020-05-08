@@ -1,7 +1,7 @@
 package model;
 
-import Util.Direction;
 import org.junit.Test;
+import util.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,7 @@ import static org.junit.Assert.assertNull;
 
 public class BoardTest {
 
-    Board board;
-    Cell cell;
+    private Board board;
 
     @Test
     public void board_getCorrectBoard_getCorrectCell() {
@@ -40,15 +39,15 @@ public class BoardTest {
     @Test
     public void getNextCell_board_getCorrectNextCell() {
         board = new Board();
-        cell = board.getCell(3, 3);
-        assertEquals(board.getCell(2,3), board.getNextCell(cell, Direction.N));
-        assertEquals(board.getCell(3,4), board.getNextCell(cell, Direction.E));
-        assertEquals(board.getCell(4,3), board.getNextCell(cell, Direction.S));
-        assertEquals(board.getCell(3,2), board.getNextCell(cell, Direction.W));
-        assertEquals(board.getCell(2,4), board.getNextCell(cell, Direction.NE));
-        assertEquals(board.getCell(4,4), board.getNextCell(cell, Direction.SE));
-        assertEquals(board.getCell(4,2), board.getNextCell(cell, Direction.SW));
-        assertEquals(board.getCell(2,2), board.getNextCell(cell, Direction.NW));
+        Cell cell = board.getCell(3, 3);
+        assertEquals(board.getCell(2, 3), board.getNextCell(cell, Direction.N));
+        assertEquals(board.getCell(3, 4), board.getNextCell(cell, Direction.E));
+        assertEquals(board.getCell(4, 3), board.getNextCell(cell, Direction.S));
+        assertEquals(board.getCell(3, 2), board.getNextCell(cell, Direction.W));
+        assertEquals(board.getCell(2, 4), board.getNextCell(cell, Direction.NE));
+        assertEquals(board.getCell(4, 4), board.getNextCell(cell, Direction.SE));
+        assertEquals(board.getCell(4, 2), board.getNextCell(cell, Direction.SW));
+        assertEquals(board.getCell(2, 2), board.getNextCell(cell, Direction.NW));
         cell = board.getCell(4, 4);
         assertNull(board.getNextCell(cell, Direction.SE));
     }

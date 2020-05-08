@@ -1,19 +1,32 @@
 package model;
 
-import Server.Rules.EnemyRules;
-import Server.Rules.Rules;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import server.rules.EnemyRules;
+import server.rules.Rules;
 
 import static org.junit.Assert.*;
 
 public class CardTest {
 
-    Card card;
-    String name;
-    Boolean threePlayersCompatibility;
-    String description;
-    Rules rules;
-    EnemyRules enemyRules;
+    private Card card;
+    private String name;
+    private String description;
+    private Rules rules;
+    private EnemyRules enemyRules;
+
+    @Before
+    public void setUp() {
+        name = "Name card";
+        description = "description";
+    }
+
+    @After
+    public void tearDown() {
+        name = null;
+        description = null;
+    }
 
     @Test
     public void setName_getCorrectName() {
@@ -56,10 +69,10 @@ public class CardTest {
         Card card1;
         Card card2;
         Card card3;
-        card1= new Card("Apollo", true, description, rules, enemyRules);
-        card2= new Card("Apollo", true, description, rules, enemyRules);
-        card3= new Card("Artemis", true, description, rules, enemyRules);
-        assertTrue(card1.equals(card2));
-        assertFalse(card1.equals(card3));
+        card1 = new Card("Apollo", true, description, rules, enemyRules);
+        card2 = new Card("Apollo", true, description, rules, enemyRules);
+        card3 = new Card("Artemis", true, description, rules, enemyRules);
+        assertEquals(card1, card2);
+        assertNotEquals(card1, card3);
     }
 }

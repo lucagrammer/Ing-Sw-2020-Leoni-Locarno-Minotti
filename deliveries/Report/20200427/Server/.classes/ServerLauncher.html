@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Server</a> ]
+    [ <a href="../index.html">server</a> ]
 </div>
 
-<h1>Coverage Summary for Class: ServerLauncher (Server)</h1>
+    <h1>Coverage Summary for Class: ServerLauncher (server)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,34 +72,36 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Server;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import Util.Configurator;
-<i>4</i>&nbsp;import Util.Frmt;
-<i>5</i>&nbsp;import Util.exceptions.MustRestartException;
-<i>6</i>&nbsp;
-<i>7</i>&nbsp;import java.io.IOException;
-<i>8</i>&nbsp;import java.net.ServerSocket;
-<i>9</i>&nbsp;
-<i>10</i>&nbsp;/**
-<i>11</i>&nbsp; * Manages the initial startup phase of the server
-<i>12</i>&nbsp; */
-<b class="nc"><i>13</i>&nbsp;public class ServerLauncher {</b>
-<i>14</i>&nbsp;    private static ServerSocket serverSocket;
-<i>15</i>&nbsp;
+    <div class="sourceCode"><i>1</i>&nbsp;package server;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import util.Configurator;
+        <i>4</i>&nbsp;import util.Frmt;
+        <i>5</i>&nbsp;import util.exceptions.DisconnectionException;
+        <i>6</i>&nbsp;
+        <i>7</i>&nbsp;import java.io.IOException;
+        <i>8</i>&nbsp;import java.net.ServerSocket;
+        <i>9</i>&nbsp;
+        <i>10</i>&nbsp;/**
+        <i>11</i>&nbsp; * Manages the initial startup phase of the server
+        <i>12</i>&nbsp; */
+        <b class="nc"><i>13</i>&nbsp;public class ServerLauncher {</b>
+        <i>14</i>&nbsp; private static ServerSocket serverSocket;
+        <i>15</i>&nbsp;
 <i>16</i>&nbsp;    public static void main(String[] args) {
 <i>17</i>&nbsp;        try {
 <b class="nc"><i>18</i>&nbsp;            launch();</b>
 <b class="nc"><i>19</i>&nbsp;        } catch (Exception e) {</b>
 <b class="nc"><i>20</i>&nbsp;            Frmt.clearServerLog();</b>
-<b class="nc"><i>21</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Fatal error: An unknown error
-    has occurred. Server has been restarted.&quot;));</b>
+        <b class="nc"><i>21</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Fatal error: An
+            unknown error
+            has occurred. server has been restarted.&quot;));</b>
 <b class="nc"><i>22</i>&nbsp;            e.printStackTrace();</b>
 <b class="nc"><i>23</i>&nbsp;            if (drop()) {</b>
 <b class="nc"><i>24</i>&nbsp;                launch();</b>
 <i>25</i>&nbsp;            } else {
-    <b class="nc"><i>26</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Fatal error: Server cannot
-        be restarted&quot;));</b>
+        <b class="nc"><i>26</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Fatal error: server
+            cannot
+            be restarted&quot;));</b>
 <i>27</i>&nbsp;            }
 <b class="nc"><i>28</i>&nbsp;        }</b>
 <i>29</i>&nbsp;    }
@@ -117,8 +119,8 @@
 <i>40</i>&nbsp;            //e.printStackTrace();
 <i>41</i>&nbsp;            return;
 <b class="nc"><i>42</i>&nbsp;        }</b>
-    <b class="nc"><i>43</i>&nbsp; System.out.println(Frmt.playerColor(&#39;g&#39;, &quot;&gt; Server started
-        successfully&quot;));</b>
+        <b class="nc"><i>43</i>&nbsp; System.out.println(Frmt.playerColor(&#39;g&#39;, &quot;&gt; server started
+            successfully&quot;));</b>
 <i>44</i>&nbsp;
 <b class="nc"><i>45</i>&nbsp;        init();</b>
 <i>46</i>&nbsp;    }
@@ -140,8 +142,8 @@
 <i>62</i>&nbsp;        try {
 <b class="nc"><i>63</i>&nbsp;            controller.gameStarter();</b>
 <b class="nc"><i>64</i>&nbsp;        } catch (InterruptedException e) {</b>
-    <b class="nc"><i>65</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Fatal error: Server
-        stopped suddenly&quot;));</b>
+        <b class="nc"><i>65</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Fatal error: server
+            stopped suddenly&quot;));</b>
 <b class="nc"><i>66</i>&nbsp;            e.printStackTrace();</b>
 <b class="nc"><i>67</i>&nbsp;        } catch (MustRestartException e) {</b>
 <i>68</i>&nbsp;            // Game must be re-initialized: drop and restart
@@ -149,8 +151,9 @@
 <b class="nc"><i>70</i>&nbsp;            if (drop()) {</b>
 <b class="nc"><i>71</i>&nbsp;                launch();</b>
 <i>72</i>&nbsp;            } else {
-    <b class="nc"><i>73</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Fatal error: Server cannot
-        be restarted&quot;));</b>
+        <b class="nc"><i>73</i>&nbsp; System.out.println(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Fatal error: server
+            cannot
+            be restarted&quot;));</b>
 <i>74</i>&nbsp;            }
 <b class="nc"><i>75</i>&nbsp;        }</b>
 <i>76</i>&nbsp;    }

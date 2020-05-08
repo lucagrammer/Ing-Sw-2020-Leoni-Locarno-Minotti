@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Server</a> ]
+    [ <a href="../index.html">server</a> ]
 </div>
 
-<h1>Coverage Summary for Class: VirtualView (Server)</h1>
+    <h1>Coverage Summary for Class: VirtualView (server)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,24 +72,24 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Server;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import Messages.Message;
-<i>4</i>&nbsp;import model.Card;
-<i>5</i>&nbsp;import model.Cell;
-<i>6</i>&nbsp;import model.Player;
-<i>7</i>&nbsp;import Util.Action;
-<i>8</i>&nbsp;import Util.Genre;
-<i>9</i>&nbsp;
-<i>10</i>&nbsp;import java.util.ArrayList;
-<i>11</i>&nbsp;import java.util.Date;
-<i>12</i>&nbsp;import java.util.List;
-<i>13</i>&nbsp;
-<i>14</i>&nbsp;/**
-<i>15</i>&nbsp; * The virtual view of the server
-<i>16</i>&nbsp; */
-<i>17</i>&nbsp;public class VirtualView {
-<i>18</i>&nbsp;    private final List&lt;ClientHandler&gt; clientHandlers;
+    <div class="sourceCode"><i>1</i>&nbsp;package server;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import network.Message;
+        <i>4</i>&nbsp;import model.Card;
+        <i>5</i>&nbsp;import model.Cell;
+        <i>6</i>&nbsp;import model.Player;
+        <i>7</i>&nbsp;import util.Action;
+        <i>8</i>&nbsp;import util.Genre;
+        <i>9</i>&nbsp;
+        <i>10</i>&nbsp;import java.util.ArrayList;
+        <i>11</i>&nbsp;import java.util.Date;
+        <i>12</i>&nbsp;import java.util.List;
+        <i>13</i>&nbsp;
+        <i>14</i>&nbsp;/**
+        <i>15</i>&nbsp; * The virtual view of the server
+        <i>16</i>&nbsp; */
+        <i>17</i>&nbsp;public class VirtualView {
+        <i>18</i>&nbsp; private final List&lt;ClientHandler&gt; clientHandlers;
 <i>19</i>&nbsp;    private final Controller controller;
 <i>20</i>&nbsp;
 <i>21</i>&nbsp;    /**

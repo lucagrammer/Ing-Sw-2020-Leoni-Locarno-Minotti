@@ -1,7 +1,7 @@
 package model;
 
-import Server.Rules.EnemyRules;
-import Server.Rules.Rules;
+import server.rules.EnemyRules;
+import server.rules.Rules;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -12,7 +12,7 @@ import java.util.Objects;
 public class Card implements Serializable {
 
     private final String name;
-    private final boolean threePlayersCompatibility;
+    private final boolean threePlayersFlag;
     private final String description;
     private final Rules rules;
     private final EnemyRules enemyRules;
@@ -20,15 +20,15 @@ public class Card implements Serializable {
     /**
      * Constructor: build the Card
      *
-     * @param name                      The name of the card
-     * @param threePlayersCompatibility Three player compatibility of the card
-     * @param description               Description of the card effect
-     * @param rules                     The game rules for the player that owns this card
-     * @param enemyRules                The game rules for the enemies
+     * @param name             The name of the card
+     * @param threePlayersFlag Three player compatibility of the card
+     * @param description      Description of the card effect
+     * @param rules            The game rules for the player that owns this card
+     * @param enemyRules       The game rules for the enemies
      */
-    public Card(String name, boolean threePlayersCompatibility, String description, Rules rules, EnemyRules enemyRules) {
+    public Card(String name, boolean threePlayersFlag, String description, Rules rules, EnemyRules enemyRules) {
         this.name = name;
-        this.threePlayersCompatibility = threePlayersCompatibility;
+        this.threePlayersFlag = threePlayersFlag;
         this.description = description;
         this.rules = rules;
         this.enemyRules = enemyRules;
@@ -58,7 +58,7 @@ public class Card implements Serializable {
      * @return True if the card can be used in a three player game, otherwise false
      */
     public boolean isThreePlayersCompatible() {
-        return threePlayersCompatibility;
+        return threePlayersFlag;
     }
 
     /**
@@ -82,13 +82,13 @@ public class Card implements Serializable {
     /**
      * Tests if the current object is equal to another object
      *
-     * @param o The other object
+     * @param obj The other object
      * @return True if the objects are the same
      */
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Card card = (Card) o;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Card card = (Card) obj;
         return Objects.equals(name, card.name);
     }
 

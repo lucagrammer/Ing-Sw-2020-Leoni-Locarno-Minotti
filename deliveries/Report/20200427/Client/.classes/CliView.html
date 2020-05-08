@@ -73,28 +73,28 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package client;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import model.*;
-<i>4</i>&nbsp;import Util.*;
-<i>5</i>&nbsp;
-<i>6</i>&nbsp;import java.text.ParseException;
-<i>7</i>&nbsp;import java.text.SimpleDateFormat;
-<i>8</i>&nbsp;import java.util.ArrayList;
-<i>9</i>&nbsp;import java.util.Date;
-<i>10</i>&nbsp;import java.util.List;
-<i>11</i>&nbsp;import java.util.Scanner;
-<i>12</i>&nbsp;
-<i>13</i>&nbsp;import static Util.Genre.MALE;
-<i>14</i>&nbsp;
-<i>15</i>&nbsp;/**
-<i>16</i>&nbsp; * Manages the command line interface to the user
-<i>17</i>&nbsp; */
-<i>18</i>&nbsp;public class CliView implements View {
-<i>19</i>&nbsp;    private final Scanner scanner;
-<i>20</i>&nbsp;    private ServerHandler serverHandler;
-<i>21</i>&nbsp;
-<i>22</i>&nbsp;    /**
-<i>23</i>&nbsp;     * Constructor: build the CliView
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import model.*;
+    <i>4</i>&nbsp;import util.*;
+    <i>5</i>&nbsp;
+    <i>6</i>&nbsp;import java.text.ParseException;
+    <i>7</i>&nbsp;import java.text.SimpleDateFormat;
+    <i>8</i>&nbsp;import java.util.ArrayList;
+    <i>9</i>&nbsp;import java.util.Date;
+    <i>10</i>&nbsp;import java.util.List;
+    <i>11</i>&nbsp;import java.util.Scanner;
+    <i>12</i>&nbsp;
+    <i>13</i>&nbsp;import static util.Genre.MALE;
+    <i>14</i>&nbsp;
+    <i>15</i>&nbsp;/**
+    <i>16</i>&nbsp; * Manages the command line interface to the user
+    <i>17</i>&nbsp; */
+    <i>18</i>&nbsp;public class CliView implements View {
+    <i>19</i>&nbsp; private final Scanner scanner;
+    <i>20</i>&nbsp; private ServerHandler serverHandler;
+    <i>21</i>&nbsp;
+    <i>22</i>&nbsp; /**
+    <i>23</i>&nbsp; * Constructor: build the CliView
 <i>24</i>&nbsp;     */
 <b class="nc"><i>25</i>&nbsp;    public CliView() {</b>
 <b class="nc"><i>26</i>&nbsp;        this.scanner = new Scanner(System.in);</b>

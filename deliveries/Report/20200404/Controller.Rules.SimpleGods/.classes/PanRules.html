@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Server.Rules.SimpleGods</a> ]
+    [ <a href="../index.html">server.rules.simpleGods</a> ]
 </div>
 
-    <h1>Coverage Summary for Class: PanRules (Server.Rules.SimpleGods)</h1>
+    <h1>Coverage Summary for Class: PanRules (server.rules.SimpleGods)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,24 +72,25 @@
 <br/>
 
 
-    <div class="sourceCode"><i>1</i>&nbsp;package Server.Rules.SimpleGods;
+    <div class="sourceCode"><i>1</i>&nbsp;package server.rules.simpleGods;
         <i>2</i>&nbsp;
-        <i>3</i>&nbsp;import Server.Rules.Rules;
+        <i>3</i>&nbsp;import server.rules.Rules;
         <i>4</i>&nbsp;import model.Cell;
         <i>5</i>&nbsp;import model.Game;
         <i>6</i>&nbsp;import model.Player;
         <i>7</i>&nbsp;import model.Worker;
-        <i>8</i>&nbsp;import Util.Action;
+        <i>8</i>&nbsp;import util.Action;
         <i>9</i>&nbsp;
         <b class="nc"><i>10</i>&nbsp;public class PanRules extends Rules {</b>
         <i>11</i>&nbsp;
         <i>12</i>&nbsp; protected boolean doMove(Action action, Player player, Game game) {
         <b class="nc"><i>13</i>&nbsp; Worker worker = player.getWorker(action.getGenre());</b>
-<b class="nc"><i>14</i>&nbsp;        Cell currentCell = worker.getPosition();</b>
-<b class="nc"><i>15</i>&nbsp;        Cell nexCell = game.getBoard().getNextCell(currentCell, action.getDirection());</b>
-<b class="nc"><i>16</i>&nbsp;        worker.setPosition(nexCell);</b>
-<i>17</i>&nbsp;
-<i>18</i>&nbsp;        // Update the actions of the player
+        <b class="nc"><i>14</i>&nbsp; Cell currentCell = worker.getPosition();</b>
+        <b class="nc"><i>15</i>&nbsp; Cell nexCell = game.getBoard().getNextCell(currentCell,
+            action.getDirection());</b>
+        <b class="nc"><i>16</i>&nbsp; worker.setPosition(nexCell);</b>
+        <i>17</i>&nbsp;
+        <i>18</i>&nbsp; // Update the actions of the player
 <b class="nc"><i>19</i>&nbsp;        player.registerAction(action);</b>
 <b class="nc"><i>20</i>&nbsp;        return (currentCell.getFloor() == 2 &amp;&amp; nexCell.getFloor() == 3) || (currentCell.getFloorDifference(nexCell)&lt;-1);</b>
 <i>21</i>&nbsp;    }

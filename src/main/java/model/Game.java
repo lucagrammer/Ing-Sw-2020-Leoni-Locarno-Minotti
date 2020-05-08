@@ -1,31 +1,33 @@
 package model;
 
-import Util.Genre;
-import Util.PlayerColor;
+import util.Genre;
+import util.PlayerColor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Stores information about a game
+ */
 public class Game implements Serializable {
-    private final int numPlayer;
+
     private final Board board;
     private final List<Card> usedCards;
+    private int numPlayers;
     private List<Player> players;
+    private boolean isActive;
 
     /**
      * Build the Game
-     *
-     * @param player    The player who creates the game
-     * @param numPlayer The number of players
      */
-    public Game(Player player, int numPlayer) {
+    public Game() {
         this.players = new ArrayList<>();
-        this.players.add(player);
-        this.numPlayer = numPlayer;
+        this.numPlayers = -1;
         this.usedCards = new ArrayList<>();
         this.board = new Board();
+        this.isActive = true;
     }
 
     /**
@@ -43,7 +45,7 @@ public class Game implements Serializable {
      * @param player The new player
      */
     public void addPlayer(Player player) {
-        if (players.size() < numPlayer) {
+        if (players.size() < numPlayers) {
             players.add(player);
             players = players.stream().sorted((o1, o2) -> o2.getDateOfBirth().compareTo(o1.getDateOfBirth())).collect(Collectors.toList());
         }
@@ -142,10 +144,14 @@ public class Game implements Serializable {
     /**
      * Check if everything is ready to start the game
      *
-     * @return True if all the players has joined the game
+     * @return True if all the players has joined the game and their username are final
      */
-    public boolean isReady() {
-        return players.size() == numPlayer;
+    public boolean canStart() {
+        for (Player player : players) {
+            if (player.hasTemporaryUsername())
+                return false;
+        }
+        return players.size() == numPlayers;
     }
 
     /**
@@ -179,5 +185,39 @@ public class Game implements Serializable {
             }
         }
         return false;
+    }
+
+    /**
+     * Gets the number of players of the game
+     *
+     * @return The number of players of the game
+     */
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
+    /**
+     * Sets the number of players of the game
+     *
+     * @param numPlayers The number of players of the game
+     */
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
+
+    /**
+     * Tests if the game is still active
+     *
+     * @return True if the game is still active, otherwise false
+     */
+    public boolean isActive() {
+        return isActive;
+    }
+
+    /**
+     * Sets the game as inactive
+     */
+    public void setInactive() {
+        isActive = false;
     }
 }

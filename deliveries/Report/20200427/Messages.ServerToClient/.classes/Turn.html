@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Messages.ServerToClient</a> ]
+    [ <a href="../index.html">network.messages</a> ]
 </div>
 
-<h1>Coverage Summary for Class: Turn (Messages.ServerToClient)</h1>
+    <h1>Coverage Summary for Class: Turn (network.ServerToClient)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,42 +72,42 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Messages.ServerToClient;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import client.View;
-<i>4</i>&nbsp;import Messages.CVMessage;
-<i>5</i>&nbsp;import Messages.VCMessage;
-<i>6</i>&nbsp;import model.Game;
-<i>7</i>&nbsp;import Server.VirtualView;
-<i>8</i>&nbsp;import Util.Action;
-<i>9</i>&nbsp;import Util.MessageType;
-<i>10</i>&nbsp;import Util.RoundActions;
-<i>11</i>&nbsp;
-<i>12</i>&nbsp;import java.io.Serializable;
-<i>13</i>&nbsp;
-<i>14</i>&nbsp;/**
-<i>15</i>&nbsp; * Message to ask an action to be performed in the turn
-<i>16</i>&nbsp; */
-<i>17</i>&nbsp;public class Turn implements Serializable, CVMessage, VCMessage {
-<i>18</i>&nbsp;    private final MessageType messageType;
-<i>19</i>&nbsp;    private RoundActions roundActions;
-<i>20</i>&nbsp;    private Game game;
-<i>21</i>&nbsp;    private Action action;
-<i>22</i>&nbsp;    private String nickname;
-<i>23</i>&nbsp;    private String loserNickname;
-<i>24</i>&nbsp;
-<i>25</i>&nbsp;    /**
-<i>26</i>&nbsp;     * Server-side constructor: build a request message
-<i>27</i>&nbsp;     *
-<i>28</i>&nbsp;     * @param roundActions  The possible actions
-<i>29</i>&nbsp;     * @param game          The game
-<i>30</i>&nbsp;     * @param loserNickname The nickname of the looser or null value
-<i>31</i>&nbsp;     */
-<b class="fc"><i>32</i>&nbsp;    public Turn(RoundActions roundActions, Game game, String loserNickname) {</b>
-<b class="fc"><i>33</i>&nbsp;        messageType = MessageType.CV;</b>
-<b class="fc"><i>34</i>&nbsp;        this.roundActions = roundActions;</b>
-<b class="fc"><i>35</i>&nbsp;        this.game = game;</b>
-<b class="fc"><i>36</i>&nbsp;        this.loserNickname = loserNickname;</b>
+    <div class="sourceCode"><i>1</i>&nbsp;package network.messages;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import client.View;
+        <i>4</i>&nbsp;import network.CVMessage;
+        <i>5</i>&nbsp;import network.VCMessage;
+        <i>6</i>&nbsp;import model.Game;
+        <i>7</i>&nbsp;import server.VirtualView;
+        <i>8</i>&nbsp;import util.Action;
+        <i>9</i>&nbsp;import util.MessageType;
+        <i>10</i>&nbsp;import util.RoundActions;
+        <i>11</i>&nbsp;
+        <i>12</i>&nbsp;import java.io.Serializable;
+        <i>13</i>&nbsp;
+        <i>14</i>&nbsp;/**
+        <i>15</i>&nbsp; * Message to ask an action to be performed in the turn
+        <i>16</i>&nbsp; */
+        <i>17</i>&nbsp;public class Turn implements Serializable, CVMessage, VCMessage {
+        <i>18</i>&nbsp; private final MessageType messageType;
+        <i>19</i>&nbsp; private RoundActions roundActions;
+        <i>20</i>&nbsp; private Game game;
+        <i>21</i>&nbsp; private Action action;
+        <i>22</i>&nbsp; private String nickname;
+        <i>23</i>&nbsp; private String loserNickname;
+        <i>24</i>&nbsp;
+        <i>25</i>&nbsp; /**
+        <i>26</i>&nbsp; * server-side constructor: build a request message
+        <i>27</i>&nbsp; *
+        <i>28</i>&nbsp; * @param roundActions The possible actions
+        <i>29</i>&nbsp; * @param game The game
+        <i>30</i>&nbsp; * @param loserNickname The nickname of the looser or null value
+        <i>31</i>&nbsp; */
+        <b class="fc"><i>32</i>&nbsp; public Turn(RoundActions roundActions, Game game, String loserNickname) {</b>
+        <b class="fc"><i>33</i>&nbsp; messageType = MessageType.CV;</b>
+        <b class="fc"><i>34</i>&nbsp; this.roundActions = roundActions;</b>
+        <b class="fc"><i>35</i>&nbsp; this.game = game;</b>
+        <b class="fc"><i>36</i>&nbsp; this.loserNickname = loserNickname;</b>
 <b class="fc"><i>37</i>&nbsp;    }</b>
 <i>38</i>&nbsp;
 <i>39</i>&nbsp;    /**

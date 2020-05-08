@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Messages.ClientToServer</a> ]
+    [ <a href="../index.html">network.ClientToServer</a> ]
 </div>
 
-<h1>Coverage Summary for Class: SetUpGame (Messages.ClientToServer)</h1>
+    <h1>Coverage Summary for Class: SetUpGame (network.ClientToServer)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,53 +72,53 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Messages.ClientToServer;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import client.View;
-<i>4</i>&nbsp;import Messages.CVMessage;
-<i>5</i>&nbsp;import Messages.VCMessage;
-<i>6</i>&nbsp;import Server.VirtualView;
-<i>7</i>&nbsp;import Util.MessageType;
-<i>8</i>&nbsp;
-<i>9</i>&nbsp;import java.io.Serializable;
-<i>10</i>&nbsp;import java.util.Date;
-<i>11</i>&nbsp;
-<i>12</i>&nbsp;/**
-<i>13</i>&nbsp; * Server connection message and exchange of player and game information
-<i>14</i>&nbsp; */
-<i>15</i>&nbsp;public class SetUpGame implements Serializable, CVMessage, VCMessage {
-<i>16</i>&nbsp;    private final MessageType messageType;
-<i>17</i>&nbsp;    private String nickname;
-<i>18</i>&nbsp;    private Date birthDate;
-<i>19</i>&nbsp;    private int numPlayers;
-<i>20</i>&nbsp;    private boolean newGame;
-<i>21</i>&nbsp;
-<i>22</i>&nbsp;    /**
-<i>23</i>&nbsp;     * client-side constructor: build the response message
+    <div class="sourceCode"><i>1</i>&nbsp;package network.ClientToServer;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import client.View;
+        <i>4</i>&nbsp;import network.CVMessage;
+        <i>5</i>&nbsp;import network.VCMessage;
+        <i>6</i>&nbsp;import server.VirtualView;
+        <i>7</i>&nbsp;import util.MessageType;
+        <i>8</i>&nbsp;
+        <i>9</i>&nbsp;import java.io.Serializable;
+        <i>10</i>&nbsp;import java.util.Date;
+        <i>11</i>&nbsp;
+        <i>12</i>&nbsp;/**
+        <i>13</i>&nbsp; * server connection message and exchange of player and game information
+        <i>14</i>&nbsp; */
+        <i>15</i>&nbsp;public class SetUpGame implements Serializable, CVMessage, VCMessage {
+        <i>16</i>&nbsp; private final MessageType messageType;
+        <i>17</i>&nbsp; private String nickname;
+        <i>18</i>&nbsp; private Date birthDate;
+        <i>19</i>&nbsp; private int numPlayers;
+        <i>20</i>&nbsp; private boolean newGame;
+        <i>21</i>&nbsp;
+        <i>22</i>&nbsp; /**
+        <i>23</i>&nbsp; * client-side constructor: build the response message
 <i>24</i>&nbsp;     *
 <i>25</i>&nbsp;     * @param nickname   The chosen nickname
 <i>26</i>&nbsp;     * @param birthDate  The birth date of the player
-<i>27</i>&nbsp;     * @param numPlayers The number of the players for the game
-<i>28</i>&nbsp;     */
-<b class="fc"><i>29</i>&nbsp;    public SetUpGame(String nickname, Date birthDate, int numPlayers) {</b>
-<b class="fc"><i>30</i>&nbsp;        this.messageType = MessageType.VC;</b>
-<b class="fc"><i>31</i>&nbsp;        this.nickname = nickname;</b>
-<b class="fc"><i>32</i>&nbsp;        this.birthDate = birthDate;</b>
-<b class="fc"><i>33</i>&nbsp;        this.numPlayers = numPlayers;</b>
-<b class="fc"><i>34</i>&nbsp;    }</b>
-<i>35</i>&nbsp;
-<i>36</i>&nbsp;    /**
-<i>37</i>&nbsp;     * Server-side constructor: build the request
-<i>38</i>&nbsp;     *
-<i>39</i>&nbsp;     * @param newGame True if the player has to decide the number of players, otherwise false
-<i>40</i>&nbsp;     */
-<b class="fc"><i>41</i>&nbsp;    public SetUpGame(boolean newGame) {</b>
-<b class="fc"><i>42</i>&nbsp;        this.messageType = MessageType.CV;</b>
-<b class="fc"><i>43</i>&nbsp;        this.newGame = newGame;</b>
-<b class="fc"><i>44</i>&nbsp;    }</b>
-<i>45</i>&nbsp;
-<i>46</i>&nbsp;    /**
-<i>47</i>&nbsp;     * Gets the message type
+        <i>27</i>&nbsp; * @param numPlayers The number of the players for the game
+        <i>28</i>&nbsp; */
+        <b class="fc"><i>29</i>&nbsp; public SetUpGame(String nickname, Date birthDate, int numPlayers) {</b>
+        <b class="fc"><i>30</i>&nbsp; this.messageType = MessageType.VC;</b>
+        <b class="fc"><i>31</i>&nbsp; this.nickname = nickname;</b>
+        <b class="fc"><i>32</i>&nbsp; this.birthDate = birthDate;</b>
+        <b class="fc"><i>33</i>&nbsp; this.numPlayers = numPlayers;</b>
+        <b class="fc"><i>34</i>&nbsp; }</b>
+        <i>35</i>&nbsp;
+        <i>36</i>&nbsp; /**
+        <i>37</i>&nbsp; * server-side constructor: build the request
+        <i>38</i>&nbsp; *
+        <i>39</i>&nbsp; * @param newGame True if the player has to decide the number of players, otherwise false
+        <i>40</i>&nbsp; */
+        <b class="fc"><i>41</i>&nbsp; public SetUpGame(boolean newGame) {</b>
+        <b class="fc"><i>42</i>&nbsp; this.messageType = MessageType.CV;</b>
+        <b class="fc"><i>43</i>&nbsp; this.newGame = newGame;</b>
+        <b class="fc"><i>44</i>&nbsp; }</b>
+        <i>45</i>&nbsp;
+        <i>46</i>&nbsp; /**
+        <i>47</i>&nbsp; * Gets the message type
 <i>48</i>&nbsp;     *
 <i>49</i>&nbsp;     * @return The message type
 <i>50</i>&nbsp;     */

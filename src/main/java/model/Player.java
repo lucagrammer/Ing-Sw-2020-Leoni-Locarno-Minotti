@@ -1,9 +1,9 @@
 package model;
 
-import Util.Action;
-import Util.Genre;
-import Util.PlayerColor;
-import Util.RoundActions;
+import util.Action;
+import util.Genre;
+import util.PlayerColor;
+import util.RoundActions;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,29 +14,33 @@ import java.util.List;
  * Stores information about a player
  */
 public class Player implements Serializable {
-    private final String nickname;
+
     private final Date dateOfBirth;
     private final Worker maleWorker;
     private final Worker femaleWorker;
+    private String nickname;
     private Card card;
     private RoundActions roundActions;
     private boolean isConnected;
     private boolean isWinner;
     private boolean isLoser;
+    private boolean hasTemporaryUsername;
 
     /**
      * Constructor: build a player
      *
-     * @param nickname    Player's nickname
-     * @param dateOfBirth Player's date of birth
+     * @param nickname             Player's nickname
+     * @param dateOfBirth          Player's date of birth
+     * @param hasTemporaryUsername True if the nickname is temporary, otherwise false
      */
-    public Player(String nickname, Date dateOfBirth) {
+    public Player(String nickname, Date dateOfBirth, boolean hasTemporaryUsername) {
         this.nickname = nickname;
         this.dateOfBirth = dateOfBirth;
         this.roundActions = new RoundActions();
         this.maleWorker = new Worker(Genre.MALE, this);
         this.femaleWorker = new Worker(Genre.FEMALE, this);
         this.isConnected = true;
+        this.hasTemporaryUsername = hasTemporaryUsername;
     }
 
     /**
@@ -231,5 +235,24 @@ public class Player implements Serializable {
      */
     public void setLoser(boolean isLoser) {
         this.isLoser = isLoser;
+    }
+
+    /**
+     * Tests if the user has a temporary username
+     *
+     * @return True if the user has a temporary username, otherwise false
+     */
+    public boolean hasTemporaryUsername() {
+        return this.hasTemporaryUsername;
+    }
+
+    /**
+     * Sets the final nickname of the user
+     *
+     * @param finalNickname The final nickname
+     */
+    public void setFinalNickname(String finalNickname) {
+        this.nickname = finalNickname;
+        this.hasTemporaryUsername = false;
     }
 }

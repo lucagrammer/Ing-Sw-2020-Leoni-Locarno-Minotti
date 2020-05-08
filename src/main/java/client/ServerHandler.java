@@ -1,17 +1,17 @@
 package client;
 
-import Messages.CVMessage;
-import Messages.ClientToServer.SetUpGame;
-import Messages.MVMessage;
-import Messages.Message;
-import Messages.PingMessage;
-import Messages.ServerToClient.*;
-import Util.Action;
-import Util.Configurator;
-import Util.Genre;
-import Util.MessageType;
 import model.Card;
 import model.Cell;
+import network.CVMessage;
+import network.MVMessage;
+import network.Message;
+import network.messages.*;
+import network.ping.NetworkHandler;
+import network.ping.PingSender;
+import util.Action;
+import util.Configurator;
+import util.Genre;
+import util.MessageType;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Manages communication from and to the server
  */
-public class ServerHandler {
+public class ServerHandler implements NetworkHandler {
     private final Object lock = new Object();
     private ObjectInputStream input;
     private ObjectOutputStream output;
@@ -31,7 +31,6 @@ public class ServerHandler {
     private View view;
     private String nickname;
     private boolean isConnected = false;
-    private int connectionAttempts = 0;
 
     /**
      * Starts listening for server messages and execute them client-side
@@ -41,19 +40,16 @@ public class ServerHandler {
             try {
                 Message serverMessage = (Message) input.readObject();
                 if (serverMessage.getType() == MessageType.MV) {
-                    MVMessage mvMessage = (MVMessage) serverMessage;
                     if (serverMessage instanceof ShowDisconnection && isConnected) {
-                        // Under control disconnection:
-                        // The server will soon close the connection due to the disconnection of another player
-                        closeConnection();
+                        // Under control disconnection
                         isConnected = false;
+                        closeConnection();
                     }
+                    MVMessage mvMessage = (MVMessage) serverMessage;
                     mvMessage.execute(view);
                 } else {
                     if (serverMessage.getType() == MessageType.CV) {
-                        if (serverMessage instanceof PingMessage && Configurator.getPingFlag()) {
-                            System.out.println("Received ping from " + nickname);
-                        }
+                        updateNickname(serverMessage);
                         CVMessage cvMessage = (CVMessage) serverMessage;
                         cvMessage.execute(view);
                     }
@@ -62,10 +58,23 @@ public class ServerHandler {
                 if (isConnected) {
                     String errorMessage = "Server unreachable" + (Configurator.getErrorDetailsFlag() ? " during message reading" : "") + ".";
                     view.showErrorMessage(errorMessage, true);
-                    closeConnection();
                 }
                 isConnected = false;
             }
+        }
+    }
+
+    /**
+     * Update the nickname of the client if the message contains it
+     *
+     * @param serverMessage The message received
+     */
+    private void updateNickname(Message serverMessage) {
+        if (serverMessage instanceof SetUpGame) {
+            this.nickname = ((SetUpGame) serverMessage).getTemporaryNickname();
+        }
+        if (serverMessage instanceof SetUpNewNickname) {
+            this.nickname = ((SetUpNewNickname) serverMessage).getTemporaryNickname();
         }
     }
 
@@ -93,29 +102,20 @@ public class ServerHandler {
      * @param serverIP IP address of the server
      */
     public void setConnection(String serverIP) {
-        // Try to connect until success
-        while (!isConnected) {
-            try {
-                connectionAttempts++;
-                socket = new Socket(serverIP, Configurator.getDefaultPort());
-                output = new ObjectOutputStream(socket.getOutputStream());
-                input = new ObjectInputStream(socket.getInputStream());
-                isConnected = true;
+        try {
+            socket = new Socket(serverIP, Configurator.getDefaultPort());
+            output = new ObjectOutputStream(socket.getOutputStream());
+            input = new ObjectInputStream(socket.getInputStream());
+            isConnected = true;
 
-                // Sets the connection timeout to 20 seconds
-                socket.setSoTimeout(20000);
-                // Start sending pings to the server every 5 seconds
-                (new PingSender()).start();
-            } catch (IOException e) {
-                isConnected = false;
-                if (connectionAttempts == 1) {
-                    String errorMessage = "Server unreachable" + (Configurator.getErrorDetailsFlag() ? " during connection setup" : "") + ". Reconnecting...";
-                    view.showErrorMessage(errorMessage, true);
-                }
-            }
+            // Sets the connection timeout to 20 seconds and start sending pings to the server every 5 seconds
+            socket.setSoTimeout(20000);
+            (new PingSender(this, false)).start();
+        } catch (IOException e) {
+            String errorMessage = "Server unreachable" + (Configurator.getErrorDetailsFlag() ? " during connection setup" : "");
+            view.showErrorMessage(errorMessage, true);
         }
 
-        view.showQueuedMessage();
         startListening();
     }
 
@@ -134,7 +134,16 @@ public class ServerHandler {
     }
 
     /**
-     * Sends a message to connected the server
+     * Checks the connection status
+     *
+     * @return True if it is connected, otherwise false
+     */
+    public boolean isConnected() {
+        return isConnected;
+    }
+
+    /**
+     * Sends a message
      *
      * @param message The message to be sent
      */
@@ -150,7 +159,6 @@ public class ServerHandler {
                 isConnected = false;
                 String errorMessage = "Server unreachable" + (Configurator.getErrorDetailsFlag() ? " during message sending" : "") + ".";
                 view.showErrorMessage(errorMessage, true);
-                closeConnection();
             }
         }
     }
@@ -163,8 +171,8 @@ public class ServerHandler {
      * @param numPlayers The number of players of the game to be created (irrelevant if the player is joining an existing game)
      */
     public void sendSetUpGame(String nickname, Date date, int numPlayers) {
-        this.nickname = nickname;
         send(new SetUpGame(nickname, date, numPlayers));
+        this.nickname = nickname;
     }
 
     /**
@@ -173,8 +181,8 @@ public class ServerHandler {
      * @param newNickname The new requested nickname
      */
     public void sendNewNickname(String newNickname) {
+        send(new SetUpNewNickname(nickname, newNickname));
         this.nickname = newNickname;
-        send(new SetUpNewNickname(newNickname));
     }
 
     /**
@@ -244,29 +252,4 @@ public class ServerHandler {
             ClientLauncher.main(null);
         }
     }
-
-    /**
-     * Class that continuously sends ping messages to the client
-     */
-    class PingSender extends Thread {
-
-        /**
-         * Sends ping messages at regular intervals
-         */
-        public void run() {
-            while (isConnected) {
-                if (Configurator.getPingFlag()) {
-                    System.out.println("\n\t>Sending ping from " + nickname);
-                }
-                send(new PingMessage(false));
-
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
 }

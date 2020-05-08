@@ -99,26 +99,26 @@
 
 
 <div class="sourceCode"><i>1</i>&nbsp;package client;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import Messages.CVMessage;
-<i>4</i>&nbsp;import Messages.ClientToServer.SetUpGame;
-<i>5</i>&nbsp;import Messages.MVMessage;
-<i>6</i>&nbsp;import Messages.Message;
-<i>7</i>&nbsp;import Messages.PingMessage;
-<i>8</i>&nbsp;import Messages.ServerToClient.*;
-<i>9</i>&nbsp;import model.Card;
-<i>10</i>&nbsp;import model.Cell;
-<i>11</i>&nbsp;import Util.*;
-<i>12</i>&nbsp;
-<i>13</i>&nbsp;import java.io.IOException;
-<i>14</i>&nbsp;import java.io.ObjectInputStream;
-<i>15</i>&nbsp;import java.io.ObjectOutputStream;
-<i>16</i>&nbsp;import java.net.Socket;
-<i>17</i>&nbsp;import java.util.Date;
-<i>18</i>&nbsp;import java.util.List;
-<i>19</i>&nbsp;
-<i>20</i>&nbsp;/**
-<i>21</i>&nbsp; * Manages communication from and to the server
+    <i>2</i>&nbsp;
+    <i>3</i>&nbsp;import network.CVMessage;
+    <i>4</i>&nbsp;import network.messages.SetUpGame;
+    <i>5</i>&nbsp;import network.MVMessage;
+    <i>6</i>&nbsp;import network.Message;
+    <i>7</i>&nbsp;import network.ping.PingMessage;
+    <i>8</i>&nbsp;import network.messages.*;
+    <i>9</i>&nbsp;import model.Card;
+    <i>10</i>&nbsp;import model.Cell;
+    <i>11</i>&nbsp;import util.*;
+    <i>12</i>&nbsp;
+    <i>13</i>&nbsp;import java.io.IOException;
+    <i>14</i>&nbsp;import java.io.ObjectInputStream;
+    <i>15</i>&nbsp;import java.io.ObjectOutputStream;
+    <i>16</i>&nbsp;import java.net.Socket;
+    <i>17</i>&nbsp;import java.util.Date;
+    <i>18</i>&nbsp;import java.util.List;
+    <i>19</i>&nbsp;
+    <i>20</i>&nbsp;/**
+    <i>21</i>&nbsp; * Manages communication from and to the server
 <i>22</i>&nbsp; */
 <b class="nc"><i>23</i>&nbsp;class ServerHandler {</b>
 <b class="nc"><i>24</i>&nbsp;    private final Object lock = new Object();</b>
@@ -157,8 +157,9 @@
 <i>57</i>&nbsp;                }
 <b class="nc"><i>58</i>&nbsp;            } catch (IOException | ClassNotFoundException e) {</b>
 <b class="nc"><i>59</i>&nbsp;                if (isConnected) {</b>
-<b class="nc"><i>60</i>&nbsp; view.showMessage(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Error: Server unreachable during
-    message reading.&quot;), true);</b>
+    <b class="nc"><i>60</i>&nbsp; view.showMessage(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Error: server unreachable
+        during
+        message reading.&quot;), true);</b>
 <b class="nc"><i>61</i>&nbsp;                    closeConnection();</b>
 <i>62</i>&nbsp;                }
 <b class="nc"><i>63</i>&nbsp;                isConnected = false;</b>
@@ -206,7 +207,7 @@
 <b class="nc"><i>105</i>&nbsp;            } catch (IOException e) {</b>
 <b class="nc"><i>106</i>&nbsp;                isConnected = false;</b>
 <b class="nc"><i>107</i>&nbsp;                if (connectionAttempts == 1) {</b>
-    <b class="nc"><i>108</i>&nbsp; view.showMessage(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Error: Server unreachable
+    <b class="nc"><i>108</i>&nbsp; view.showMessage(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Error: server unreachable
         during connection setup. Reconnecting...&quot;), true);</b>
 <i>109</i>&nbsp;                }
 <i>110</i>&nbsp;                try {
@@ -249,7 +250,7 @@
 <b class="nc"><i>146</i>&nbsp;                }</b>
 <b class="nc"><i>147</i>&nbsp;            } catch (IOException e) {</b>
 <b class="nc"><i>148</i>&nbsp;                isConnected = false;</b>
-    <b class="nc"><i>149</i>&nbsp; view.showMessage(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Error: Server unreachable
+    <b class="nc"><i>149</i>&nbsp; view.showMessage(Frmt.playerColor(&#39;r&#39;, &quot;&gt; Error: server unreachable
         during message sending.&quot;), true);</b>
 <b class="nc"><i>150</i>&nbsp;                closeConnection();</b>
 <b class="nc"><i>151</i>&nbsp;            }</b>

@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Messages.ServerToClient</a> ]
+    [ <a href="../index.html">network.messages</a> ]
 </div>
 
-<h1>Coverage Summary for Class: ShowCardAssignment (Messages.ServerToClient)</h1>
+    <h1>Coverage Summary for Class: ShowCardAssignment (network.ServerToClient)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,35 +72,35 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Messages.ServerToClient;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import client.View;
-<i>4</i>&nbsp;import Messages.MVMessage;
-<i>5</i>&nbsp;import model.Player;
-<i>6</i>&nbsp;import Util.MessageType;
-<i>7</i>&nbsp;
-<i>8</i>&nbsp;import java.io.Serializable;
-<i>9</i>&nbsp;import java.util.List;
-<i>10</i>&nbsp;
-<i>11</i>&nbsp;/**
-<i>12</i>&nbsp; * Message to inform the player of the allocation of cards
-<i>13</i>&nbsp; */
-<i>14</i>&nbsp;public class ShowCardAssignment implements Serializable, MVMessage {
-<i>15</i>&nbsp;    private final MessageType messageType;
-<i>16</i>&nbsp;    private final List&lt;Player&gt; playerList;
-<i>17</i>&nbsp;
-<i>18</i>&nbsp;    /**
-<i>19</i>&nbsp;     * Server-side constructor: build a message
-<i>20</i>&nbsp;     *
-<i>21</i>&nbsp;     * @param playerList The list of players
-<i>22</i>&nbsp;     */
-<b class="fc"><i>23</i>&nbsp;    public ShowCardAssignment(List&lt;Player&gt; playerList) {</b>
-<b class="fc"><i>24</i>&nbsp;        messageType = MessageType.MV;</b>
-<b class="fc"><i>25</i>&nbsp;        this.playerList = playerList;</b>
-<b class="fc"><i>26</i>&nbsp;    }</b>
-<i>27</i>&nbsp;
-<i>28</i>&nbsp;    /**
-<i>29</i>&nbsp;     * Execute the request client-side
+    <div class="sourceCode"><i>1</i>&nbsp;package network.messages;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import client.View;
+        <i>4</i>&nbsp;import network.MVMessage;
+        <i>5</i>&nbsp;import model.Player;
+        <i>6</i>&nbsp;import util.MessageType;
+        <i>7</i>&nbsp;
+        <i>8</i>&nbsp;import java.io.Serializable;
+        <i>9</i>&nbsp;import java.util.List;
+        <i>10</i>&nbsp;
+        <i>11</i>&nbsp;/**
+        <i>12</i>&nbsp; * Message to inform the player of the allocation of cards
+        <i>13</i>&nbsp; */
+        <i>14</i>&nbsp;public class ShowCardAssignment implements Serializable, MVMessage {
+        <i>15</i>&nbsp; private final MessageType messageType;
+        <i>16</i>&nbsp; private final List&lt;Player&gt; playerList;
+        <i>17</i>&nbsp;
+        <i>18</i>&nbsp; /**
+        <i>19</i>&nbsp; * server-side constructor: build a message
+        <i>20</i>&nbsp; *
+        <i>21</i>&nbsp; * @param playerList The list of players
+        <i>22</i>&nbsp; */
+        <b class="fc"><i>23</i>&nbsp; public ShowCardAssignment(List&lt;Player&gt; playerList) {</b>
+        <b class="fc"><i>24</i>&nbsp; messageType = MessageType.MV;</b>
+        <b class="fc"><i>25</i>&nbsp; this.playerList = playerList;</b>
+        <b class="fc"><i>26</i>&nbsp; }</b>
+        <i>27</i>&nbsp;
+        <i>28</i>&nbsp; /**
+        <i>29</i>&nbsp; * Execute the request client-side
 <i>30</i>&nbsp;     *
 <i>31</i>&nbsp;     * @param view The recipient component
 <i>32</i>&nbsp;     */

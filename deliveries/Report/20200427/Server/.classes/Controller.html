@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">Server</a> ]
+    [ <a href="../index.html">server</a> ]
 </div>
 
-<h1>Coverage Summary for Class: Controller (Server)</h1>
+    <h1>Coverage Summary for Class: Controller (server)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,25 +72,25 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package Server;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import Messages.ServerToClient.*;
-<i>4</i>&nbsp;import model.Card;
-<i>5</i>&nbsp;import model.Cell;
-<i>6</i>&nbsp;import model.Game;
-<i>7</i>&nbsp;import model.Player;
-<i>8</i>&nbsp;import Util.*;
-<i>9</i>&nbsp;import Util.exceptions.MustRestartException;
-<i>10</i>&nbsp;
-<i>11</i>&nbsp;import java.util.ArrayList;
-<i>12</i>&nbsp;import java.util.Date;
-<i>13</i>&nbsp;import java.util.List;
-<i>14</i>&nbsp;
-<i>15</i>&nbsp;/**
-<i>16</i>&nbsp; * Controller of the game
-<i>17</i>&nbsp; */
-<b class="nc"><i>18</i>&nbsp;public class Controller {</b>
-<i>19</i>&nbsp;    private Game game;
+    <div class="sourceCode"><i>1</i>&nbsp;package server;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import network.messages.*;
+        <i>4</i>&nbsp;import model.Card;
+        <i>5</i>&nbsp;import model.Cell;
+        <i>6</i>&nbsp;import model.Game;
+        <i>7</i>&nbsp;import model.Player;
+        <i>8</i>&nbsp;import util.*;
+        <i>9</i>&nbsp;import util.exceptions.DisconnectionException;
+        <i>10</i>&nbsp;
+        <i>11</i>&nbsp;import java.util.ArrayList;
+        <i>12</i>&nbsp;import java.util.Date;
+        <i>13</i>&nbsp;import java.util.List;
+        <i>14</i>&nbsp;
+        <i>15</i>&nbsp;/**
+        <i>16</i>&nbsp; * Controller of the game
+        <i>17</i>&nbsp; */
+        <b class="nc"><i>18</i>&nbsp;public class Controller {</b>
+        <i>19</i>&nbsp; private Game game;
 <i>20</i>&nbsp;    private VirtualView virtualView;
 <i>21</i>&nbsp;    private Player currentPlayer;
 <b class="nc"><i>22</i>&nbsp;    private boolean mustReset = false;</b>
