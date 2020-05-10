@@ -1,0 +1,705 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CliView</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CliView (client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliView</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 289)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import model.*;
+<i>4</i>&nbsp;import util.*;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.text.ParseException;
+<i>7</i>&nbsp;import java.text.SimpleDateFormat;
+<i>8</i>&nbsp;import java.util.ArrayList;
+<i>9</i>&nbsp;import java.util.Date;
+<i>10</i>&nbsp;import java.util.List;
+<i>11</i>&nbsp;import java.util.Scanner;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import static util.Genre.MALE;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * Manages the command line interface to the user
+<i>17</i>&nbsp; */
+<i>18</i>&nbsp;public class CliView implements View {
+<i>19</i>&nbsp;    private final Scanner scanner;
+<i>20</i>&nbsp;    private ServerHandler serverHandler;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    /**
+<i>23</i>&nbsp;     * Constructor: build the CliView
+<i>24</i>&nbsp;     */
+<b class="nc"><i>25</i>&nbsp;    public CliView() {</b>
+<b class="nc"><i>26</i>&nbsp;        this.scanner = new Scanner(System.in);</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * Sets the serverHandler
+<i>31</i>&nbsp;     *
+<i>32</i>&nbsp;     * @param serverHandler The serverHandler
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    public void setServerHandler(ServerHandler serverHandler) {
+<b class="nc"><i>35</i>&nbsp;        this.serverHandler = serverHandler;</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * Interface launcher. Asks the server IP to connect to and notify it to the serverHandler
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    public void launch() {
+<b class="nc"><i>42</i>&nbsp;        String defaultServerIP = Configurator.getDefaultIp();</b>
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;        Frmt.clearScreen();</b>
+<b class="nc"><i>45</i>&nbsp;        System.out.print(Frmt.style(&#39;b&#39;, &quot; Enter the server IP [press enter for default IP]: &quot;));</b>
+<b class="nc"><i>46</i>&nbsp;        String serverIP = scanner.nextLine();</b>
+<b class="nc"><i>47</i>&nbsp;        if (serverIP.equals(&quot;&quot;)) {</b>
+<b class="nc"><i>48</i>&nbsp;            serverIP = defaultServerIP;</b>
+<b class="nc"><i>49</i>&nbsp;            System.out.println(Frmt.style(&#39;i&#39;, &quot;  &gt; Default server IP will be applied, &quot; + defaultServerIP));</b>
+<i>50</i>&nbsp;        }
+<b class="nc"><i>51</i>&nbsp;        showQueuedMessage();</b>
+<b class="nc"><i>52</i>&nbsp;        serverHandler.setConnection(serverIP);</b>
+<i>53</i>&nbsp;    }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    /**
+<i>56</i>&nbsp;     * Shows a message to say to the user that is connected to
+<i>57</i>&nbsp;     * the server and will be added to the next available game
+<i>58</i>&nbsp;     */
+<i>59</i>&nbsp;    public void showQueuedMessage() {
+<b class="nc"><i>60</i>&nbsp;        Frmt.clearScreen();</b>
+<b class="nc"><i>61</i>&nbsp;        System.out.println(Frmt.style(&#39;i&#39;, &quot;  &gt; You will be added to the first available game...&quot;));</b>
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    /**
+<i>65</i>&nbsp;     * Shows a specified message to the user
+<i>66</i>&nbsp;     *
+<i>67</i>&nbsp;     * @param message   The message to be shown
+<i>68</i>&nbsp;     * @param newScreen True if it&#39;s necessary to clean the interface
+<i>69</i>&nbsp;     */
+<i>70</i>&nbsp;    public void showMessage(String message, boolean newScreen) {
+<b class="nc"><i>71</i>&nbsp;        if (newScreen)</b>
+<b class="nc"><i>72</i>&nbsp;            Frmt.clearScreen();</b>
+<b class="nc"><i>73</i>&nbsp;        System.out.println(message);</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * Shows a loading message to the user
+<i>78</i>&nbsp;     */
+<i>79</i>&nbsp;    public void showLoading() {
+<b class="nc"><i>80</i>&nbsp;        Frmt.clearScreen();</b>
+<b class="nc"><i>81</i>&nbsp;        System.out.println(Frmt.style(&#39;i&#39;, &quot;  &gt; The game will start shortly, get ready!&quot;));</b>
+<i>82</i>&nbsp;    }
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    /**
+<i>85</i>&nbsp;     * Asks a new nickname to the user and notify the choice to the serverHandler
+<i>86</i>&nbsp;     */
+<i>87</i>&nbsp;    public void askNewNickname() {
+<b class="nc"><i>88</i>&nbsp;        Frmt.clearScreen();</b>
+<b class="nc"><i>89</i>&nbsp;        System.out.println(Frmt.color(&#39;r&#39;, &quot;  &gt; Error: the chosen username is already taken.&quot;));</b>
+<b class="nc"><i>90</i>&nbsp;        String newNickname = askNickname();</b>
+<b class="nc"><i>91</i>&nbsp;        Frmt.clearScreen();</b>
+<b class="nc"><i>92</i>&nbsp;        System.out.println(Frmt.style(&#39;i&#39;, &quot;  &gt; Waiting for the other players to connect...&quot;));</b>
+<b class="nc"><i>93</i>&nbsp;        serverHandler.sendNewNickname(newNickname);</b>
+<i>94</i>&nbsp;    }
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    /**
+<i>97</i>&nbsp;     * Asks nickname, birth date and if it&#39;s a new game the number of players
+<i>98</i>&nbsp;     * for the game and notify the information to the serverHandler
+<i>99</i>&nbsp;     *
+<i>100</i>&nbsp;     * @param newGame True if the it is a new game, otherwise false
+<i>101</i>&nbsp;     */
+<i>102</i>&nbsp;    public void setUpGame(boolean newGame) {
+<i>103</i>&nbsp;        boolean incorrect;
+<b class="nc"><i>104</i>&nbsp;        Frmt.clearScreen();</b>
+<b class="nc"><i>105</i>&nbsp;        String nickname = askNickname();</b>
+<i>106</i>&nbsp;
+<b class="nc"><i>107</i>&nbsp;        Date date = askDate();</b>
+<i>108</i>&nbsp;
+<b class="nc"><i>109</i>&nbsp;        int numPlayers = 0;</b>
+<b class="nc"><i>110</i>&nbsp;        if (newGame) {</b>
+<b class="nc"><i>111</i>&nbsp;            Frmt.clearScreen();</b>
+<i>112</i>&nbsp;            do {
+<b class="nc"><i>113</i>&nbsp;                System.out.print(Frmt.style(&#39;b&#39;, &quot;\n Enter the number of competitors [2..3]: &quot;));</b>
+<b class="nc"><i>114</i>&nbsp;                String numPlayersString = scanner.nextLine();</b>
+<i>115</i>&nbsp;                try {
+<b class="nc"><i>116</i>&nbsp;                    numPlayers = Integer.parseInt(numPlayersString);</b>
+<b class="nc"><i>117</i>&nbsp;                } catch (Exception e) {</b>
+<b class="nc"><i>118</i>&nbsp;                    numPlayers = 0;</b>
+<b class="nc"><i>119</i>&nbsp;                }</b>
+<b class="nc"><i>120</i>&nbsp;                if (numPlayers &lt; 2 || numPlayers &gt; 3) {</b>
+<b class="nc"><i>121</i>&nbsp;                    Frmt.clearScreen();</b>
+<b class="nc"><i>122</i>&nbsp;                    System.out.println(Frmt.color(&#39;r&#39;, &quot;  &gt; Invalid choice. Try again.&quot;));</b>
+<b class="nc"><i>123</i>&nbsp;                    incorrect = true;</b>
+<i>124</i>&nbsp;                } else {
+<b class="nc"><i>125</i>&nbsp;                    incorrect = false;</b>
+<i>126</i>&nbsp;                }
+<b class="nc"><i>127</i>&nbsp;            } while (incorrect);</b>
+<i>128</i>&nbsp;        }
+<b class="nc"><i>129</i>&nbsp;        Frmt.clearScreen();</b>
+<b class="nc"><i>130</i>&nbsp;        System.out.println(Frmt.style(&#39;i&#39;, &quot;\n  &gt; Waiting for the other players to connect...&quot;));</b>
+<b class="nc"><i>131</i>&nbsp;        serverHandler.sendSetUpGame(nickname, date, numPlayers);</b>
+<i>132</i>&nbsp;    }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /**
+<i>136</i>&nbsp;     * Asks nickname
+<i>137</i>&nbsp;     *
+<i>138</i>&nbsp;     * @return The chosen nickname
+<i>139</i>&nbsp;     */
+<i>140</i>&nbsp;    private Date askDate() {
+<i>141</i>&nbsp;        boolean incorrect;
+<b class="nc"><i>142</i>&nbsp;        Date date = null;</b>
+<b class="nc"><i>143</i>&nbsp;        Frmt.clearScreen();</b>
+<i>144</i>&nbsp;        do {
+<b class="nc"><i>145</i>&nbsp;            System.out.print(Frmt.style(&#39;b&#39;, &quot;\n Enter your birth date [dd/mm/yyyy]: &quot;));</b>
+<b class="nc"><i>146</i>&nbsp;            String fullDate = scanner.nextLine();</b>
+<i>147</i>&nbsp;            try {
+<b class="nc"><i>148</i>&nbsp;                date = new SimpleDateFormat(&quot;dd/MM/yyyy&quot;).parse(fullDate);</b>
+<b class="nc"><i>149</i>&nbsp;                incorrect = false;</b>
+<b class="nc"><i>150</i>&nbsp;            } catch (ParseException e) {</b>
+<b class="nc"><i>151</i>&nbsp;                Frmt.clearScreen();</b>
+<b class="nc"><i>152</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;  &gt; Incorrect date format. Try again.&quot;));</b>
+<b class="nc"><i>153</i>&nbsp;                incorrect = true;</b>
+<b class="nc"><i>154</i>&nbsp;            }</b>
+<b class="nc"><i>155</i>&nbsp;        } while (incorrect);</b>
+<b class="nc"><i>156</i>&nbsp;        return date;</b>
+<i>157</i>&nbsp;    }
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;    /**
+<i>160</i>&nbsp;     * Asks nickname
+<i>161</i>&nbsp;     *
+<i>162</i>&nbsp;     * @return The chosen nickname
+<i>163</i>&nbsp;     */
+<i>164</i>&nbsp;    private String askNickname() {
+<i>165</i>&nbsp;        boolean incorrect;
+<i>166</i>&nbsp;        String nickname;
+<i>167</i>&nbsp;        do {
+<i>168</i>&nbsp;
+<b class="nc"><i>169</i>&nbsp;            System.out.print(Frmt.style(&#39;b&#39;, &quot;\n Enter your nickname: &quot;));</b>
+<b class="nc"><i>170</i>&nbsp;            nickname = scanner.nextLine();</b>
+<b class="nc"><i>171</i>&nbsp;            if (nickname.equals(&quot;&quot;) || nickname.contains(&quot; &quot;)) {</b>
+<b class="nc"><i>172</i>&nbsp;                Frmt.clearScreen();</b>
+<b class="nc"><i>173</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;  &gt; Invalid nickname. Try again.&quot;));</b>
+<b class="nc"><i>174</i>&nbsp;                incorrect = true;</b>
+<i>175</i>&nbsp;            } else {
+<b class="nc"><i>176</i>&nbsp;                incorrect = false;</b>
+<i>177</i>&nbsp;            }
+<b class="nc"><i>178</i>&nbsp;        } while (incorrect);</b>
+<b class="nc"><i>179</i>&nbsp;        return nickname;</b>
+<i>180</i>&nbsp;    }
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;    /**
+<i>183</i>&nbsp;     * Asks the game cards
+<i>184</i>&nbsp;     *
+<i>185</i>&nbsp;     * @param numCards Number of cards to be selected
+<i>186</i>&nbsp;     */
+<i>187</i>&nbsp;    public void askGameCards(int numCards) {
+<b class="nc"><i>188</i>&nbsp;        List&lt;Card&gt; allCardList = Configurator.getAllCards();</b>
+<i>189</i>&nbsp;        List&lt;String&gt; allCardNames;
+<b class="nc"><i>190</i>&nbsp;        List&lt;Card&gt; chosenCard = new ArrayList&lt;&gt;();</b>
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;        boolean incorrect;
+<b class="nc"><i>193</i>&nbsp;        Frmt.clearScreen();</b>
+<i>194</i>&nbsp;        do {
+<b class="nc"><i>195</i>&nbsp;            System.out.println(&quot;\n\n &quot; + Frmt.style(&#39;b&#39;, &quot;Choose &quot; + (numCards - chosenCard.size()) + &quot; card&quot; + ((numCards - chosenCard.size() &gt; 1) ? &quot;s&quot; : &quot;&quot;) + &quot; between these:&quot;));</b>
+<b class="nc"><i>196</i>&nbsp;            allCardNames = printCards(allCardList, chosenCard);</b>
+<i>197</i>&nbsp;
+<b class="nc"><i>198</i>&nbsp;            incorrect = false;</b>
+<b class="nc"><i>199</i>&nbsp;            System.out.print(&quot;  ↳: &quot;);</b>
+<b class="nc"><i>200</i>&nbsp;            String chosenCardName = scanner.next();</b>
+<b class="nc"><i>201</i>&nbsp;            Frmt.clearScreen();</b>
+<b class="nc"><i>202</i>&nbsp;            if (!allCardNames.contains(chosenCardName.toLowerCase())) {</b>
+<b class="nc"><i>203</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;   &gt; Invalid choice. Try again.&quot;));</b>
+<b class="nc"><i>204</i>&nbsp;                incorrect = true;</b>
+<i>205</i>&nbsp;            } else {
+<b class="nc"><i>206</i>&nbsp;                for (Card card : allCardList) {</b>
+<b class="nc"><i>207</i>&nbsp;                    if (card.getName().equalsIgnoreCase(chosenCardName)) {</b>
+<b class="nc"><i>208</i>&nbsp;                        if (chosenCard.contains(card)) {</b>
+<b class="nc"><i>209</i>&nbsp;                            System.out.println(Frmt.color(&#39;r&#39;, &quot;   &gt; The card has already been selected. Try again.&quot;));</b>
+<b class="nc"><i>210</i>&nbsp;                            incorrect = true;</b>
+<i>211</i>&nbsp;                        } else {
+<b class="nc"><i>212</i>&nbsp;                            chosenCard.add(card);</b>
+<i>213</i>&nbsp;                        }
+<i>214</i>&nbsp;                    }
+<b class="nc"><i>215</i>&nbsp;                }</b>
+<i>216</i>&nbsp;            }
+<b class="nc"><i>217</i>&nbsp;        } while (incorrect || chosenCard.size() &lt; numCards);</b>
+<i>218</i>&nbsp;
+<b class="nc"><i>219</i>&nbsp;        showLoading();</b>
+<b class="nc"><i>220</i>&nbsp;        serverHandler.sendGameCards(chosenCard);</b>
+<i>221</i>&nbsp;    }
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;    /**
+<i>224</i>&nbsp;     * Print all the available cards
+<i>225</i>&nbsp;     *
+<i>226</i>&nbsp;     * @param allCardList All the cards
+<i>227</i>&nbsp;     * @param chosenCard  The unavailable cards
+<i>228</i>&nbsp;     * @return A list containing all the names of the printed available cards
+<i>229</i>&nbsp;     */
+<i>230</i>&nbsp;    private List&lt;String&gt; printCards(List&lt;Card&gt; allCardList, List&lt;Card&gt; chosenCard) {
+<b class="nc"><i>231</i>&nbsp;        List&lt;String&gt; allCardNames = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>232</i>&nbsp;        for (Card card : allCardList) {</b>
+<b class="nc"><i>233</i>&nbsp;            if (!chosenCard.contains(card)) {</b>
+<b class="nc"><i>234</i>&nbsp;                System.out.println(Frmt.style(&#39;b&#39;, &quot;\n   ❖ &quot; + card.getName().toUpperCase()));</b>
+<b class="nc"><i>235</i>&nbsp;                System.out.println(Frmt.style(&#39;i&#39;, &quot;      &quot; + card.getDescription()));</b>
+<i>236</i>&nbsp;            }
+<b class="nc"><i>237</i>&nbsp;            allCardNames.add(card.getName().toLowerCase());</b>
+<b class="nc"><i>238</i>&nbsp;        }</b>
+<b class="nc"><i>239</i>&nbsp;        System.out.println();</b>
+<b class="nc"><i>240</i>&nbsp;        return allCardNames;</b>
+<i>241</i>&nbsp;    }
+<i>242</i>&nbsp;
+<i>243</i>&nbsp;    /**
+<i>244</i>&nbsp;     * Asks the card the player whats to use during the game
+<i>245</i>&nbsp;     *
+<i>246</i>&nbsp;     * @param possibleChoices All the possible cards
+<i>247</i>&nbsp;     */
+<i>248</i>&nbsp;    public void askPlayerCard(List&lt;Card&gt; possibleChoices) {
+<b class="nc"><i>249</i>&nbsp;        Card chosenCard = null;</b>
+<i>250</i>&nbsp;        String chosenCardName;
+<b class="nc"><i>251</i>&nbsp;        List&lt;String&gt; allCardNames = new ArrayList&lt;&gt;();</b>
+<i>252</i>&nbsp;
+<i>253</i>&nbsp;        boolean incorrect;
+<i>254</i>&nbsp;        do {
+<b class="nc"><i>255</i>&nbsp;            System.out.println(&quot;\n\n &quot; + Frmt.style(&#39;b&#39;, &quot;Choose your card between these:&quot;));</b>
+<b class="nc"><i>256</i>&nbsp;            for (Card card : possibleChoices) {</b>
+<b class="nc"><i>257</i>&nbsp;                System.out.println(Frmt.style(&#39;b&#39;, &quot;\n   ❖ &quot; + card.getName().toUpperCase()));</b>
+<b class="nc"><i>258</i>&nbsp;                System.out.println(Frmt.style(&#39;i&#39;, &quot;      &quot; + card.getDescription()));</b>
+<b class="nc"><i>259</i>&nbsp;                allCardNames.add(card.getName().toLowerCase());</b>
+<b class="nc"><i>260</i>&nbsp;            }</b>
+<b class="nc"><i>261</i>&nbsp;            System.out.println();</b>
+<i>262</i>&nbsp;
+<b class="nc"><i>263</i>&nbsp;            incorrect = false;</b>
+<b class="nc"><i>264</i>&nbsp;            System.out.print(&quot;  ↳: &quot;);</b>
+<b class="nc"><i>265</i>&nbsp;            chosenCardName = scanner.next();</b>
+<b class="nc"><i>266</i>&nbsp;            if (!allCardNames.contains(chosenCardName.toLowerCase())) {</b>
+<b class="nc"><i>267</i>&nbsp;                Frmt.clearScreen();</b>
+<b class="nc"><i>268</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;   &gt; Invalid choice. Try again.&quot;));</b>
+<b class="nc"><i>269</i>&nbsp;                incorrect = true;</b>
+<i>270</i>&nbsp;            }
+<b class="nc"><i>271</i>&nbsp;        } while (incorrect);</b>
+<i>272</i>&nbsp;
+<b class="nc"><i>273</i>&nbsp;        for (Card card : possibleChoices) {</b>
+<b class="nc"><i>274</i>&nbsp;            if (card.getName().equalsIgnoreCase(chosenCardName)) {</b>
+<b class="nc"><i>275</i>&nbsp;                chosenCard = card;</b>
+<i>276</i>&nbsp;            }
+<b class="nc"><i>277</i>&nbsp;        }</b>
+<i>278</i>&nbsp;
+<b class="nc"><i>279</i>&nbsp;        showLoading();</b>
+<b class="nc"><i>280</i>&nbsp;        serverHandler.sendPlayerCard(chosenCard);</b>
+<i>281</i>&nbsp;    }
+<i>282</i>&nbsp;
+<i>283</i>&nbsp;    /**
+<i>284</i>&nbsp;     * Asks the nickname of the first player
+<i>285</i>&nbsp;     *
+<i>286</i>&nbsp;     * @param playersNicknames All the nicknames
+<i>287</i>&nbsp;     */
+<i>288</i>&nbsp;    public void askFirstPlayer(List&lt;String&gt; playersNicknames) {
+<b class="nc"><i>289</i>&nbsp;        List&lt;String&gt; allNicknames = new ArrayList&lt;&gt;();</b>
+<i>290</i>&nbsp;
+<i>291</i>&nbsp;        String chosenNickname;
+<i>292</i>&nbsp;        boolean incorrect;
+<b class="nc"><i>293</i>&nbsp;        System.out.println(&quot;\n\n&quot;);</b>
+<i>294</i>&nbsp;        do {
+<b class="nc"><i>295</i>&nbsp;            System.out.print(&quot; &quot; + Frmt.style(&#39;b&#39;, &quot;Choose who will be the first player:&quot;) + &quot; &quot;);</b>
+<b class="nc"><i>296</i>&nbsp;            for (int i = 0; i &lt; playersNicknames.size(); i++) {</b>
+<b class="nc"><i>297</i>&nbsp;                String name = playersNicknames.get(i);</b>
+<b class="nc"><i>298</i>&nbsp;                allNicknames.add(name.toLowerCase());</b>
+<b class="nc"><i>299</i>&nbsp;                if (i != playersNicknames.size() - 1) {</b>
+<b class="nc"><i>300</i>&nbsp;                    System.out.print(Frmt.style(&#39;b&#39;, name + &quot;, &quot;));</b>
+<i>301</i>&nbsp;                } else {
+<b class="nc"><i>302</i>&nbsp;                    System.out.println(Frmt.style(&#39;b&#39;, name + &quot;?&quot;));</b>
+<i>303</i>&nbsp;                }
+<i>304</i>&nbsp;            }
+<i>305</i>&nbsp;
+<b class="nc"><i>306</i>&nbsp;            incorrect = false;</b>
+<b class="nc"><i>307</i>&nbsp;            System.out.print(&quot;  ↳: &quot;);</b>
+<b class="nc"><i>308</i>&nbsp;            chosenNickname = scanner.next();</b>
+<b class="nc"><i>309</i>&nbsp;            if (!allNicknames.contains(chosenNickname.toLowerCase())) {</b>
+<b class="nc"><i>310</i>&nbsp;                Frmt.clearScreen();</b>
+<b class="nc"><i>311</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;   &gt; Invalid choice. Try again.&quot;));</b>
+<b class="nc"><i>312</i>&nbsp;                incorrect = true;</b>
+<i>313</i>&nbsp;            }
+<b class="nc"><i>314</i>&nbsp;        } while (incorrect);</b>
+<i>315</i>&nbsp;
+<b class="nc"><i>316</i>&nbsp;        showLoading();</b>
+<b class="nc"><i>317</i>&nbsp;        serverHandler.sendFirstPlayer(chosenNickname);</b>
+<i>318</i>&nbsp;    }
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;    /**
+<i>321</i>&nbsp;     * Show all the cards of the game
+<i>322</i>&nbsp;     *
+<i>323</i>&nbsp;     * @param cards All the cards of the game
+<i>324</i>&nbsp;     */
+<i>325</i>&nbsp;    public void showGameCards(List&lt;Card&gt; cards) {
+<b class="nc"><i>326</i>&nbsp;        List&lt;Card&gt; allCardList = Configurator.getAllCards();</b>
+<i>327</i>&nbsp;
+<b class="nc"><i>328</i>&nbsp;        Frmt.clearScreen();</b>
+<b class="nc"><i>329</i>&nbsp;        System.out.println(&quot; &quot; + Frmt.style(&#39;b&#39;, &quot;The cards used in this match will be:&quot;));</b>
+<b class="nc"><i>330</i>&nbsp;        for (Card card : allCardList) {</b>
+<b class="nc"><i>331</i>&nbsp;            if (cards.contains(card)) {</b>
+<b class="nc"><i>332</i>&nbsp;                System.out.println(Frmt.style(&#39;b&#39;, &quot;\n   ❖ &quot; + card.getName().toUpperCase()));</b>
+<b class="nc"><i>333</i>&nbsp;                System.out.println(Frmt.style(&#39;i&#39;, &quot;      &quot; + card.getDescription()));</b>
+<i>334</i>&nbsp;            }
+<b class="nc"><i>335</i>&nbsp;        }</b>
+<i>336</i>&nbsp;    }
+<i>337</i>&nbsp;
+<i>338</i>&nbsp;    /**
+<i>339</i>&nbsp;     * Shows the cards assignment of the game
+<i>340</i>&nbsp;     *
+<i>341</i>&nbsp;     * @param playerList The list of players of the game
+<i>342</i>&nbsp;     */
+<i>343</i>&nbsp;    public void showCardAssignmentMessage(List&lt;Player&gt; playerList) {
+<b class="nc"><i>344</i>&nbsp;        Frmt.clearScreen();</b>
+<b class="nc"><i>345</i>&nbsp;        System.out.println(&quot; &quot; + Frmt.style(&#39;b&#39;, &quot;Cards assignment:&quot;));</b>
+<b class="nc"><i>346</i>&nbsp;        for (Player player : playerList) {</b>
+<b class="nc"><i>347</i>&nbsp;            System.out.print(Frmt.style(&#39;b&#39;, &quot;\n   ▷ &quot; + player.getNickname()));</b>
+<b class="nc"><i>348</i>&nbsp;            System.out.println(Frmt.style(&#39;i&#39;, &quot; will use &quot; + player.getCard().getName()));</b>
+<b class="nc"><i>349</i>&nbsp;        }</b>
+<i>350</i>&nbsp;    }
+<i>351</i>&nbsp;
+<i>352</i>&nbsp;    /**
+<i>353</i>&nbsp;     * Asks the color the player whats to choose
+<i>354</i>&nbsp;     *
+<i>355</i>&nbsp;     * @param availableColors All the available colors
+<i>356</i>&nbsp;     */
+<i>357</i>&nbsp;    public void askPlayerColor(List&lt;String&gt; availableColors) {
+<i>358</i>&nbsp;        String chosenColor;
+<i>359</i>&nbsp;
+<b class="nc"><i>360</i>&nbsp;        Frmt.clearScreen();</b>
+<i>361</i>&nbsp;        //There&#39;s only one color?
+<b class="nc"><i>362</i>&nbsp;        if (availableColors.size() == 1) {</b>
+<b class="nc"><i>363</i>&nbsp;            System.out.print(&quot;\n\n &quot; + Frmt.style(&#39;b&#39;, &quot;Your color will be&quot;) + &quot; &quot;);</b>
+<b class="nc"><i>364</i>&nbsp;            System.out.println(Frmt.color(availableColors.get(0).toLowerCase().charAt(0), availableColors.get(0).toLowerCase()));</b>
+<b class="nc"><i>365</i>&nbsp;            chosenColor = availableColors.get(0);</b>
+<i>366</i>&nbsp;
+<i>367</i>&nbsp;        } else {
+<b class="nc"><i>368</i>&nbsp;            List&lt;String&gt; allColors = new ArrayList&lt;&gt;();</b>
+<i>369</i>&nbsp;            boolean incorrect;
+<i>370</i>&nbsp;            do {
+<b class="nc"><i>371</i>&nbsp;                System.out.print(&quot;\n\n &quot; + Frmt.style(&#39;b&#39;, &quot;Choose your color between:&quot;) + &quot; &quot;);</b>
+<b class="nc"><i>372</i>&nbsp;                for (int i = 0; i &lt; availableColors.size(); i++) {</b>
+<b class="nc"><i>373</i>&nbsp;                    String color = availableColors.get(i);</b>
+<b class="nc"><i>374</i>&nbsp;                    if (i != availableColors.size() - 1) {</b>
+<b class="nc"><i>375</i>&nbsp;                        System.out.print(Frmt.color(color.toLowerCase().charAt(0), color.toLowerCase() + &quot;, &quot;));</b>
+<i>376</i>&nbsp;                    } else {
+<b class="nc"><i>377</i>&nbsp;                        System.out.println(Frmt.color(color.toLowerCase().charAt(0), color.toLowerCase() + &quot;?&quot;));</b>
+<i>378</i>&nbsp;                    }
+<b class="nc"><i>379</i>&nbsp;                    allColors.add(color.toLowerCase());</b>
+<i>380</i>&nbsp;                }
+<i>381</i>&nbsp;
+<b class="nc"><i>382</i>&nbsp;                incorrect = false;</b>
+<b class="nc"><i>383</i>&nbsp;                System.out.print(&quot;  ↳: &quot;);</b>
+<b class="nc"><i>384</i>&nbsp;                chosenColor = scanner.next();</b>
+<b class="nc"><i>385</i>&nbsp;                if (!allColors.contains(chosenColor.toLowerCase())) {</b>
+<b class="nc"><i>386</i>&nbsp;                    Frmt.clearScreen();</b>
+<b class="nc"><i>387</i>&nbsp;                    System.out.println(Frmt.color(&#39;r&#39;, &quot;   &gt; Invalid choice. Try again.&quot;));</b>
+<b class="nc"><i>388</i>&nbsp;                    incorrect = true;</b>
+<i>389</i>&nbsp;                }
+<b class="nc"><i>390</i>&nbsp;            } while (incorrect);</b>
+<i>391</i>&nbsp;        }
+<b class="nc"><i>392</i>&nbsp;        serverHandler.sendPlayerColor(chosenColor);</b>
+<i>393</i>&nbsp;    }
+<i>394</i>&nbsp;
+<i>395</i>&nbsp;    /**
+<i>396</i>&nbsp;     * Asks the first position for the male and female worker
+<i>397</i>&nbsp;     * @param genre          The genre of the worker
+<i>398</i>&nbsp;     * @param forbiddenCells The forbidden cells
+<i>399</i>&nbsp;     * @param mapInfo        The map info
+<i>400</i>&nbsp;     */
+<i>401</i>&nbsp;    public void askPlayerPosition(Genre genre, List&lt;Cell&gt; forbiddenCells, MapInfo mapInfo) {
+<i>402</i>&nbsp;        Cell chosenCell;
+<i>403</i>&nbsp;        String chosenPosition;
+<b class="nc"><i>404</i>&nbsp;        int row = -1, column = -1;</b>
+<i>405</i>&nbsp;        boolean incorrect;
+<b class="nc"><i>406</i>&nbsp;        Frmt.clearScreen();</b>
+<i>407</i>&nbsp;        do {
+<b class="nc"><i>408</i>&nbsp;            showMap(mapInfo, false);</b>
+<b class="nc"><i>409</i>&nbsp;            incorrect = false;</b>
+<b class="nc"><i>410</i>&nbsp;            System.out.print(&quot;\n &quot; + Frmt.style(&#39;b&#39;, &quot;Choose the position of your &quot; + ((genre == MALE) ? &quot;male&quot; : &quot;female&quot;) + &quot; worker [row,column]:&quot;) + &quot; &quot;);</b>
+<b class="nc"><i>411</i>&nbsp;            chosenPosition = scanner.next();</b>
+<i>412</i>&nbsp;            try {
+<b class="nc"><i>413</i>&nbsp;                row = Character.getNumericValue(chosenPosition.charAt(0));</b>
+<b class="nc"><i>414</i>&nbsp;                column = Character.getNumericValue(chosenPosition.charAt(2));</b>
+<b class="nc"><i>415</i>&nbsp;            } catch (Exception e) {</b>
+<b class="nc"><i>416</i>&nbsp;                Frmt.clearScreen();</b>
+<b class="nc"><i>417</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;  &gt; Invalid choice. Try again.&quot;));</b>
+<b class="nc"><i>418</i>&nbsp;                incorrect = true;</b>
+<b class="nc"><i>419</i>&nbsp;            }</b>
+<i>420</i>&nbsp;
+<b class="nc"><i>421</i>&nbsp;            chosenCell = new Cell(row, column);</b>
+<b class="nc"><i>422</i>&nbsp;            if (!incorrect &amp;&amp; (row &lt; 0 || column &lt; 0 || row &gt; 4 || column &gt; 4 || forbiddenCells.contains(chosenCell) || chosenPosition.length() != 3)) {</b>
+<b class="nc"><i>423</i>&nbsp;                Frmt.clearScreen();</b>
+<b class="nc"><i>424</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;  &gt; Invalid choice. Try again.&quot;));</b>
+<b class="nc"><i>425</i>&nbsp;                incorrect = true;</b>
+<i>426</i>&nbsp;            }
+<b class="nc"><i>427</i>&nbsp;        } while (incorrect);</b>
+<b class="nc"><i>428</i>&nbsp;        serverHandler.sendPlayerPosition(genre, chosenCell);</b>
+<i>429</i>&nbsp;    }
+<i>430</i>&nbsp;
+<i>431</i>&nbsp;    /**
+<i>432</i>&nbsp;     * Shows the board of the game
+<i>433</i>&nbsp;     *
+<i>434</i>&nbsp;     * @param mapInfo   The map info
+<i>435</i>&nbsp;     * @param newScreen True if it&#39;s necessary to clean the interface
+<i>436</i>&nbsp;     */
+<i>437</i>&nbsp;    public void showMap(MapInfo mapInfo, boolean newScreen) {
+<b class="nc"><i>438</i>&nbsp;        List&lt;String&gt; playerNames=mapInfo.getNicknames();</b>
+<b class="nc"><i>439</i>&nbsp;        List&lt;String&gt; colors=mapInfo.getColors();</b>
+<b class="nc"><i>440</i>&nbsp;        List&lt;String&gt; cards=mapInfo.getCards();</b>
+<i>441</i>&nbsp;
+<b class="nc"><i>442</i>&nbsp;        if (newScreen)</b>
+<b class="nc"><i>443</i>&nbsp;            Frmt.clearScreen();</b>
+<i>444</i>&nbsp;
+<b class="nc"><i>445</i>&nbsp;        System.out.println(&quot;\tNW\t\t                          N                             \tNE&quot;);</b>
+<b class="nc"><i>446</i>&nbsp;        System.out.print(&quot;\n\t\t\t&quot;);</b>
+<b class="nc"><i>447</i>&nbsp;        for (int j = 0; j &lt; 5; j++) {</b>
+<b class="nc"><i>448</i>&nbsp;            System.out.print(&quot;    &quot; + j + &quot;    &quot; + &quot;  &quot;);</b>
+<i>449</i>&nbsp;        }
+<b class="nc"><i>450</i>&nbsp;        System.out.println();</b>
+<b class="nc"><i>451</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="nc"><i>452</i>&nbsp;            System.out.print(&quot;\n\t\t\t&quot;);</b>
+<b class="nc"><i>453</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="nc"><i>454</i>&nbsp;                char color = (mapInfo.getColorAt(i,j) == null) ? &#39;w&#39; : mapInfo.getColorAt(i,j).charAt(0);</b>
+<b class="nc"><i>455</i>&nbsp;                System.out.print(Frmt.color(color, Frmt.style(&#39;r&#39;, &quot;         &quot;)) + &quot;  &quot;);</b>
+<i>456</i>&nbsp;            }
+<i>457</i>&nbsp;
+<i>458</i>&nbsp;            // Legend
+<b class="nc"><i>459</i>&nbsp;            if (i == 1 &amp;&amp; colors.size() &gt; 0) {</b>
+<b class="nc"><i>460</i>&nbsp;                System.out.print(&quot;\t\t\t  &quot; + Frmt.color(colors.get(0).charAt(0), Frmt.style(&#39;r&#39;, &quot;  &quot;</b>
+<b class="nc"><i>461</i>&nbsp;                        + playerNames.get(0).toUpperCase() + &quot; - &quot; + cards.get(0) + &quot;  &quot;)));</b>
+<i>462</i>&nbsp;            }
+<i>463</i>&nbsp;
+<b class="nc"><i>464</i>&nbsp;            if (i == 2) {</b>
+<b class="nc"><i>465</i>&nbsp;                System.out.print(&quot;\n\tW\t&quot; + i + &quot;\t&quot;);</b>
+<i>466</i>&nbsp;            } else {
+<b class="nc"><i>467</i>&nbsp;                System.out.print(&quot;\n\t\t&quot; + i + &quot;\t&quot;);</b>
+<i>468</i>&nbsp;            }
+<b class="nc"><i>469</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="nc"><i>470</i>&nbsp;                Frmt domed = (mapInfo.getDomeAt(i,j)) ? Frmt.DOME : Frmt.NOT_DOME;</b>
+<b class="nc"><i>471</i>&nbsp;                String genre = (mapInfo.getGenreAt(i,j) == null) ? &quot; &quot; : Frmt.getGenreIcon(mapInfo.getGenreAt(i,j));</b>
+<b class="nc"><i>472</i>&nbsp;                System.out.print(Frmt.color(&#39;w&#39;, Frmt.style(&#39;r&#39;, &quot; &quot; + domed + &quot;    &quot; + genre + &quot;  &quot;)) + &quot;  &quot;);</b>
+<i>473</i>&nbsp;            }
+<b class="nc"><i>474</i>&nbsp;            if (i == 2) {</b>
+<b class="nc"><i>475</i>&nbsp;                System.out.print(&quot;\t\tE&quot;);</b>
+<i>476</i>&nbsp;            }
+<i>477</i>&nbsp;
+<i>478</i>&nbsp;            // Legend
+<b class="nc"><i>479</i>&nbsp;            if (i == 1 &amp;&amp; colors.size() &gt; 1) {</b>
+<b class="nc"><i>480</i>&nbsp;                System.out.print(&quot;\t\t\t  &quot; + Frmt.color(colors.get(1).charAt(0), Frmt.style(&#39;r&#39;, &quot;  &quot;</b>
+<b class="nc"><i>481</i>&nbsp;                        + playerNames.get(1).toUpperCase() + &quot; - &quot; + cards.get(1) + &quot;  &quot;)));</b>
+<i>482</i>&nbsp;            }
+<i>483</i>&nbsp;
+<b class="nc"><i>484</i>&nbsp;            System.out.print(&quot;\n\t\t\t&quot;);</b>
+<b class="nc"><i>485</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="nc"><i>486</i>&nbsp;                int floor = mapInfo.getFloorAt(i,j);</b>
+<b class="nc"><i>487</i>&nbsp;                System.out.print(Frmt.color(&#39;w&#39;, Frmt.style(&#39;r&#39;, &quot; &quot; + floor + &quot;       &quot;)) + &quot;  &quot;);</b>
+<i>488</i>&nbsp;            }
+<i>489</i>&nbsp;
+<i>490</i>&nbsp;            // Legend
+<b class="nc"><i>491</i>&nbsp;            if (i == 1 &amp;&amp; colors.size() &gt; 2) {</b>
+<b class="nc"><i>492</i>&nbsp;                System.out.print(&quot;\t\t\t  &quot; + Frmt.color(colors.get(2).charAt(0), Frmt.style(&#39;r&#39;, &quot;  &quot;</b>
+<b class="nc"><i>493</i>&nbsp;                        + playerNames.get(2).toUpperCase() + &quot; - &quot; + cards.get(2) + &quot;  &quot;)));</b>
+<i>494</i>&nbsp;            }
+<b class="nc"><i>495</i>&nbsp;            if (i == 0 &amp;&amp; colors.size() &gt; 0) {</b>
+<b class="nc"><i>496</i>&nbsp;                System.out.print(&quot;\t\t\t  &quot; + Frmt.style(&quot;bi&quot;, &quot;KEY:&quot;));</b>
+<i>497</i>&nbsp;            }
+<b class="nc"><i>498</i>&nbsp;            System.out.print(&quot;\n&quot;);</b>
+<i>499</i>&nbsp;        }
+<b class="nc"><i>500</i>&nbsp;        System.out.println(&quot;\n\tSW\t\t                          S                             \tSE&quot;);</b>
+<b class="nc"><i>501</i>&nbsp;        System.out.print(&quot;\n&quot;);</b>
+<i>502</i>&nbsp;    }
+<i>503</i>&nbsp;
+<i>504</i>&nbsp;    /**
+<i>505</i>&nbsp;     * Asks the action the player wants to perform
+<i>506</i>&nbsp;     *  @param roundActions     All the possible actions
+<i>507</i>&nbsp;     * @param mapInfo           The map info
+<i>508</i>&nbsp;     * @param loserNickname     The nickname of the looser or null value
+<i>509</i>&nbsp;     */
+<i>510</i>&nbsp;    public void askAction(RoundActions roundActions, MapInfo mapInfo, String loserNickname) {
+<i>511</i>&nbsp;        String action, genre, direction;
+<i>512</i>&nbsp;        Action theAction;
+<i>513</i>&nbsp;        boolean incorrect;
+<i>514</i>&nbsp;
+<b class="nc"><i>515</i>&nbsp;        Frmt.clearScreen();</b>
+<i>516</i>&nbsp;        do {
+<b class="nc"><i>517</i>&nbsp;            showMap(mapInfo, false);</b>
+<b class="nc"><i>518</i>&nbsp;            incorrect = false;</b>
+<i>519</i>&nbsp;
+<i>520</i>&nbsp;            // There&#39;s a loser?
+<b class="nc"><i>521</i>&nbsp;            if (loserNickname != null) {</b>
+<b class="nc"><i>522</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;\n\t\t&quot; + Frmt.style(&#39;b&#39;, &quot;&quot; + loserNickname.toUpperCase() + &quot; has lost &quot; + Frmt.DEATH)));</b>
+<i>523</i>&nbsp;            }
+<b class="nc"><i>524</i>&nbsp;            System.out.println(Frmt.style(&#39;b&#39;, &quot;\t\tIt&#39;s your turn. &quot;));</b>
+<b class="nc"><i>525</i>&nbsp;            System.out.print(&quot;\n\t\t&quot; + Frmt.style(&#39;b&#39;, &quot;You can:  \n\t\t&quot;));</b>
+<b class="nc"><i>526</i>&nbsp;            int counter = 0;</b>
+<b class="nc"><i>527</i>&nbsp;            for (Action possibleAction : roundActions.getActionList()) {</b>
+<b class="nc"><i>528</i>&nbsp;                if (counter == 11) {</b>
+<b class="nc"><i>529</i>&nbsp;                    System.out.print(&quot;\n\t\t&quot;);</b>
+<b class="nc"><i>530</i>&nbsp;                    counter = 0;</b>
+<i>531</i>&nbsp;                }
+<b class="nc"><i>532</i>&nbsp;                if (possibleAction.getActionType().name().equalsIgnoreCase(&quot;END&quot;)) {</b>
+<b class="nc"><i>533</i>&nbsp;                    System.out.print(&quot;END; &quot;);</b>
+<i>534</i>&nbsp;
+<i>535</i>&nbsp;                } else {
+<b class="nc"><i>536</i>&nbsp;                    System.out.print(possibleAction.getActionType().name() + &quot; &quot; + possibleAction.getGenre().name().charAt(0) + &quot; &quot; + possibleAction.getDirection().name() + &quot;; &quot;);</b>
+<i>537</i>&nbsp;                }
+<b class="nc"><i>538</i>&nbsp;                counter++;</b>
+<b class="nc"><i>539</i>&nbsp;            }</b>
+<i>540</i>&nbsp;
+<b class="nc"><i>541</i>&nbsp;            System.out.print(&quot;\n\n\t\t&quot; + Frmt.style(&#39;b&#39;, &quot;Insert your action type [MOVE/FLOOR/DOME/END]:&quot;) + &quot; &quot;);</b>
+<b class="nc"><i>542</i>&nbsp;            action = scanner.next();</b>
+<b class="nc"><i>543</i>&nbsp;            if (!action.equalsIgnoreCase(&quot;end&quot;)) {</b>
+<b class="nc"><i>544</i>&nbsp;                System.out.print(&quot;\t\t&quot; + Frmt.style(&#39;b&#39;, &quot;Insert the genre of the worker [M/F]:&quot;) + &quot; &quot;);</b>
+<b class="nc"><i>545</i>&nbsp;                genre = scanner.next();</b>
+<b class="nc"><i>546</i>&nbsp;                System.out.print(&quot;\t\t&quot; + Frmt.style(&#39;b&#39;, &quot;Insert the direction [N/NE/E/SE/S/SW/W/NW]:&quot;) + &quot; &quot;);</b>
+<b class="nc"><i>547</i>&nbsp;                direction = scanner.next();</b>
+<i>548</i>&nbsp;
+<b class="nc"><i>549</i>&nbsp;                theAction = roundActions.find(action, genre, direction);</b>
+<i>550</i>&nbsp;            } else {
+<b class="nc"><i>551</i>&nbsp;                theAction = roundActions.canEnd();</b>
+<i>552</i>&nbsp;            }
+<b class="nc"><i>553</i>&nbsp;            if (theAction == null) {</b>
+<b class="nc"><i>554</i>&nbsp;                Frmt.clearScreen();</b>
+<b class="nc"><i>555</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;\t\t  &gt; Invalid action. Try again.\n&quot;));</b>
+<b class="nc"><i>556</i>&nbsp;                incorrect = true;</b>
+<i>557</i>&nbsp;            }
+<b class="nc"><i>558</i>&nbsp;        } while (incorrect);</b>
+<b class="nc"><i>559</i>&nbsp;        serverHandler.sendAction(theAction);</b>
+<i>560</i>&nbsp;    }
+<i>561</i>&nbsp;
+<i>562</i>&nbsp;    /**
+<i>563</i>&nbsp;     * Notify the players that the game has ended and notify the winner
+<i>564</i>&nbsp;     *
+<i>565</i>&nbsp;     * @param winnerNickname The nickname of the winner
+<i>566</i>&nbsp;     * @param youWin         True if the player has win
+<i>567</i>&nbsp;     */
+<i>568</i>&nbsp;    public void showGameEndMessage(String winnerNickname, boolean youWin) {
+<b class="nc"><i>569</i>&nbsp;        if (youWin) {</b>
+<b class="nc"><i>570</i>&nbsp;            System.out.println(Frmt.color(&#39;g&#39;, &quot;\n\n\t&quot; + Frmt.style(&#39;b&#39;, &quot;If it seems to be true, probably it is: YOU WIN &quot; + Frmt.CUP)));</b>
+<i>571</i>&nbsp;        } else {
+<b class="nc"><i>572</i>&nbsp;            System.out.println(Frmt.color(&#39;r&#39;, &quot;\n\n\t&quot; + Frmt.style(&#39;b&#39;, &quot;YOU LOSE &quot; + Frmt.DEATH + &quot; : the winner is &quot; + winnerNickname.toUpperCase())));</b>
+<i>573</i>&nbsp;        }
+<b class="nc"><i>574</i>&nbsp;        askNewGame();</b>
+<i>575</i>&nbsp;    }
+<i>576</i>&nbsp;
+<i>577</i>&nbsp;    /**
+<i>578</i>&nbsp;     * Notify the players that a player has disconnected and the game has ended
+<i>579</i>&nbsp;     *
+<i>580</i>&nbsp;     * @param disconnectedNickname The nickname of the disconnected player
+<i>581</i>&nbsp;     */
+<i>582</i>&nbsp;    public void showDisconnectionMessage(String disconnectedNickname) {
+<b class="nc"><i>583</i>&nbsp;        Frmt.clearScreen();</b>
+<b class="nc"><i>584</i>&nbsp;        System.out.println(Frmt.color(&#39;r&#39;, &quot;\n\n\t&quot; + Frmt.style(&quot;ui&quot;, &quot;GAME OVER: &quot; +</b>
+<i>585</i>&nbsp;                disconnectedNickname + &quot; has disconnected.&quot;)));
+<b class="nc"><i>586</i>&nbsp;        askNewGame();</b>
+<i>587</i>&nbsp;    }
+<i>588</i>&nbsp;
+<i>589</i>&nbsp;    /**
+<i>590</i>&nbsp;     * Shows an error message to the user
+<i>591</i>&nbsp;     *
+<i>592</i>&nbsp;     * @param errorMessage The message to be shown
+<i>593</i>&nbsp;     * @param newScreen    True if it&#39;s necessary to clean the interface
+<i>594</i>&nbsp;     */
+<i>595</i>&nbsp;    public void showErrorMessage(String errorMessage, boolean newScreen) {
+<b class="nc"><i>596</i>&nbsp;        if (newScreen)</b>
+<b class="nc"><i>597</i>&nbsp;            Frmt.clearScreen();</b>
+<b class="nc"><i>598</i>&nbsp;        System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Error: &quot; + errorMessage));</b>
+<i>599</i>&nbsp;    }
+<i>600</i>&nbsp;
+<i>601</i>&nbsp;    /**
+<i>602</i>&nbsp;     * Asks to the player if he wants to start a new game
+<i>603</i>&nbsp;     */
+<i>604</i>&nbsp;    private void askNewGame() {
+<b class="nc"><i>605</i>&nbsp;        System.out.print(&quot;\n\n\tDo you want to play again? [Yes/No]: &quot;);</b>
+<i>606</i>&nbsp;
+<i>607</i>&nbsp;        boolean incorrect;
+<i>608</i>&nbsp;        String choice;
+<i>609</i>&nbsp;        do {
+<b class="nc"><i>610</i>&nbsp;            incorrect = false;</b>
+<b class="nc"><i>611</i>&nbsp;            choice = scanner.next();</b>
+<i>612</i>&nbsp;
+<b class="nc"><i>613</i>&nbsp;            if (!choice.equalsIgnoreCase(&quot;yes&quot;) &amp;&amp; !choice.equalsIgnoreCase(&quot;no&quot;)) {</b>
+<b class="nc"><i>614</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Invalid choice. Try again.&quot;));</b>
+<b class="nc"><i>615</i>&nbsp;                incorrect = true;</b>
+<i>616</i>&nbsp;            }
+<b class="nc"><i>617</i>&nbsp;        } while (incorrect);</b>
+<i>618</i>&nbsp;
+<b class="nc"><i>619</i>&nbsp;        serverHandler.sendNewGame(choice.equalsIgnoreCase(&quot;yes&quot;));</b>
+<i>620</i>&nbsp;    }
+<i>621</i>&nbsp;
+<i>622</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-10 19:55</div>
+</div>
+</body>
+</html>

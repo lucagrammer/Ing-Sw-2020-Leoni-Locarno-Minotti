@@ -55,6 +55,7 @@ public class ServerHandler implements NetworkHandler {
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
                 if (isConnected) {
                     String errorMessage = "Server unreachable" + (Configurator.getErrorDetailsFlag() ? " during message reading" : "") + ".";
                     view.showErrorMessage(errorMessage, true);

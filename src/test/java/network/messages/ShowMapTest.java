@@ -26,7 +26,7 @@ public class ShowMapTest {
 
     @Test
     public void setType_getCorrectType() {
-        ShowMap showMap = new ShowMap(game, currentNickname, null);
+        ShowMap showMap = new ShowMap(null, currentNickname, null);
         assertEquals(CV, showMap.getType());
     }
 }

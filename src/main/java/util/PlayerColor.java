@@ -8,7 +8,7 @@ import java.util.List;
  * All the possible colors of the players/workers
  */
 public enum PlayerColor {
-    BLUE("Blue", new Color(139, 232, 234)),
+    BLUE("Blue", new Color(23, 161, 200)),
     PURPLE("Purple", new Color(226, 150, 169)),
     YELLOW("Yellow", new Color(245, 223, 111));
 

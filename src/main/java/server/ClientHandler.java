@@ -155,7 +155,7 @@ class ClientHandler extends Thread implements NetworkHandler {
             SYSMessage sysMessage = (SYSMessage) clientMessage;
             sysMessage.execute(virtualView, nickname);
         } else {
-            send(new ShowDisconnection("Someone"));
+            send(new ShowDisconnection("Another player"));
         }
     }
 

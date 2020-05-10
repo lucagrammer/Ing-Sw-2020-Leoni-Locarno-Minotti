@@ -1,0 +1,207 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ServerLauncher</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">server</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ServerLauncher (server)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ServerLauncher</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 47)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package server;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import model.Game;
+<i>4</i>&nbsp;import util.Configurator;
+<i>5</i>&nbsp;import util.Frmt;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.io.IOException;
+<i>8</i>&nbsp;import java.net.ServerSocket;
+<i>9</i>&nbsp;import java.net.Socket;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * Manages the startup phase of the server and the connection set up
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;public class ServerLauncher {
+<i>15</i>&nbsp;    private static ServerSocket serverSocket;
+<i>16</i>&nbsp;    private Game currentGame;
+<i>17</i>&nbsp;    private VirtualView currentVirtualView;
+<i>18</i>&nbsp;    private int addedPlayers;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    /**
+<i>21</i>&nbsp;     * Constructor: build a ServerLauncher
+<i>22</i>&nbsp;     */
+<b class="nc"><i>23</i>&nbsp;    public ServerLauncher() {</b>
+<b class="nc"><i>24</i>&nbsp;        currentGame = null;</b>
+<b class="nc"><i>25</i>&nbsp;        currentVirtualView = null;</b>
+<b class="nc"><i>26</i>&nbsp;        addedPlayers = 0;</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    public static void main(String[] args) {
+<b class="nc"><i>30</i>&nbsp;        ServerLauncher serverLauncher = new ServerLauncher();</b>
+<i>31</i>&nbsp;        try {
+<b class="nc"><i>32</i>&nbsp;            serverLauncher.launch();</b>
+<b class="nc"><i>33</i>&nbsp;        } catch (Exception e) {</b>
+<b class="nc"><i>34</i>&nbsp;            Frmt.clearServerLog();</b>
+<b class="nc"><i>35</i>&nbsp;            System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Fatal error: Could not start the server.&quot;));</b>
+<b class="nc"><i>36</i>&nbsp;        }</b>
+<i>37</i>&nbsp;    }
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /**
+<i>40</i>&nbsp;     * ServerLauncher launcher. Starts the server socket and listen for clients requests
+<i>41</i>&nbsp;     *
+<i>42</i>&nbsp;     * @throws IOException When the server can&#39;t open the ServerSocket
+<i>43</i>&nbsp;     */
+<i>44</i>&nbsp;    public void launch() throws IOException {
+<b class="nc"><i>45</i>&nbsp;        Frmt.clearServerLog();</b>
+<b class="nc"><i>46</i>&nbsp;        serverSocket = new ServerSocket(Configurator.getDefaultPort());</b>
+<b class="nc"><i>47</i>&nbsp;        System.out.println(Frmt.color(&#39;g&#39;, &quot;&gt; Server started successfully.&quot;));</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;        while (true) {
+<i>50</i>&nbsp;            try {
+<b class="nc"><i>51</i>&nbsp;                initClient();</b>
+<b class="nc"><i>52</i>&nbsp;            } catch (IOException | InterruptedException e) {</b>
+<b class="nc"><i>53</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Connection Error: Could not accept the connection.&quot;));</b>
+<b class="nc"><i>54</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>55</i>&nbsp;            }</b>
+<i>56</i>&nbsp;        }
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * Add a client to an existing game or create a new game if there are no games available
+<i>61</i>&nbsp;     *
+<i>62</i>&nbsp;     * @throws IOException          When happens a connection error
+<i>63</i>&nbsp;     * @throws InterruptedException When the server has been interrupted
+<i>64</i>&nbsp;     */
+<i>65</i>&nbsp;    public void initClient() throws IOException, InterruptedException {
+<i>66</i>&nbsp;        ClientHandler clientHandler;
+<i>67</i>&nbsp;
+<b class="nc"><i>68</i>&nbsp;        Socket socket = serverSocket.accept();</b>
+<b class="nc"><i>69</i>&nbsp;        System.out.println(Frmt.color(&#39;g&#39;, &quot;&gt; &quot; + socket.getRemoteSocketAddress() + &quot; has connected.&quot;));</b>
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;        // Creates a game if it doesn&#39;t exist and add the client to it
+<b class="nc"><i>72</i>&nbsp;        if (currentGame == null) {</b>
+<b class="nc"><i>73</i>&nbsp;            initGame();</b>
+<b class="nc"><i>74</i>&nbsp;            clientHandler = new ClientHandler(currentVirtualView, socket, true);</b>
+<i>75</i>&nbsp;        } else {
+<b class="nc"><i>76</i>&nbsp;            clientHandler = new ClientHandler(currentVirtualView, socket, false);</b>
+<i>77</i>&nbsp;        }
+<b class="nc"><i>78</i>&nbsp;        currentVirtualView.addClientHandler(clientHandler);</b>
+<b class="nc"><i>79</i>&nbsp;        clientHandler.start();</b>
+<b class="nc"><i>80</i>&nbsp;        addedPlayers++;</b>
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;        // Sleep until the number of players of the game has been set
+<b class="nc"><i>83</i>&nbsp;        synchronized (currentGame) {</b>
+<b class="nc"><i>84</i>&nbsp;            while (currentGame.getNumPlayers() == -1 &amp;&amp; currentGame.isActive()) {</b>
+<b class="nc"><i>85</i>&nbsp;                currentGame.wait();</b>
+<i>86</i>&nbsp;            }
+<b class="nc"><i>87</i>&nbsp;        }</b>
+<b class="nc"><i>88</i>&nbsp;        if (addedPlayers == currentGame.getNumPlayers() || !currentGame.isActive()) {</b>
+<b class="nc"><i>89</i>&nbsp;            clearGameRoom();</b>
+<i>90</i>&nbsp;        }
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /**
+<i>94</i>&nbsp;     * Clears the game room preparing it to welcome new users
+<i>95</i>&nbsp;     */
+<i>96</i>&nbsp;    private void clearGameRoom() {
+<b class="nc"><i>97</i>&nbsp;        System.out.println(&quot;&gt; Status: Game room is full.&quot;);</b>
+<b class="nc"><i>98</i>&nbsp;        currentGame = null;</b>
+<b class="nc"><i>99</i>&nbsp;        currentVirtualView = null;</b>
+<b class="nc"><i>100</i>&nbsp;        addedPlayers = 0;</b>
+<i>101</i>&nbsp;    }
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    /**
+<i>104</i>&nbsp;     * Creates and initializes a new game instance
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    private void initGame() {
+<b class="nc"><i>107</i>&nbsp;        System.out.println(&quot;&gt; Status: New game has been created.&quot;);</b>
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;        // Setup of the server side game management
+<b class="nc"><i>110</i>&nbsp;        currentGame = new Game();</b>
+<b class="nc"><i>111</i>&nbsp;        Controller controller = new Controller(currentGame);</b>
+<b class="nc"><i>112</i>&nbsp;        currentVirtualView = new VirtualView(controller);</b>
+<b class="nc"><i>113</i>&nbsp;        controller.setVirtualView(currentVirtualView);</b>
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;        // Starts the game controller
+<b class="nc"><i>116</i>&nbsp;        (new Thread(() -&gt; {</b>
+<i>117</i>&nbsp;            try {
+<b class="nc"><i>118</i>&nbsp;                controller.gameStarter();</b>
+<b class="nc"><i>119</i>&nbsp;            } catch (Exception ignored) {</b>
+<b class="nc"><i>120</i>&nbsp;            }</b>
+<b class="nc"><i>121</i>&nbsp;            System.out.println(Frmt.color(&#39;r&#39;, &quot;&gt; Status: Controller has stopped.&quot;));</b>
+<i>122</i>&nbsp;        })).start();
+<i>123</i>&nbsp;    }
+<i>124</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-10 19:55</div>
+</div>
+</body>
+</html>

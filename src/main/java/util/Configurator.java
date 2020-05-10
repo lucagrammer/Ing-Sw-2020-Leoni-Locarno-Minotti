@@ -109,8 +109,23 @@ public class Configurator {
         Image image = null;
         try {
             image = (new ImageIcon(Configurator.class.getResource("/GuiResources/" + cardName.toLowerCase() + "Card.png"))).getImage();
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
+        return image;
+    }
+
+
+    /**
+     * Gets a card image by the name of the card
+     *
+     * @param floor The floor number (0,1,2,3)
+     * @param state The state of the cell (dome,free,colors)
+     * @return The related Image object
+     */
+    public static Image getCellImage(int floor,String state) {
+        Image image = null;
+        try {
+            image = (new ImageIcon(Configurator.class.getResource("/GuiResources/components/" + floor + "_"+state.toLowerCase()+".png"))).getImage().getScaledInstance(30,65, Image.SCALE_SMOOTH);
+        } catch (Exception ignored) {}
         return image;
     }
 

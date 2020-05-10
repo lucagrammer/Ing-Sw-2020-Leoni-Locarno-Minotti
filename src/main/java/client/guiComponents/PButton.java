@@ -1,5 +1,8 @@
 package client.guiComponents;
 
+import util.Configurator;
+import util.MapInfo;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -29,8 +32,39 @@ public class PButton extends JButton {
     public PButton(Color color) {
         super();
         setBackground(color);
-        //setOpaque(false);
-        //setContentAreaFilled(false);
+        setOpaque(true);
         setBorderPainted(false);
+    }
+
+
+    /**
+     * Constructor: build a transparent button
+     *
+     * //TODO
+     * @param mapInfo   The map info
+     */
+    public PButton(MapInfo mapInfo, int row, int column) {
+        super();
+        setBackground(new Color(0, 0, 0, 0));
+        setOpaque(false);
+        setContentAreaFilled(false);
+        setBorderPainted(false);
+        setContent(mapInfo,row,column);
+    }
+
+    public void setContent(MapInfo mapInfo, int row, int column){
+        int floor = mapInfo.getFloorAt(row,column);
+        boolean dome = mapInfo.getDomeAt(row,column);
+        String color = mapInfo.getColorAt(row,column); // maybe null
+        String state;
+        if(color==null){
+            state=dome? "dome" : "free";
+        }else{
+            state=color;
+        }
+
+        state="yellow";//TODO
+        floor=3;
+        setIcon(new ImageIcon(Configurator.getCellImage(floor,state)));
     }
 }

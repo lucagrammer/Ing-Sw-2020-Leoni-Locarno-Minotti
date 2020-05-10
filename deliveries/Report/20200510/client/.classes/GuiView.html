@@ -1,0 +1,825 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GuiView</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GuiView (client)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiView</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 43)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 297)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GuiView$CardMouseListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 25)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 48)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 322)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import client.guiComponents.*;
+<i>4</i>&nbsp;import model.*;
+<i>5</i>&nbsp;import util.*;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import javax.swing.*;
+<i>8</i>&nbsp;import java.awt.*;
+<i>9</i>&nbsp;import java.awt.event.MouseEvent;
+<i>10</i>&nbsp;import java.awt.event.MouseListener;
+<i>11</i>&nbsp;import java.io.File;
+<i>12</i>&nbsp;import java.io.IOException;
+<i>13</i>&nbsp;import java.text.ParseException;
+<i>14</i>&nbsp;import java.text.SimpleDateFormat;
+<i>15</i>&nbsp;import java.util.ArrayList;
+<i>16</i>&nbsp;import java.util.Date;
+<i>17</i>&nbsp;import java.util.List;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;/**
+<i>20</i>&nbsp; * Manages the graphic user interface
+<i>21</i>&nbsp; */
+<b class="nc"><i>22</i>&nbsp;public class GuiView implements View {</b>
+<i>23</i>&nbsp;    private ServerHandler serverHandler;
+<i>24</i>&nbsp;    private JFrame mainFrame;
+<i>25</i>&nbsp;    private PPanelContainer bodyContainer;
+<i>26</i>&nbsp;    private PPanelContainer commandBar;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /**
+<i>29</i>&nbsp;     * Constructor: build a GuiView
+<i>30</i>&nbsp;     */
+<b class="nc"><i>31</i>&nbsp;    public GuiView(){</b>
+<b class="nc"><i>32</i>&nbsp;        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();</b>
+<i>33</i>&nbsp;        try {
+<b class="nc"><i>34</i>&nbsp;            ge.registerFont(Font.createFont(0, new File(getClass().getResource(&quot;/GuiResources/LeGourmetScript.otf&quot;).getFile())));</b>
+<b class="nc"><i>35</i>&nbsp;        } catch (FontFormatException | IOException e) {</b>
+<b class="nc"><i>36</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>37</i>&nbsp;        }</b>
+<i>38</i>&nbsp;    }
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    /**
+<i>41</i>&nbsp;     * Sets the serverHandler
+<i>42</i>&nbsp;     *
+<i>43</i>&nbsp;     * @param serverHandler The serverHandler
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    public void setServerHandler(ServerHandler serverHandler) {
+<b class="nc"><i>46</i>&nbsp;        this.serverHandler = serverHandler;</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /**
+<i>50</i>&nbsp;     * Interface launcher. Asks the server IP to connect to and notify it to the serverHandler
+<i>51</i>&nbsp;     */
+<i>52</i>&nbsp;    public void launch() {
+<b class="nc"><i>53</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<i>54</i>&nbsp;            // Prepare the main frame
+<b class="nc"><i>55</i>&nbsp;            mainFrame = new JFrame(&quot;Santorini&quot;);</b>
+<b class="nc"><i>56</i>&nbsp;            mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</b>
+<b class="nc"><i>57</i>&nbsp;            mainFrame.setSize(1000, 730);</b>
+<b class="nc"><i>58</i>&nbsp;            mainFrame.setResizable(false);</b>
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;            Image backgroundImage = (new ImageIcon(getClass().getResource(&quot;/GuiResources/background.png&quot;))).getImage();</b>
+<b class="nc"><i>61</i>&nbsp;            JPanel background = new PPanelBackground(backgroundImage);</b>
+<b class="nc"><i>62</i>&nbsp;            mainFrame.repaint();</b>
+<b class="nc"><i>63</i>&nbsp;            background.setLayout(null);</b>
+<b class="nc"><i>64</i>&nbsp;            mainFrame.add(background);</b>
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;            // Prepare the body container
+<b class="nc"><i>67</i>&nbsp;            bodyContainer = new PPanelContainer();</b>
+<b class="nc"><i>68</i>&nbsp;            bodyContainer.setBounds(80, 200, 840, 450);</b>
+<b class="nc"><i>69</i>&nbsp;            background.add(bodyContainer);</b>
+<i>70</i>&nbsp;
+<b class="nc"><i>71</i>&nbsp;            Form form=new Form(bodyContainer);</b>
+<b class="nc"><i>72</i>&nbsp;            form.addField(0,&quot;Enter the server IP: &quot;,Configurator.getDefaultIp());</b>
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;            form.setActionButton(&quot;NEXT&quot;,(ev) -&gt; (new Thread(() -&gt; {
+<b class="nc"><i>75</i>&nbsp;                showQueuedMessage();</b>
+<b class="nc"><i>76</i>&nbsp;                serverHandler.setConnection(form.getFieldValueAt(0));</b>
+<i>77</i>&nbsp;            })).start());
+<i>78</i>&nbsp;
+<b class="nc"><i>79</i>&nbsp;            mainFrame.setVisible(true);</b>
+<i>80</i>&nbsp;        });
+<i>81</i>&nbsp;    }
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /**
+<i>84</i>&nbsp;     * Apply changes to a panel
+<i>85</i>&nbsp;     * @param panel The panel
+<i>86</i>&nbsp;     */
+<i>87</i>&nbsp;    private void applyChangesTo(JPanel panel) {
+<b class="nc"><i>88</i>&nbsp;        panel.revalidate();</b>
+<b class="nc"><i>89</i>&nbsp;        panel.repaint();</b>
+<i>90</i>&nbsp;    }
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;    /**
+<i>93</i>&nbsp;     * Flush the components inside a panel
+<i>94</i>&nbsp;     * @param panel     The panel
+<i>95</i>&nbsp;     */
+<i>96</i>&nbsp;    private void clear(JPanel panel){
+<b class="nc"><i>97</i>&nbsp;        panel.removeAll();</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * Shows a message to say to the user that is connected to
+<i>102</i>&nbsp;     * the server and will be added to the next available game
+<i>103</i>&nbsp;     */
+<i>104</i>&nbsp;    public void showQueuedMessage() {
+<b class="nc"><i>105</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>106</i>&nbsp;            showMessage(&quot;You will be added to the first available game...&quot;,true);</b>
+<i>107</i>&nbsp;        });
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    /**
+<i>111</i>&nbsp;     * Shows a specified message to the user
+<i>112</i>&nbsp;     *
+<i>113</i>&nbsp;     * @param message   The message to be shown
+<i>114</i>&nbsp;     * @param newScreen True if it&#39;s necessary to clean the interface
+<i>115</i>&nbsp;     */
+<i>116</i>&nbsp;    public void showMessage(String message, boolean newScreen) {
+<b class="nc"><i>117</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>118</i>&nbsp;            clear(bodyContainer);</b>
+<i>119</i>&nbsp;
+<b class="nc"><i>120</i>&nbsp;            PLabel label = new PLabel(message);</b>
+<b class="nc"><i>121</i>&nbsp;            label.setBounds(0, 0, 840, 450);</b>
+<b class="nc"><i>122</i>&nbsp;            bodyContainer.add(label);</b>
+<i>123</i>&nbsp;
+<b class="nc"><i>124</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>125</i>&nbsp;        });
+<i>126</i>&nbsp;    }
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    /**
+<i>129</i>&nbsp;     * Shows a loading message to the user
+<i>130</i>&nbsp;     */
+<i>131</i>&nbsp;    public void showLoading() {
+<b class="nc"><i>132</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>133</i>&nbsp;            clear(bodyContainer);</b>
+<i>134</i>&nbsp;
+<b class="nc"><i>135</i>&nbsp;            PLabel label = new PLabel(&quot;The game will start shortly, get ready!&quot;);</b>
+<b class="nc"><i>136</i>&nbsp;            label.setBounds(0, 0, 840, 450);</b>
+<b class="nc"><i>137</i>&nbsp;            bodyContainer.add(label);</b>
+<i>138</i>&nbsp;
+<b class="nc"><i>139</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>140</i>&nbsp;        });
+<i>141</i>&nbsp;    }
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;    /**
+<i>144</i>&nbsp;     * Asks a new nickname to the user and notify the choice to the serverHandler
+<i>145</i>&nbsp;     */
+<i>146</i>&nbsp;    public void askNewNickname() {
+<b class="nc"><i>147</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>148</i>&nbsp;            clear(bodyContainer);</b>
+<i>149</i>&nbsp;
+<b class="nc"><i>150</i>&nbsp;            Form form=new Form(bodyContainer);</b>
+<b class="nc"><i>151</i>&nbsp;            form.addField(0,&quot;Nickname: &quot;,&quot;&quot;);</b>
+<b class="nc"><i>152</i>&nbsp;            form.addErrorLabel(&quot;The chosen username is already taken.&quot;);</b>
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;            form.setActionButton(&quot;NEXT&quot;,(ev) -&gt; (new Thread(() -&gt; {
+<b class="nc"><i>155</i>&nbsp;                String nickname = form.getFieldValueAt(0);</b>
+<b class="nc"><i>156</i>&nbsp;                if (!nickname.equals(&quot;&quot;) &amp;&amp; !nickname.contains(&quot; &quot;)) {</b>
+<b class="nc"><i>157</i>&nbsp;                    showMessage(&quot;Waiting for the other players to connect...&quot;, true);</b>
+<b class="nc"><i>158</i>&nbsp;                    serverHandler.sendNewNickname(nickname);</b>
+<i>159</i>&nbsp;                } else {
+<b class="nc"><i>160</i>&nbsp;                    form.setErrorMessage(&quot;Invalid nickname. Try again.&quot;);</b>
+<i>161</i>&nbsp;                }
+<i>162</i>&nbsp;            })).start());
+<i>163</i>&nbsp;
+<b class="nc"><i>164</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>165</i>&nbsp;        });
+<i>166</i>&nbsp;    }
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    /**
+<i>169</i>&nbsp;     * Asks nickname, birth date and if it&#39;s a new game the number of players
+<i>170</i>&nbsp;     * for the game and notify the information to the serverHandler
+<i>171</i>&nbsp;     *
+<i>172</i>&nbsp;     * @param newGame True if the it is a new game, otherwise false
+<i>173</i>&nbsp;     */
+<i>174</i>&nbsp;    public void setUpGame(boolean newGame) {
+<b class="nc"><i>175</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>176</i>&nbsp;            clear(bodyContainer);</b>
+<i>177</i>&nbsp;
+<b class="nc"><i>178</i>&nbsp;            Form form= new Form(bodyContainer);</b>
+<b class="nc"><i>179</i>&nbsp;            form.addField(0,&quot;Nickname: &quot;,&quot;&quot;);</b>
+<b class="nc"><i>180</i>&nbsp;            form.addField(1,&quot;Date of birth [dd/mm/yyyy]: &quot;,&quot;&quot;);</b>
+<b class="nc"><i>181</i>&nbsp;            form.addField((newGame)? 2 : -1,&quot;Number of competitors [2..3]: &quot;,&quot;&quot;);</b>
+<b class="nc"><i>182</i>&nbsp;            form.addErrorLabel(&quot;&quot;);</b>
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;            form.setActionButton(&quot;NEXT&quot;,(ev) -&gt; (new Thread(() -&gt; {
+<b class="nc"><i>185</i>&nbsp;                String nickname = form.getFieldValueAt(0);</b>
+<b class="nc"><i>186</i>&nbsp;                if (nickname.equals(&quot;&quot;) || nickname.contains(&quot; &quot;)) {</b>
+<b class="nc"><i>187</i>&nbsp;                    form.setErrorMessage(&quot;Invalid nickname. Try again.&quot;);</b>
+<i>188</i>&nbsp;                    return;
+<i>189</i>&nbsp;                }
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;                Date date;
+<i>192</i>&nbsp;                try {
+<b class="nc"><i>193</i>&nbsp;                    date = (new SimpleDateFormat(&quot;dd/MM/yyyy&quot;)).parse(form.getFieldValueAt(1));</b>
+<b class="nc"><i>194</i>&nbsp;                } catch (ParseException e) {</b>
+<b class="nc"><i>195</i>&nbsp;                    form.setErrorMessage(&quot;Invalid date. Try again.&quot;);</b>
+<i>196</i>&nbsp;                    return;
+<b class="nc"><i>197</i>&nbsp;                }</b>
+<i>198</i>&nbsp;
+<b class="nc"><i>199</i>&nbsp;                int playersNumber=0;</b>
+<b class="nc"><i>200</i>&nbsp;                if (newGame) {</b>
+<i>201</i>&nbsp;                    try {
+<b class="nc"><i>202</i>&nbsp;                        playersNumber = Integer.parseInt(form.getFieldValueAt(2));</b>
+<b class="nc"><i>203</i>&nbsp;                    } catch (Exception e) {</b>
+<b class="nc"><i>204</i>&nbsp;                        form.setErrorMessage(&quot;Invalid choice. Try again.&quot;);</b>
+<i>205</i>&nbsp;                        return;
+<b class="nc"><i>206</i>&nbsp;                    }</b>
+<i>207</i>&nbsp;
+<b class="nc"><i>208</i>&nbsp;                    if (playersNumber &lt; 2 || playersNumber &gt; 3) {</b>
+<b class="nc"><i>209</i>&nbsp;                        form.setErrorMessage(&quot;Invalid choice. Try again.&quot;);</b>
+<i>210</i>&nbsp;                        return;
+<i>211</i>&nbsp;                    }
+<i>212</i>&nbsp;                }
+<i>213</i>&nbsp;
+<b class="nc"><i>214</i>&nbsp;                showMessage(&quot;Waiting for the other players to connect...&quot;, true);</b>
+<b class="nc"><i>215</i>&nbsp;                serverHandler.sendSetUpGame(nickname, date, playersNumber);</b>
+<i>216</i>&nbsp;            })).start());
+<i>217</i>&nbsp;
+<b class="nc"><i>218</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>219</i>&nbsp;        });
+<i>220</i>&nbsp;    }
+<i>221</i>&nbsp;
+<i>222</i>&nbsp;    /**
+<i>223</i>&nbsp;     * Asks the game cards
+<i>224</i>&nbsp;     *
+<i>225</i>&nbsp;     * @param numCards Number of cards to be selected
+<i>226</i>&nbsp;     */
+<i>227</i>&nbsp;    public void askGameCards(int numCards) {
+<b class="nc"><i>228</i>&nbsp;        List&lt;Card&gt; chosenCard = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>229</i>&nbsp;        printCards(chosenCard, numCards);</b>
+<i>230</i>&nbsp;    }
+<i>231</i>&nbsp;
+<i>232</i>&nbsp;    private void printCards(List&lt;Card&gt; chosenCards, int numCards) {
+<b class="nc"><i>233</i>&nbsp;        if (numCards == chosenCards.size()) {</b>
+<b class="nc"><i>234</i>&nbsp;            (new Thread(() -&gt; {</b>
+<b class="nc"><i>235</i>&nbsp;                showLoading();</b>
+<b class="nc"><i>236</i>&nbsp;                serverHandler.sendGameCards(chosenCards);</b>
+<i>237</i>&nbsp;            })).start();
+<i>238</i>&nbsp;        } else {
+<b class="nc"><i>239</i>&nbsp;            SwingUtilities.invokeLater(() -&gt; {</b>
+<i>240</i>&nbsp;                // Flush body components
+<b class="nc"><i>241</i>&nbsp;                this.bodyContainer.removeAll();</b>
+<i>242</i>&nbsp;
+<b class="nc"><i>243</i>&nbsp;                List&lt;Card&gt; allCardList = Configurator.getAllCards();</b>
+<i>244</i>&nbsp;
+<i>245</i>&nbsp;                // Remove cards
+<b class="nc"><i>246</i>&nbsp;                allCardList.removeAll(chosenCards);</b>
+<i>247</i>&nbsp;
+<b class="nc"><i>248</i>&nbsp;                PLabel label = new PLabel(&quot;Choose &quot; + (numCards - chosenCards.size()) + &quot; card&quot; + (numCards - chosenCards.size() &gt; 1 ? &quot;s&quot; : &quot;&quot;) + &quot; between these:&quot;);</b>
+<b class="nc"><i>249</i>&nbsp;                label.setFontSize(30);</b>
+<b class="nc"><i>250</i>&nbsp;                label.setBounds(0, 0, 840, 40);</b>
+<b class="nc"><i>251</i>&nbsp;                bodyContainer.add(label);</b>
+<i>252</i>&nbsp;
+<b class="nc"><i>253</i>&nbsp;                PPanelContainer cardContainer = new PPanelContainer();</b>
+<b class="nc"><i>254</i>&nbsp;                cardContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);</b>
+<b class="nc"><i>255</i>&nbsp;                cardContainer.setLayout(new GridLayout(1, 9, 10, 0));</b>
+<b class="nc"><i>256</i>&nbsp;                bodyContainer.add(cardContainer);</b>
+<i>257</i>&nbsp;
+<b class="nc"><i>258</i>&nbsp;                PPanelContainer descriptionBackground = new PPanelContainer();</b>
+<b class="nc"><i>259</i>&nbsp;                descriptionBackground.setBounds(0, 280, bodyContainer.getWidth(), 150);</b>
+<b class="nc"><i>260</i>&nbsp;                descriptionBackground.setLayout(null);</b>
+<b class="nc"><i>261</i>&nbsp;                bodyContainer.add(descriptionBackground);</b>
+<i>262</i>&nbsp;
+<b class="nc"><i>263</i>&nbsp;                PLabel nameLabel = new PLabel(&quot;&quot;);</b>
+<b class="nc"><i>264</i>&nbsp;                nameLabel.setFontSize(30);</b>
+<b class="nc"><i>265</i>&nbsp;                nameLabel.setForeground(new Color(186, 164, 154));</b>
+<b class="nc"><i>266</i>&nbsp;                nameLabel.setBounds(0, 20, descriptionBackground.getWidth(), 35);</b>
+<b class="nc"><i>267</i>&nbsp;                descriptionBackground.add(nameLabel);</b>
+<i>268</i>&nbsp;
+<b class="nc"><i>269</i>&nbsp;                PLabel descriptionLabel = new PLabel(&quot;&quot;);</b>
+<b class="nc"><i>270</i>&nbsp;                descriptionLabel.setFont(new Font(&quot;Helvetica&quot;, Font.PLAIN, 17));</b>
+<b class="nc"><i>271</i>&nbsp;                descriptionLabel.setBounds(90, 50, descriptionBackground.getWidth() - 180, 80);</b>
+<b class="nc"><i>272</i>&nbsp;                descriptionBackground.add(descriptionLabel);</b>
+<i>273</i>&nbsp;
+<b class="nc"><i>274</i>&nbsp;                for (Card card : allCardList) {</b>
+<b class="nc"><i>275</i>&nbsp;                    Image scaledImage = Configurator.getCardImage(card.getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>276</i>&nbsp;                    PButton cardButton = new PButton(scaledImage);</b>
+<b class="nc"><i>277</i>&nbsp;                    cardContainer.add(cardButton);</b>
+<b class="nc"><i>278</i>&nbsp;                    cardButton.addMouseListener(new GuiView.CardMouseListener(card, nameLabel, descriptionLabel, chosenCards, numCards));</b>
+<b class="nc"><i>279</i>&nbsp;                }</b>
+<i>280</i>&nbsp;
+<b class="nc"><i>281</i>&nbsp;                applyChangesTo(bodyContainer);</b>
+<i>282</i>&nbsp;            });
+<i>283</i>&nbsp;        }
+<i>284</i>&nbsp;
+<i>285</i>&nbsp;    }
+<i>286</i>&nbsp;
+<i>287</i>&nbsp;    /**
+<i>288</i>&nbsp;     * Asks the card the player whats to use during the game
+<i>289</i>&nbsp;     *
+<i>290</i>&nbsp;     * @param possibleChoices All the possible cards
+<i>291</i>&nbsp;     */
+<i>292</i>&nbsp;    public void askPlayerCard(List&lt;Card&gt; possibleChoices) {
+<b class="nc"><i>293</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<i>294</i>&nbsp;            // Flush body components
+<b class="nc"><i>295</i>&nbsp;            this.bodyContainer.removeAll();</b>
+<i>296</i>&nbsp;
+<b class="nc"><i>297</i>&nbsp;            PLabel label = new PLabel(&quot;Choose your card between these:&quot;);</b>
+<b class="nc"><i>298</i>&nbsp;            label.setFontSize(30);</b>
+<b class="nc"><i>299</i>&nbsp;            label.setBounds(0, 0, 840, 40);</b>
+<b class="nc"><i>300</i>&nbsp;            bodyContainer.add(label);</b>
+<i>301</i>&nbsp;
+<b class="nc"><i>302</i>&nbsp;            PPanelContainer cardContainer = new PPanelContainer();</b>
+<b class="nc"><i>303</i>&nbsp;            cardContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);</b>
+<b class="nc"><i>304</i>&nbsp;            cardContainer.setLayout(new GridLayout(1, 9, 10, 0));</b>
+<b class="nc"><i>305</i>&nbsp;            bodyContainer.add(cardContainer);</b>
+<i>306</i>&nbsp;
+<b class="nc"><i>307</i>&nbsp;            PPanelContainer descriptionBackground = new PPanelContainer();</b>
+<b class="nc"><i>308</i>&nbsp;            descriptionBackground.setBounds(0, 280, bodyContainer.getWidth(), 150);</b>
+<b class="nc"><i>309</i>&nbsp;            descriptionBackground.setLayout(null);</b>
+<b class="nc"><i>310</i>&nbsp;            bodyContainer.add(descriptionBackground);</b>
+<i>311</i>&nbsp;
+<b class="nc"><i>312</i>&nbsp;            PLabel nameLabel = new PLabel(&quot;&quot;);</b>
+<b class="nc"><i>313</i>&nbsp;            nameLabel.setFontSize(30);</b>
+<b class="nc"><i>314</i>&nbsp;            nameLabel.setForeground(new Color(186, 164, 154));</b>
+<b class="nc"><i>315</i>&nbsp;            nameLabel.setBounds(0, 20, descriptionBackground.getWidth(), 35);</b>
+<b class="nc"><i>316</i>&nbsp;            descriptionBackground.add(nameLabel);</b>
+<i>317</i>&nbsp;
+<b class="nc"><i>318</i>&nbsp;            PLabel descriptionLabel = new PLabel(&quot;&quot;);</b>
+<b class="nc"><i>319</i>&nbsp;            descriptionLabel.setFont(new Font(&quot;Helvetica&quot;, Font.PLAIN, 17));</b>
+<b class="nc"><i>320</i>&nbsp;            descriptionLabel.setBounds(90, 50, descriptionBackground.getWidth() - 180, 80);</b>
+<b class="nc"><i>321</i>&nbsp;            descriptionBackground.add(descriptionLabel);</b>
+<i>322</i>&nbsp;
+<b class="nc"><i>323</i>&nbsp;            for (Card card : possibleChoices) {</b>
+<b class="nc"><i>324</i>&nbsp;                Image scaledImage = Configurator.getCardImage(card.getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>325</i>&nbsp;                PButton cardButton = new PButton(scaledImage);</b>
+<b class="nc"><i>326</i>&nbsp;                cardContainer.add(cardButton);</b>
+<b class="nc"><i>327</i>&nbsp;                cardButton.addMouseListener(new GuiView.CardMouseListener(card, nameLabel, descriptionLabel, true));</b>
+<b class="nc"><i>328</i>&nbsp;            }</b>
+<i>329</i>&nbsp;
+<b class="nc"><i>330</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>331</i>&nbsp;        });
+<i>332</i>&nbsp;    }
+<i>333</i>&nbsp;
+<i>334</i>&nbsp;    /**
+<i>335</i>&nbsp;     * Asks the nickname of the first player
+<i>336</i>&nbsp;     *
+<i>337</i>&nbsp;     * @param playersNicknames All the nicknames
+<i>338</i>&nbsp;     */
+<i>339</i>&nbsp;    public void askFirstPlayer(List&lt;String&gt; playersNicknames) {
+<b class="nc"><i>340</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<i>341</i>&nbsp;            // Flush body components
+<b class="nc"><i>342</i>&nbsp;            this.bodyContainer.removeAll();</b>
+<i>343</i>&nbsp;
+<b class="nc"><i>344</i>&nbsp;            PLabel label = new PLabel(&quot;Choose the first player:&quot;);</b>
+<b class="nc"><i>345</i>&nbsp;            label.setFontSize(30);</b>
+<b class="nc"><i>346</i>&nbsp;            label.setBounds(0, 0, 840, 40);</b>
+<b class="nc"><i>347</i>&nbsp;            bodyContainer.add(label);</b>
+<i>348</i>&nbsp;
+<b class="nc"><i>349</i>&nbsp;            PPanelContainer playerContainer = new PPanelContainer();</b>
+<b class="nc"><i>350</i>&nbsp;            playerContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);</b>
+<b class="nc"><i>351</i>&nbsp;            playerContainer.setLayout(new GridLayout(1, playersNicknames.size(), 10, 0));</b>
+<b class="nc"><i>352</i>&nbsp;            bodyContainer.add(playerContainer);</b>
+<i>353</i>&nbsp;
+<b class="nc"><i>354</i>&nbsp;            for (String name : playersNicknames) {</b>
+<b class="nc"><i>355</i>&nbsp;                Image scaledImage = (new ImageIcon(getClass().getResource(&quot;/GuiResources/btn_blue.png&quot;))).getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>356</i>&nbsp;                PButtonSigned button = new PButtonSigned(scaledImage,name);</b>
+<i>357</i>&nbsp;                button.addActionListener((ev) -&gt; (new Thread(() -&gt; {
+<b class="nc"><i>358</i>&nbsp;                    showLoading();</b>
+<b class="nc"><i>359</i>&nbsp;                    serverHandler.sendFirstPlayer(button.getSign());</b>
+<i>360</i>&nbsp;                })).start());
+<b class="nc"><i>361</i>&nbsp;                playerContainer.add(button);</b>
+<b class="nc"><i>362</i>&nbsp;            }</b>
+<i>363</i>&nbsp;
+<b class="nc"><i>364</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>365</i>&nbsp;        });
+<i>366</i>&nbsp;    }
+<i>367</i>&nbsp;
+<i>368</i>&nbsp;    /**
+<i>369</i>&nbsp;     * Show all the cards of the game
+<i>370</i>&nbsp;     *
+<i>371</i>&nbsp;     * @param cards All the cards of the game
+<i>372</i>&nbsp;     */
+<i>373</i>&nbsp;    public void showGameCards(List&lt;Card&gt; cards) {
+<b class="nc"><i>374</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<i>375</i>&nbsp;            // Flush body components
+<b class="nc"><i>376</i>&nbsp;            this.bodyContainer.removeAll();</b>
+<i>377</i>&nbsp;
+<b class="nc"><i>378</i>&nbsp;            PLabel label = new PLabel(&quot;The cards used in this match will be:&quot;);</b>
+<b class="nc"><i>379</i>&nbsp;            label.setFontSize(30);</b>
+<b class="nc"><i>380</i>&nbsp;            label.setBounds(0, 0, 840, 40);</b>
+<b class="nc"><i>381</i>&nbsp;            bodyContainer.add(label);</b>
+<i>382</i>&nbsp;
+<b class="nc"><i>383</i>&nbsp;            PPanelContainer cardContainer = new PPanelContainer();</b>
+<b class="nc"><i>384</i>&nbsp;            cardContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);</b>
+<b class="nc"><i>385</i>&nbsp;            cardContainer.setLayout(new GridLayout(1, 9, 10, 0));</b>
+<b class="nc"><i>386</i>&nbsp;            bodyContainer.add(cardContainer);</b>
+<i>387</i>&nbsp;
+<b class="nc"><i>388</i>&nbsp;            PPanelContainer descriptionBackground = new PPanelContainer();</b>
+<b class="nc"><i>389</i>&nbsp;            descriptionBackground.setBounds(0, 280, bodyContainer.getWidth(), 150);</b>
+<b class="nc"><i>390</i>&nbsp;            descriptionBackground.setLayout(null);</b>
+<b class="nc"><i>391</i>&nbsp;            bodyContainer.add(descriptionBackground);</b>
+<i>392</i>&nbsp;
+<b class="nc"><i>393</i>&nbsp;            PLabel nameLabel = new PLabel(&quot;&quot;);</b>
+<b class="nc"><i>394</i>&nbsp;            nameLabel.setFontSize(30);</b>
+<b class="nc"><i>395</i>&nbsp;            nameLabel.setForeground(new Color(186, 164, 154));</b>
+<b class="nc"><i>396</i>&nbsp;            nameLabel.setBounds(0, 20, descriptionBackground.getWidth(), 35);</b>
+<b class="nc"><i>397</i>&nbsp;            descriptionBackground.add(nameLabel);</b>
+<i>398</i>&nbsp;
+<b class="nc"><i>399</i>&nbsp;            PLabel descriptionLabel = new PLabel(&quot;&quot;);</b>
+<b class="nc"><i>400</i>&nbsp;            descriptionLabel.setFont(new Font(&quot;Helvetica&quot;, Font.PLAIN, 17));</b>
+<b class="nc"><i>401</i>&nbsp;            descriptionLabel.setBounds(90, 50, descriptionBackground.getWidth() - 180, 80);</b>
+<b class="nc"><i>402</i>&nbsp;            descriptionBackground.add(descriptionLabel);</b>
+<i>403</i>&nbsp;
+<b class="nc"><i>404</i>&nbsp;            for (Card card : cards) {</b>
+<b class="nc"><i>405</i>&nbsp;                Image scaledImage = Configurator.getCardImage(card.getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>406</i>&nbsp;                PButton cardButton = new PButton(scaledImage);</b>
+<b class="nc"><i>407</i>&nbsp;                cardContainer.add(cardButton);</b>
+<b class="nc"><i>408</i>&nbsp;                cardButton.addMouseListener(new GuiView.CardMouseListener(card, nameLabel, descriptionLabel, false));</b>
+<b class="nc"><i>409</i>&nbsp;            }</b>
+<i>410</i>&nbsp;
+<b class="nc"><i>411</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>412</i>&nbsp;        });
+<i>413</i>&nbsp;    }
+<i>414</i>&nbsp;
+<i>415</i>&nbsp;    /**
+<i>416</i>&nbsp;     * Shows th cards assignment of the game
+<i>417</i>&nbsp;     *
+<i>418</i>&nbsp;     * @param playerList The list of players of the game
+<i>419</i>&nbsp;     */
+<i>420</i>&nbsp;    public void showCardAssignmentMessage(List&lt;Player&gt; playerList) {
+<b class="nc"><i>421</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<i>422</i>&nbsp;            // Flush body components
+<b class="nc"><i>423</i>&nbsp;            this.bodyContainer.removeAll();</b>
+<i>424</i>&nbsp;
+<b class="nc"><i>425</i>&nbsp;            PLabel label = new PLabel(&quot;Cards assignment:&quot;);</b>
+<b class="nc"><i>426</i>&nbsp;            label.setFontSize(30);</b>
+<b class="nc"><i>427</i>&nbsp;            label.setBounds(0, 0, 840, 40);</b>
+<b class="nc"><i>428</i>&nbsp;            bodyContainer.add(label);</b>
+<i>429</i>&nbsp;
+<b class="nc"><i>430</i>&nbsp;            PPanelContainer cardContainer = new PPanelContainer();</b>
+<b class="nc"><i>431</i>&nbsp;            cardContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);</b>
+<b class="nc"><i>432</i>&nbsp;            cardContainer.setLayout(new GridLayout(1, 9, 10, 0));</b>
+<b class="nc"><i>433</i>&nbsp;            bodyContainer.add(cardContainer);</b>
+<i>434</i>&nbsp;
+<b class="nc"><i>435</i>&nbsp;            PPanelContainer assignmentContainer = new PPanelContainer();</b>
+<b class="nc"><i>436</i>&nbsp;            assignmentContainer.setBounds(0, 228, bodyContainer.getWidth(), 40);</b>
+<b class="nc"><i>437</i>&nbsp;            assignmentContainer.setLayout(new GridLayout(1, 9, 10, 0));</b>
+<b class="nc"><i>438</i>&nbsp;            bodyContainer.add(assignmentContainer);</b>
+<i>439</i>&nbsp;
+<b class="nc"><i>440</i>&nbsp;            for (Player player : playerList) {</b>
+<b class="nc"><i>441</i>&nbsp;                Image scaledImage = Configurator.getCardImage(player.getCard().getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>442</i>&nbsp;                PButton cardButton = new PButton(scaledImage);</b>
+<b class="nc"><i>443</i>&nbsp;                cardContainer.add(cardButton);</b>
+<i>444</i>&nbsp;
+<b class="nc"><i>445</i>&nbsp;                PLabel nameLabel = new PLabel(player.getNickname());</b>
+<b class="nc"><i>446</i>&nbsp;                nameLabel.setFontSize(25);</b>
+<b class="nc"><i>447</i>&nbsp;                nameLabel.setForeground(new Color(186, 164, 154));</b>
+<b class="nc"><i>448</i>&nbsp;                assignmentContainer.add(nameLabel);</b>
+<b class="nc"><i>449</i>&nbsp;            }</b>
+<i>450</i>&nbsp;
+<b class="nc"><i>451</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>452</i>&nbsp;        });
+<i>453</i>&nbsp;    }
+<i>454</i>&nbsp;
+<i>455</i>&nbsp;    /**
+<i>456</i>&nbsp;     * Asks the color the player whats to choose
+<i>457</i>&nbsp;     *
+<i>458</i>&nbsp;     * @param availableColors All the available colors
+<i>459</i>&nbsp;     */
+<i>460</i>&nbsp;    public void askPlayerColor(List&lt;String&gt; availableColors) {
+<b class="nc"><i>461</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<i>462</i>&nbsp;            // Flush body components
+<b class="nc"><i>463</i>&nbsp;            this.bodyContainer.removeAll();</b>
+<i>464</i>&nbsp;
+<b class="nc"><i>465</i>&nbsp;            PLabel label = new PLabel(&quot;Choose your color between these:&quot;);</b>
+<b class="nc"><i>466</i>&nbsp;            label.setFontSize(30);</b>
+<b class="nc"><i>467</i>&nbsp;            label.setBounds(0, 0, 840, 40);</b>
+<b class="nc"><i>468</i>&nbsp;            bodyContainer.add(label);</b>
+<i>469</i>&nbsp;
+<b class="nc"><i>470</i>&nbsp;            PPanelContainer colorContainer = new PPanelContainer();</b>
+<b class="nc"><i>471</i>&nbsp;            colorContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);</b>
+<b class="nc"><i>472</i>&nbsp;            colorContainer.setLayout(new GridLayout(1, 3, 10, 0));</b>
+<b class="nc"><i>473</i>&nbsp;            bodyContainer.add(colorContainer);</b>
+<i>474</i>&nbsp;
+<b class="nc"><i>475</i>&nbsp;            for (String color : availableColors) {</b>
+<b class="nc"><i>476</i>&nbsp;                PButton button = new PButton(PlayerColor.getColorCodeByName(color));</b>
+<b class="nc"><i>477</i>&nbsp;                colorContainer.add(button);</b>
+<i>478</i>&nbsp;                button.addActionListener((ev) -&gt; (new Thread(() -&gt; {
+<b class="nc"><i>479</i>&nbsp;                    serverHandler.sendPlayerColor(color);</b>
+<b class="nc"><i>480</i>&nbsp;                    System.out.println(&quot;OK&quot;);</b>
+<i>481</i>&nbsp;                })).start());
+<b class="nc"><i>482</i>&nbsp;            }</b>
+<i>483</i>&nbsp;
+<b class="nc"><i>484</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>485</i>&nbsp;        });
+<i>486</i>&nbsp;    }
+<i>487</i>&nbsp;
+<i>488</i>&nbsp;    /**
+<i>489</i>&nbsp;     * Asks the first position for the male and female worker
+<i>490</i>&nbsp;     *  @param genre            The genre of the worker
+<i>491</i>&nbsp;     * @param forbiddenCells    The forbidden cells
+<i>492</i>&nbsp;     * @param mapInfo           The map info
+<i>493</i>&nbsp;     */
+<i>494</i>&nbsp;    public void askPlayerPosition(Genre genre, List&lt;Cell&gt; forbiddenCells, MapInfo mapInfo) {
+<b class="nc"><i>495</i>&nbsp;        mainFrame.getContentPane().removeAll();</b>
+<b class="nc"><i>496</i>&nbsp;        mainFrame.setVisible(true);</b>
+<i>497</i>&nbsp;
+<b class="nc"><i>498</i>&nbsp;        Image backgroundImage = (new ImageIcon(getClass().getResource(&quot;/GuiResources/emptyBackground.png&quot;))).getImage();</b>
+<b class="nc"><i>499</i>&nbsp;        JPanel background = new PPanelBackground(backgroundImage);</b>
+<b class="nc"><i>500</i>&nbsp;        mainFrame.repaint();</b>
+<b class="nc"><i>501</i>&nbsp;        background.setLayout(null);</b>
+<b class="nc"><i>502</i>&nbsp;        mainFrame.add(background);</b>
+<i>503</i>&nbsp;
+<i>504</i>&nbsp;        // Prepare the body container
+<b class="nc"><i>505</i>&nbsp;        bodyContainer = new PPanelContainer();</b>
+<b class="nc"><i>506</i>&nbsp;        bodyContainer.setBounds(80, 60, 840, 610);</b>
+<b class="nc"><i>507</i>&nbsp;        background.add(bodyContainer);</b>
+<i>508</i>&nbsp;
+<b class="nc"><i>509</i>&nbsp;        mainFrame.revalidate();</b>
+<b class="nc"><i>510</i>&nbsp;        mainFrame.repaint();</b>
+<i>511</i>&nbsp;
+<b class="nc"><i>512</i>&nbsp;        showMap(mapInfo, false);</b>
+<i>513</i>&nbsp;
+<b class="nc"><i>514</i>&nbsp;        PLabel commandLabel = new PLabel(&quot;Choose the position of your worker&quot;);</b>
+<b class="nc"><i>515</i>&nbsp;        commandLabel.setFontSize(30);</b>
+<b class="nc"><i>516</i>&nbsp;        commandLabel.setBounds(0, 0, bodyContainer.getWidth(), 40);</b>
+<b class="nc"><i>517</i>&nbsp;        bodyContainer.add(commandLabel);</b>
+<i>518</i>&nbsp;
+<i>519</i>&nbsp;        /*Cell chosenCell;
+<i>520</i>&nbsp;        String chosenPosition;
+<i>521</i>&nbsp;        int row = -1, column = -1;
+<i>522</i>&nbsp;        boolean incorrect;
+<i>523</i>&nbsp;        Frmt.clearScreen();
+<i>524</i>&nbsp;        do {
+<i>525</i>&nbsp;            showMap(game, false);
+<i>526</i>&nbsp;            incorrect = false;
+<i>527</i>&nbsp;            System.out.print(&quot;\n &quot; + Frmt.style(&#39;b&#39;, &quot;Choose the position of your &quot; + ((genre == MALE) ? &quot;male&quot; : &quot;female&quot;) + &quot; worker [row,column]:&quot;) + &quot; &quot;);
+<i>528</i>&nbsp;            chosenPosition = scanner.next();
+<i>529</i>&nbsp;            try {
+<i>530</i>&nbsp;                row = Character.getNumericValue(chosenPosition.charAt(0));
+<i>531</i>&nbsp;                column = Character.getNumericValue(chosenPosition.charAt(2));
+<i>532</i>&nbsp;            } catch (Exception e) {
+<i>533</i>&nbsp;                Frmt.clearScreen();
+<i>534</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;  &gt; Invalid choice. Try again.&quot;));
+<i>535</i>&nbsp;                incorrect = true;
+<i>536</i>&nbsp;            }
+<i>537</i>&nbsp;
+<i>538</i>&nbsp;            chosenCell = new Cell(row, column);
+<i>539</i>&nbsp;            if (!incorrect &amp;&amp; (row &lt; 0 || column &lt; 0 || row &gt; 4 || column &gt; 4 || forbiddenCells.contains(chosenCell) || chosenPosition.length() != 3)) {
+<i>540</i>&nbsp;                Frmt.clearScreen();
+<i>541</i>&nbsp;                System.out.println(Frmt.color(&#39;r&#39;, &quot;  &gt; Invalid choice. Try again.&quot;));
+<i>542</i>&nbsp;                incorrect = true;
+<i>543</i>&nbsp;            }
+<i>544</i>&nbsp;        } while (incorrect);
+<i>545</i>&nbsp;        serverHandler.sendPlayerPosition(genre, chosenCell);*/
+<i>546</i>&nbsp;    }
+<i>547</i>&nbsp;
+<i>548</i>&nbsp;    /**
+<i>549</i>&nbsp;     * Shows the board of the game
+<i>550</i>&nbsp;     *
+<i>551</i>&nbsp;     * @param mapInfo   The map info
+<i>552</i>&nbsp;     * @param newScreen True if it&#39;s necessary to clean the interface
+<i>553</i>&nbsp;     */
+<i>554</i>&nbsp;    public void showMap(MapInfo mapInfo, boolean newScreen) {
+<b class="nc"><i>555</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>556</i>&nbsp;            if(newScreen) {</b>
+<i>557</i>&nbsp;                // Flush body components
+<b class="nc"><i>558</i>&nbsp;                this.bodyContainer.removeAll();</b>
+<i>559</i>&nbsp;            }
+<i>560</i>&nbsp;
+<b class="nc"><i>561</i>&nbsp;            Image islandImg = (new ImageIcon(getClass().getResource(&quot;/GuiResources/SantoriniBoard.png&quot;))).getImage();</b>
+<b class="nc"><i>562</i>&nbsp;            JPanel island = new PPanelBackground(islandImg);</b>
+<b class="nc"><i>563</i>&nbsp;            island.setBounds(0,50,496,500);</b>
+<b class="nc"><i>564</i>&nbsp;            island.repaint();</b>
+<b class="nc"><i>565</i>&nbsp;            island.setLayout(null);</b>
+<b class="nc"><i>566</i>&nbsp;            bodyContainer.add(island);</b>
+<i>567</i>&nbsp;
+<b class="nc"><i>568</i>&nbsp;            PPanelContainer mapContainer= new PPanelContainer();</b>
+<b class="nc"><i>569</i>&nbsp;            mapContainer.setBounds(70,63,368,368);</b>
+<b class="nc"><i>570</i>&nbsp;            mapContainer.setLayout(new GridLayout(5,5,11,11));</b>
+<b class="nc"><i>571</i>&nbsp;            island.add(mapContainer);</b>
+<i>572</i>&nbsp;
+<b class="nc"><i>573</i>&nbsp;            PPanelContainer sideBar= new PPanelContainer();</b>
+<b class="nc"><i>574</i>&nbsp;            sideBar.setBounds(island.getWidth()+20,63,324,450);</b>
+<b class="nc"><i>575</i>&nbsp;            sideBar.setLayout(new GridLayout(2,2,15,15));</b>
+<b class="nc"><i>576</i>&nbsp;            bodyContainer.add(sideBar);</b>
+<i>577</i>&nbsp;
+<b class="nc"><i>578</i>&nbsp;            commandBar= new PPanelContainer();</b>
+<b class="nc"><i>579</i>&nbsp;            commandBar.setBounds(30,103,154,220);</b>
+<b class="nc"><i>580</i>&nbsp;            commandBar.setLayout(new GridLayout(2,2,20,20));</b>
+<b class="nc"><i>581</i>&nbsp;            sideBar.add(commandBar);</b>
+<i>582</i>&nbsp;
+<b class="nc"><i>583</i>&nbsp;            PPanelContainer keyContainer= new PPanelContainer();</b>
+<b class="nc"><i>584</i>&nbsp;            keyContainer.setBounds(30,103,sideBar.getWidth(),175);</b>
+<b class="nc"><i>585</i>&nbsp;            keyContainer.setLayout(new GridLayout(1,3,5,5));</b>
+<b class="nc"><i>586</i>&nbsp;            sideBar.add(keyContainer);</b>
+<i>587</i>&nbsp;
+<b class="nc"><i>588</i>&nbsp;            for(int i=0;i&lt;5;i++){</b>
+<b class="nc"><i>589</i>&nbsp;                for(int j=0;j&lt;5;j++){</b>
+<b class="nc"><i>590</i>&nbsp;                    PButton cell = new PButton(mapInfo,i,j);</b>
+<b class="nc"><i>591</i>&nbsp;                    cell.setSize(30,65);</b>
+<b class="nc"><i>592</i>&nbsp;                    mapContainer.add(cell);</b>
+<i>593</i>&nbsp;                }
+<i>594</i>&nbsp;            }
+<i>595</i>&nbsp;
+<i>596</i>&nbsp;
+<i>597</i>&nbsp;
+<b class="nc"><i>598</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>599</i>&nbsp;        });
+<i>600</i>&nbsp;    }
+<i>601</i>&nbsp;
+<i>602</i>&nbsp;    /**
+<i>603</i>&nbsp;     * Asks the action the player wants to perform
+<i>604</i>&nbsp;     * @param roundActions  All the possible actions
+<i>605</i>&nbsp;     * @param mapInfo       The map info
+<i>606</i>&nbsp;     * @param loserNickname The nickname of the looser or null value
+<i>607</i>&nbsp;     */
+<i>608</i>&nbsp;    public void askAction(RoundActions roundActions, MapInfo mapInfo, String loserNickname) {
+<i>609</i>&nbsp;
+<i>610</i>&nbsp;    }
+<i>611</i>&nbsp;
+<i>612</i>&nbsp;    /**
+<i>613</i>&nbsp;     * Notify the players that the game has ended and notify the winner
+<i>614</i>&nbsp;     *
+<i>615</i>&nbsp;     * @param winnerNickname The nickname of the winner
+<i>616</i>&nbsp;     * @param youWin         True if the player has win
+<i>617</i>&nbsp;     */
+<i>618</i>&nbsp;    public void showGameEndMessage(String winnerNickname, boolean youWin) {
+<i>619</i>&nbsp;
+<i>620</i>&nbsp;    }
+<i>621</i>&nbsp;
+<i>622</i>&nbsp;    /**
+<i>623</i>&nbsp;     * Notify the players that a player has disconnected and the game has ended
+<i>624</i>&nbsp;     *
+<i>625</i>&nbsp;     * @param disconnectedNickname The nickname of the disconnected player
+<i>626</i>&nbsp;     */
+<i>627</i>&nbsp;    public void showDisconnectionMessage(String disconnectedNickname) {
+<b class="nc"><i>628</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>629</i>&nbsp;            clear(bodyContainer);</b>
+<i>630</i>&nbsp;
+<b class="nc"><i>631</i>&nbsp;            PLabel label = new PLabel(&quot;GAME OVER: &quot; + disconnectedNickname + &quot; has disconnected.&quot;);</b>
+<b class="nc"><i>632</i>&nbsp;            label.setBounds(0, 0, 840, 450);</b>
+<b class="nc"><i>633</i>&nbsp;            bodyContainer.add(label);</b>
+<i>634</i>&nbsp;            // TODO: mettere new game
+<i>635</i>&nbsp;            //serverHandler.sendNewGame(choice.equalsIgnoreCase(&quot;yes&quot;));
+<i>636</i>&nbsp;
+<b class="nc"><i>637</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>638</i>&nbsp;        });
+<i>639</i>&nbsp;    }
+<i>640</i>&nbsp;
+<i>641</i>&nbsp;    /**
+<i>642</i>&nbsp;     * Shows an error message to the user
+<i>643</i>&nbsp;     *
+<i>644</i>&nbsp;     * @param errorMessage The message to be shown
+<i>645</i>&nbsp;     * @param newScreen    True if it&#39;s necessary to clean the interface
+<i>646</i>&nbsp;     */
+<i>647</i>&nbsp;    public void showErrorMessage(String errorMessage, boolean newScreen) {
+<b class="nc"><i>648</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>649</i>&nbsp;            clear(bodyContainer);</b>
+<i>650</i>&nbsp;
+<b class="nc"><i>651</i>&nbsp;            PLabel label = new PLabel(errorMessage);</b>
+<b class="nc"><i>652</i>&nbsp;            label.setBounds(0, 0, 840, 450);</b>
+<b class="nc"><i>653</i>&nbsp;            label.setForeground(Color.RED);</b>
+<b class="nc"><i>654</i>&nbsp;            bodyContainer.add(label);</b>
+<i>655</i>&nbsp;
+<b class="nc"><i>656</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>657</i>&nbsp;        });
+<i>658</i>&nbsp;    }
+<i>659</i>&nbsp;
+<i>660</i>&nbsp;    class CardMouseListener implements MouseListener {
+<i>661</i>&nbsp;        private final Card card;
+<i>662</i>&nbsp;        private final PLabel nameLabel;
+<i>663</i>&nbsp;        private final PLabel descriptionLabel;
+<i>664</i>&nbsp;        private final boolean gameCardsSetUp;
+<i>665</i>&nbsp;        private final boolean selectionEnabled;
+<i>666</i>&nbsp;        private int numCards;
+<i>667</i>&nbsp;        private List&lt;Card&gt; chosenCards;
+<i>668</i>&nbsp;
+<b class="nc"><i>669</i>&nbsp;        public CardMouseListener(Card card, PLabel nameLabel, PLabel descriptionLabel, List&lt;Card&gt; chosenCards, int numCards) {</b>
+<b class="nc"><i>670</i>&nbsp;            this.gameCardsSetUp = true;</b>
+<b class="nc"><i>671</i>&nbsp;            this.selectionEnabled = true;</b>
+<b class="nc"><i>672</i>&nbsp;            this.card = card;</b>
+<b class="nc"><i>673</i>&nbsp;            this.nameLabel = nameLabel;</b>
+<b class="nc"><i>674</i>&nbsp;            this.descriptionLabel = descriptionLabel;</b>
+<b class="nc"><i>675</i>&nbsp;            this.chosenCards = chosenCards;</b>
+<b class="nc"><i>676</i>&nbsp;            this.numCards = numCards;</b>
+<i>677</i>&nbsp;        }
+<i>678</i>&nbsp;
+<b class="nc"><i>679</i>&nbsp;        public CardMouseListener(Card card, PLabel nameLabel, PLabel descriptionLabel, boolean selectionEnabled) {</b>
+<b class="nc"><i>680</i>&nbsp;            this.gameCardsSetUp = false;</b>
+<b class="nc"><i>681</i>&nbsp;            this.selectionEnabled = selectionEnabled;</b>
+<b class="nc"><i>682</i>&nbsp;            this.card = card;</b>
+<b class="nc"><i>683</i>&nbsp;            this.nameLabel = nameLabel;</b>
+<b class="nc"><i>684</i>&nbsp;            this.descriptionLabel = descriptionLabel;</b>
+<i>685</i>&nbsp;        }
+<i>686</i>&nbsp;
+<i>687</i>&nbsp;        public void mouseClicked(MouseEvent e) {
+<b class="nc"><i>688</i>&nbsp;            if (gameCardsSetUp) {</b>
+<b class="nc"><i>689</i>&nbsp;                chosenCards.add(card);</b>
+<b class="nc"><i>690</i>&nbsp;                printCards(chosenCards, numCards);</b>
+<i>691</i>&nbsp;            } else {
+<b class="nc"><i>692</i>&nbsp;                if (selectionEnabled) {</b>
+<b class="nc"><i>693</i>&nbsp;                    showLoading();</b>
+<b class="nc"><i>694</i>&nbsp;                    serverHandler.sendPlayerCard(card);</b>
+<i>695</i>&nbsp;                }
+<i>696</i>&nbsp;            }
+<i>697</i>&nbsp;        }
+<i>698</i>&nbsp;
+<i>699</i>&nbsp;        public void mousePressed(MouseEvent e) {
+<i>700</i>&nbsp;        }
+<i>701</i>&nbsp;
+<i>702</i>&nbsp;        public void mouseReleased(MouseEvent e) {
+<i>703</i>&nbsp;        }
+<i>704</i>&nbsp;
+<i>705</i>&nbsp;        public void mouseEntered(MouseEvent e) {
+<b class="nc"><i>706</i>&nbsp;            nameLabel.setText(card.getName().toUpperCase());</b>
+<b class="nc"><i>707</i>&nbsp;            String description = card.getDescription();</b>
+<b class="nc"><i>708</i>&nbsp;            descriptionLabel.setText(&quot;&lt;HTML&gt;&lt;CENTER&gt;&quot; + description + &quot;&lt;/CENTER&gt;&lt;/HTML&gt;&quot;);</b>
+<i>709</i>&nbsp;        }
+<i>710</i>&nbsp;
+<i>711</i>&nbsp;        public void mouseExited(MouseEvent e) {
+<b class="nc"><i>712</i>&nbsp;            nameLabel.setText(&quot;&quot;);</b>
+<b class="nc"><i>713</i>&nbsp;            descriptionLabel.setText(&quot;&quot;);</b>
+<i>714</i>&nbsp;        }
+<i>715</i>&nbsp;    }
+<i>716</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-10 19:55</div>
+</div>
+</body>
+</html>

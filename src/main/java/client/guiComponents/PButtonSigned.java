@@ -10,10 +10,11 @@ public class PButtonSigned extends PButton{
         super(image);
         this.sign=sign;
         setText(sign);
-        setFont(new Font("LeGourmetScript", Font.PLAIN, 27));
+        setFont(new Font("LeGourmetScript", Font.PLAIN, 30));
         setForeground(Color.WHITE);
         setHorizontalTextPosition(JButton.CENTER);
         setVerticalTextPosition(JButton.CENTER);
+
     }
 
     public String getSign() {

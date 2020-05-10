@@ -1,0 +1,167 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Worker</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Worker (model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Worker</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/ 14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import util.Genre;
+<i>4</i>&nbsp;import util.PlayerColor;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.io.Serializable;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * Stores information about a worker
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;public class Worker implements Serializable {
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    private final Genre genre;
+<i>14</i>&nbsp;    private final Player player;
+<i>15</i>&nbsp;    private PlayerColor playerColor;
+<i>16</i>&nbsp;    private Cell position;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * Constructor: build a Worker
+<i>20</i>&nbsp;     *
+<i>21</i>&nbsp;     * @param genre  The genre of the worker
+<i>22</i>&nbsp;     * @param player The player who owns this worker
+<i>23</i>&nbsp;     */
+<b class="fc"><i>24</i>&nbsp;    public Worker(Genre genre, Player player) {</b>
+<b class="fc"><i>25</i>&nbsp;        this.genre = genre;</b>
+<b class="fc"><i>26</i>&nbsp;        this.player = player;</b>
+<b class="fc"><i>27</i>&nbsp;        this.position = null;</b>
+<b class="fc"><i>28</i>&nbsp;        this.playerColor = null;</b>
+<b class="fc"><i>29</i>&nbsp;    }</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * Gets the current position of the worker
+<i>33</i>&nbsp;     *
+<i>34</i>&nbsp;     * @return The current position
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    public Cell getPosition() {
+<b class="fc"><i>37</i>&nbsp;        return position;</b>
+<i>38</i>&nbsp;    }
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    /**
+<i>41</i>&nbsp;     * Sets the position of the worker
+<i>42</i>&nbsp;     *
+<i>43</i>&nbsp;     * @param position The new position
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    public void setPosition(Cell position) {
+<b class="fc"><i>46</i>&nbsp;        this.position = position;</b>
+<b class="fc"><i>47</i>&nbsp;    }</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /**
+<i>50</i>&nbsp;     * Gets the playerColor of the worker
+<i>51</i>&nbsp;     *
+<i>52</i>&nbsp;     * @return The playerColor of the worker
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    public PlayerColor getPlayerColor() {
+<b class="fc"><i>55</i>&nbsp;        return playerColor;</b>
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * Sets the playerColor of the player
+<i>60</i>&nbsp;     *
+<i>61</i>&nbsp;     * @param playerColor The playerColor of the player
+<i>62</i>&nbsp;     */
+<i>63</i>&nbsp;    public void setPlayerColor(PlayerColor playerColor) {
+<b class="fc"><i>64</i>&nbsp;        this.playerColor = playerColor;</b>
+<b class="fc"><i>65</i>&nbsp;    }</b>
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * Gets the genre of the worker
+<i>69</i>&nbsp;     *
+<i>70</i>&nbsp;     * @return The genre of the worker
+<i>71</i>&nbsp;     */
+<i>72</i>&nbsp;    public Genre getGenre() {
+<b class="fc"><i>73</i>&nbsp;        return genre;</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * Gets the player who owns this worker
+<i>78</i>&nbsp;     *
+<i>79</i>&nbsp;     * @return The player who owns this worker
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;    public Player getPlayer() {
+<b class="fc"><i>82</i>&nbsp;        return player;</b>
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-10 19:55</div>
+</div>
+</body>
+</html>

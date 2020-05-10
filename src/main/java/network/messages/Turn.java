@@ -1,11 +1,11 @@
 package network.messages;
 
 import client.View;
-import model.Game;
 import network.CVMessage;
 import network.VCMessage;
 import server.VirtualView;
 import util.Action;
+import util.MapInfo;
 import util.MessageType;
 import util.RoundActions;
 
@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Turn implements Serializable, CVMessage, VCMessage {
     private final MessageType messageType;
     private RoundActions roundActions;
-    private Game game;
+    private MapInfo mapInfo;
     private Action action;
     private String nickname;
     private String loserNickname;
@@ -26,13 +26,13 @@ public class Turn implements Serializable, CVMessage, VCMessage {
      * Server-side constructor: build a request message
      *
      * @param roundActions  The possible actions
-     * @param game          The game
+     * @param mapInfo       The map info
      * @param loserNickname The nickname of the looser or null value
      */
-    public Turn(RoundActions roundActions, Game game, String loserNickname) {
+    public Turn(RoundActions roundActions, MapInfo mapInfo, String loserNickname) {
         messageType = MessageType.CV;
         this.roundActions = roundActions;
-        this.game = game;
+        this.mapInfo = mapInfo;
         this.loserNickname = loserNickname;
     }
 
@@ -54,7 +54,7 @@ public class Turn implements Serializable, CVMessage, VCMessage {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.askAction(roundActions, game, loserNickname);
+        view.askAction(roundActions, mapInfo, loserNickname);
     }
 
     /**

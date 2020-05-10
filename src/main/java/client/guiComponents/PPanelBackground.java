@@ -16,6 +16,7 @@ public class PPanelBackground extends JPanel {
      */
     public PPanelBackground(Image image) {
         this.image = image;
+        setBackground(new Color(0,0,0,0));
     }
 
     /**

@@ -1,0 +1,127 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AtlasRules</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">server.rules.simpleGods</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AtlasRules (server.rules.simpleGods)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AtlasRules</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/ 14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package server.rules.simpleGods;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import model.Cell;
+<i>4</i>&nbsp;import model.Game;
+<i>5</i>&nbsp;import model.Player;
+<i>6</i>&nbsp;import model.Worker;
+<i>7</i>&nbsp;import server.rules.Rules;
+<i>8</i>&nbsp;import util.RoundActions;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import java.util.List;
+<i>11</i>&nbsp;import java.util.stream.Collectors;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;/**
+<i>14</i>&nbsp; * Atlas Card
+<i>15</i>&nbsp; */
+<b class="fc"><i>16</i>&nbsp;public class AtlasRules extends Rules {</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * Gets a RoundActions object containing all the build-dome-actions of the specified worker according to the Rules
+<i>20</i>&nbsp;     *
+<i>21</i>&nbsp;     * @param worker The worker whose possible actions are to be analyzed
+<i>22</i>&nbsp;     * @param game   The game to which the player belongs
+<i>23</i>&nbsp;     * @return A RoundActions object containing all the possible build-dome-actions
+<i>24</i>&nbsp;     */
+<i>25</i>&nbsp;    protected RoundActions getPossibleDomes(Worker worker, Game game) {
+<b class="fc"><i>26</i>&nbsp;        RoundActions roundDomes = new RoundActions();</b>
+<b class="fc"><i>27</i>&nbsp;        Cell workerCell = worker.getPosition();</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;        // Add all the adjacent cells that don&#39;t have a dome: here you can build a dome
+<b class="fc"><i>30</i>&nbsp;        List&lt;Cell&gt; cells = game.</b>
+<b class="fc"><i>31</i>&nbsp;                getBoard().</b>
+<b class="fc"><i>32</i>&nbsp;                getAdjacents(workerCell).</b>
+<b class="fc"><i>33</i>&nbsp;                stream().</b>
+<b class="fc"><i>34</i>&nbsp;                filter(x -&gt; !x.getDome()).</b>
+<b class="fc"><i>35</i>&nbsp;                collect(Collectors.toList());</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;        // Remove all the cells that are already occupied
+<b class="fc"><i>38</i>&nbsp;        for (Player gamePlayer : game.getPlayers()) {</b>
+<b class="fc"><i>39</i>&nbsp;            cells.removeAll(gamePlayer.getOccupiedCells());</b>
+<b class="fc"><i>40</i>&nbsp;        }</b>
+<b class="fc"><i>41</i>&nbsp;        roundDomes.addDomes(cells, workerCell, worker.getGenre());</b>
+<b class="fc"><i>42</i>&nbsp;        return roundDomes;</b>
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-10 19:55</div>
+</div>
+</body>
+</html>

@@ -2,11 +2,11 @@ package network.messages;
 
 import client.View;
 import model.Cell;
-import model.Game;
 import network.CVMessage;
 import network.VCMessage;
 import server.VirtualView;
 import util.Genre;
+import util.MapInfo;
 import util.MessageType;
 
 import java.io.Serializable;
@@ -18,7 +18,7 @@ import java.util.List;
 public class SetUpPlayerPosition implements CVMessage, VCMessage, Serializable {
     private final MessageType messageType;
     private final Genre genre;
-    private Game game;
+    private MapInfo mapInfo;
     private List<Cell> forbiddenCells;
     private Cell chosenPosition;
     private String nickname;
@@ -28,11 +28,11 @@ public class SetUpPlayerPosition implements CVMessage, VCMessage, Serializable {
      *
      * @param genre          The genre of the worker
      * @param forbiddenCells The forbidden cells
-     * @param game           The game
+     * @param mapInfo        The map info
      */
-    public SetUpPlayerPosition(Genre genre, List<Cell> forbiddenCells, Game game) {
+    public SetUpPlayerPosition(Genre genre, List<Cell> forbiddenCells, MapInfo mapInfo) {
         this.messageType = MessageType.CV;
-        this.game = game;
+        this.mapInfo=mapInfo;
         this.genre = genre;
         this.forbiddenCells = forbiddenCells;
     }
@@ -66,7 +66,7 @@ public class SetUpPlayerPosition implements CVMessage, VCMessage, Serializable {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.askPlayerPosition(genre, forbiddenCells, game);
+        view.askPlayerPosition(genre, forbiddenCells, mapInfo);
     }
 
     /**

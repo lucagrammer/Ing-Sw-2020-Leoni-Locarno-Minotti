@@ -1,0 +1,169 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ArtemisRules</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">server.rules.simpleGods</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ArtemisRules (server.rules.simpleGods)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ArtemisRules</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (34/ 34)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package server.rules.simpleGods;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import model.Cell;
+<i>4</i>&nbsp;import model.Game;
+<i>5</i>&nbsp;import model.Player;
+<i>6</i>&nbsp;import model.Worker;
+<i>7</i>&nbsp;import server.rules.Rules;
+<i>8</i>&nbsp;import util.*;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import java.util.List;
+<i>11</i>&nbsp;import java.util.stream.Collectors;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;/**
+<i>14</i>&nbsp; * Artemis Card
+<i>15</i>&nbsp; */
+<b class="fc"><i>16</i>&nbsp;public class ArtemisRules extends Rules {</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * Gets a RoundActions object containing all the possible actions of the specified player according to the Rules
+<i>20</i>&nbsp;     *
+<i>21</i>&nbsp;     * @param player The player whose possible actions are to be analyzed
+<i>22</i>&nbsp;     * @param game   The game to which the player belongs
+<i>23</i>&nbsp;     * @return A RoundActions object containing all the possible actions
+<i>24</i>&nbsp;     */
+<i>25</i>&nbsp;    public RoundActions nextPossibleActions(Player player, Game game) {
+<b class="fc"><i>26</i>&nbsp;        RoundActions roundActions = player.getRoundActions();</b>
+<b class="fc"><i>27</i>&nbsp;        RoundActions possibleActions = new RoundActions();</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;        // Has not moved?
+<b class="fc"><i>30</i>&nbsp;        if (roundActions.hasMoved() == 0) {</b>
+<b class="fc"><i>31</i>&nbsp;            possibleActions.add(getPossibleMoves(player.getWorker(Genre.MALE), game));</b>
+<b class="fc"><i>32</i>&nbsp;            possibleActions.add(getPossibleMoves(player.getWorker(Genre.FEMALE), game));</b>
+<i>33</i>&nbsp;            //Can&#39;t move?
+<b class="fc"><i>34</i>&nbsp;            if (possibleActions.isEmpty())</b>
+<b class="fc"><i>35</i>&nbsp;                possibleActions.add(new Action(ActionType.LOSE));</b>
+<i>36</i>&nbsp;        } else {
+<b class="fc"><i>37</i>&nbsp;            Genre movedWorkerGenre = roundActions.</b>
+<b class="fc"><i>38</i>&nbsp;                    getActionList().</b>
+<b class="fc"><i>39</i>&nbsp;                    stream().</b>
+<b class="fc"><i>40</i>&nbsp;                    filter(x -&gt; x.getActionType() == ActionType.MOVE).</b>
+<b class="fc"><i>41</i>&nbsp;                    collect(Collectors.toList()).</b>
+<b class="fc"><i>42</i>&nbsp;                    get(0).</b>
+<b class="fc"><i>43</i>&nbsp;                    getGenre();</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;            // Has not build?
+<b class="fc"><i>46</i>&nbsp;            if (roundActions.hasBuildAnything() == 0) {</b>
+<i>47</i>&nbsp;                // Has moved once?
+<b class="fc"><i>48</i>&nbsp;                if (roundActions.hasMoved() == 1) {</b>
+<b class="fc"><i>49</i>&nbsp;                    possibleActions.add(getPossibleMoves(player.getWorker(movedWorkerGenre), game));</b>
+<i>50</i>&nbsp;                }
+<b class="fc"><i>51</i>&nbsp;                possibleActions.add(getPossibleBuilds(player.getWorker(movedWorkerGenre), game));</b>
+<b class="fc"><i>52</i>&nbsp;                possibleActions.add(getPossibleDomes(player.getWorker(movedWorkerGenre), game));</b>
+<i>53</i>&nbsp;                //Can&#39;t do anything?
+<b class="fc"><i>54</i>&nbsp;                if (possibleActions.isEmpty())</b>
+<b class="fc"><i>55</i>&nbsp;                    possibleActions.add(new Action(ActionType.LOSE));</b>
+<i>56</i>&nbsp;            } else {
+<b class="fc"><i>57</i>&nbsp;                possibleActions.add(new Action(ActionType.END));</b>
+<i>58</i>&nbsp;            }
+<i>59</i>&nbsp;        }
+<b class="fc"><i>60</i>&nbsp;        return possibleActions;</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * Gets a RoundActions object containing all the move-actions of the specified worker according to the Rules
+<i>65</i>&nbsp;     *
+<i>66</i>&nbsp;     * @param worker The worker whose possible moves are to be analyzed
+<i>67</i>&nbsp;     * @param game   The game to which the player belongs
+<i>68</i>&nbsp;     * @return A RoundActions object containing all the possible move-actions
+<i>69</i>&nbsp;     */
+<i>70</i>&nbsp;    protected RoundActions getPossibleMoves(Worker worker, Game game) {
+<b class="fc"><i>71</i>&nbsp;        RoundActions roundMoves = new RoundActions();</b>
+<b class="fc"><i>72</i>&nbsp;        Cell workerCell = worker.getPosition();</b>
+<b class="fc"><i>73</i>&nbsp;        List&lt;Cell&gt; cells = calculateStandardMoves(workerCell, game);</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;        // Remove the cell occupied by the previous move, if any
+<b class="fc"><i>76</i>&nbsp;        Player player = game.getPlayerByColor(worker.getPlayerColor());</b>
+<b class="fc"><i>77</i>&nbsp;        RoundActions roundActions = player.getRoundActions();</b>
+<b class="fc"><i>78</i>&nbsp;        if (!roundActions.isEmpty()) {</b>
+<b class="fc"><i>79</i>&nbsp;            Direction prevMoveDirection = roundActions.getActionList().get(0).getDirection();</b>
+<b class="fc"><i>80</i>&nbsp;            cells.remove(game.getBoard().getPrevCell(workerCell, prevMoveDirection));</b>
+<i>81</i>&nbsp;        }
+<i>82</i>&nbsp;
+<b class="fc"><i>83</i>&nbsp;        roundMoves.addMoves(cells, workerCell, worker.getGenre());</b>
+<b class="fc"><i>84</i>&nbsp;        return roundMoves;</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-10 19:55</div>
+</div>
+</body>
+</html>

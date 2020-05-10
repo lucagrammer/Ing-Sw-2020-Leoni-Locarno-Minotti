@@ -2,9 +2,9 @@ package client;
 
 import model.Card;
 import model.Cell;
-import model.Game;
 import model.Player;
 import util.Genre;
+import util.MapInfo;
 import util.RoundActions;
 
 import java.util.List;
@@ -97,12 +97,11 @@ public interface View {
 
     /**
      * Asks the first position for the male and female worker
-     *
-     * @param genre          The genre of the worker
+     *  @param genre         The genre of the worker
      * @param forbiddenCells The forbidden cells
-     * @param game           The game
+     * @param mapInfo        The map info
      */
-    void askPlayerPosition(Genre genre, List<Cell> forbiddenCells, Game game);
+    void askPlayerPosition(Genre genre, List<Cell> forbiddenCells, MapInfo mapInfo);
 
     /**
      * Shows the board of the game
@@ -110,16 +109,15 @@ public interface View {
      * @param game      The game
      * @param newScreen True if it's necessary to clean the interface
      */
-    void showMap(Game game, boolean newScreen);
+    void showMap(MapInfo mapInfo, boolean newScreen);
 
     /**
      * Asks the action the player wants to perform
-     *
      * @param roundActions  All the possible actions
-     * @param game          The game
+     * @param mapInfo        The map info
      * @param loserNickname The nickname of the looser or null value
      */
-    void askAction(RoundActions roundActions, Game game, String loserNickname);
+    void askAction(RoundActions roundActions, MapInfo mapInfo, String loserNickname);
 
     /**
      * Notify the players that the game has ended and notify the winner

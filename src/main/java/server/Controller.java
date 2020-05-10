@@ -93,7 +93,7 @@ public class Controller {
             currentClientHandler = virtualView.getClientHandlerByNickname(currentNickname);
             System.out.println("> Status: waiting for color choice of " + currentPlayer.getNickname());
 
-            virtualView.sendToEveryoneExcept(new ShowMap(game, currentNickname, null), currentPlayer);
+            virtualView.sendToEveryoneExcept(new ShowMap(new MapInfo(game), currentNickname, null), currentPlayer);
 
             // PlayerColor setup
             currentClientHandler.send(new SetUpPlayerColor(availableColors));
@@ -114,7 +114,7 @@ public class Controller {
                     forbiddenCells.addAll(player.getOccupiedCells());
                 }
 
-                currentClientHandler.send(new SetUpPlayerPosition(genre, forbiddenCells, game));
+                currentClientHandler.send(new SetUpPlayerPosition(genre, forbiddenCells, new MapInfo(game)));
                 synchronized (this) {
                     while (currentPlayer.getWorker(genre).getPosition() == null && isRunning()) {
                         this.wait();
@@ -152,10 +152,10 @@ public class Controller {
                     currentPlayer.setRoundActions(new RoundActions());
                 } else {
                     // Update the map for everyone
-                    virtualView.sendToEveryoneExcept(new ShowMap(game, currentPlayer.getNickname(), loserNickname), currentPlayer);
+                    virtualView.sendToEveryoneExcept(new ShowMap(new MapInfo(game), currentPlayer.getNickname(), loserNickname), currentPlayer);
 
                     int currentActionsNumber = currentPlayer.getRoundActions().getActionList().size();
-                    virtualView.getClientHandlerByNickname(currentPlayer.getNickname()).send(new Turn(possibleActions, game, loserNickname));
+                    virtualView.getClientHandlerByNickname(currentPlayer.getNickname()).send(new Turn(possibleActions, new MapInfo(game), loserNickname));
                     loserNickname = null;
                     synchronized (this) {
                         while (currentPlayer.getRoundActions().getActionList().size() <= currentActionsNumber && isRunning()) {
@@ -229,7 +229,7 @@ public class Controller {
      * Manages the win of the current player: update the final map and then notify everyone
      */
     private void manageWin() {
-        virtualView.sendToEveryone(new ShowMap(game, currentPlayer.getNickname(), null));
+        virtualView.sendToEveryone(new ShowMap(new MapInfo(game), currentPlayer.getNickname(), null));
         System.out.println("> Game ended: " + currentPlayer.getNickname() + " has won");
         for (Player p : game.getAllPlayers()) {
             virtualView.getClientHandlerByNickname(p.getNickname()).send(new ShowGameEndMessage(currentPlayer.getNickname(), currentPlayer.equals(p)));

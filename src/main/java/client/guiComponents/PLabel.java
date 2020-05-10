@@ -15,7 +15,7 @@ public class PLabel extends JLabel {
      */
     public PLabel(String labelText) {
         int defaultSize = 40;
-        setText(labelText);
+        setText("<HTML>"+labelText+"</HTML>");
         setHorizontalAlignment(CENTER);
         setVerticalAlignment(JLabel.CENTER);
         setForeground(Color.WHITE);

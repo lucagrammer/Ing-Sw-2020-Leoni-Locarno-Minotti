@@ -1,9 +1,9 @@
 package network.messages;
 
 import client.View;
-import model.Game;
 import network.CVMessage;
 import util.Frmt;
+import util.MapInfo;
 import util.MessageType;
 
 import java.io.Serializable;
@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public class ShowMap implements CVMessage, Serializable {
     private final MessageType messageType;
-    private final Game game;
+    private final MapInfo mapInfo;
     private final String currentNickname;
     private final String loserNickname;
 
@@ -21,14 +21,14 @@ public class ShowMap implements CVMessage, Serializable {
      * Server-side constructor: build a request message
      *
      * @param currentNickname The nickname of the current player
-     * @param game            The game
+     * @param mapInfo         The map info
      * @param loserNickname   The nickname of the loser player or null value
      */
-    public ShowMap(Game game, String currentNickname, String loserNickname) {
+    public ShowMap(MapInfo mapInfo, String currentNickname, String loserNickname) {
         messageType = MessageType.CV;
         this.currentNickname = currentNickname;
         this.loserNickname = loserNickname;
-        this.game = game;
+        this.mapInfo = mapInfo;
     }
 
     /**
@@ -37,7 +37,7 @@ public class ShowMap implements CVMessage, Serializable {
      * @param view The recipient component
      */
     public void execute(View view) {
-        view.showMap(game, true);
+        view.showMap(mapInfo, true);
         if (loserNickname != null) {
             view.showMessage("\n\n\t\t" + Frmt.style('b', Frmt.color('r', loserNickname.toUpperCase() + " has lost " + Frmt.DEATH)), false);
         }

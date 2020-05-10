@@ -78,7 +78,7 @@ public class CliView implements View {
      */
     public void showLoading() {
         Frmt.clearScreen();
-        System.out.println(Frmt.style('i', "  > Loading..."));
+        System.out.println(Frmt.style('i', "  > The game will start shortly, get ready!"));
     }
 
     /**
@@ -186,7 +186,7 @@ public class CliView implements View {
      */
     public void askGameCards(int numCards) {
         List<Card> allCardList = Configurator.getAllCards();
-        List<String> allCardNames = new ArrayList<>();
+        List<String> allCardNames;
         List<Card> chosenCard = new ArrayList<>();
 
         boolean incorrect;
@@ -394,19 +394,18 @@ public class CliView implements View {
 
     /**
      * Asks the first position for the male and female worker
-     *
      * @param genre          The genre of the worker
      * @param forbiddenCells The forbidden cells
-     * @param game           The game
+     * @param mapInfo        The map info
      */
-    public void askPlayerPosition(Genre genre, List<Cell> forbiddenCells, Game game) {
+    public void askPlayerPosition(Genre genre, List<Cell> forbiddenCells, MapInfo mapInfo) {
         Cell chosenCell;
         String chosenPosition;
         int row = -1, column = -1;
         boolean incorrect;
         Frmt.clearScreen();
         do {
-            showMap(game, false);
+            showMap(mapInfo, false);
             incorrect = false;
             System.out.print("\n " + Frmt.style('b', "Choose the position of your " + ((genre == MALE) ? "male" : "female") + " worker [row,column]:") + " ");
             chosenPosition = scanner.next();
@@ -432,45 +431,17 @@ public class CliView implements View {
     /**
      * Shows the board of the game
      *
-     * @param game      The game
+     * @param mapInfo   The map info
      * @param newScreen True if it's necessary to clean the interface
      */
-    public void showMap(Game game, boolean newScreen) {
-        String[][] cellColorMatrix = new String[5][5];
-        Genre[][] cellGenreMatrix = new Genre[5][5];
-        Cell[][] cellsInfoMatrix = game.getBoard().getBoard();
-        List<String> playerNames = new ArrayList<>();
-        List<Character> colors = new ArrayList<>();    // players color in the same order of playerNames
+    public void showMap(MapInfo mapInfo, boolean newScreen) {
+        List<String> playerNames=mapInfo.getNicknames();
+        List<String> colors=mapInfo.getColors();
+        List<String> cards=mapInfo.getCards();
 
-        // Null initialization of the info matrix
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                cellColorMatrix[i][j] = null;
-                cellGenreMatrix[i][j] = null;
-            }
-        }
-
-        // Fill matrix with correct information
-        for (Player player : game.getPlayers()) {
-            for (Genre genre : Genre.values()) {
-                Worker worker = player.getWorker(genre);
-                Cell position = worker.getPosition();
-                if (position != null) {
-                    int row = position.getRow();
-                    int column = position.getColumn();
-                    cellColorMatrix[row][column] = worker.getPlayerColor().toString();
-                    cellGenreMatrix[row][column] = genre;
-                    if (!colors.contains(cellColorMatrix[row][column].charAt(0))) {
-                        playerNames.add(player.getNickname());
-                        colors.add(cellColorMatrix[row][column].charAt(0));
-                    }
-                }
-            }
-        }
-
-        // Show the map
         if (newScreen)
             Frmt.clearScreen();
+
         System.out.println("\tNW\t\t                          N                             \tNE");
         System.out.print("\n\t\t\t");
         for (int j = 0; j < 5; j++) {
@@ -480,14 +451,14 @@ public class CliView implements View {
         for (int i = 0; i < 5; i++) {
             System.out.print("\n\t\t\t");
             for (int j = 0; j < 5; j++) {
-                char color = (cellColorMatrix[i][j] == null) ? 'w' : cellColorMatrix[i][j].toLowerCase().charAt(0);
+                char color = (mapInfo.getColorAt(i,j) == null) ? 'w' : mapInfo.getColorAt(i,j).charAt(0);
                 System.out.print(Frmt.color(color, Frmt.style('r', "         ")) + "  ");
             }
 
             // Legend
             if (i == 1 && colors.size() > 0) {
-                System.out.print("\t\t\t  " + Frmt.color(colors.get(0), Frmt.style('r', "  "
-                        + playerNames.get(0).toUpperCase() + " - " + game.getPlayerByNickname(playerNames.get(0)).getCard().getName() + "  ")));
+                System.out.print("\t\t\t  " + Frmt.color(colors.get(0).charAt(0), Frmt.style('r', "  "
+                        + playerNames.get(0).toUpperCase() + " - " + cards.get(0) + "  ")));
             }
 
             if (i == 2) {
@@ -496,8 +467,8 @@ public class CliView implements View {
                 System.out.print("\n\t\t" + i + "\t");
             }
             for (int j = 0; j < 5; j++) {
-                Frmt domed = (cellsInfoMatrix[i][j].getDome()) ? Frmt.DOME : Frmt.NOT_DOME;
-                String genre = (cellGenreMatrix[i][j] == null) ? " " : Frmt.getGenreIcon(cellGenreMatrix[i][j]);
+                Frmt domed = (mapInfo.getDomeAt(i,j)) ? Frmt.DOME : Frmt.NOT_DOME;
+                String genre = (mapInfo.getGenreAt(i,j) == null) ? " " : Frmt.getGenreIcon(mapInfo.getGenreAt(i,j));
                 System.out.print(Frmt.color('w', Frmt.style('r', " " + domed + "    " + genre + "  ")) + "  ");
             }
             if (i == 2) {
@@ -506,18 +477,20 @@ public class CliView implements View {
 
             // Legend
             if (i == 1 && colors.size() > 1) {
-                System.out.print("\t\t\t  " + Frmt.color(colors.get(1), Frmt.style('r', "  " + playerNames.get(1).toUpperCase() + " - " + game.getPlayerByNickname(playerNames.get(1)).getCard().getName() + "  ")));
+                System.out.print("\t\t\t  " + Frmt.color(colors.get(1).charAt(0), Frmt.style('r', "  "
+                        + playerNames.get(1).toUpperCase() + " - " + cards.get(1) + "  ")));
             }
 
             System.out.print("\n\t\t\t");
             for (int j = 0; j < 5; j++) {
-                int floor = cellsInfoMatrix[i][j].getFloor();
+                int floor = mapInfo.getFloorAt(i,j);
                 System.out.print(Frmt.color('w', Frmt.style('r', " " + floor + "       ")) + "  ");
             }
 
             // Legend
             if (i == 1 && colors.size() > 2) {
-                System.out.print("\t\t\t  " + Frmt.color(colors.get(2), Frmt.style('r', "  " + playerNames.get(2).toUpperCase() + " - " + game.getPlayerByNickname(playerNames.get(2)).getCard().getName() + "  ")));
+                System.out.print("\t\t\t  " + Frmt.color(colors.get(2).charAt(0), Frmt.style('r', "  "
+                        + playerNames.get(2).toUpperCase() + " - " + cards.get(2) + "  ")));
             }
             if (i == 0 && colors.size() > 0) {
                 System.out.print("\t\t\t  " + Frmt.style("bi", "KEY:"));
@@ -530,19 +503,18 @@ public class CliView implements View {
 
     /**
      * Asks the action the player wants to perform
-     *
-     * @param roundActions  All the possible actions
-     * @param game          The game
-     * @param loserNickname The nickname of the looser or null value
+     *  @param roundActions     All the possible actions
+     * @param mapInfo           The map info
+     * @param loserNickname     The nickname of the looser or null value
      */
-    public void askAction(RoundActions roundActions, Game game, String loserNickname) {
+    public void askAction(RoundActions roundActions, MapInfo mapInfo, String loserNickname) {
         String action, genre, direction;
         Action theAction;
         boolean incorrect;
 
         Frmt.clearScreen();
         do {
-            showMap(game, false);
+            showMap(mapInfo, false);
             incorrect = false;
 
             // There's a loser?
