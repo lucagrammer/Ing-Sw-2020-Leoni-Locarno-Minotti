@@ -130,6 +130,9 @@ public class GameTest {
         Player player1 = new Player("Kate", new Date(1 / 5 / 1998), false);
         game.addPlayer(player1);
         assertFalse(game.canStart());
+        Player player2 = new Player("Temporary", new Date(3 / 4 / 1999), true);
+        game.addPlayer(player2);
+        assertFalse(game.canStart());
     }
 
     @Test
@@ -225,4 +228,34 @@ public class GameTest {
             }
         }
     }
+
+    @Test
+    public void setAllPlayers_GetAllCorrectPlayers() throws ParseException {
+        String birthDate = "02/01/1998";
+        Date dateOfBirth = dateFormat.parse(birthDate);
+        List<Player> AllPlayers= new ArrayList<>();
+        Player player1 = new Player("Kate", dateOfBirth, false);
+        String birthDate2 = "01/01/1998";
+        Date dateOfBirth2 = dateFormat.parse(birthDate2);
+        Player player2 = new Player("Julie", dateOfBirth2, false);
+        game.addPlayer(player1);
+        game.addPlayer(player2);
+        AllPlayers.add(player);
+        AllPlayers.add(player1);
+        AllPlayers.add(player2);
+        assertEquals(AllPlayers, game.getAllPlayers());
+    }
+
+    @Test
+    public void GetCorrectNumPlayers() throws ParseException {
+        assertEquals(3, game.getNumPlayers());
+    }
+
+    @Test
+    public void setIsActive_GetCorrectIsActive() {
+        assertTrue(game.isActive());
+        game.setInactive();
+        assertFalse(game.isActive());
+    }
+
 }

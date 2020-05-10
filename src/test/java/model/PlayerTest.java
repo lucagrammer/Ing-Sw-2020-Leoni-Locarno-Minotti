@@ -121,4 +121,12 @@ public class PlayerTest {
         expected.add(new Action(ActionType.FLOOR, Genre.FEMALE, Direction.S, 1));
         assertEquals(expected, player.getRoundActions());
     }
+
+    @Test
+    public void setFinalNickname_getCorrectHasTemporaryNickname() {
+        Player newPlayer = new Player("Temporary", new Date(3 / 2 / 1998), true);
+        player.setFinalNickname("John");
+        assertFalse(player.hasTemporaryUsername());
+
+    }
 }

@@ -79,6 +79,12 @@ public class CellTest {
         assertEquals(Direction.W, cell.calculateDirection(new Cell(3, 2)));
         assertEquals(Direction.NW, cell.calculateDirection(new Cell(2, 2)));
     }
+
+    @Test
+    public void cellInfo_getCorrectToString() {
+        cell = new Cell(3,3);
+        assertEquals("row=3, column=3, dome=false, floor=0", cell.toString());
+    }
 }
 
 
