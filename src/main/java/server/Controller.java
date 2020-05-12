@@ -86,7 +86,7 @@ public class Controller {
     private void firstTurn() throws InterruptedException, DisconnectionException {
         String currentNickname;
         ClientHandler currentClientHandler;
-        List<String> availableColors = PlayerColor.allColorsToString();
+        ArrayList<String> availableColors = PlayerColor.allColorsToString();
 
         for (int i = 0; i < game.getPlayers().size(); i++) {
             currentNickname = currentPlayer.getNickname();

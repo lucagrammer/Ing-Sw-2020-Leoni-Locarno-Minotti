@@ -2,7 +2,6 @@ package util;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * All the possible colors of the players/workers
@@ -51,8 +50,8 @@ public enum PlayerColor {
      *
      * @return A list containing all the possible colors
      */
-    public static List<String> allColorsToString() {
-        List<String> allColors = new ArrayList<>();
+    public static ArrayList<String> allColorsToString() {
+        ArrayList<String> allColors = new ArrayList<>();
         for (PlayerColor color : PlayerColor.values()) {
             allColors.add(color.name);
         }

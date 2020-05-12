@@ -7,6 +7,7 @@ import util.Genre;
 import util.MapInfo;
 import util.RoundActions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -93,7 +94,7 @@ public interface View {
      *
      * @param availableColors All the available colors
      */
-    void askPlayerColor(List<String> availableColors);
+    void askPlayerColor(ArrayList<String> availableColors);
 
     /**
      * Asks the first position for the male and female worker

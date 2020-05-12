@@ -14,7 +14,6 @@ public class PButtonSigned extends PButton{
         setForeground(Color.WHITE);
         setHorizontalTextPosition(JButton.CENTER);
         setVerticalTextPosition(JButton.CENTER);
-
     }
 
     public String getSign() {

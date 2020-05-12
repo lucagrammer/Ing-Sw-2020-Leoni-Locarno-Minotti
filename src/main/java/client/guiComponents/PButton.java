@@ -36,6 +36,17 @@ public class PButton extends JButton {
         setBorderPainted(false);
     }
 
+    /**
+     * Constructor: build a colored button
+     *
+     * @param color The color of the button
+     */
+    public PButton(Color color, Image image) {
+        super(new ImageIcon(image));
+        setBackground(color);
+        setOpaque(true);
+        setBorderPainted(false);
+    }
 
     /**
      * Constructor: build a transparent button
@@ -63,8 +74,6 @@ public class PButton extends JButton {
             state=color;
         }
 
-        state="yellow";//TODO
-        floor=3;
         setIcon(new ImageIcon(Configurator.getCellImage(floor,state)));
     }
 }

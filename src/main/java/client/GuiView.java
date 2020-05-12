@@ -1,13 +1,13 @@
 package client;
 
 import client.guiComponents.*;
-import model.*;
+import model.Card;
+import model.Cell;
+import model.Player;
 import util.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -23,7 +23,7 @@ public class GuiView implements View {
     private ServerHandler serverHandler;
     private JFrame mainFrame;
     private PPanelContainer bodyContainer;
-    private PPanelContainer commandBar;
+    private MapElement mapElement;
 
     /**
      * Constructor: build a GuiView
@@ -44,6 +44,14 @@ public class GuiView implements View {
      */
     public void setServerHandler(ServerHandler serverHandler) {
         this.serverHandler = serverHandler;
+    }
+
+    /**
+     * Gets the server handler that manages the graphical user interface view
+     * @return  The serverHandler that manages the GuiView
+     */
+    public ServerHandler getServerHandler() {
+        return serverHandler;
     }
 
     /**
@@ -81,12 +89,12 @@ public class GuiView implements View {
     }
 
     /**
-     * Apply changes to a panel
-     * @param panel The panel
+     * Apply changes to a component
+     * @param component The component
      */
-    private void applyChangesTo(JPanel panel) {
-        panel.revalidate();
-        panel.repaint();
+    private void applyChangesTo(Component component) {
+        component.revalidate();
+        component.repaint();
     }
 
     /**
@@ -98,12 +106,26 @@ public class GuiView implements View {
     }
 
     /**
+     * Flush the components inside a frame
+     * @param frame     The frame
+     */
+    private void clear(JFrame frame){
+        frame.getContentPane().removeAll();
+    }
+
+    /**
      * Shows a message to say to the user that is connected to
      * the server and will be added to the next available game
      */
     public void showQueuedMessage() {
         SwingUtilities.invokeLater(() -> {
-            showMessage("You will be added to the first available game...",true);
+            clear(bodyContainer);
+
+            MessageElement messageElement=new MessageElement(bodyContainer);
+            messageElement.setMessage("You will be added to the first available game...");
+            messageElement.showLoadingIcon();
+
+            applyChangesTo(bodyContainer);
         });
     }
 
@@ -117,9 +139,8 @@ public class GuiView implements View {
         SwingUtilities.invokeLater(() -> {
             clear(bodyContainer);
 
-            PLabel label = new PLabel(message);
-            label.setBounds(0, 0, 840, 450);
-            bodyContainer.add(label);
+            MessageElement messageElement=new MessageElement(bodyContainer);
+            messageElement.setMessage(message);
 
             applyChangesTo(bodyContainer);
         });
@@ -132,9 +153,9 @@ public class GuiView implements View {
         SwingUtilities.invokeLater(() -> {
             clear(bodyContainer);
 
-            PLabel label = new PLabel("The game will start shortly, get ready!");
-            label.setBounds(0, 0, 840, 450);
-            bodyContainer.add(label);
+            MessageElement messageElement=new MessageElement(bodyContainer);
+            messageElement.setMessage("The game will start shortly, get ready!");
+            messageElement.showLoadingIcon();
 
             applyChangesTo(bodyContainer);
         });
@@ -176,9 +197,9 @@ public class GuiView implements View {
             clear(bodyContainer);
 
             Form form= new Form(bodyContainer);
-            form.addField(0,"Nickname: ","");
-            form.addField(1,"Date of birth [dd/mm/yyyy]: ","");
-            form.addField((newGame)? 2 : -1,"Number of competitors [2..3]: ","");
+            form.addField(0,"Nickname: ","Player");
+            form.addField(1,"Date of birth [dd/mm/yyyy]: ","24/09/1998");
+            form.addField((newGame)? 2 : -1,"Number of competitors [2..3]: ","2");
             form.addErrorLabel("");
 
             form.setActionButton("NEXT",(ev) -> (new Thread(() -> {
@@ -229,7 +250,12 @@ public class GuiView implements View {
         printCards(chosenCard, numCards);
     }
 
-    private void printCards(List<Card> chosenCards, int numCards) {
+    /**
+     * Adds the card switcher to the view
+     * @param chosenCards   The cards not to be shown
+     * @param numCards      The number of cards to be shown
+     */
+    public void printCards(List<Card> chosenCards, int numCards) {
         if (numCards == chosenCards.size()) {
             (new Thread(() -> {
                 showLoading();
@@ -237,51 +263,16 @@ public class GuiView implements View {
             })).start();
         } else {
             SwingUtilities.invokeLater(() -> {
-                // Flush body components
-                this.bodyContainer.removeAll();
+                clear(bodyContainer);
 
-                List<Card> allCardList = Configurator.getAllCards();
-
-                // Remove cards
-                allCardList.removeAll(chosenCards);
-
-                PLabel label = new PLabel("Choose " + (numCards - chosenCards.size()) + " card" + (numCards - chosenCards.size() > 1 ? "s" : "") + " between these:");
-                label.setFontSize(30);
-                label.setBounds(0, 0, 840, 40);
-                bodyContainer.add(label);
-
-                PPanelContainer cardContainer = new PPanelContainer();
-                cardContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);
-                cardContainer.setLayout(new GridLayout(1, 9, 10, 0));
-                bodyContainer.add(cardContainer);
-
-                PPanelContainer descriptionBackground = new PPanelContainer();
-                descriptionBackground.setBounds(0, 280, bodyContainer.getWidth(), 150);
-                descriptionBackground.setLayout(null);
-                bodyContainer.add(descriptionBackground);
-
-                PLabel nameLabel = new PLabel("");
-                nameLabel.setFontSize(30);
-                nameLabel.setForeground(new Color(186, 164, 154));
-                nameLabel.setBounds(0, 20, descriptionBackground.getWidth(), 35);
-                descriptionBackground.add(nameLabel);
-
-                PLabel descriptionLabel = new PLabel("");
-                descriptionLabel.setFont(new Font("Helvetica", Font.PLAIN, 17));
-                descriptionLabel.setBounds(90, 50, descriptionBackground.getWidth() - 180, 80);
-                descriptionBackground.add(descriptionLabel);
-
-                for (Card card : allCardList) {
-                    Image scaledImage = Configurator.getCardImage(card.getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);
-                    PButton cardButton = new PButton(scaledImage);
-                    cardContainer.add(cardButton);
-                    cardButton.addMouseListener(new GuiView.CardMouseListener(card, nameLabel, descriptionLabel, chosenCards, numCards));
-                }
+                CardSwitcher cardSwitcher= new CardSwitcher(bodyContainer,this);
+                cardSwitcher.setHeading("Choose " + (numCards - chosenCards.size()) + " card" + (numCards - chosenCards.size() > 1 ? "s" : "") + " between these:");
+                cardSwitcher.showSwitcher(chosenCards,numCards);
+                cardSwitcher.showCardDetails();
 
                 applyChangesTo(bodyContainer);
             });
         }
-
     }
 
     /**
@@ -291,41 +282,12 @@ public class GuiView implements View {
      */
     public void askPlayerCard(List<Card> possibleChoices) {
         SwingUtilities.invokeLater(() -> {
-            // Flush body components
-            this.bodyContainer.removeAll();
+            clear(bodyContainer);
 
-            PLabel label = new PLabel("Choose your card between these:");
-            label.setFontSize(30);
-            label.setBounds(0, 0, 840, 40);
-            bodyContainer.add(label);
-
-            PPanelContainer cardContainer = new PPanelContainer();
-            cardContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);
-            cardContainer.setLayout(new GridLayout(1, 9, 10, 0));
-            bodyContainer.add(cardContainer);
-
-            PPanelContainer descriptionBackground = new PPanelContainer();
-            descriptionBackground.setBounds(0, 280, bodyContainer.getWidth(), 150);
-            descriptionBackground.setLayout(null);
-            bodyContainer.add(descriptionBackground);
-
-            PLabel nameLabel = new PLabel("");
-            nameLabel.setFontSize(30);
-            nameLabel.setForeground(new Color(186, 164, 154));
-            nameLabel.setBounds(0, 20, descriptionBackground.getWidth(), 35);
-            descriptionBackground.add(nameLabel);
-
-            PLabel descriptionLabel = new PLabel("");
-            descriptionLabel.setFont(new Font("Helvetica", Font.PLAIN, 17));
-            descriptionLabel.setBounds(90, 50, descriptionBackground.getWidth() - 180, 80);
-            descriptionBackground.add(descriptionLabel);
-
-            for (Card card : possibleChoices) {
-                Image scaledImage = Configurator.getCardImage(card.getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);
-                PButton cardButton = new PButton(scaledImage);
-                cardContainer.add(cardButton);
-                cardButton.addMouseListener(new GuiView.CardMouseListener(card, nameLabel, descriptionLabel, true));
-            }
+            CardSwitcher cardSwitcher= new CardSwitcher(bodyContainer,this);
+            cardSwitcher.setHeading("Choose your card between these:");
+            cardSwitcher.showSwitcher(possibleChoices,true);
+            cardSwitcher.showCardDetails();
 
             applyChangesTo(bodyContainer);
         });
@@ -338,28 +300,11 @@ public class GuiView implements View {
      */
     public void askFirstPlayer(List<String> playersNicknames) {
         SwingUtilities.invokeLater(() -> {
-            // Flush body components
-            this.bodyContainer.removeAll();
+            clear(bodyContainer);
 
-            PLabel label = new PLabel("Choose the first player:");
-            label.setFontSize(30);
-            label.setBounds(0, 0, 840, 40);
-            bodyContainer.add(label);
-
-            PPanelContainer playerContainer = new PPanelContainer();
-            playerContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);
-            playerContainer.setLayout(new GridLayout(1, playersNicknames.size(), 10, 0));
-            bodyContainer.add(playerContainer);
-
-            for (String name : playersNicknames) {
-                Image scaledImage = (new ImageIcon(getClass().getResource("/GuiResources/btn_blue.png"))).getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);
-                PButtonSigned button = new PButtonSigned(scaledImage,name);
-                button.addActionListener((ev) -> (new Thread(() -> {
-                    showLoading();
-                    serverHandler.sendFirstPlayer(button.getSign());
-                })).start());
-                playerContainer.add(button);
-            }
+            PlayerSwitcher playerSwitcher=new PlayerSwitcher(bodyContainer,this);
+            playerSwitcher.showHeading("Choose the first player:");
+            playerSwitcher.showSwitcher(playersNicknames);
 
             applyChangesTo(bodyContainer);
         });
@@ -372,41 +317,12 @@ public class GuiView implements View {
      */
     public void showGameCards(List<Card> cards) {
         SwingUtilities.invokeLater(() -> {
-            // Flush body components
-            this.bodyContainer.removeAll();
+            clear(bodyContainer);
 
-            PLabel label = new PLabel("The cards used in this match will be:");
-            label.setFontSize(30);
-            label.setBounds(0, 0, 840, 40);
-            bodyContainer.add(label);
-
-            PPanelContainer cardContainer = new PPanelContainer();
-            cardContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);
-            cardContainer.setLayout(new GridLayout(1, 9, 10, 0));
-            bodyContainer.add(cardContainer);
-
-            PPanelContainer descriptionBackground = new PPanelContainer();
-            descriptionBackground.setBounds(0, 280, bodyContainer.getWidth(), 150);
-            descriptionBackground.setLayout(null);
-            bodyContainer.add(descriptionBackground);
-
-            PLabel nameLabel = new PLabel("");
-            nameLabel.setFontSize(30);
-            nameLabel.setForeground(new Color(186, 164, 154));
-            nameLabel.setBounds(0, 20, descriptionBackground.getWidth(), 35);
-            descriptionBackground.add(nameLabel);
-
-            PLabel descriptionLabel = new PLabel("");
-            descriptionLabel.setFont(new Font("Helvetica", Font.PLAIN, 17));
-            descriptionLabel.setBounds(90, 50, descriptionBackground.getWidth() - 180, 80);
-            descriptionBackground.add(descriptionLabel);
-
-            for (Card card : cards) {
-                Image scaledImage = Configurator.getCardImage(card.getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);
-                PButton cardButton = new PButton(scaledImage);
-                cardContainer.add(cardButton);
-                cardButton.addMouseListener(new GuiView.CardMouseListener(card, nameLabel, descriptionLabel, false));
-            }
+            CardSwitcher cardSwitcher= new CardSwitcher(bodyContainer,this);
+            cardSwitcher.setHeading("The cards used in this match will be:");
+            cardSwitcher.showSwitcher(cards,false);
+            cardSwitcher.showCardDetails();
 
             applyChangesTo(bodyContainer);
         });
@@ -419,34 +335,19 @@ public class GuiView implements View {
      */
     public void showCardAssignmentMessage(List<Player> playerList) {
         SwingUtilities.invokeLater(() -> {
-            // Flush body components
-            this.bodyContainer.removeAll();
+            clear(bodyContainer);
 
-            PLabel label = new PLabel("Cards assignment:");
-            label.setFontSize(30);
-            label.setBounds(0, 0, 840, 40);
-            bodyContainer.add(label);
-
-            PPanelContainer cardContainer = new PPanelContainer();
-            cardContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);
-            cardContainer.setLayout(new GridLayout(1, 9, 10, 0));
-            bodyContainer.add(cardContainer);
-
-            PPanelContainer assignmentContainer = new PPanelContainer();
-            assignmentContainer.setBounds(0, 228, bodyContainer.getWidth(), 40);
-            assignmentContainer.setLayout(new GridLayout(1, 9, 10, 0));
-            bodyContainer.add(assignmentContainer);
-
-            for (Player player : playerList) {
-                Image scaledImage = Configurator.getCardImage(player.getCard().getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);
-                PButton cardButton = new PButton(scaledImage);
-                cardContainer.add(cardButton);
-
-                PLabel nameLabel = new PLabel(player.getNickname());
-                nameLabel.setFontSize(25);
-                nameLabel.setForeground(new Color(186, 164, 154));
-                assignmentContainer.add(nameLabel);
+            List<Card> cards= new ArrayList<>();
+            List<String> owners= new ArrayList<>();
+            for(Player player: playerList){
+                cards.add(player.getCard());
+                owners.add(player.getNickname());
             }
+
+            CardSwitcher cardSwitcher= new CardSwitcher(bodyContainer,this);
+            cardSwitcher.setHeading("Cards assignment:");
+            cardSwitcher.showSwitcher(cards,false);
+            cardSwitcher.setSingleCardLabel(owners);
 
             applyChangesTo(bodyContainer);
         });
@@ -457,29 +358,13 @@ public class GuiView implements View {
      *
      * @param availableColors All the available colors
      */
-    public void askPlayerColor(List<String> availableColors) {
+    public void askPlayerColor(ArrayList<String> availableColors) {
         SwingUtilities.invokeLater(() -> {
-            // Flush body components
-            this.bodyContainer.removeAll();
+            clear(bodyContainer);
 
-            PLabel label = new PLabel("Choose your color between these:");
-            label.setFontSize(30);
-            label.setBounds(0, 0, 840, 40);
-            bodyContainer.add(label);
-
-            PPanelContainer colorContainer = new PPanelContainer();
-            colorContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);
-            colorContainer.setLayout(new GridLayout(1, 3, 10, 0));
-            bodyContainer.add(colorContainer);
-
-            for (String color : availableColors) {
-                PButton button = new PButton(PlayerColor.getColorCodeByName(color));
-                colorContainer.add(button);
-                button.addActionListener((ev) -> (new Thread(() -> {
-                    serverHandler.sendPlayerColor(color);
-                    System.out.println("OK");
-                })).start());
-            }
+            ColorSwitcher colorSwitcher= new ColorSwitcher(bodyContainer,this);
+            colorSwitcher.setHeading("Choose your color between these:");
+            colorSwitcher.showSwitcher(availableColors);
 
             applyChangesTo(bodyContainer);
         });
@@ -492,57 +377,29 @@ public class GuiView implements View {
      * @param mapInfo           The map info
      */
     public void askPlayerPosition(Genre genre, List<Cell> forbiddenCells, MapInfo mapInfo) {
-        mainFrame.getContentPane().removeAll();
-        mainFrame.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            clear(mainFrame);
 
-        Image backgroundImage = (new ImageIcon(getClass().getResource("/GuiResources/emptyBackground.png"))).getImage();
-        JPanel background = new PPanelBackground(backgroundImage);
-        mainFrame.repaint();
-        background.setLayout(null);
-        mainFrame.add(background);
+            Image backgroundImage = (new ImageIcon(getClass().getResource("/GuiResources/emptyBackground.png"))).getImage();
+            JPanel background = new PPanelBackground(backgroundImage);
+            mainFrame.repaint();
+            background.setLayout(null);
+            mainFrame.add(background);
 
-        // Prepare the body container
-        bodyContainer = new PPanelContainer();
-        bodyContainer.setBounds(80, 60, 840, 610);
-        background.add(bodyContainer);
+            // Prepare the body container
+            bodyContainer = new PPanelContainer();
+            bodyContainer.setBounds(80, 60, 840, 610);
+            background.add(bodyContainer);
 
-        mainFrame.revalidate();
-        mainFrame.repaint();
+            applyChangesTo(mainFrame);
 
-        showMap(mapInfo, false);
+            mapElement = new MapElement(bodyContainer, this);
+            mapElement.showMap(mapInfo);
+            mapElement.setHeading("Choose the position of your worker");
+            mapElement.enableCellSelection(forbiddenCells, genre);
 
-        PLabel commandLabel = new PLabel("Choose the position of your worker");
-        commandLabel.setFontSize(30);
-        commandLabel.setBounds(0, 0, bodyContainer.getWidth(), 40);
-        bodyContainer.add(commandLabel);
-
-        /*Cell chosenCell;
-        String chosenPosition;
-        int row = -1, column = -1;
-        boolean incorrect;
-        Frmt.clearScreen();
-        do {
-            showMap(game, false);
-            incorrect = false;
-            System.out.print("\n " + Frmt.style('b', "Choose the position of your " + ((genre == MALE) ? "male" : "female") + " worker [row,column]:") + " ");
-            chosenPosition = scanner.next();
-            try {
-                row = Character.getNumericValue(chosenPosition.charAt(0));
-                column = Character.getNumericValue(chosenPosition.charAt(2));
-            } catch (Exception e) {
-                Frmt.clearScreen();
-                System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
-                incorrect = true;
-            }
-
-            chosenCell = new Cell(row, column);
-            if (!incorrect && (row < 0 || column < 0 || row > 4 || column > 4 || forbiddenCells.contains(chosenCell) || chosenPosition.length() != 3)) {
-                Frmt.clearScreen();
-                System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
-                incorrect = true;
-            }
-        } while (incorrect);
-        serverHandler.sendPlayerPosition(genre, chosenCell);*/
+            applyChangesTo(bodyContainer);
+        });
     }
 
     /**
@@ -554,46 +411,10 @@ public class GuiView implements View {
     public void showMap(MapInfo mapInfo, boolean newScreen) {
         SwingUtilities.invokeLater(() -> {
             if(newScreen) {
-                // Flush body components
-                this.bodyContainer.removeAll();
+                clear(bodyContainer);
             }
 
-            Image islandImg = (new ImageIcon(getClass().getResource("/GuiResources/SantoriniBoard.png"))).getImage();
-            JPanel island = new PPanelBackground(islandImg);
-            island.setBounds(0,50,496,500);
-            island.repaint();
-            island.setLayout(null);
-            bodyContainer.add(island);
-
-            PPanelContainer mapContainer= new PPanelContainer();
-            mapContainer.setBounds(70,63,368,368);
-            mapContainer.setLayout(new GridLayout(5,5,11,11));
-            island.add(mapContainer);
-
-            PPanelContainer sideBar= new PPanelContainer();
-            sideBar.setBounds(island.getWidth()+20,63,324,450);
-            sideBar.setLayout(new GridLayout(2,2,15,15));
-            bodyContainer.add(sideBar);
-
-            commandBar= new PPanelContainer();
-            commandBar.setBounds(30,103,154,220);
-            commandBar.setLayout(new GridLayout(2,2,20,20));
-            sideBar.add(commandBar);
-
-            PPanelContainer keyContainer= new PPanelContainer();
-            keyContainer.setBounds(30,103,sideBar.getWidth(),175);
-            keyContainer.setLayout(new GridLayout(1,3,5,5));
-            sideBar.add(keyContainer);
-
-            for(int i=0;i<5;i++){
-                for(int j=0;j<5;j++){
-                    PButton cell = new PButton(mapInfo,i,j);
-                    cell.setSize(30,65);
-                    mapContainer.add(cell);
-                }
-            }
-
-
+            //update the existing mapElement.showMap(mapInfo);
 
             applyChangesTo(bodyContainer);
         });
@@ -602,7 +423,7 @@ public class GuiView implements View {
     /**
      * Asks the action the player wants to perform
      * @param roundActions  All the possible actions
-     * @param mapInfo       The map info
+     * @param mapInfo        The map info
      * @param loserNickname The nickname of the looser or null value
      */
     public void askAction(RoundActions roundActions, MapInfo mapInfo, String loserNickname) {
@@ -657,60 +478,4 @@ public class GuiView implements View {
         });
     }
 
-    class CardMouseListener implements MouseListener {
-        private final Card card;
-        private final PLabel nameLabel;
-        private final PLabel descriptionLabel;
-        private final boolean gameCardsSetUp;
-        private final boolean selectionEnabled;
-        private int numCards;
-        private List<Card> chosenCards;
-
-        public CardMouseListener(Card card, PLabel nameLabel, PLabel descriptionLabel, List<Card> chosenCards, int numCards) {
-            this.gameCardsSetUp = true;
-            this.selectionEnabled = true;
-            this.card = card;
-            this.nameLabel = nameLabel;
-            this.descriptionLabel = descriptionLabel;
-            this.chosenCards = chosenCards;
-            this.numCards = numCards;
-        }
-
-        public CardMouseListener(Card card, PLabel nameLabel, PLabel descriptionLabel, boolean selectionEnabled) {
-            this.gameCardsSetUp = false;
-            this.selectionEnabled = selectionEnabled;
-            this.card = card;
-            this.nameLabel = nameLabel;
-            this.descriptionLabel = descriptionLabel;
-        }
-
-        public void mouseClicked(MouseEvent e) {
-            if (gameCardsSetUp) {
-                chosenCards.add(card);
-                printCards(chosenCards, numCards);
-            } else {
-                if (selectionEnabled) {
-                    showLoading();
-                    serverHandler.sendPlayerCard(card);
-                }
-            }
-        }
-
-        public void mousePressed(MouseEvent e) {
-        }
-
-        public void mouseReleased(MouseEvent e) {
-        }
-
-        public void mouseEntered(MouseEvent e) {
-            nameLabel.setText(card.getName().toUpperCase());
-            String description = card.getDescription();
-            descriptionLabel.setText("<HTML><CENTER>" + description + "</CENTER></HTML>");
-        }
-
-        public void mouseExited(MouseEvent e) {
-            nameLabel.setText("");
-            descriptionLabel.setText("");
-        }
-    }
 }

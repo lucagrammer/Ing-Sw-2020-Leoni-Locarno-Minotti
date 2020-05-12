@@ -354,7 +354,7 @@ public class CliView implements View {
      *
      * @param availableColors All the available colors
      */
-    public void askPlayerColor(List<String> availableColors) {
+    public void askPlayerColor(ArrayList<String> availableColors) {
         String chosenColor;
 
         Frmt.clearScreen();

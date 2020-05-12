@@ -7,14 +7,14 @@ import server.VirtualView;
 import util.MessageType;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Message for the choice of the color of the player
  */
 public class SetUpPlayerColor implements CVMessage, VCMessage, Serializable {
     private final MessageType messageType;
-    private List<String> availableColors;
+    private ArrayList<String> availableColors;
     private String color;
     private String nickname;
 
@@ -23,7 +23,7 @@ public class SetUpPlayerColor implements CVMessage, VCMessage, Serializable {
      *
      * @param availableColors The available colors
      */
-    public SetUpPlayerColor(List<String> availableColors) {
+    public SetUpPlayerColor(ArrayList<String> availableColors) {
         this.messageType = MessageType.CV;
         this.availableColors = availableColors;
     }

@@ -15,11 +15,19 @@ public class PLabel extends JLabel {
      */
     public PLabel(String labelText) {
         int defaultSize = 40;
-        setText("<HTML>"+labelText+"</HTML>");
+        super.setText("<HTML>"+labelText+"</HTML>");
         setHorizontalAlignment(CENTER);
         setVerticalAlignment(JLabel.CENTER);
         setForeground(Color.WHITE);
         setFont(new Font("LeGourmetScript", Font.PLAIN, defaultSize));
+    }
+
+    /**
+     * Sets the text of the label
+     * @param text  The text to be shown
+     */
+    public void setText(String text) {
+        super.setText("<HTML>"+text+"</HTML>");
     }
 
     /**
