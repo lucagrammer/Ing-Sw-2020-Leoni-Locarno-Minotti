@@ -1,7 +1,6 @@
 package client.guiComponents;
 
 import client.GuiView;
-import util.PlayerColor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,18 +23,21 @@ public class ColorSwitcher {
 
         // Prepares the external container
         colorContainer = new PPanelContainer();
-        colorContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);
+        colorContainer.setBounds(0, 80, bodyContainer.getWidth(), 292);
         colorContainer.setLayout(new GridLayout(1, 3, 10, 0));
     }
 
+    /**
+     * Adds the switcher to the container in a default position with a single selection action listener
+     * @param colors    All the colors to be added to the switcher
+     */
     public void showSwitcher(ArrayList<String> colors){
         bodyContainer.add(colorContainer);
-        int width=(bodyContainer.getWidth()-10*(colors.size()-1))/colors.size();
 
         for (String color : colors) {
-            Image scaledImage = (new ImageIcon(getClass().getResource("/GuiResources/frame_color.png")))
-                    .getImage().getScaledInstance(width, 138, Image.SCALE_SMOOTH);
-            PButton button = new PButton(PlayerColor.getColorCodeByName(color),scaledImage);
+            Image scaledImage = (new ImageIcon(getClass().getResource("/GuiResources/"+color.toLowerCase()+"_choice.png")))
+                    .getImage().getScaledInstance(273, 292, Image.SCALE_SMOOTH);
+            PButton button = new PButton(scaledImage);
             colorContainer.add(button);
             button.addActionListener((ev) -> (new Thread(() -> {
                 guiView.getServerHandler().sendPlayerColor(color);
@@ -43,6 +45,10 @@ public class ColorSwitcher {
         }
     }
 
+    /**
+     * Sets the text of the color switcher heading
+     * @param heading   The text to be shown
+     */
     public void setHeading(String heading){
         PLabel label = new PLabel(heading);
         label.setFontSize(30);

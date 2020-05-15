@@ -247,7 +247,7 @@ public class GameTest {
     }
 
     @Test
-    public void GetCorrectNumPlayers() throws ParseException {
+    public void GetCorrectNumPlayers() {
         assertEquals(3, game.getNumPlayers());
     }
 
