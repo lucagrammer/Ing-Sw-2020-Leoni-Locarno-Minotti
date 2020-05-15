@@ -1,4 +1,4 @@
-package client.guiComponents;
+package client.gui.components;
 
 import util.Configurator;
 import util.MapInfo;
@@ -67,21 +67,21 @@ public class PButton extends JButton {
     /**
      * Set the correct image of the cell as the icon of the button
      *
-     * @param mapInfo   The map info
-     * @param row       The row of the cell to be shown
-     * @param column    The column of the cell to be shown
+     * @param mapInfo The map info
+     * @param row     The row of the cell to be shown
+     * @param column  The column of the cell to be shown
      */
-    public void setContent(MapInfo mapInfo, int row, int column){
-        int floor = mapInfo.getFloorAt(row,column);
-        boolean dome = mapInfo.getDomeAt(row,column);
-        String color = mapInfo.getColorAt(row,column); // maybe null
+    private void setContent(MapInfo mapInfo, int row, int column) {
+        int floor = mapInfo.getFloorAt(row, column);
+        boolean dome = mapInfo.getDomeAt(row, column);
+        String color = mapInfo.getColorAt(row, column); // may be null
         String state;
-        if(color==null){
-            state=dome? "dome" : "free";
-        }else{
-            state=color;
+        if (color == null) {
+            state = dome ? "dome" : "free";
+        } else {
+            state = color;
         }
 
-        setIcon(new ImageIcon(Configurator.getCellImage(floor,state)));
+        setIcon(new ImageIcon(Configurator.getCellImage(floor, state)));
     }
 }

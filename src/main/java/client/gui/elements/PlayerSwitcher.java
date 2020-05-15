@@ -1,6 +1,9 @@
-package client.guiComponents;
+package client.gui.elements;
 
 import client.GuiView;
+import client.gui.components.PButton;
+import client.gui.components.PLabel;
+import client.gui.components.PPanelContainer;
 
 import javax.swing.*;
 import java.awt.*;

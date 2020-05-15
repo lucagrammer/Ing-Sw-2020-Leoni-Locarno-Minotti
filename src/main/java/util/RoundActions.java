@@ -239,7 +239,7 @@ public class RoundActions implements Serializable {
      * @param actionType The action type to be cheched
      * @return True if the RoundActions contain at least one action of the specified type, otherwise false
      */
-    private boolean contains(ActionType actionType) {
+    public boolean contains(ActionType actionType) {
         for (Action a : getActionList()) {
             if (a.getActionType().equals(actionType)) {
                 return true;

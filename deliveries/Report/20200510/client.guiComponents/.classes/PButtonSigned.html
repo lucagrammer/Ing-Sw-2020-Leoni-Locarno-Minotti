@@ -17,7 +17,7 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">client.guiComponents</a> ]
+    [ <a href="../index.html">client.gui</a> ]
 </div>
 
 <h1>Coverage Summary for Class: PButtonSigned (client.guiComponents)</h1>
@@ -68,31 +68,31 @@
 
 </table>
 
-<br/>
-<br/>
+    <br/>
+    <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package client.guiComponents;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import javax.swing.*;
-<i>4</i>&nbsp;import java.awt.*;
-<i>5</i>&nbsp;
-<i>6</i>&nbsp;public class PButtonSigned extends PButton{
-<i>7</i>&nbsp;    private String sign;
-<i>8</i>&nbsp;
-<i>9</i>&nbsp;    public PButtonSigned(Image image, String sign){
-<b class="nc"><i>10</i>&nbsp;        super(image);</b>
-<b class="nc"><i>11</i>&nbsp;        this.sign=sign;</b>
-<b class="nc"><i>12</i>&nbsp;        setText(sign);</b>
-<b class="nc"><i>13</i>&nbsp;        setFont(new Font(&quot;LeGourmetScript&quot;, Font.PLAIN, 30));</b>
-<b class="nc"><i>14</i>&nbsp;        setForeground(Color.WHITE);</b>
-<b class="nc"><i>15</i>&nbsp;        setHorizontalTextPosition(JButton.CENTER);</b>
-<b class="nc"><i>16</i>&nbsp;        setVerticalTextPosition(JButton.CENTER);</b>
-<i>17</i>&nbsp;
-<i>18</i>&nbsp;    }
-<i>19</i>&nbsp;
-<i>20</i>&nbsp;    public String getSign() {
-<b class="nc"><i>21</i>&nbsp;        return sign;</b>
+    <div class="sourceCode"><i>1</i>&nbsp;package client.gui;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import javax.swing.*;
+        <i>4</i>&nbsp;import java.awt.*;
+        <i>5</i>&nbsp;
+        <i>6</i>&nbsp;public class PButtonSigned extends PButton{
+        <i>7</i>&nbsp; private String sign;
+        <i>8</i>&nbsp;
+        <i>9</i>&nbsp; public PButtonSigned(Image image, String sign){
+        <b class="nc"><i>10</i>&nbsp; super(image);</b>
+        <b class="nc"><i>11</i>&nbsp; this.sign=sign;</b>
+        <b class="nc"><i>12</i>&nbsp; setText(sign);</b>
+        <b class="nc"><i>13</i>&nbsp; setFont(new Font(&quot;LeGourmetScript&quot;, Font.PLAIN, 30));</b>
+        <b class="nc"><i>14</i>&nbsp; setForeground(Color.WHITE);</b>
+        <b class="nc"><i>15</i>&nbsp; setHorizontalTextPosition(JButton.CENTER);</b>
+        <b class="nc"><i>16</i>&nbsp; setVerticalTextPosition(JButton.CENTER);</b>
+        <i>17</i>&nbsp;
+        <i>18</i>&nbsp; }
+        <i>19</i>&nbsp;
+        <i>20</i>&nbsp; public String getSign() {
+        <b class="nc"><i>21</i>&nbsp; return sign;</b>
 <i>22</i>&nbsp;    }
 <i>23</i>&nbsp;
 <i>24</i>&nbsp;}

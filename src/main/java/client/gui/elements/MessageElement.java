@@ -1,4 +1,7 @@
-package client.guiComponents;
+package client.gui.elements;
+
+import client.gui.components.PLabel;
+import client.gui.components.PPanelContainer;
 
 /**
  * A message element with personalized icons

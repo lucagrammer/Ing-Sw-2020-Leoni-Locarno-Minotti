@@ -1,6 +1,9 @@
-package client.guiComponents;
+package client.gui.elements;
 
 import client.GuiView;
+import client.gui.components.PButton;
+import client.gui.components.PLabel;
+import client.gui.components.PPanelContainer;
 import model.Card;
 import util.Configurator;
 
@@ -153,20 +156,21 @@ public class CardSwitcher {
     public class CardMouseListener implements MouseListener {
         private final Card card;
         private final CardSwitcher cardSwitcher;
-        private final boolean multipleSelection;
-        private final boolean singleSelection;
+        private boolean multipleSelection;
+        private boolean singleSelection;
         private int numCards;
         private List<Card> chosenCards;
 
         /**
          * Constructor: build a CardMouseListener with multiple selection enabled
-         * @param card                  The managed card
-         * @param cardSwitcher          The card switcher to be controlled
-         * @param numCards              The number of cards to be selected
+         *
+         * @param card         The managed card
+         * @param cardSwitcher The card switcher to be controlled
+         * @param numCards     The number of cards to be selected
          */
         public CardMouseListener(Card card, CardSwitcher cardSwitcher, List<Card> chosenCards, int numCards) {
             this.multipleSelection = true;
-            this.singleSelection = true;
+            this.singleSelection = false;
             this.card = card;
             this.cardSwitcher=cardSwitcher;
             this.chosenCards = chosenCards;
@@ -193,10 +197,12 @@ public class CardSwitcher {
          */
         public void mouseClicked(MouseEvent e) {
             if (multipleSelection) {
+                multipleSelection = false;
                 chosenCards.add(card);
                 guiView.printCards(chosenCards, numCards);
             } else {
                 if (singleSelection) {
+                    singleSelection = false;
                     guiView.showLoading();
                     (new Thread(() -> guiView.getServerHandler().sendPlayerCard(card))).start();
                 }

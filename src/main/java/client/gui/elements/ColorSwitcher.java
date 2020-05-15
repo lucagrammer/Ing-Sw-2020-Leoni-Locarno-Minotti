@@ -1,11 +1,17 @@
-package client.guiComponents;
+package client.gui.elements;
 
 import client.GuiView;
+import client.gui.components.PButton;
+import client.gui.components.PLabel;
+import client.gui.components.PPanelContainer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * A color switcher with an action listener that enable single selection
+ */
 public class ColorSwitcher {
     private final GuiView guiView;
     private final PPanelContainer bodyContainer;
@@ -39,9 +45,7 @@ public class ColorSwitcher {
                     .getImage().getScaledInstance(273, 292, Image.SCALE_SMOOTH);
             PButton button = new PButton(scaledImage);
             colorContainer.add(button);
-            button.addActionListener((ev) -> (new Thread(() -> {
-                guiView.getServerHandler().sendPlayerColor(color);
-            })).start());
+            button.addActionListener((ev) -> (new Thread(() -> guiView.getServerHandler().sendPlayerColor(color))).start());
         }
     }
 

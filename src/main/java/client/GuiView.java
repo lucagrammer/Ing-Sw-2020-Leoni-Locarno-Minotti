@@ -1,6 +1,9 @@
 package client;
 
-import client.guiComponents.*;
+import client.gui.components.PLabel;
+import client.gui.components.PPanelBackground;
+import client.gui.components.PPanelContainer;
+import client.gui.elements.*;
 import model.Card;
 import model.Cell;
 import model.Player;
@@ -79,7 +82,7 @@ public class GuiView implements View {
             bodyContainer.setBounds(80, 200, 840, 450);
             background.add(bodyContainer);
 
-            Form form=new Form(bodyContainer);
+            FormElement form = new FormElement(bodyContainer);
             form.addField(0,"Enter the server IP: ",Configurator.getDefaultIp());
 
             form.setActionButton("NEXT",(ev) -> (new Thread(() -> {
@@ -145,12 +148,16 @@ public class GuiView implements View {
      */
     public void showMessage(String message, boolean newScreen) {
         SwingUtilities.invokeLater(() -> {
-            clear(bodyContainer);
+            if (newScreen) {
+                clear(bodyContainer);
 
-            MessageElement messageElement=new MessageElement(bodyContainer);
-            messageElement.setMessage(message);
+                MessageElement messageElement = new MessageElement(bodyContainer);
+                messageElement.setMessage(message);
 
-            applyChangesTo(bodyContainer);
+                applyChangesTo(bodyContainer);
+            } else {
+                mapElement.setStateMessage(message);
+            }
         });
     }
 
@@ -176,7 +183,7 @@ public class GuiView implements View {
         SwingUtilities.invokeLater(() -> {
             clear(bodyContainer);
 
-            Form form=new Form(bodyContainer);
+            FormElement form = new FormElement(bodyContainer);
             form.addField(0,"Nickname: ","");
             form.setErrorMessage("The chosen username is already taken.");
 
@@ -204,7 +211,7 @@ public class GuiView implements View {
         SwingUtilities.invokeLater(() -> {
             clear(bodyContainer);
 
-            Form form= new Form(bodyContainer);
+            FormElement form = new FormElement(bodyContainer);
             form.addField(0,"Nickname: ","Player");
             form.addField(1,"Date of birth [dd/mm/yyyy]: ","24/09/1998");
             form.addField((newGame)? 2 : -1,"Number of competitors [2..3]: ","2");
@@ -327,8 +334,9 @@ public class GuiView implements View {
         });
     }
 
+
     /**
-     * Shows th cards assignment of the game
+     * Shows the cards assignment of the game
      *
      * @param playerList The list of players of the game
      */
@@ -358,39 +366,32 @@ public class GuiView implements View {
      * @param availableColors All the available colors
      */
     public void askPlayerColor(ArrayList<String> availableColors) {
-        SwingUtilities.invokeLater(() -> {
-            clear(bodyContainer);
+        if (availableColors.size() == 1) {
+            (new Thread(() -> serverHandler.sendPlayerColor(availableColors.get(0)))).start();
+        } else {
+            SwingUtilities.invokeLater(() -> {
+                clear(bodyContainer);
 
-            ColorSwitcher colorSwitcher= new ColorSwitcher(bodyContainer,this);
-            colorSwitcher.setHeading("Choose your color between these:");
-            colorSwitcher.showSwitcher(availableColors);
+                ColorSwitcher colorSwitcher = new ColorSwitcher(bodyContainer, this);
+                colorSwitcher.setHeading("Choose your color between these:");
+                colorSwitcher.showSwitcher(availableColors);
 
-            applyChangesTo(bodyContainer);
-        });
+                applyChangesTo(bodyContainer);
+            });
+        }
     }
+
 
     /**
      * Asks the first position for the male and female worker
-     *  @param genre            The genre of the worker
-     * @param forbiddenCells    The forbidden cells
-     * @param mapInfo           The map info
+     *
+     * @param genre          The genre of the worker
+     * @param forbiddenCells The forbidden cells
+     * @param mapInfo        The map info
      */
     public void askPlayerPosition(Genre genre, List<Cell> forbiddenCells, MapInfo mapInfo) {
         SwingUtilities.invokeLater(() -> {
-            clear(mainFrame);
-
-            Image backgroundImage = (new ImageIcon(getClass().getResource("/GuiResources/emptyBackground.png"))).getImage();
-            JPanel background = new PPanelBackground(backgroundImage);
-            mainFrame.repaint();
-            background.setLayout(null);
-            mainFrame.add(background);
-
-            // Prepare the body container
-            bodyContainer = new PPanelContainer();
-            bodyContainer.setBounds(80, 60, 840, 610);
-            background.add(bodyContainer);
-
-            applyChangesTo(mainFrame);
+            enableGameMode();
 
             mapElement = new MapElement(bodyContainer, this);
             mapElement.showMap(mapInfo);
@@ -402,6 +403,27 @@ public class GuiView implements View {
     }
 
     /**
+     * Enable full screen game mode, reducing the space occupied by the santorini logo
+     */
+    private void enableGameMode() {
+        clear(mainFrame);
+
+        Image backgroundImage = (new ImageIcon(getClass().getResource("/GuiResources/emptyBackground.png"))).getImage();
+        JPanel background = new PPanelBackground(backgroundImage);
+        mainFrame.repaint();
+        background.setLayout(null);
+        mainFrame.add(background);
+
+        // Prepare the body container
+        bodyContainer = new PPanelContainer();
+        bodyContainer.setBounds(80, 60, 840, 610);
+        background.add(bodyContainer);
+
+        applyChangesTo(mainFrame);
+    }
+
+
+    /**
      * Shows the board of the game
      *
      * @param mapInfo   The map info
@@ -409,11 +431,13 @@ public class GuiView implements View {
      */
     public void showMap(MapInfo mapInfo, boolean newScreen) {
         SwingUtilities.invokeLater(() -> {
-            if(newScreen) {
-                clear(bodyContainer);
+            if (mapElement == null) {
+                enableGameMode();
+                mapElement = new MapElement(bodyContainer, this);
+            } else {
+                mapElement.clearMap();
             }
-
-            //update the existing mapElement.showMap(mapInfo);
+            mapElement.showMap(mapInfo);
 
             applyChangesTo(bodyContainer);
         });
@@ -426,7 +450,15 @@ public class GuiView implements View {
      * @param loserNickname The nickname of the looser or null value
      */
     public void askAction(RoundActions roundActions, MapInfo mapInfo, String loserNickname) {
+        SwingUtilities.invokeLater(() -> {
+            showMap(mapInfo, false);
+            if (loserNickname != null) {
+                showLoser(loserNickname);
+            }
+            mapElement.enableActions(roundActions);
 
+            applyChangesTo(bodyContainer);
+        });
     }
 
     /**
@@ -475,6 +507,25 @@ public class GuiView implements View {
 
             applyChangesTo(bodyContainer);
         });
+    }
+
+    /**
+     * Notify the players that there is a loser
+     *
+     * @param loserNickname The nickname of the loser
+     */
+    public void showLoser(String loserNickname) {
+        showMessage(loserNickname.toUpperCase() + " has lost ", false);
+    }
+
+    /**
+     * Shows the user who is taking his turn
+     *
+     * @param currentNickname The nickname of the user who is taking his turn
+     * @param hasLoser        True if during the turn a player has lost
+     */
+    public void showTurn(String currentNickname, boolean hasLoser) {
+        SwingUtilities.invokeLater(() -> mapElement.setHeading("It's " + currentNickname.toUpperCase() + " turn"));
     }
 
 }

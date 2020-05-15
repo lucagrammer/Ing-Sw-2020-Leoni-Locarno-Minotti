@@ -17,7 +17,7 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">client.guiComponents</a> ]
+    [ <a href="../index.html">client.gui</a> ]
 </div>
 
 <h1>Coverage Summary for Class: Form (client.guiComponents)</h1>
@@ -68,31 +68,31 @@
 
 </table>
 
-<br/>
-<br/>
+    <br/>
+    <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package client.guiComponents;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import javax.swing.*;
-<i>4</i>&nbsp;import java.awt.*;
-<i>5</i>&nbsp;import java.awt.event.ActionListener;
-<i>6</i>&nbsp;import java.util.ArrayList;
-<i>7</i>&nbsp;
-<i>8</i>&nbsp;public class Form {
-<i>9</i>&nbsp;    private PPanelContainer bodyContainer;
-<i>10</i>&nbsp;    private PLabel errorLabel;
-<i>11</i>&nbsp;    private ArrayList&lt;PTextField&gt; fieldList;
-<i>12</i>&nbsp;
-<b class="nc"><i>13</i>&nbsp;    public Form(PPanelContainer formContainer){</b>
-<b class="nc"><i>14</i>&nbsp;        bodyContainer=formContainer;</b>
-<b class="nc"><i>15</i>&nbsp;        fieldList=new ArrayList&lt;&gt;();</b>
-<i>16</i>&nbsp;    }
-<i>17</i>&nbsp;
-<i>18</i>&nbsp;    /**
-<i>19</i>&nbsp;     * Adds a Button with text and Action Listener to the bottom of the form container
-<i>20</i>&nbsp;     * @param text              The text to be shown inside the button
-<i>21</i>&nbsp;     * @param actionListener    The Action Listener of the button
+    <div class="sourceCode"><i>1</i>&nbsp;package client.gui;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import javax.swing.*;
+        <i>4</i>&nbsp;import java.awt.*;
+        <i>5</i>&nbsp;import java.awt.event.ActionListener;
+        <i>6</i>&nbsp;import java.util.ArrayList;
+        <i>7</i>&nbsp;
+        <i>8</i>&nbsp;public class Form {
+        <i>9</i>&nbsp; private PPanelContainer bodyContainer;
+        <i>10</i>&nbsp; private PLabel errorLabel;
+        <i>11</i>&nbsp; private ArrayList&lt;PTextField&gt; fieldList;
+        <i>12</i>&nbsp;
+        <b class="nc"><i>13</i>&nbsp; public Form(PPanelContainer formContainer){</b>
+        <b class="nc"><i>14</i>&nbsp; bodyContainer=formContainer;</b>
+        <b class="nc"><i>15</i>&nbsp; fieldList=new ArrayList&lt;&gt;();</b>
+        <i>16</i>&nbsp; }
+        <i>17</i>&nbsp;
+        <i>18</i>&nbsp; /**
+        <i>19</i>&nbsp; * Adds a Button with text and Action Listener to the bottom of the form container
+        <i>20</i>&nbsp; * @param text The text to be shown inside the button
+        <i>21</i>&nbsp; * @param actionListener The Action Listener of the button
 <i>22</i>&nbsp;     */
 <i>23</i>&nbsp;    public void setActionButton(String text, ActionListener actionListener) {
 <i>24</i>&nbsp;        /*Image scaledImage = (new ImageIcon(getClass().getResource(&quot;/GuiResources/btn_blue_next.png&quot;))).getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);

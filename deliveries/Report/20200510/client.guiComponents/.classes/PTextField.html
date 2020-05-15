@@ -17,7 +17,7 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">client.guiComponents</a> ]
+    [ <a href="../index.html">client.gui</a> ]
 </div>
 
 <h1>Coverage Summary for Class: PTextField (client.guiComponents)</h1>
@@ -68,31 +68,32 @@
 
 </table>
 
-<br/>
-<br/>
+    <br/>
+    <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package client.guiComponents;
-<i>2</i>&nbsp;
-<i>3</i>&nbsp;import javax.swing.*;
-<i>4</i>&nbsp;import java.awt.*;
-<i>5</i>&nbsp;
-<i>6</i>&nbsp;/**
-<i>7</i>&nbsp; * A customized Label with a text-field
-<i>8</i>&nbsp; */
-<i>9</i>&nbsp;public class PTextField extends JLabel {
-<i>10</i>&nbsp;    private final JTextField textField;
-<i>11</i>&nbsp;
-<i>12</i>&nbsp;    /**
-<i>13</i>&nbsp;     * Constructor: build a customized Label with a text-field
-<i>14</i>&nbsp;     *
-<i>15</i>&nbsp;     * @param defaultText The default text of the text-field or null value
-<i>16</i>&nbsp;     */
-<b class="nc"><i>17</i>&nbsp;    public PTextField(String defaultText) {</b>
-<b class="nc"><i>18</i>&nbsp;        Image scaledTextFieldIcon = new ImageIcon(this.getClass().getResource(&quot;/GuiResources/textfield_bg.png&quot;)).getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);</b>
-<i>19</i>&nbsp;
-<b class="nc"><i>20</i>&nbsp;        setIcon(new ImageIcon(scaledTextFieldIcon));</b>
-<b class="nc"><i>21</i>&nbsp;        setLayout(new BorderLayout());</b>
+    <div class="sourceCode"><i>1</i>&nbsp;package client.gui;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import javax.swing.*;
+        <i>4</i>&nbsp;import java.awt.*;
+        <i>5</i>&nbsp;
+        <i>6</i>&nbsp;/**
+        <i>7</i>&nbsp; * A customized Label with a text-field
+        <i>8</i>&nbsp; */
+        <i>9</i>&nbsp;public class PTextField extends JLabel {
+        <i>10</i>&nbsp; private final JTextField textField;
+        <i>11</i>&nbsp;
+        <i>12</i>&nbsp; /**
+        <i>13</i>&nbsp; * Constructor: build a customized Label with a text-field
+        <i>14</i>&nbsp; *
+        <i>15</i>&nbsp; * @param defaultText The default text of the text-field or null value
+        <i>16</i>&nbsp; */
+        <b class="nc"><i>17</i>&nbsp; public PTextField(String defaultText) {</b>
+        <b class="nc"><i>18</i>&nbsp; Image scaledTextFieldIcon = new ImageIcon(this.getClass().getResource(&quot;/GuiResources/textfield_bg.png&quot;)).getImage().getScaledInstance(250,
+            40, Image.SCALE_SMOOTH);</b>
+        <i>19</i>&nbsp;
+        <b class="nc"><i>20</i>&nbsp; setIcon(new ImageIcon(scaledTextFieldIcon));</b>
+        <b class="nc"><i>21</i>&nbsp; setLayout(new BorderLayout());</b>
 <i>22</i>&nbsp;
 <b class="nc"><i>23</i>&nbsp;        textField = new JTextField();</b>
 <b class="nc"><i>24</i>&nbsp;        if (defaultText != null) {</b>

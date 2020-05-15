@@ -107,7 +107,7 @@ public interface View {
     /**
      * Shows the board of the game
      *
-     * @param game      The game
+     * @param mapInfo   The map info
      * @param newScreen True if it's necessary to clean the interface
      */
     void showMap(MapInfo mapInfo, boolean newScreen);
@@ -142,4 +142,19 @@ public interface View {
      * @param newScreen    True if it's necessary to clean the interface
      */
     void showErrorMessage(String errorMessage, boolean newScreen);
+
+    /**
+     * Notify the players that there is a loser
+     *
+     * @param loserNickname The nickname of the loser
+     */
+    void showLoser(String loserNickname);
+
+    /**
+     * Shows the user who is taking his turn
+     *
+     * @param currentNickname The nickname of the user who is taking his turn
+     * @param hasLoser        True if during the turn a player has lost
+     */
+    void showTurn(String currentNickname, boolean hasLoser);
 }

@@ -1,6 +1,7 @@
 package client;
 
 import model.Card;
+import model.Cell;
 import util.Configurator;
 
 import java.text.ParseException;
@@ -124,16 +125,40 @@ public class InputValidator {
 
     /**
      * Tests if the entered string is a color contained in a set of colors names
-     * @param choice                The entered string
-     * @param availableColors    The set of allowed colors
-     * @return  True if the color is valid, otherwise false
+     *
+     * @param choice          The entered string
+     * @param availableColors The set of allowed colors
+     * @return True if the color is valid, otherwise false
      */
     public boolean isColorBetween(String choice, ArrayList<String> availableColors) {
-        for(String color: availableColors){
-            if(choice.equalsIgnoreCase(color)){
+        for (String color : availableColors) {
+            if (choice.equalsIgnoreCase(color)) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Tests if the entered string is a valid position between the allowed ones
+     *
+     * @param chosenPosition The entered string
+     * @param forbiddenCells The set of forbidden cells
+     * @return The cell corresponding to the chosen position if it's valid, otherwise null value
+     */
+    public Cell isValidPosition(String chosenPosition, List<Cell> forbiddenCells) {
+        int row, column;
+        try {
+            row = Character.getNumericValue(chosenPosition.charAt(0));
+            column = Character.getNumericValue(chosenPosition.charAt(2));
+        } catch (Exception e) {
+            return null;
+        }
+
+        Cell chosenCell = new Cell(row, column);
+        if (row < 0 || column < 0 || row > 4 || column > 4 || forbiddenCells.contains(chosenCell) || chosenPosition.length() != 3) {
+            chosenCell = null;
+        }
+        return chosenCell;
     }
 }

@@ -1,4 +1,6 @@
-package client.guiComponents;
+package client.gui.elements;
+
+import client.gui.components.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,20 +10,22 @@ import java.util.ArrayList;
 /**
  * A form with fields, error label and action button
  */
-public class Form {
-    private PPanelContainer bodyContainer;
-    private PLabel errorLabel;
-    private ArrayList<PTextField> fieldList;
+public class FormElement {
+    private final PPanelContainer bodyContainer;
+    private final PLabelState errorLabel;
+    private final ArrayList<PTextField> fieldList;
 
     /**
      * Constructor: build an empty form
-     * @param formContainer
+     *
+     * @param formContainer The form container
      */
-    public Form(PPanelContainer formContainer){
-        bodyContainer=formContainer;
-        fieldList=new ArrayList<>();
+    public FormElement(PPanelContainer formContainer) {
+        bodyContainer = formContainer;
+        fieldList = new ArrayList<>();
 
-        errorLabel = new PLabelError("");
+        errorLabel = new PLabelState("");
+        errorLabel.setErrorForeground();
         errorLabel.setBounds(0, 240, 840, 40);
         this.bodyContainer.add(errorLabel);
     }
@@ -32,12 +36,6 @@ public class Form {
      * @param actionListener    The Action Listener of the button
      */
     public void setActionButton(String text, ActionListener actionListener) {
-        /*Image scaledImage = (new ImageIcon(getClass().getResource("/GuiResources/btn_blue_next.png"))).getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);
-        PButton button = new PButton(scaledImage);
-        button.setBounds(322, 300, 197, 50);
-        button.addActionListener(actionListener);
-        bodyContainer.add(button);*/
-
         Image scaledImage = (new ImageIcon(getClass().getResource("/GuiResources/btn_blue.png"))).getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);
         PButtonSigned button = new PButtonSigned(scaledImage,text);
         button.setBounds(322, 300, 197, 55);
@@ -47,35 +45,24 @@ public class Form {
 
     /**
      * Adds a form to the form container
-     * @param position          The position of the form or a negative number to hide the component
-     * @param formField         The name of the field
-     * @param defaultValue      The default value
-     * @return  The added PTextField element
+     *
+     * @param position     The position of the form or a negative number to hide the component
+     * @param formField    The name of the field
+     * @param defaultValue The default value
      */
-    public PTextField addField(int position, String formField, String defaultValue) {
-        int yBound=30+position*70;
+    public void addField(int position, String formField, String defaultValue) {
+        int yBound = 30 + position * 70;
         PLabel label = new PLabelForm(formField);
         label.setBounds(10, yBound, 400, 40);
 
         PTextField textField = new PTextField(defaultValue);
         textField.setBounds(430, yBound, 250, 40);
-        if(position>=0) {
+        if (position >= 0) {
             bodyContainer.add(label);
             bodyContainer.add(textField);
         }
 
         fieldList.add(textField);
-        return textField;
-    }
-
-    /**
-     * Adds an error Label to the form container
-     * @param errorMessage The error message
-     * @return  The errorLabel
-     */
-    public PLabel addErrorLabel(String errorMessage) {
-        setErrorMessage(errorMessage); //TODO Remove
-        return errorLabel;
     }
 
     /**
@@ -84,14 +71,6 @@ public class Form {
      */
     public void setErrorMessage(String errorMessage){
         errorLabel.setText(errorMessage);
-    }
-
-    /**
-     * Clear the error message
-     */
-    public void clearErrorMessage(){
-        if(errorLabel!=null)
-            errorLabel.setText("");
     }
 
     /**

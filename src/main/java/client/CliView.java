@@ -381,31 +381,20 @@ public class CliView implements View {
      */
     public void askPlayerPosition(Genre genre, List<Cell> forbiddenCells, MapInfo mapInfo) {
         Cell chosenCell;
-        String chosenPosition;
-        int row = -1, column = -1;
-        boolean incorrect;
+        boolean correct;
         Frmt.clearScreen();
         do {
             showMap(mapInfo, false);
-            incorrect = false;
-            System.out.print("\n " + Frmt.style('b', "Choose the position of your " + ((genre == MALE) ? "male" : "female") + " worker [row,column]:") + " ");
-            chosenPosition = scanner.next();
-            try {
-                row = Character.getNumericValue(chosenPosition.charAt(0));
-                column = Character.getNumericValue(chosenPosition.charAt(2));
-            } catch (Exception e) {
-                Frmt.clearScreen();
-                System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
-                incorrect = true;
-            }
 
-            chosenCell = new Cell(row, column);
-            if (!incorrect && (row < 0 || column < 0 || row > 4 || column > 4 || forbiddenCells.contains(chosenCell) || chosenPosition.length() != 3)) {
+            System.out.print("\n " + Frmt.style('b', "Choose the position of your " + ((genre == MALE) ? "male" : "female") + " worker [row,column]:") + " ");
+            String chosenPosition = scanner.next();
+            chosenCell = inputValidator.isValidPosition(chosenPosition, forbiddenCells);
+            correct = chosenCell != null;
+            if (!correct) {
                 Frmt.clearScreen();
                 System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
-                incorrect = true;
             }
-        } while (incorrect);
+        } while (!correct);
         serverHandler.sendPlayerPosition(genre, chosenCell);
     }
 
@@ -502,22 +491,7 @@ public class CliView implements View {
             if (loserNickname != null) {
                 System.out.println(Frmt.color('r', "\n\t\t" + Frmt.style('b', "" + loserNickname.toUpperCase() + " has lost " + Frmt.DEATH)));
             }
-            System.out.println(Frmt.style('b', "\t\tIt's your turn. "));
-            System.out.print("\n\t\t" + Frmt.style('b', "You can:  \n\t\t"));
-            int counter = 0;
-            for (Action possibleAction : roundActions.getActionList()) {
-                if (counter == 11) {
-                    System.out.print("\n\t\t");
-                    counter = 0;
-                }
-                if (possibleAction.getActionType().name().equalsIgnoreCase("END")) {
-                    System.out.print("END; ");
-
-                } else {
-                    System.out.print(possibleAction.getActionType().name() + " " + possibleAction.getGenre().name().charAt(0) + " " + possibleAction.getDirection().name() + "; ");
-                }
-                counter++;
-            }
+            showPossibleActions(roundActions);
 
             System.out.print("\n\n\t\t" + Frmt.style('b', "Insert your action type [MOVE/FLOOR/DOME/END]:") + " ");
             action = scanner.next();
@@ -538,6 +512,30 @@ public class CliView implements View {
             }
         } while (incorrect);
         serverHandler.sendAction(theAction);
+    }
+
+    /**
+     * Shows the possible actions of the user
+     *
+     * @param roundActions The possible actions of the user
+     */
+    private void showPossibleActions(RoundActions roundActions) {
+        System.out.println(Frmt.style('b', "\t\tIt's your turn. "));
+        System.out.print("\n\t\t" + Frmt.style('b', "You can:  \n\t\t"));
+        int counter = 0;
+        for (Action possibleAction : roundActions.getActionList()) {
+            if (counter == 11) {
+                System.out.print("\n\t\t");
+                counter = 0;
+            }
+            if (possibleAction.getActionType().name().equalsIgnoreCase("END")) {
+                System.out.print("END; ");
+
+            } else {
+                System.out.print(possibleAction.getActionType().name() + " " + possibleAction.getGenre().name().charAt(0) + " " + possibleAction.getDirection().name() + "; ");
+            }
+            counter++;
+        }
     }
 
     /**
@@ -577,6 +575,25 @@ public class CliView implements View {
         if (newScreen)
             Frmt.clearScreen();
         System.out.println(Frmt.color('r', "> Error: " + errorMessage));
+    }
+
+    /**
+     * Notify the players that there is a loser
+     *
+     * @param loserNickname The nickname of the loser
+     */
+    public void showLoser(String loserNickname) {
+        showMessage("\n\n\t\t" + Frmt.style('b', Frmt.color('r', loserNickname.toUpperCase() + " has lost " + Frmt.DEATH)), false);
+    }
+
+    /**
+     * Shows the user who is taking his turn
+     *
+     * @param currentNickname The nickname of the user who is taking his turn
+     * @param hasLoser        True if during the turn a player has lost
+     */
+    public void showTurn(String currentNickname, boolean hasLoser) {
+        showMessage(((hasLoser) ? "\n\n\t\t" : "\t\t") + Frmt.style('b', "It's " + currentNickname.toUpperCase() + " turn."), false);
     }
 
     /**
