@@ -49,10 +49,11 @@ public class PButton extends JButton {
     }
 
     /**
-     * Constructor: build a transparent button
+     * Constructor: build a button with the image of the correct cell
      *
-     * //TODO
      * @param mapInfo   The map info
+     * @param row       The row of the cell to be shown
+     * @param column    The column of the cell to be shown
      */
     public PButton(MapInfo mapInfo, int row, int column) {
         super();
@@ -63,6 +64,13 @@ public class PButton extends JButton {
         setContent(mapInfo,row,column);
     }
 
+    /**
+     * Set the correct image of the cell as the icon of the button
+     *
+     * @param mapInfo   The map info
+     * @param row       The row of the cell to be shown
+     * @param column    The column of the cell to be shown
+     */
     public void setContent(MapInfo mapInfo, int row, int column){
         int floor = mapInfo.getFloorAt(row,column);
         boolean dome = mapInfo.getDomeAt(row,column);

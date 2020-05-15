@@ -1,10 +1,10 @@
 package client;
 
-import model.*;
+import model.Card;
+import model.Cell;
+import model.Player;
 import util.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,12 +17,14 @@ import static util.Genre.MALE;
  */
 public class CliView implements View {
     private final Scanner scanner;
+    private final InputValidator inputValidator;
     private ServerHandler serverHandler;
 
     /**
      * Constructor: build the CliView
      */
     public CliView() {
+        this.inputValidator = new InputValidator();
         this.scanner = new Scanner(System.in);
     }
 
@@ -40,14 +42,25 @@ public class CliView implements View {
      */
     public void launch() {
         String defaultServerIP = Configurator.getDefaultIp();
+        String serverIP;
+        boolean correct;
 
         Frmt.clearScreen();
-        System.out.print(Frmt.style('b', " Enter the server IP [press enter for default IP]: "));
-        String serverIP = scanner.nextLine();
-        if (serverIP.equals("")) {
-            serverIP = defaultServerIP;
-            System.out.println(Frmt.style('i', "  > Default server IP will be applied, " + defaultServerIP));
-        }
+        do {
+            System.out.print(Frmt.style('b', " Enter the server IP [press enter for default IP]: "));
+            serverIP = scanner.nextLine();
+            if (inputValidator.isEmptyIp(serverIP)) {
+                correct=true;
+                serverIP = defaultServerIP;
+                System.out.println(Frmt.style('i', "  > Default server IP will be applied, " + defaultServerIP));
+            }else{
+                correct=inputValidator.isIp(serverIP);
+                if (!correct){
+                    Frmt.clearScreen();
+                    System.out.println(Frmt.color('r', "  > Invalid ip. Try again."));
+                }
+            }
+        }while(!correct);
         showQueuedMessage();
         serverHandler.setConnection(serverIP);
     }
@@ -100,31 +113,26 @@ public class CliView implements View {
      * @param newGame True if the it is a new game, otherwise false
      */
     public void setUpGame(boolean newGame) {
-        boolean incorrect;
         Frmt.clearScreen();
         String nickname = askNickname();
 
         Date date = askDate();
 
-        int numPlayers = 0;
+        boolean correct;
+        Integer numPlayers = 0;
         if (newGame) {
             Frmt.clearScreen();
             do {
                 System.out.print(Frmt.style('b', "\n Enter the number of competitors [2..3]: "));
                 String numPlayersString = scanner.nextLine();
-                try {
-                    numPlayers = Integer.parseInt(numPlayersString);
-                } catch (Exception e) {
-                    numPlayers = 0;
-                }
-                if (numPlayers < 2 || numPlayers > 3) {
+
+                numPlayers=inputValidator.isNumPlayer(numPlayersString);
+                correct= numPlayers!=null;
+                if (!correct) {
                     Frmt.clearScreen();
                     System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));
-                    incorrect = true;
-                } else {
-                    incorrect = false;
                 }
-            } while (incorrect);
+            } while (!correct);
         }
         Frmt.clearScreen();
         System.out.println(Frmt.style('i', "\n  > Waiting for the other players to connect..."));
@@ -138,21 +146,19 @@ public class CliView implements View {
      * @return The chosen nickname
      */
     private Date askDate() {
-        boolean incorrect;
-        Date date = null;
+        boolean correct;
+        Date date;
         Frmt.clearScreen();
         do {
             System.out.print(Frmt.style('b', "\n Enter your birth date [dd/mm/yyyy]: "));
             String fullDate = scanner.nextLine();
-            try {
-                date = new SimpleDateFormat("dd/MM/yyyy").parse(fullDate);
-                incorrect = false;
-            } catch (ParseException e) {
+            date=inputValidator.isDate(fullDate);
+            correct= date!=null;
+            if (!correct) {
                 Frmt.clearScreen();
                 System.out.println(Frmt.color('r', "  > Incorrect date format. Try again."));
-                incorrect = true;
             }
-        } while (incorrect);
+        } while (!correct);
         return date;
     }
 
@@ -162,20 +168,18 @@ public class CliView implements View {
      * @return The chosen nickname
      */
     private String askNickname() {
-        boolean incorrect;
+        boolean correct;
         String nickname;
         do {
 
             System.out.print(Frmt.style('b', "\n Enter your nickname: "));
             nickname = scanner.nextLine();
-            if (nickname.equals("") || nickname.contains(" ")) {
+            correct = inputValidator.isNickname(nickname);
+            if (!correct) {
                 Frmt.clearScreen();
                 System.out.println(Frmt.color('r', "  > Invalid nickname. Try again."));
-                incorrect = true;
-            } else {
-                incorrect = false;
             }
-        } while (incorrect);
+        } while (!correct);
         return nickname;
     }
 
@@ -185,59 +189,49 @@ public class CliView implements View {
      * @param numCards Number of cards to be selected
      */
     public void askGameCards(int numCards) {
-        List<Card> allCardList = Configurator.getAllCards();
-        List<String> allCardNames;
-        List<Card> chosenCard = new ArrayList<>();
+        List<Card> chosenCards = new ArrayList<>();
 
-        boolean incorrect;
+        boolean correct;
         Frmt.clearScreen();
         do {
-            System.out.println("\n\n " + Frmt.style('b', "Choose " + (numCards - chosenCard.size()) + " card" + ((numCards - chosenCard.size() > 1) ? "s" : "") + " between these:"));
-            allCardNames = printCards(allCardList, chosenCard);
+            System.out.println("\n\n " + Frmt.style('b', "Choose " + (numCards - chosenCards.size()) + " card" + ((numCards - chosenCards.size() > 1) ? "s" : "") + " between these:"));
+            List<String> availableCards = printAllCardsExcept(chosenCards);
 
-            incorrect = false;
             System.out.print("  ↳: ");
             String chosenCardName = scanner.next();
-            Frmt.clearScreen();
-            if (!allCardNames.contains(chosenCardName.toLowerCase())) {
+            Card enteredCard = inputValidator.isCard(chosenCardName, availableCards);
+            correct = enteredCard!=null;
+            if(!correct){
+                Frmt.clearScreen();
                 System.out.println(Frmt.color('r', "   > Invalid choice. Try again."));
-                incorrect = true;
-            } else {
-                for (Card card : allCardList) {
-                    if (card.getName().equalsIgnoreCase(chosenCardName)) {
-                        if (chosenCard.contains(card)) {
-                            System.out.println(Frmt.color('r', "   > The card has already been selected. Try again."));
-                            incorrect = true;
-                        } else {
-                            chosenCard.add(card);
-                        }
-                    }
-                }
+            }else{
+                chosenCards.add(enteredCard);
             }
-        } while (incorrect || chosenCard.size() < numCards);
+
+        } while (!correct || chosenCards.size() < numCards);
 
         showLoading();
-        serverHandler.sendGameCards(chosenCard);
+        serverHandler.sendGameCards(chosenCards);
     }
 
     /**
-     * Print all the available cards
+     * Print all the available cards except the specified ones
      *
-     * @param allCardList All the cards
-     * @param chosenCard  The unavailable cards
+     * @param unavailableCards  The unavailable cards
      * @return A list containing all the names of the printed available cards
      */
-    private List<String> printCards(List<Card> allCardList, List<Card> chosenCard) {
-        List<String> allCardNames = new ArrayList<>();
+    private List<String> printAllCardsExcept(List<Card> unavailableCards) {
+        List<Card> allCardList = Configurator.getAllCards();
+        List<String> availableCards = new ArrayList<>();
         for (Card card : allCardList) {
-            if (!chosenCard.contains(card)) {
+            if (!unavailableCards.contains(card)) {
                 System.out.println(Frmt.style('b', "\n   ❖ " + card.getName().toUpperCase()));
                 System.out.println(Frmt.style('i', "      " + card.getDescription()));
+                availableCards.add(card.getName().toLowerCase());
             }
-            allCardNames.add(card.getName().toLowerCase());
         }
         System.out.println();
-        return allCardNames;
+        return availableCards;
     }
 
     /**
@@ -246,35 +240,28 @@ public class CliView implements View {
      * @param possibleChoices All the possible cards
      */
     public void askPlayerCard(List<Card> possibleChoices) {
-        Card chosenCard = null;
-        String chosenCardName;
-        List<String> allCardNames = new ArrayList<>();
+        Card chosenCard;
+        List<String> availableNames = new ArrayList<>();
 
-        boolean incorrect;
+        boolean correct;
         do {
             System.out.println("\n\n " + Frmt.style('b', "Choose your card between these:"));
             for (Card card : possibleChoices) {
                 System.out.println(Frmt.style('b', "\n   ❖ " + card.getName().toUpperCase()));
                 System.out.println(Frmt.style('i', "      " + card.getDescription()));
-                allCardNames.add(card.getName().toLowerCase());
+                availableNames.add(card.getName().toLowerCase());
             }
             System.out.println();
 
-            incorrect = false;
             System.out.print("  ↳: ");
-            chosenCardName = scanner.next();
-            if (!allCardNames.contains(chosenCardName.toLowerCase())) {
+            String chosenCardName = scanner.next();
+            chosenCard = inputValidator.isCard(chosenCardName, availableNames);
+            correct = chosenCard!=null;
+            if(!correct){
                 Frmt.clearScreen();
                 System.out.println(Frmt.color('r', "   > Invalid choice. Try again."));
-                incorrect = true;
             }
-        } while (incorrect);
-
-        for (Card card : possibleChoices) {
-            if (card.getName().equalsIgnoreCase(chosenCardName)) {
-                chosenCard = card;
-            }
-        }
+        } while (!correct);
 
         showLoading();
         serverHandler.sendPlayerCard(chosenCard);
@@ -286,16 +273,14 @@ public class CliView implements View {
      * @param playersNicknames All the nicknames
      */
     public void askFirstPlayer(List<String> playersNicknames) {
-        List<String> allNicknames = new ArrayList<>();
 
         String chosenNickname;
-        boolean incorrect;
+        boolean correct;
         System.out.println("\n\n");
         do {
             System.out.print(" " + Frmt.style('b', "Choose who will be the first player:") + " ");
             for (int i = 0; i < playersNicknames.size(); i++) {
                 String name = playersNicknames.get(i);
-                allNicknames.add(name.toLowerCase());
                 if (i != playersNicknames.size() - 1) {
                     System.out.print(Frmt.style('b', name + ", "));
                 } else {
@@ -303,15 +288,14 @@ public class CliView implements View {
                 }
             }
 
-            incorrect = false;
             System.out.print("  ↳: ");
             chosenNickname = scanner.next();
-            if (!allNicknames.contains(chosenNickname.toLowerCase())) {
+            correct= inputValidator.isNicknameBetween(chosenNickname,playersNicknames);
+            if (!correct) {
                 Frmt.clearScreen();
                 System.out.println(Frmt.color('r', "   > Invalid choice. Try again."));
-                incorrect = true;
             }
-        } while (incorrect);
+        } while (!correct);
 
         showLoading();
         serverHandler.sendFirstPlayer(chosenNickname);
@@ -365,8 +349,7 @@ public class CliView implements View {
             chosenColor = availableColors.get(0);
 
         } else {
-            List<String> allColors = new ArrayList<>();
-            boolean incorrect;
+            boolean correct;
             do {
                 System.out.print("\n\n " + Frmt.style('b', "Choose your color between:") + " ");
                 for (int i = 0; i < availableColors.size(); i++) {
@@ -376,18 +359,16 @@ public class CliView implements View {
                     } else {
                         System.out.println(Frmt.color(color.toLowerCase().charAt(0), color.toLowerCase() + "?"));
                     }
-                    allColors.add(color.toLowerCase());
                 }
 
-                incorrect = false;
                 System.out.print("  ↳: ");
                 chosenColor = scanner.next();
-                if (!allColors.contains(chosenColor.toLowerCase())) {
+                correct= inputValidator.isColorBetween(chosenColor,availableColors);
+                if (!correct) {
                     Frmt.clearScreen();
                     System.out.println(Frmt.color('r', "   > Invalid choice. Try again."));
-                    incorrect = true;
                 }
-            } while (incorrect);
+            } while (!correct);
         }
         serverHandler.sendPlayerColor(chosenColor);
     }

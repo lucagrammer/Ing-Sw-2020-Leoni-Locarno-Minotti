@@ -198,9 +198,7 @@ public class CardSwitcher {
             } else {
                 if (singleSelection) {
                     guiView.showLoading();
-                    (new Thread(() -> {
-                        guiView.getServerHandler().sendPlayerCard(card);
-                    })).start();
+                    (new Thread(() -> guiView.getServerHandler().sendPlayerCard(card))).start();
                 }
 
             }
