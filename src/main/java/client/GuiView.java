@@ -4,14 +4,15 @@ import client.guiComponents.*;
 import model.Card;
 import model.Cell;
 import model.Player;
-import util.*;
+import util.Configurator;
+import util.Genre;
+import util.MapInfo;
+import util.RoundActions;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ public class GuiView implements View {
     private JFrame mainFrame;
     private PPanelContainer bodyContainer;
     private MapElement mapElement;
+    private final InputValidator inputValidator;
 
     /**
      * Constructor: build a GuiView
@@ -35,6 +37,7 @@ public class GuiView implements View {
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
+        inputValidator= new InputValidator();
     }
 
     /**
@@ -80,8 +83,13 @@ public class GuiView implements View {
             form.addField(0,"Enter the server IP: ",Configurator.getDefaultIp());
 
             form.setActionButton("NEXT",(ev) -> (new Thread(() -> {
-                showQueuedMessage();
-                serverHandler.setConnection(form.getFieldValueAt(0));
+                String serverIP = form.getFieldValueAt(0);
+                if (inputValidator.isIp(serverIP) && !inputValidator.isEmptyIp(serverIP)) {
+                    showQueuedMessage();
+                    serverHandler.setConnection(serverIP);
+                } else {
+                    form.setErrorMessage("Invalid ip. Try again.");
+                }
             })).start());
 
             mainFrame.setVisible(true);
@@ -170,11 +178,11 @@ public class GuiView implements View {
 
             Form form=new Form(bodyContainer);
             form.addField(0,"Nickname: ","");
-            form.addErrorLabel("The chosen username is already taken.");
+            form.setErrorMessage("The chosen username is already taken.");
 
             form.setActionButton("NEXT",(ev) -> (new Thread(() -> {
                 String nickname = form.getFieldValueAt(0);
-                if (!nickname.equals("") && !nickname.contains(" ")) {
+                if (inputValidator.isNickname(nickname)) {
                     showMessage("Waiting for the other players to connect...", true);
                     serverHandler.sendNewNickname(nickname);
                 } else {
@@ -200,33 +208,24 @@ public class GuiView implements View {
             form.addField(0,"Nickname: ","Player");
             form.addField(1,"Date of birth [dd/mm/yyyy]: ","24/09/1998");
             form.addField((newGame)? 2 : -1,"Number of competitors [2..3]: ","2");
-            form.addErrorLabel("");
 
             form.setActionButton("NEXT",(ev) -> (new Thread(() -> {
                 String nickname = form.getFieldValueAt(0);
-                if (nickname.equals("") || nickname.contains(" ")) {
+                if (!inputValidator.isNickname(nickname)) {
                     form.setErrorMessage("Invalid nickname. Try again.");
                     return;
                 }
 
-                Date date;
-                try {
-                    date = (new SimpleDateFormat("dd/MM/yyyy")).parse(form.getFieldValueAt(1));
-                } catch (ParseException e) {
+                Date date=inputValidator.isDate(form.getFieldValueAt(1));
+                if(date==null){
                     form.setErrorMessage("Invalid date. Try again.");
                     return;
                 }
 
-                int playersNumber=0;
+                Integer playersNumber=0;
                 if (newGame) {
-                    try {
-                        playersNumber = Integer.parseInt(form.getFieldValueAt(2));
-                    } catch (Exception e) {
-                        form.setErrorMessage("Invalid choice. Try again.");
-                        return;
-                    }
-
-                    if (playersNumber < 2 || playersNumber > 3) {
+                    playersNumber= inputValidator.isNumPlayer(form.getFieldValueAt(2));
+                    if(playersNumber==null) {
                         form.setErrorMessage("Invalid choice. Try again.");
                         return;
                     }

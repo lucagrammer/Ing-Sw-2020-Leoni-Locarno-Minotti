@@ -9,6 +9,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ *  The map element with board, commands and legend section
+ */
 public class MapElement {
     private PPanelContainer bodyContainer;
     private GuiView guiView;
@@ -20,6 +23,11 @@ public class MapElement {
     private PLabel commandLabel;
     private PButton[][] cells;
 
+    /**
+     * Constructor: build a MapElement
+     * @param bodyContainer The container of the player switcher
+     * @param guiView       The guiView that controls the bodyContainer
+     */
     public MapElement(PPanelContainer bodyContainer, GuiView guiView){
         this.bodyContainer= bodyContainer;
         this.guiView=guiView;
@@ -57,6 +65,11 @@ public class MapElement {
 
     }
 
+    /**
+     * Builds and add the map element to the container in a default position
+     * @param mapInfo    The information about the map
+     *
+     */
     public void showMap(MapInfo mapInfo){
         cells= new PButton[5][5];
         for(int i=0;i<5;i++){
@@ -68,6 +81,10 @@ public class MapElement {
         }
     }
 
+    /**
+     * Sets the text of the map element heading
+     * @param heading   The text to be shown
+     */
     public void setHeading(String heading){
         commandLabel = new PLabel(heading);
         commandLabel.setFontSize(30);
@@ -75,6 +92,11 @@ public class MapElement {
         bodyContainer.add(commandLabel);
     }
 
+    /**
+     * Enable the cell selection in all cells except specific ones for a specified genre
+     * @param forbiddenCells    The set of forbidden cells
+     * @param genre             The genre of the worker to be positioned
+     */
     public void enableCellSelection(List<Cell> forbiddenCells, Genre genre) {
 
         for(int i=0; i<5; i++){
@@ -82,7 +104,7 @@ public class MapElement {
                 Cell currentCell= new Cell(i,j);
                 if(forbiddenCells.contains(currentCell)){
                     cells[i][j].addActionListener((ev) -> (new Thread(() -> {
-                        addErrorLabel("Invalid choice. Try again.");
+                        setErrorMessage("Invalid choice. Try again.");
                     })).start());
                 }else{
                     cells[i][j].addActionListener((ev) -> (new Thread(() -> {
@@ -93,8 +115,18 @@ public class MapElement {
         }
     }
 
-    public void addErrorLabel(String errorMessage){
+    /**
+     * Sets the error message
+     * @param errorMessage  The error message
+     */
+    public void setErrorMessage(String errorMessage){
         errorLabel.setText(errorMessage);
     }
 
+    /**
+     * Clear the error message
+     */
+    public void clearErrorMessage(){
+        errorLabel.setText("");
+    }
 }

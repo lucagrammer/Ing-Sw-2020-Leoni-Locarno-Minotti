@@ -4,7 +4,7 @@ package client.guiComponents;
  * A message element with personalized icons
  */
 public class MessageElement {
-    private PLabel label;
+    private final PLabel label;
 
     /**
      * Constructor: build a MessageElement

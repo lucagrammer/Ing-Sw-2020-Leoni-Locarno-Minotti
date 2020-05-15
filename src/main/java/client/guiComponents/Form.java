@@ -5,14 +5,25 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * A form with fields, error label and action button
+ */
 public class Form {
     private PPanelContainer bodyContainer;
     private PLabel errorLabel;
     private ArrayList<PTextField> fieldList;
 
+    /**
+     * Constructor: build an empty form
+     * @param formContainer
+     */
     public Form(PPanelContainer formContainer){
         bodyContainer=formContainer;
         fieldList=new ArrayList<>();
+
+        errorLabel = new PLabelError("");
+        errorLabel.setBounds(0, 240, 840, 40);
+        this.bodyContainer.add(errorLabel);
     }
 
     /**
@@ -63,9 +74,7 @@ public class Form {
      * @return  The errorLabel
      */
     public PLabel addErrorLabel(String errorMessage) {
-        errorLabel = new PLabelError(errorMessage);
-        errorLabel.setBounds(0, 240, 840, 40);
-        bodyContainer.add(errorLabel);
+        setErrorMessage(errorMessage); //TODO Remove
         return errorLabel;
     }
 
@@ -74,10 +83,7 @@ public class Form {
      * @param errorMessage  The error message
      */
     public void setErrorMessage(String errorMessage){
-        if(errorLabel==null)
-            addErrorLabel(errorMessage);
-        else
-            errorLabel.setText(errorMessage);
+        errorLabel.setText(errorMessage);
     }
 
     /**
