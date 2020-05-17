@@ -396,7 +396,7 @@ public class GuiView implements View {
             mapElement = new MapElement(bodyContainer, this);
             mapElement.showMap(mapInfo);
             mapElement.setHeading("Choose the position of your worker");
-            mapElement.enableCellSelection(forbiddenCells, genre);
+            mapElement.enableFirstPositionSelection(forbiddenCells, genre);
 
             applyChangesTo(bodyContainer);
         });
@@ -455,7 +455,7 @@ public class GuiView implements View {
             if (loserNickname != null) {
                 showLoser(loserNickname);
             }
-            mapElement.enableActions(roundActions);
+            mapElement.enableActionTypeSelection(roundActions);
 
             applyChangesTo(bodyContainer);
         });

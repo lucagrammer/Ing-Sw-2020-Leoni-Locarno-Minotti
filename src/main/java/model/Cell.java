@@ -124,8 +124,11 @@ public class Cell implements Serializable {
     public Direction calculateDirection(Cell adjacentCell) {
         int rowDifference = adjacentCell.getRow() - row;
         int columnDifference = adjacentCell.getColumn() - column;
-
-        return Direction.fromDiff(rowDifference, columnDifference);
+        if(Math.abs(rowDifference)<2 && Math.abs(columnDifference)<2 && !(rowDifference==0 && columnDifference==0)) {
+            return Direction.fromDiff(rowDifference, columnDifference);
+        }else{
+            return null;
+        }
     }
 
     /**

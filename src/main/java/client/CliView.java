@@ -473,7 +473,7 @@ public class CliView implements View {
 
     /**
      * Asks the action the player wants to perform
-     *  @param roundActions     All the possible actions
+     * @param roundActions     All the possible actions
      * @param mapInfo           The map info
      * @param loserNickname     The nickname of the looser or null value
      */
@@ -503,7 +503,7 @@ public class CliView implements View {
 
                 theAction = roundActions.find(action, genre, direction);
             } else {
-                theAction = roundActions.canEnd();
+                theAction = roundActions.findEnd();
             }
             if (theAction == null) {
                 Frmt.clearScreen();

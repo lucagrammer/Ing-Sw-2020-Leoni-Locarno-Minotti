@@ -13,19 +13,39 @@ import java.util.List;
  * A summary of the game map information
  */
 public class MapInfo implements Serializable {
-    private final String[][] cellColorMatrix;
-    private final Genre[][] cellGenreMatrix;
-    private final Cell[][] cellsInfoMatrix;
-    private final List<String> playerNames;
-    private final List<String> colors;
-    private final List<String> cards;
+    private String[][] cellColorMatrix;
+    private Genre[][] cellGenreMatrix;
+    private Cell[][] cellsInfoMatrix;
+    private List<String> playerNames;
+    private List<String> colors;
+    private List<String> cards;
+    private PlayerColor currentPlayerColor;
 
     /**
      * Constructor: build a map info synthesis
      *
      * @param game The game
      */
-    public MapInfo(Game game) {
+    public MapInfo(Game game){
+        generateInfo(game);
+    }
+
+    /**
+     * Constructor: build a map info synthesis
+     *
+     * @param game      The game
+     * @param color     The color of the current player
+     */
+    public MapInfo(Game game, PlayerColor color) {
+        generateInfo(game);
+        this.currentPlayerColor=color;
+    }
+
+    /**
+     * Generate map info
+     * @param game  The game
+     */
+    private void generateInfo(Game game){
         cellColorMatrix = new String[5][5];
         cellGenreMatrix = new Genre[5][5];
         cellsInfoMatrix = game.getBoard().getBoard();
@@ -60,6 +80,14 @@ public class MapInfo implements Serializable {
                 }
             }
         }
+    }
+
+    /**
+     * Gets the color of the current player if defined
+     * @return The color of the current or the null value if it's not defined
+     */
+    public String getCurrentPlayerColor() {
+        return currentPlayerColor.toString();
     }
 
     /**
