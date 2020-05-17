@@ -1,0 +1,614 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GuiView</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GuiView (client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GuiView</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 49)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 184)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import client.gui.components.PLabel;
+<i>4</i>&nbsp;import client.gui.components.PPanelBackground;
+<i>5</i>&nbsp;import client.gui.components.PPanelContainer;
+<i>6</i>&nbsp;import client.gui.elements.*;
+<i>7</i>&nbsp;import model.Card;
+<i>8</i>&nbsp;import model.Cell;
+<i>9</i>&nbsp;import model.Player;
+<i>10</i>&nbsp;import util.Configurator;
+<i>11</i>&nbsp;import util.Genre;
+<i>12</i>&nbsp;import util.MapInfo;
+<i>13</i>&nbsp;import util.RoundActions;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;import javax.swing.*;
+<i>16</i>&nbsp;import java.awt.*;
+<i>17</i>&nbsp;import java.io.File;
+<i>18</i>&nbsp;import java.io.IOException;
+<i>19</i>&nbsp;import java.util.ArrayList;
+<i>20</i>&nbsp;import java.util.Date;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Manages the graphic user interface
+<i>25</i>&nbsp; */
+<i>26</i>&nbsp;public class GuiView implements View {
+<i>27</i>&nbsp;    private ServerHandler serverHandler;
+<i>28</i>&nbsp;    private JFrame mainFrame;
+<i>29</i>&nbsp;    private PPanelContainer bodyContainer;
+<i>30</i>&nbsp;    private MapElement mapElement;
+<i>31</i>&nbsp;    private final InputValidator inputValidator;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * Constructor: build a GuiView
+<i>35</i>&nbsp;     */
+<b class="nc"><i>36</i>&nbsp;    public GuiView(){</b>
+<b class="nc"><i>37</i>&nbsp;        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();</b>
+<i>38</i>&nbsp;        try {
+<b class="nc"><i>39</i>&nbsp;            ge.registerFont(Font.createFont(0, new File(getClass().getResource(&quot;/GuiResources/LeGourmetScript.otf&quot;).getFile())));</b>
+<b class="nc"><i>40</i>&nbsp;        } catch (FontFormatException | IOException e) {</b>
+<b class="nc"><i>41</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>42</i>&nbsp;        }</b>
+<b class="nc"><i>43</i>&nbsp;        inputValidator= new InputValidator();</b>
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * Sets the serverHandler
+<i>48</i>&nbsp;     *
+<i>49</i>&nbsp;     * @param serverHandler The serverHandler
+<i>50</i>&nbsp;     */
+<i>51</i>&nbsp;    public void setServerHandler(ServerHandler serverHandler) {
+<b class="nc"><i>52</i>&nbsp;        this.serverHandler = serverHandler;</b>
+<i>53</i>&nbsp;    }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    /**
+<i>56</i>&nbsp;     * Gets the server handler that manages the graphical user interface view
+<i>57</i>&nbsp;     * @return  The serverHandler that manages the GuiView
+<i>58</i>&nbsp;     */
+<i>59</i>&nbsp;    public ServerHandler getServerHandler() {
+<b class="nc"><i>60</i>&nbsp;        return serverHandler;</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * Interface launcher. Asks the server IP to connect to and notify it to the serverHandler
+<i>65</i>&nbsp;     */
+<i>66</i>&nbsp;    public void launch() {
+<b class="nc"><i>67</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<i>68</i>&nbsp;            // Prepare the main frame
+<b class="nc"><i>69</i>&nbsp;            mainFrame = new JFrame(&quot;Santorini&quot;);</b>
+<b class="nc"><i>70</i>&nbsp;            mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</b>
+<b class="nc"><i>71</i>&nbsp;            mainFrame.setSize(1000, 730);</b>
+<b class="nc"><i>72</i>&nbsp;            mainFrame.setResizable(false);</b>
+<i>73</i>&nbsp;
+<b class="nc"><i>74</i>&nbsp;            Image backgroundImage = (new ImageIcon(getClass().getResource(&quot;/GuiResources/background.png&quot;))).getImage();</b>
+<b class="nc"><i>75</i>&nbsp;            JPanel background = new PPanelBackground(backgroundImage);</b>
+<b class="nc"><i>76</i>&nbsp;            mainFrame.repaint();</b>
+<b class="nc"><i>77</i>&nbsp;            background.setLayout(null);</b>
+<b class="nc"><i>78</i>&nbsp;            mainFrame.add(background);</b>
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;            // Prepare the body container
+<b class="nc"><i>81</i>&nbsp;            bodyContainer = new PPanelContainer();</b>
+<b class="nc"><i>82</i>&nbsp;            bodyContainer.setBounds(80, 200, 840, 450);</b>
+<b class="nc"><i>83</i>&nbsp;            background.add(bodyContainer);</b>
+<i>84</i>&nbsp;
+<b class="nc"><i>85</i>&nbsp;            FormElement form = new FormElement(bodyContainer);</b>
+<b class="nc"><i>86</i>&nbsp;            form.addField(0,&quot;Enter the server IP: &quot;,Configurator.getDefaultIp());</b>
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;            form.setActionButton(&quot;NEXT&quot;,(ev) -&gt; (new Thread(() -&gt; {
+<b class="nc"><i>89</i>&nbsp;                String serverIP = form.getFieldValueAt(0);</b>
+<b class="nc"><i>90</i>&nbsp;                if (inputValidator.isIp(serverIP) &amp;&amp; !inputValidator.isEmptyIp(serverIP)) {</b>
+<b class="nc"><i>91</i>&nbsp;                    showQueuedMessage();</b>
+<b class="nc"><i>92</i>&nbsp;                    serverHandler.setConnection(serverIP);</b>
+<i>93</i>&nbsp;                } else {
+<b class="nc"><i>94</i>&nbsp;                    form.setErrorMessage(&quot;Invalid ip. Try again.&quot;);</b>
+<i>95</i>&nbsp;                }
+<i>96</i>&nbsp;            })).start());
+<i>97</i>&nbsp;
+<b class="nc"><i>98</i>&nbsp;            mainFrame.setVisible(true);</b>
+<i>99</i>&nbsp;        });
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    /**
+<i>103</i>&nbsp;     * Apply changes to a component
+<i>104</i>&nbsp;     * @param component The component
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    private void applyChangesTo(Component component) {
+<b class="nc"><i>107</i>&nbsp;        component.revalidate();</b>
+<b class="nc"><i>108</i>&nbsp;        component.repaint();</b>
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    /**
+<i>112</i>&nbsp;     * Flush the components inside a panel
+<i>113</i>&nbsp;     * @param panel     The panel
+<i>114</i>&nbsp;     */
+<i>115</i>&nbsp;    private void clear(JPanel panel){
+<b class="nc"><i>116</i>&nbsp;        panel.removeAll();</b>
+<i>117</i>&nbsp;    }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    /**
+<i>120</i>&nbsp;     * Flush the components inside a frame
+<i>121</i>&nbsp;     * @param frame     The frame
+<i>122</i>&nbsp;     */
+<i>123</i>&nbsp;    private void clear(JFrame frame){
+<b class="nc"><i>124</i>&nbsp;        frame.getContentPane().removeAll();</b>
+<i>125</i>&nbsp;    }
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;    /**
+<i>128</i>&nbsp;     * Shows a message to say to the user that is connected to
+<i>129</i>&nbsp;     * the server and will be added to the next available game
+<i>130</i>&nbsp;     */
+<i>131</i>&nbsp;    public void showQueuedMessage() {
+<b class="nc"><i>132</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>133</i>&nbsp;            clear(bodyContainer);</b>
+<i>134</i>&nbsp;
+<b class="nc"><i>135</i>&nbsp;            MessageElement messageElement=new MessageElement(bodyContainer);</b>
+<b class="nc"><i>136</i>&nbsp;            messageElement.setMessage(&quot;You will be added to the first available game...&quot;);</b>
+<b class="nc"><i>137</i>&nbsp;            messageElement.showLoadingIcon();</b>
+<i>138</i>&nbsp;
+<b class="nc"><i>139</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>140</i>&nbsp;        });
+<i>141</i>&nbsp;    }
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;    /**
+<i>144</i>&nbsp;     * Shows a specified message to the user
+<i>145</i>&nbsp;     *
+<i>146</i>&nbsp;     * @param message   The message to be shown
+<i>147</i>&nbsp;     * @param newScreen True if it&#39;s necessary to clean the interface
+<i>148</i>&nbsp;     */
+<i>149</i>&nbsp;    public void showMessage(String message, boolean newScreen) {
+<b class="nc"><i>150</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>151</i>&nbsp;            if (newScreen) {</b>
+<b class="nc"><i>152</i>&nbsp;                clear(bodyContainer);</b>
+<i>153</i>&nbsp;
+<b class="nc"><i>154</i>&nbsp;                MessageElement messageElement = new MessageElement(bodyContainer);</b>
+<b class="nc"><i>155</i>&nbsp;                messageElement.setMessage(message);</b>
+<i>156</i>&nbsp;
+<b class="nc"><i>157</i>&nbsp;                applyChangesTo(bodyContainer);</b>
+<b class="nc"><i>158</i>&nbsp;            } else {</b>
+<b class="nc"><i>159</i>&nbsp;                mapElement.setStateMessage(message);</b>
+<i>160</i>&nbsp;            }
+<i>161</i>&nbsp;        });
+<i>162</i>&nbsp;    }
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;    /**
+<i>165</i>&nbsp;     * Shows a loading message to the user
+<i>166</i>&nbsp;     */
+<i>167</i>&nbsp;    public void showLoading() {
+<b class="nc"><i>168</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>169</i>&nbsp;            clear(bodyContainer);</b>
+<i>170</i>&nbsp;
+<b class="nc"><i>171</i>&nbsp;            MessageElement messageElement=new MessageElement(bodyContainer);</b>
+<b class="nc"><i>172</i>&nbsp;            messageElement.setMessage(&quot;The game will start shortly, get ready!&quot;);</b>
+<b class="nc"><i>173</i>&nbsp;            messageElement.showLoadingIcon();</b>
+<i>174</i>&nbsp;
+<b class="nc"><i>175</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>176</i>&nbsp;        });
+<i>177</i>&nbsp;    }
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;    /**
+<i>180</i>&nbsp;     * Asks a new nickname to the user and notify the choice to the serverHandler
+<i>181</i>&nbsp;     */
+<i>182</i>&nbsp;    public void askNewNickname() {
+<b class="nc"><i>183</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>184</i>&nbsp;            clear(bodyContainer);</b>
+<i>185</i>&nbsp;
+<b class="nc"><i>186</i>&nbsp;            FormElement form = new FormElement(bodyContainer);</b>
+<b class="nc"><i>187</i>&nbsp;            form.addField(0,&quot;Nickname: &quot;,&quot;&quot;);</b>
+<b class="nc"><i>188</i>&nbsp;            form.setErrorMessage(&quot;The chosen username is already taken.&quot;);</b>
+<i>189</i>&nbsp;
+<i>190</i>&nbsp;            form.setActionButton(&quot;NEXT&quot;,(ev) -&gt; (new Thread(() -&gt; {
+<b class="nc"><i>191</i>&nbsp;                String nickname = form.getFieldValueAt(0);</b>
+<b class="nc"><i>192</i>&nbsp;                if (inputValidator.isNickname(nickname)) {</b>
+<b class="nc"><i>193</i>&nbsp;                    showMessage(&quot;Waiting for the other players to connect...&quot;, true);</b>
+<b class="nc"><i>194</i>&nbsp;                    serverHandler.sendNewNickname(nickname);</b>
+<i>195</i>&nbsp;                } else {
+<b class="nc"><i>196</i>&nbsp;                    form.setErrorMessage(&quot;Invalid nickname. Try again.&quot;);</b>
+<i>197</i>&nbsp;                }
+<i>198</i>&nbsp;            })).start());
+<i>199</i>&nbsp;
+<b class="nc"><i>200</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>201</i>&nbsp;        });
+<i>202</i>&nbsp;    }
+<i>203</i>&nbsp;
+<i>204</i>&nbsp;    /**
+<i>205</i>&nbsp;     * Asks nickname, birth date and if it&#39;s a new game the number of players
+<i>206</i>&nbsp;     * for the game and notify the information to the serverHandler
+<i>207</i>&nbsp;     *
+<i>208</i>&nbsp;     * @param newGame True if the it is a new game, otherwise false
+<i>209</i>&nbsp;     */
+<i>210</i>&nbsp;    public void setUpGame(boolean newGame) {
+<b class="nc"><i>211</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>212</i>&nbsp;            clear(bodyContainer);</b>
+<i>213</i>&nbsp;
+<b class="nc"><i>214</i>&nbsp;            FormElement form = new FormElement(bodyContainer);</b>
+<b class="nc"><i>215</i>&nbsp;            form.addField(0,&quot;Nickname: &quot;,&quot;Player&quot;);</b>
+<b class="nc"><i>216</i>&nbsp;            form.addField(1,&quot;Date of birth [dd/mm/yyyy]: &quot;,&quot;24/09/1998&quot;);</b>
+<b class="nc"><i>217</i>&nbsp;            form.addField((newGame)? 2 : -1,&quot;Number of competitors [2..3]: &quot;,&quot;2&quot;);</b>
+<i>218</i>&nbsp;
+<i>219</i>&nbsp;            form.setActionButton(&quot;NEXT&quot;,(ev) -&gt; (new Thread(() -&gt; {
+<b class="nc"><i>220</i>&nbsp;                String nickname = form.getFieldValueAt(0);</b>
+<b class="nc"><i>221</i>&nbsp;                if (!inputValidator.isNickname(nickname)) {</b>
+<b class="nc"><i>222</i>&nbsp;                    form.setErrorMessage(&quot;Invalid nickname. Try again.&quot;);</b>
+<i>223</i>&nbsp;                    return;
+<i>224</i>&nbsp;                }
+<i>225</i>&nbsp;
+<b class="nc"><i>226</i>&nbsp;                Date date=inputValidator.isDate(form.getFieldValueAt(1));</b>
+<b class="nc"><i>227</i>&nbsp;                if(date==null){</b>
+<b class="nc"><i>228</i>&nbsp;                    form.setErrorMessage(&quot;Invalid date. Try again.&quot;);</b>
+<i>229</i>&nbsp;                    return;
+<i>230</i>&nbsp;                }
+<i>231</i>&nbsp;
+<b class="nc"><i>232</i>&nbsp;                Integer playersNumber=0;</b>
+<b class="nc"><i>233</i>&nbsp;                if (newGame) {</b>
+<b class="nc"><i>234</i>&nbsp;                    playersNumber= inputValidator.isNumPlayer(form.getFieldValueAt(2));</b>
+<b class="nc"><i>235</i>&nbsp;                    if(playersNumber==null) {</b>
+<b class="nc"><i>236</i>&nbsp;                        form.setErrorMessage(&quot;Invalid choice. Try again.&quot;);</b>
+<i>237</i>&nbsp;                        return;
+<i>238</i>&nbsp;                    }
+<i>239</i>&nbsp;                }
+<i>240</i>&nbsp;
+<b class="nc"><i>241</i>&nbsp;                showMessage(&quot;Waiting for the other players to connect...&quot;, true);</b>
+<b class="nc"><i>242</i>&nbsp;                serverHandler.sendSetUpGame(nickname, date, playersNumber);</b>
+<i>243</i>&nbsp;            })).start());
+<i>244</i>&nbsp;
+<b class="nc"><i>245</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>246</i>&nbsp;        });
+<i>247</i>&nbsp;    }
+<i>248</i>&nbsp;
+<i>249</i>&nbsp;    /**
+<i>250</i>&nbsp;     * Asks the game cards
+<i>251</i>&nbsp;     *
+<i>252</i>&nbsp;     * @param numCards Number of cards to be selected
+<i>253</i>&nbsp;     */
+<i>254</i>&nbsp;    public void askGameCards(int numCards) {
+<b class="nc"><i>255</i>&nbsp;        List&lt;Card&gt; chosenCard = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>256</i>&nbsp;        printCards(chosenCard, numCards);</b>
+<i>257</i>&nbsp;    }
+<i>258</i>&nbsp;
+<i>259</i>&nbsp;    /**
+<i>260</i>&nbsp;     * Adds the card switcher to the view
+<i>261</i>&nbsp;     * @param chosenCards   The cards not to be shown
+<i>262</i>&nbsp;     * @param numCards      The number of cards to be shown
+<i>263</i>&nbsp;     */
+<i>264</i>&nbsp;    public void printCards(List&lt;Card&gt; chosenCards, int numCards) {
+<b class="nc"><i>265</i>&nbsp;        if (numCards == chosenCards.size()) {</b>
+<b class="nc"><i>266</i>&nbsp;            (new Thread(() -&gt; {</b>
+<b class="nc"><i>267</i>&nbsp;                showLoading();</b>
+<b class="nc"><i>268</i>&nbsp;                serverHandler.sendGameCards(chosenCards);</b>
+<i>269</i>&nbsp;            })).start();
+<i>270</i>&nbsp;        } else {
+<b class="nc"><i>271</i>&nbsp;            SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>272</i>&nbsp;                clear(bodyContainer);</b>
+<i>273</i>&nbsp;
+<b class="nc"><i>274</i>&nbsp;                CardSwitcher cardSwitcher= new CardSwitcher(bodyContainer,this);</b>
+<b class="nc"><i>275</i>&nbsp;                cardSwitcher.setHeading(&quot;Choose &quot; + (numCards - chosenCards.size()) + &quot; card&quot; + (numCards - chosenCards.size() &gt; 1 ? &quot;s&quot; : &quot;&quot;) + &quot; between these:&quot;);</b>
+<b class="nc"><i>276</i>&nbsp;                cardSwitcher.showSwitcher(chosenCards,numCards);</b>
+<b class="nc"><i>277</i>&nbsp;                cardSwitcher.showCardDetails();</b>
+<i>278</i>&nbsp;
+<b class="nc"><i>279</i>&nbsp;                applyChangesTo(bodyContainer);</b>
+<i>280</i>&nbsp;            });
+<i>281</i>&nbsp;        }
+<i>282</i>&nbsp;    }
+<i>283</i>&nbsp;
+<i>284</i>&nbsp;    /**
+<i>285</i>&nbsp;     * Asks the card the player whats to use during the game
+<i>286</i>&nbsp;     *
+<i>287</i>&nbsp;     * @param possibleChoices All the possible cards
+<i>288</i>&nbsp;     */
+<i>289</i>&nbsp;    public void askPlayerCard(List&lt;Card&gt; possibleChoices) {
+<b class="nc"><i>290</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>291</i>&nbsp;            clear(bodyContainer);</b>
+<i>292</i>&nbsp;
+<b class="nc"><i>293</i>&nbsp;            CardSwitcher cardSwitcher= new CardSwitcher(bodyContainer,this);</b>
+<b class="nc"><i>294</i>&nbsp;            cardSwitcher.setHeading(&quot;Choose your card between these:&quot;);</b>
+<b class="nc"><i>295</i>&nbsp;            cardSwitcher.showSwitcher(possibleChoices,true);</b>
+<b class="nc"><i>296</i>&nbsp;            cardSwitcher.showCardDetails();</b>
+<i>297</i>&nbsp;
+<b class="nc"><i>298</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>299</i>&nbsp;        });
+<i>300</i>&nbsp;    }
+<i>301</i>&nbsp;
+<i>302</i>&nbsp;    /**
+<i>303</i>&nbsp;     * Asks the nickname of the first player
+<i>304</i>&nbsp;     *
+<i>305</i>&nbsp;     * @param playersNicknames All the nicknames
+<i>306</i>&nbsp;     */
+<i>307</i>&nbsp;    public void askFirstPlayer(List&lt;String&gt; playersNicknames) {
+<b class="nc"><i>308</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>309</i>&nbsp;            clear(bodyContainer);</b>
+<i>310</i>&nbsp;
+<b class="nc"><i>311</i>&nbsp;            PlayerSwitcher playerSwitcher=new PlayerSwitcher(bodyContainer,this);</b>
+<b class="nc"><i>312</i>&nbsp;            playerSwitcher.showHeading(&quot;Choose the first player:&quot;);</b>
+<b class="nc"><i>313</i>&nbsp;            playerSwitcher.showSwitcher(playersNicknames);</b>
+<i>314</i>&nbsp;
+<b class="nc"><i>315</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>316</i>&nbsp;        });
+<i>317</i>&nbsp;    }
+<i>318</i>&nbsp;
+<i>319</i>&nbsp;    /**
+<i>320</i>&nbsp;     * Show all the cards of the game
+<i>321</i>&nbsp;     *
+<i>322</i>&nbsp;     * @param cards All the cards of the game
+<i>323</i>&nbsp;     */
+<i>324</i>&nbsp;    public void showGameCards(List&lt;Card&gt; cards) {
+<b class="nc"><i>325</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>326</i>&nbsp;            clear(bodyContainer);</b>
+<i>327</i>&nbsp;
+<b class="nc"><i>328</i>&nbsp;            CardSwitcher cardSwitcher= new CardSwitcher(bodyContainer,this);</b>
+<b class="nc"><i>329</i>&nbsp;            cardSwitcher.setHeading(&quot;The cards used in this match will be:&quot;);</b>
+<b class="nc"><i>330</i>&nbsp;            cardSwitcher.showSwitcher(cards,false);</b>
+<b class="nc"><i>331</i>&nbsp;            cardSwitcher.showCardDetails();</b>
+<i>332</i>&nbsp;
+<b class="nc"><i>333</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>334</i>&nbsp;        });
+<i>335</i>&nbsp;    }
+<i>336</i>&nbsp;
+<i>337</i>&nbsp;
+<i>338</i>&nbsp;    /**
+<i>339</i>&nbsp;     * Shows the cards assignment of the game
+<i>340</i>&nbsp;     *
+<i>341</i>&nbsp;     * @param playerList The list of players of the game
+<i>342</i>&nbsp;     */
+<i>343</i>&nbsp;    public void showCardAssignmentMessage(List&lt;Player&gt; playerList) {
+<b class="nc"><i>344</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>345</i>&nbsp;            clear(bodyContainer);</b>
+<i>346</i>&nbsp;
+<b class="nc"><i>347</i>&nbsp;            List&lt;Card&gt; cards= new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>348</i>&nbsp;            List&lt;String&gt; owners= new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>349</i>&nbsp;            for(Player player: playerList){</b>
+<b class="nc"><i>350</i>&nbsp;                cards.add(player.getCard());</b>
+<b class="nc"><i>351</i>&nbsp;                owners.add(player.getNickname());</b>
+<b class="nc"><i>352</i>&nbsp;            }</b>
+<i>353</i>&nbsp;
+<b class="nc"><i>354</i>&nbsp;            CardSwitcher cardSwitcher= new CardSwitcher(bodyContainer,this);</b>
+<b class="nc"><i>355</i>&nbsp;            cardSwitcher.setHeading(&quot;Cards assignment:&quot;);</b>
+<b class="nc"><i>356</i>&nbsp;            cardSwitcher.showSwitcher(cards,false);</b>
+<b class="nc"><i>357</i>&nbsp;            cardSwitcher.setSingleCardLabel(owners);</b>
+<i>358</i>&nbsp;
+<b class="nc"><i>359</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>360</i>&nbsp;        });
+<i>361</i>&nbsp;    }
+<i>362</i>&nbsp;
+<i>363</i>&nbsp;    /**
+<i>364</i>&nbsp;     * Asks the color the player whats to choose
+<i>365</i>&nbsp;     *
+<i>366</i>&nbsp;     * @param availableColors All the available colors
+<i>367</i>&nbsp;     */
+<i>368</i>&nbsp;    public void askPlayerColor(ArrayList&lt;String&gt; availableColors) {
+<b class="nc"><i>369</i>&nbsp;        if (availableColors.size() == 1) {</b>
+<b class="nc"><i>370</i>&nbsp;            (new Thread(() -&gt; serverHandler.sendPlayerColor(availableColors.get(0)))).start();</b>
+<i>371</i>&nbsp;        } else {
+<b class="nc"><i>372</i>&nbsp;            SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>373</i>&nbsp;                clear(bodyContainer);</b>
+<i>374</i>&nbsp;
+<b class="nc"><i>375</i>&nbsp;                ColorSwitcher colorSwitcher = new ColorSwitcher(bodyContainer, this);</b>
+<b class="nc"><i>376</i>&nbsp;                colorSwitcher.setHeading(&quot;Choose your color between these:&quot;);</b>
+<b class="nc"><i>377</i>&nbsp;                colorSwitcher.showSwitcher(availableColors);</b>
+<i>378</i>&nbsp;
+<b class="nc"><i>379</i>&nbsp;                applyChangesTo(bodyContainer);</b>
+<i>380</i>&nbsp;            });
+<i>381</i>&nbsp;        }
+<i>382</i>&nbsp;    }
+<i>383</i>&nbsp;
+<i>384</i>&nbsp;
+<i>385</i>&nbsp;    /**
+<i>386</i>&nbsp;     * Asks the first position for the male and female worker
+<i>387</i>&nbsp;     *
+<i>388</i>&nbsp;     * @param genre          The genre of the worker
+<i>389</i>&nbsp;     * @param forbiddenCells The forbidden cells
+<i>390</i>&nbsp;     * @param mapInfo        The map info
+<i>391</i>&nbsp;     */
+<i>392</i>&nbsp;    public void askPlayerPosition(Genre genre, List&lt;Cell&gt; forbiddenCells, MapInfo mapInfo) {
+<b class="nc"><i>393</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>394</i>&nbsp;            enableGameMode();</b>
+<i>395</i>&nbsp;
+<b class="nc"><i>396</i>&nbsp;            mapElement = new MapElement(bodyContainer, this);</b>
+<b class="nc"><i>397</i>&nbsp;            mapElement.showMap(mapInfo);</b>
+<b class="nc"><i>398</i>&nbsp;            mapElement.setHeading(&quot;Choose the position of your worker&quot;);</b>
+<b class="nc"><i>399</i>&nbsp;            mapElement.enableFirstPositionSelection(forbiddenCells, genre);</b>
+<i>400</i>&nbsp;
+<b class="nc"><i>401</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>402</i>&nbsp;        });
+<i>403</i>&nbsp;    }
+<i>404</i>&nbsp;
+<i>405</i>&nbsp;    /**
+<i>406</i>&nbsp;     * Enable full screen game mode, reducing the space occupied by the santorini logo
+<i>407</i>&nbsp;     */
+<i>408</i>&nbsp;    private void enableGameMode() {
+<b class="nc"><i>409</i>&nbsp;        clear(mainFrame);</b>
+<i>410</i>&nbsp;
+<b class="nc"><i>411</i>&nbsp;        Image backgroundImage = (new ImageIcon(getClass().getResource(&quot;/GuiResources/emptyBackground.png&quot;))).getImage();</b>
+<b class="nc"><i>412</i>&nbsp;        JPanel background = new PPanelBackground(backgroundImage);</b>
+<b class="nc"><i>413</i>&nbsp;        mainFrame.repaint();</b>
+<b class="nc"><i>414</i>&nbsp;        background.setLayout(null);</b>
+<b class="nc"><i>415</i>&nbsp;        mainFrame.add(background);</b>
+<i>416</i>&nbsp;
+<i>417</i>&nbsp;        // Prepare the body container
+<b class="nc"><i>418</i>&nbsp;        bodyContainer = new PPanelContainer();</b>
+<b class="nc"><i>419</i>&nbsp;        bodyContainer.setBounds(80, 60, 840, 610);</b>
+<b class="nc"><i>420</i>&nbsp;        background.add(bodyContainer);</b>
+<i>421</i>&nbsp;
+<b class="nc"><i>422</i>&nbsp;        applyChangesTo(mainFrame);</b>
+<i>423</i>&nbsp;    }
+<i>424</i>&nbsp;
+<i>425</i>&nbsp;
+<i>426</i>&nbsp;    /**
+<i>427</i>&nbsp;     * Shows the board of the game
+<i>428</i>&nbsp;     *
+<i>429</i>&nbsp;     * @param mapInfo   The map info
+<i>430</i>&nbsp;     * @param newScreen True if it&#39;s necessary to clean the interface
+<i>431</i>&nbsp;     */
+<i>432</i>&nbsp;    public void showMap(MapInfo mapInfo, boolean newScreen) {
+<b class="nc"><i>433</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>434</i>&nbsp;            if (mapElement == null) {</b>
+<b class="nc"><i>435</i>&nbsp;                enableGameMode();</b>
+<b class="nc"><i>436</i>&nbsp;                mapElement = new MapElement(bodyContainer, this);</b>
+<i>437</i>&nbsp;            } else {
+<b class="nc"><i>438</i>&nbsp;                mapElement.clearMap();</b>
+<i>439</i>&nbsp;            }
+<b class="nc"><i>440</i>&nbsp;            mapElement.showMap(mapInfo);</b>
+<i>441</i>&nbsp;
+<b class="nc"><i>442</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>443</i>&nbsp;        });
+<i>444</i>&nbsp;    }
+<i>445</i>&nbsp;
+<i>446</i>&nbsp;    /**
+<i>447</i>&nbsp;     * Asks the action the player wants to perform
+<i>448</i>&nbsp;     * @param roundActions  All the possible actions
+<i>449</i>&nbsp;     * @param mapInfo        The map info
+<i>450</i>&nbsp;     * @param loserNickname The nickname of the looser or null value
+<i>451</i>&nbsp;     */
+<i>452</i>&nbsp;    public void askAction(RoundActions roundActions, MapInfo mapInfo, String loserNickname) {
+<b class="nc"><i>453</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>454</i>&nbsp;            showMap(mapInfo, false);</b>
+<b class="nc"><i>455</i>&nbsp;            if (loserNickname != null) {</b>
+<b class="nc"><i>456</i>&nbsp;                showLoser(loserNickname);</b>
+<i>457</i>&nbsp;            }
+<b class="nc"><i>458</i>&nbsp;            mapElement.enableActionTypeSelection(roundActions);</b>
+<i>459</i>&nbsp;
+<b class="nc"><i>460</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>461</i>&nbsp;        });
+<i>462</i>&nbsp;    }
+<i>463</i>&nbsp;
+<i>464</i>&nbsp;    /**
+<i>465</i>&nbsp;     * Notify the players that the game has ended and notify the winner
+<i>466</i>&nbsp;     *
+<i>467</i>&nbsp;     * @param winnerNickname The nickname of the winner
+<i>468</i>&nbsp;     * @param youWin         True if the player has win
+<i>469</i>&nbsp;     */
+<i>470</i>&nbsp;    public void showGameEndMessage(String winnerNickname, boolean youWin) {
+<i>471</i>&nbsp;
+<i>472</i>&nbsp;    }
+<i>473</i>&nbsp;
+<i>474</i>&nbsp;    /**
+<i>475</i>&nbsp;     * Notify the players that a player has disconnected and the game has ended
+<i>476</i>&nbsp;     *
+<i>477</i>&nbsp;     * @param disconnectedNickname The nickname of the disconnected player
+<i>478</i>&nbsp;     */
+<i>479</i>&nbsp;    public void showDisconnectionMessage(String disconnectedNickname) {
+<b class="nc"><i>480</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>481</i>&nbsp;            clear(bodyContainer);</b>
+<i>482</i>&nbsp;
+<b class="nc"><i>483</i>&nbsp;            PLabel label = new PLabel(&quot;GAME OVER: &quot; + disconnectedNickname + &quot; has disconnected.&quot;);</b>
+<b class="nc"><i>484</i>&nbsp;            label.setBounds(0, 0, 840, 450);</b>
+<b class="nc"><i>485</i>&nbsp;            bodyContainer.add(label);</b>
+<i>486</i>&nbsp;            // TODO: mettere new game
+<i>487</i>&nbsp;            //serverHandler.sendNewGame(choice.equalsIgnoreCase(&quot;yes&quot;));
+<i>488</i>&nbsp;
+<b class="nc"><i>489</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>490</i>&nbsp;        });
+<i>491</i>&nbsp;    }
+<i>492</i>&nbsp;
+<i>493</i>&nbsp;    /**
+<i>494</i>&nbsp;     * Shows an error message to the user
+<i>495</i>&nbsp;     *
+<i>496</i>&nbsp;     * @param errorMessage The message to be shown
+<i>497</i>&nbsp;     * @param newScreen    True if it&#39;s necessary to clean the interface
+<i>498</i>&nbsp;     */
+<i>499</i>&nbsp;    public void showErrorMessage(String errorMessage, boolean newScreen) {
+<b class="nc"><i>500</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; {</b>
+<b class="nc"><i>501</i>&nbsp;            clear(bodyContainer);</b>
+<i>502</i>&nbsp;
+<b class="nc"><i>503</i>&nbsp;            PLabel label = new PLabel(errorMessage);</b>
+<b class="nc"><i>504</i>&nbsp;            label.setBounds(0, 0, 840, 450);</b>
+<b class="nc"><i>505</i>&nbsp;            label.setForeground(Color.RED);</b>
+<b class="nc"><i>506</i>&nbsp;            bodyContainer.add(label);</b>
+<i>507</i>&nbsp;
+<b class="nc"><i>508</i>&nbsp;            applyChangesTo(bodyContainer);</b>
+<i>509</i>&nbsp;        });
+<i>510</i>&nbsp;    }
+<i>511</i>&nbsp;
+<i>512</i>&nbsp;    /**
+<i>513</i>&nbsp;     * Notify the players that there is a loser
+<i>514</i>&nbsp;     *
+<i>515</i>&nbsp;     * @param loserNickname The nickname of the loser
+<i>516</i>&nbsp;     */
+<i>517</i>&nbsp;    public void showLoser(String loserNickname) {
+<b class="nc"><i>518</i>&nbsp;        showMessage(loserNickname.toUpperCase() + &quot; has lost &quot;, false);</b>
+<i>519</i>&nbsp;    }
+<i>520</i>&nbsp;
+<i>521</i>&nbsp;    /**
+<i>522</i>&nbsp;     * Shows the user who is taking his turn
+<i>523</i>&nbsp;     *
+<i>524</i>&nbsp;     * @param currentNickname The nickname of the user who is taking his turn
+<i>525</i>&nbsp;     * @param hasLoser        True if during the turn a player has lost
+<i>526</i>&nbsp;     */
+<i>527</i>&nbsp;    public void showTurn(String currentNickname, boolean hasLoser) {
+<b class="nc"><i>528</i>&nbsp;        SwingUtilities.invokeLater(() -&gt; mapElement.setHeading(&quot;It&#39;s &quot; + currentNickname.toUpperCase() + &quot; turn&quot;));</b>
+<i>529</i>&nbsp;    }
+<i>530</i>&nbsp;
+<i>531</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-17 19:54</div>
+</div>
+</body>
+</html>

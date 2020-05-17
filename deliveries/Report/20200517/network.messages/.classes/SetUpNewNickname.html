@@ -1,0 +1,166 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SetUpNewNickname</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">network.messages</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SetUpNewNickname (network.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SetUpNewNickname</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    42,9%
+  </span>
+  <span class="absValue">
+    (3/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    37,5%
+  </span>
+  <span class="absValue">
+    (6/ 16)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package network.messages;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import client.View;
+<i>4</i>&nbsp;import network.CVMessage;
+<i>5</i>&nbsp;import network.VCMessage;
+<i>6</i>&nbsp;import server.VirtualView;
+<i>7</i>&nbsp;import util.MessageType;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import java.io.Serializable;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * Message requesting to reset the nickname because it is already in use. Response message to the reset request.
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;public class SetUpNewNickname implements CVMessage, VCMessage, Serializable {
+<i>15</i>&nbsp;    private final MessageType messageType;
+<i>16</i>&nbsp;    private final String temporaryNickname;
+<i>17</i>&nbsp;    private String nickname;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    /**
+<i>20</i>&nbsp;     * Client-side constructor: build a response message
+<i>21</i>&nbsp;     *
+<i>22</i>&nbsp;     * @param nickname The new chosen nickname
+<i>23</i>&nbsp;     */
+<b class="nc"><i>24</i>&nbsp;    public SetUpNewNickname(String temporaryNickname, String nickname) {</b>
+<b class="nc"><i>25</i>&nbsp;        this.messageType = MessageType.VC;</b>
+<b class="nc"><i>26</i>&nbsp;        this.nickname = nickname;</b>
+<b class="nc"><i>27</i>&nbsp;        this.temporaryNickname = temporaryNickname;</b>
+<b class="nc"><i>28</i>&nbsp;    }</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * Server-side constructor: build a request message
+<i>33</i>&nbsp;     */
+<b class="fc"><i>34</i>&nbsp;    public SetUpNewNickname(String temporaryNickname) {</b>
+<b class="fc"><i>35</i>&nbsp;        this.messageType = MessageType.CV;</b>
+<b class="fc"><i>36</i>&nbsp;        this.temporaryNickname = temporaryNickname;</b>
+<b class="fc"><i>37</i>&nbsp;    }</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /**
+<i>40</i>&nbsp;     * Gets the message type
+<i>41</i>&nbsp;     *
+<i>42</i>&nbsp;     * @return The message type
+<i>43</i>&nbsp;     */
+<i>44</i>&nbsp;    public MessageType getType() {
+<b class="fc"><i>45</i>&nbsp;        return messageType;</b>
+<i>46</i>&nbsp;    }
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /**
+<i>49</i>&nbsp;     * Gets the new chosen nickname
+<i>50</i>&nbsp;     *
+<i>51</i>&nbsp;     * @return The new chosen nickname
+<i>52</i>&nbsp;     */
+<i>53</i>&nbsp;    public String getNickname() {
+<b class="nc"><i>54</i>&nbsp;        return nickname;</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * Gets the temporary nickname of the user
+<i>59</i>&nbsp;     *
+<i>60</i>&nbsp;     * @return The temporary nickname
+<i>61</i>&nbsp;     */
+<i>62</i>&nbsp;    public String getTemporaryNickname() {
+<b class="fc"><i>63</i>&nbsp;        return temporaryNickname;</b>
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /**
+<i>67</i>&nbsp;     * Execute the request client-side
+<i>68</i>&nbsp;     *
+<i>69</i>&nbsp;     * @param view The recipient component
+<i>70</i>&nbsp;     */
+<i>71</i>&nbsp;    public void execute(View view) {
+<b class="nc"><i>72</i>&nbsp;        view.askNewNickname();</b>
+<b class="nc"><i>73</i>&nbsp;    }</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    /**
+<i>76</i>&nbsp;     * Execute the request server-side
+<i>77</i>&nbsp;     *
+<i>78</i>&nbsp;     * @param virtualView The recipient component
+<i>79</i>&nbsp;     */
+<i>80</i>&nbsp;    public void execute(VirtualView virtualView) {
+<b class="nc"><i>81</i>&nbsp;        virtualView.setNewNickname(temporaryNickname, nickname);</b>
+<b class="nc"><i>82</i>&nbsp;    }</b>
+<i>83</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-17 19:54</div>
+</div>
+</body>
+</html>

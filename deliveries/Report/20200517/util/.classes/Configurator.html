@@ -1,0 +1,233 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Configurator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Configurator (util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Configurator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 53)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package util;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import model.Card;
+<i>4</i>&nbsp;import org.jdom2.Document;
+<i>5</i>&nbsp;import org.jdom2.Element;
+<i>6</i>&nbsp;import org.jdom2.JDOMException;
+<i>7</i>&nbsp;import org.jdom2.input.SAXBuilder;
+<i>8</i>&nbsp;import server.rules.EnemyRules;
+<i>9</i>&nbsp;import server.rules.Rules;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import javax.swing.*;
+<i>12</i>&nbsp;import java.awt.*;
+<i>13</i>&nbsp;import java.io.File;
+<i>14</i>&nbsp;import java.io.IOException;
+<i>15</i>&nbsp;import java.util.ArrayList;
+<i>16</i>&nbsp;import java.util.List;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;/**
+<i>19</i>&nbsp; * Menage the configuration of the application
+<i>20</i>&nbsp; */
+<b class="nc"><i>21</i>&nbsp;public class Configurator {</b>
+<i>22</i>&nbsp;
+<b class="nc"><i>23</i>&nbsp;    private static final SAXBuilder builder = new SAXBuilder();</b>
+<b class="nc"><i>24</i>&nbsp;    private static final Object connectionConfigLock = new Object();</b>
+<b class="nc"><i>25</i>&nbsp;    private static final Object cardsConfigLock = new Object();</b>
+<i>26</i>&nbsp;    private static final boolean showErrorDetailsFlag = true;
+<i>27</i>&nbsp;    private static final boolean showPingFlag = false;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * Gets the default IP of the server
+<i>31</i>&nbsp;     *
+<i>32</i>&nbsp;     * @return The default IP of the server
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    public static String getDefaultIp() {
+<b class="nc"><i>35</i>&nbsp;        String ip = null;</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;        try {
+<i>38</i>&nbsp;            Document document;
+<b class="nc"><i>39</i>&nbsp;            synchronized (connectionConfigLock) {</b>
+<b class="nc"><i>40</i>&nbsp;                document = builder.build(new File(Configurator.class.getResource(&quot;/ConnectionConfig.xml&quot;).getFile()));</b>
+<b class="nc"><i>41</i>&nbsp;            }</b>
+<b class="nc"><i>42</i>&nbsp;            Element rootElement = document.getRootElement();</b>
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;            ip = rootElement.getChildText(&quot;server-ip-default&quot;);</b>
+<b class="nc"><i>45</i>&nbsp;        } catch (JDOMException | IOException e) {</b>
+<b class="nc"><i>46</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>47</i>&nbsp;        }</b>
+<b class="nc"><i>48</i>&nbsp;        return ip;</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * Gets the default port of the server
+<i>53</i>&nbsp;     *
+<i>54</i>&nbsp;     * @return The default port of the server
+<i>55</i>&nbsp;     */
+<i>56</i>&nbsp;    public static int getDefaultPort() {
+<b class="nc"><i>57</i>&nbsp;        int port = 0;</b>
+<i>58</i>&nbsp;        try {
+<i>59</i>&nbsp;            Document document;
+<b class="nc"><i>60</i>&nbsp;            synchronized (connectionConfigLock) {</b>
+<b class="nc"><i>61</i>&nbsp;                document = builder.build(new File(Configurator.class.getResource(&quot;/ConnectionConfig.xml&quot;).getFile()));</b>
+<b class="nc"><i>62</i>&nbsp;            }</b>
+<b class="nc"><i>63</i>&nbsp;            Element rootElement = document.getRootElement();</b>
+<i>64</i>&nbsp;
+<b class="nc"><i>65</i>&nbsp;            port = Integer.parseInt(rootElement.getChildText(&quot;server-port-default&quot;));</b>
+<b class="nc"><i>66</i>&nbsp;        } catch (JDOMException | IOException e) {</b>
+<b class="nc"><i>67</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>68</i>&nbsp;        }</b>
+<b class="nc"><i>69</i>&nbsp;        return port;</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * Gets the list of all the cards
+<i>74</i>&nbsp;     *
+<i>75</i>&nbsp;     * @return A list containing all the game cards
+<i>76</i>&nbsp;     */
+<i>77</i>&nbsp;    public static List&lt;Card&gt; getAllCards() {
+<b class="nc"><i>78</i>&nbsp;        List&lt;Card&gt; cards = new ArrayList&lt;&gt;();</b>
+<i>79</i>&nbsp;        try {
+<i>80</i>&nbsp;            Document document;
+<b class="nc"><i>81</i>&nbsp;            synchronized (cardsConfigLock) {</b>
+<b class="nc"><i>82</i>&nbsp;                document = builder.build(new File(Configurator.class.getResource(&quot;/SimpleGodsConfig.xml&quot;).getFile()));</b>
+<b class="nc"><i>83</i>&nbsp;            }</b>
+<b class="nc"><i>84</i>&nbsp;            Element rootElement = document.getRootElement();</b>
+<i>85</i>&nbsp;
+<b class="nc"><i>86</i>&nbsp;            List&lt;Element&gt; children = rootElement.getChildren();</b>
+<b class="nc"><i>87</i>&nbsp;            for (Object child : children) {</b>
+<b class="nc"><i>88</i>&nbsp;                Element element = (Element) child;</b>
+<b class="nc"><i>89</i>&nbsp;                String name = element.getChildText(&quot;name&quot;);</b>
+<b class="nc"><i>90</i>&nbsp;                String description = element.getChildText(&quot;description&quot;);</b>
+<b class="nc"><i>91</i>&nbsp;                boolean threePlayerFlag = Boolean.parseBoolean(element.getChildText(&quot;three-players-compatible&quot;));</b>
+<b class="nc"><i>92</i>&nbsp;                Rules rules = (Rules) Class.forName(element.getChildText(&quot;rules&quot;)).getDeclaredConstructor().newInstance();</b>
+<b class="nc"><i>93</i>&nbsp;                EnemyRules enemyRules = (EnemyRules) Class.forName(element.getChildText(&quot;enemy-rules&quot;)).getDeclaredConstructor().newInstance();</b>
+<b class="nc"><i>94</i>&nbsp;                cards.add(new Card(name, threePlayerFlag, description, rules, enemyRules));</b>
+<b class="nc"><i>95</i>&nbsp;            }</b>
+<b class="nc"><i>96</i>&nbsp;        } catch (Exception e) {</b>
+<b class="nc"><i>97</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>98</i>&nbsp;        }</b>
+<b class="nc"><i>99</i>&nbsp;        return cards;</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    /**
+<i>103</i>&nbsp;     * Gets a card image by the name of the card
+<i>104</i>&nbsp;     *
+<i>105</i>&nbsp;     * @param cardName The name of the card
+<i>106</i>&nbsp;     * @return The related Image object
+<i>107</i>&nbsp;     */
+<i>108</i>&nbsp;    public static Image getCardImage(String cardName) {
+<b class="nc"><i>109</i>&nbsp;        Image image = null;</b>
+<i>110</i>&nbsp;        try {
+<b class="nc"><i>111</i>&nbsp;            image = (new ImageIcon(Configurator.class.getResource(&quot;/GuiResources/&quot; + cardName.toLowerCase() + &quot;Card.png&quot;))).getImage();</b>
+<b class="nc"><i>112</i>&nbsp;        } catch (Exception ignored) {}</b>
+<b class="nc"><i>113</i>&nbsp;        return image;</b>
+<i>114</i>&nbsp;    }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;    /**
+<i>118</i>&nbsp;     * Gets a card image by the name of the card
+<i>119</i>&nbsp;     *
+<i>120</i>&nbsp;     * @param floor The floor number (0,1,2,3)
+<i>121</i>&nbsp;     * @param state The state of the cell (dome,free,colors)
+<i>122</i>&nbsp;     * @return The related Image object
+<i>123</i>&nbsp;     */
+<i>124</i>&nbsp;    public static Image getCellImage(int floor,String state) {
+<b class="nc"><i>125</i>&nbsp;        Image image = null;</b>
+<i>126</i>&nbsp;        try {
+<b class="nc"><i>127</i>&nbsp;            image = (new ImageIcon(Configurator.class.getResource(&quot;/GuiResources/components/&quot; + floor + &quot;_&quot;+state.toLowerCase()+&quot;.png&quot;))).getImage().getScaledInstance(30,65, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>128</i>&nbsp;        } catch (Exception ignored) {}</b>
+<b class="nc"><i>129</i>&nbsp;        return image;</b>
+<i>130</i>&nbsp;    }
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    /**
+<i>133</i>&nbsp;     * Gets the show-ping-messages flag
+<i>134</i>&nbsp;     *
+<i>135</i>&nbsp;     * @return The boolean value of the show-ping-messages flag
+<i>136</i>&nbsp;     */
+<i>137</i>&nbsp;    public static boolean getPingFlag() {
+<b class="nc"><i>138</i>&nbsp;        return showPingFlag;</b>
+<i>139</i>&nbsp;    }
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    /**
+<i>142</i>&nbsp;     * Gets the show-error-details flag
+<i>143</i>&nbsp;     *
+<i>144</i>&nbsp;     * @return The boolean value of the show-error-details flag
+<i>145</i>&nbsp;     */
+<i>146</i>&nbsp;    public static boolean getErrorDetailsFlag() {
+<b class="nc"><i>147</i>&nbsp;        return showErrorDetailsFlag;</b>
+<i>148</i>&nbsp;    }
+<i>149</i>&nbsp;}
+<i>150</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-17 19:54</div>
+</div>
+</body>
+</html>
