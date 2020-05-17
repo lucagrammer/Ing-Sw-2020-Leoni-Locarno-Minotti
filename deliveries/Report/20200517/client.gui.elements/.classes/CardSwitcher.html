@@ -1,0 +1,352 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CardSwitcher</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">client.gui.elements</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CardSwitcher (client.gui.elements)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CardSwitcher</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 57)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CardSwitcher$CardMouseListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 23)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 80)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package client.gui.elements;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import client.GuiView;
+<i>4</i>&nbsp;import client.gui.components.PButton;
+<i>5</i>&nbsp;import client.gui.components.PLabel;
+<i>6</i>&nbsp;import client.gui.components.PPanelContainer;
+<i>7</i>&nbsp;import model.Card;
+<i>8</i>&nbsp;import util.Configurator;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import java.awt.*;
+<i>11</i>&nbsp;import java.awt.event.MouseEvent;
+<i>12</i>&nbsp;import java.awt.event.MouseListener;
+<i>13</i>&nbsp;import java.util.List;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * A cards switcher with an action listener that enable multiple or single selection
+<i>17</i>&nbsp; */
+<b class="nc"><i>18</i>&nbsp;public class CardSwitcher {</b>
+<i>19</i>&nbsp;    private final GuiView guiView;
+<i>20</i>&nbsp;    private final PPanelContainer bodyContainer;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    private final PPanelContainer cardDetailsContainer;
+<i>23</i>&nbsp;    private final PPanelContainer cardContainer;
+<i>24</i>&nbsp;    private final PLabel nameLabel;
+<i>25</i>&nbsp;    private final PLabel descriptionLabel;
+<i>26</i>&nbsp;    private PPanelContainer labelContainer;
+<i>27</i>&nbsp;    private boolean switcherVisibility;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * Constructor: build a card switcher
+<i>31</i>&nbsp;     * @param bodyContainer The container of the card switcher
+<i>32</i>&nbsp;     * @param guiView       The guiView that controls the bodyContainer
+<i>33</i>&nbsp;     */
+<b class="nc"><i>34</i>&nbsp;    public CardSwitcher(PPanelContainer bodyContainer, GuiView guiView){</b>
+<b class="nc"><i>35</i>&nbsp;        this.bodyContainer=bodyContainer;</b>
+<b class="nc"><i>36</i>&nbsp;        this.guiView=guiView;</b>
+<b class="nc"><i>37</i>&nbsp;        switcherVisibility=false;</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;        // Prepares the external container
+<b class="nc"><i>40</i>&nbsp;        cardContainer = new PPanelContainer();</b>
+<b class="nc"><i>41</i>&nbsp;        cardContainer.setBounds(0, 80, bodyContainer.getWidth(), 138);</b>
+<b class="nc"><i>42</i>&nbsp;        cardContainer.setLayout(new GridLayout(1, 9, 10, 0));</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;        // Prepare the card details container
+<b class="nc"><i>45</i>&nbsp;        cardDetailsContainer = new PPanelContainer();</b>
+<b class="nc"><i>46</i>&nbsp;        cardDetailsContainer.setBounds(0, 280, bodyContainer.getWidth(), 150);</b>
+<b class="nc"><i>47</i>&nbsp;        cardDetailsContainer.setLayout(null);</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;        // Prepare the card name label
+<b class="nc"><i>50</i>&nbsp;        nameLabel = new PLabel(&quot;&quot;);</b>
+<b class="nc"><i>51</i>&nbsp;        nameLabel.setFontSize(30);</b>
+<b class="nc"><i>52</i>&nbsp;        nameLabel.setForeground(new Color(186, 164, 154));</b>
+<b class="nc"><i>53</i>&nbsp;        nameLabel.setBounds(0, 20, cardDetailsContainer.getWidth(), 35);</b>
+<b class="nc"><i>54</i>&nbsp;        cardDetailsContainer.add(nameLabel);</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;        // Prepare the card description label
+<b class="nc"><i>57</i>&nbsp;        descriptionLabel = new PLabel(&quot;&quot;);</b>
+<b class="nc"><i>58</i>&nbsp;        descriptionLabel.setFont(new Font(&quot;Helvetica&quot;, Font.PLAIN, 17));</b>
+<b class="nc"><i>59</i>&nbsp;        descriptionLabel.setBounds(90, 50, cardDetailsContainer.getWidth() - 180, 80);</b>
+<b class="nc"><i>60</i>&nbsp;        cardDetailsContainer.add(descriptionLabel);</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * Sets the text of the card switcher heading
+<i>65</i>&nbsp;     * @param heading   The text to be shown
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public void setHeading(String heading){
+<b class="nc"><i>68</i>&nbsp;        PLabel label = new PLabel(heading);</b>
+<b class="nc"><i>69</i>&nbsp;        label.setFontSize(30);</b>
+<b class="nc"><i>70</i>&nbsp;        label.setBounds(0, 0, bodyContainer.getWidth(), 40);</b>
+<b class="nc"><i>71</i>&nbsp;        bodyContainer.add(label);</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /**
+<i>75</i>&nbsp;     * Sets the card details to be shown below the switcher
+<i>76</i>&nbsp;     * @param card  The card or null value to clear the details
+<i>77</i>&nbsp;     */
+<i>78</i>&nbsp;    void setDetails(Card card){
+<b class="nc"><i>79</i>&nbsp;        nameLabel.setText(card==null? &quot;&quot;: card.getName().toUpperCase());</b>
+<b class="nc"><i>80</i>&nbsp;        descriptionLabel.setText(card==null? &quot;&quot;: (&quot;&lt;HTML&gt;&lt;CENTER&gt;&quot; + card.getDescription() + &quot;&lt;/CENTER&gt;&lt;/HTML&gt;&quot;));</b>
+<i>81</i>&nbsp;    }
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /**
+<i>84</i>&nbsp;     * Sets the card label to be shown below each card
+<i>85</i>&nbsp;     * @param owners  The label values or null value to clear the labels
+<i>86</i>&nbsp;     */
+<i>87</i>&nbsp;    public void setSingleCardLabel(List&lt;String&gt; owners){
+<b class="nc"><i>88</i>&nbsp;        if(labelContainer==null) {</b>
+<b class="nc"><i>89</i>&nbsp;            labelContainer = new PPanelContainer();</b>
+<b class="nc"><i>90</i>&nbsp;            labelContainer.setBounds(0, 225, bodyContainer.getWidth(), 30);</b>
+<b class="nc"><i>91</i>&nbsp;            labelContainer.setLayout(new GridLayout(1, 3, 10, 0));</b>
+<b class="nc"><i>92</i>&nbsp;            bodyContainer.add(labelContainer);</b>
+<i>93</i>&nbsp;
+<b class="nc"><i>94</i>&nbsp;            for(String owner: owners){</b>
+<b class="nc"><i>95</i>&nbsp;                PLabel cardLabel = new PLabel(owner);</b>
+<b class="nc"><i>96</i>&nbsp;                cardLabel.setFontSize(25);</b>
+<b class="nc"><i>97</i>&nbsp;                cardLabel.setForeground(new Color(186, 164, 154));</b>
+<b class="nc"><i>98</i>&nbsp;                labelContainer.add(cardLabel);</b>
+<b class="nc"><i>99</i>&nbsp;            }</b>
+<i>100</i>&nbsp;        }
+<i>101</i>&nbsp;    }
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * Adds the switcher to the container in a default position with a single selection action listener
+<i>106</i>&nbsp;     * @param visibleCards      All the cards to be added to the switcher
+<i>107</i>&nbsp;     * @param selectable        True if a single card can be selected, otherwise false
+<i>108</i>&nbsp;     */
+<i>109</i>&nbsp;    public void showSwitcher(List&lt;Card&gt; visibleCards,boolean selectable) {
+<b class="nc"><i>110</i>&nbsp;        switcherVisibility=true;</b>
+<b class="nc"><i>111</i>&nbsp;        bodyContainer.add(cardContainer);</b>
+<i>112</i>&nbsp;
+<b class="nc"><i>113</i>&nbsp;        for (Card card : visibleCards) {</b>
+<b class="nc"><i>114</i>&nbsp;            Image scaledImage = Configurator.getCardImage(card.getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>115</i>&nbsp;            PButton cardButton = new PButton(scaledImage);</b>
+<b class="nc"><i>116</i>&nbsp;            cardContainer.add(cardButton);</b>
+<b class="nc"><i>117</i>&nbsp;            cardButton.addMouseListener(new CardMouseListener(card, this, selectable));</b>
+<b class="nc"><i>118</i>&nbsp;        }</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * Adds the switcher to the container in a default position with a multiple selection action listener
+<i>123</i>&nbsp;     * The switcher contains all the cards except a specified set of cards
+<i>124</i>&nbsp;     *
+<i>125</i>&nbsp;     * @param chosenCards   The cards not to be shown
+<i>126</i>&nbsp;     * @param numCards      The number of cards to be selected
+<i>127</i>&nbsp;     */
+<i>128</i>&nbsp;    public void showSwitcher(List&lt;Card&gt; chosenCards,int numCards) {
+<b class="nc"><i>129</i>&nbsp;        switcherVisibility=true;</b>
+<b class="nc"><i>130</i>&nbsp;        bodyContainer.add(cardContainer);</b>
+<i>131</i>&nbsp;
+<b class="nc"><i>132</i>&nbsp;        List&lt;Card&gt; allCardList = Configurator.getAllCards();</b>
+<b class="nc"><i>133</i>&nbsp;        allCardList.removeAll(chosenCards);</b>
+<b class="nc"><i>134</i>&nbsp;        for (Card card : allCardList) {</b>
+<b class="nc"><i>135</i>&nbsp;            Image scaledImage = Configurator.getCardImage(card.getName()).getScaledInstance(82, 138, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>136</i>&nbsp;            PButton cardButton = new PButton(scaledImage);</b>
+<b class="nc"><i>137</i>&nbsp;            cardContainer.add(cardButton);</b>
+<b class="nc"><i>138</i>&nbsp;            cardButton.addMouseListener(new CardMouseListener(card, this, chosenCards, numCards));</b>
+<b class="nc"><i>139</i>&nbsp;        }</b>
+<i>140</i>&nbsp;    }
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    /**
+<i>143</i>&nbsp;     * Adds the card details container to the default container in a default position
+<i>144</i>&nbsp;     * if the switcher has already been added.
+<i>145</i>&nbsp;     */
+<i>146</i>&nbsp;    public void showCardDetails() {
+<b class="nc"><i>147</i>&nbsp;        if(!switcherVisibility)</b>
+<i>148</i>&nbsp;            return;
+<b class="nc"><i>149</i>&nbsp;        bodyContainer.add(cardDetailsContainer);</b>
+<i>150</i>&nbsp;    }
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;    /**
+<i>154</i>&nbsp;     * The mouse event manager for the card switcher
+<i>155</i>&nbsp;     */
+<i>156</i>&nbsp;    public class CardMouseListener implements MouseListener {
+<i>157</i>&nbsp;        private final Card card;
+<i>158</i>&nbsp;        private final CardSwitcher cardSwitcher;
+<i>159</i>&nbsp;        private boolean multipleSelection;
+<i>160</i>&nbsp;        private boolean singleSelection;
+<i>161</i>&nbsp;        private int numCards;
+<i>162</i>&nbsp;        private List&lt;Card&gt; chosenCards;
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;        /**
+<i>165</i>&nbsp;         * Constructor: build a CardMouseListener with multiple selection enabled
+<i>166</i>&nbsp;         *
+<i>167</i>&nbsp;         * @param card         The managed card
+<i>168</i>&nbsp;         * @param cardSwitcher The card switcher to be controlled
+<i>169</i>&nbsp;         * @param numCards     The number of cards to be selected
+<i>170</i>&nbsp;         */
+<b class="nc"><i>171</i>&nbsp;        public CardMouseListener(Card card, CardSwitcher cardSwitcher, List&lt;Card&gt; chosenCards, int numCards) {</b>
+<b class="nc"><i>172</i>&nbsp;            this.multipleSelection = true;</b>
+<b class="nc"><i>173</i>&nbsp;            this.singleSelection = false;</b>
+<b class="nc"><i>174</i>&nbsp;            this.card = card;</b>
+<b class="nc"><i>175</i>&nbsp;            this.cardSwitcher=cardSwitcher;</b>
+<b class="nc"><i>176</i>&nbsp;            this.chosenCards = chosenCards;</b>
+<b class="nc"><i>177</i>&nbsp;            this.numCards = numCards;</b>
+<i>178</i>&nbsp;        }
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;        /**
+<i>181</i>&nbsp;         * Constructor: build a CardMouseListener with single selection
+<i>182</i>&nbsp;         * @param card                  The managed card
+<i>183</i>&nbsp;         * @param cardSwitcher          The card switcher to be controlled
+<i>184</i>&nbsp;         * @param selectable            True to enable single selection, otherwise false
+<i>185</i>&nbsp;         */
+<b class="nc"><i>186</i>&nbsp;        public CardMouseListener(Card card, CardSwitcher cardSwitcher, boolean selectable) {</b>
+<b class="nc"><i>187</i>&nbsp;            this.multipleSelection = false;</b>
+<b class="nc"><i>188</i>&nbsp;            this.singleSelection = selectable;</b>
+<b class="nc"><i>189</i>&nbsp;            this.card = card;</b>
+<b class="nc"><i>190</i>&nbsp;            this.cardSwitcher=cardSwitcher;</b>
+<i>191</i>&nbsp;        }
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;        /**
+<i>194</i>&nbsp;         * Mouse on-card-click manager: if multiple selection is enabled update the guiView, otherwise
+<i>195</i>&nbsp;         * if single selection is enabled update the guiView, otherwise do nothing
+<i>196</i>&nbsp;         * @param e The mouse event
+<i>197</i>&nbsp;         */
+<i>198</i>&nbsp;        public void mouseClicked(MouseEvent e) {
+<b class="nc"><i>199</i>&nbsp;            if (multipleSelection) {</b>
+<b class="nc"><i>200</i>&nbsp;                multipleSelection = false;</b>
+<b class="nc"><i>201</i>&nbsp;                chosenCards.add(card);</b>
+<b class="nc"><i>202</i>&nbsp;                guiView.printCards(chosenCards, numCards);</b>
+<i>203</i>&nbsp;            } else {
+<b class="nc"><i>204</i>&nbsp;                if (singleSelection) {</b>
+<b class="nc"><i>205</i>&nbsp;                    singleSelection = false;</b>
+<b class="nc"><i>206</i>&nbsp;                    guiView.showLoading();</b>
+<b class="nc"><i>207</i>&nbsp;                    (new Thread(() -&gt; guiView.getServerHandler().sendPlayerCard(card))).start();</b>
+<i>208</i>&nbsp;                }
+<i>209</i>&nbsp;
+<i>210</i>&nbsp;            }
+<i>211</i>&nbsp;        }
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;        /**
+<i>214</i>&nbsp;         * Mouse on-card-press manager: same as on-card-click
+<i>215</i>&nbsp;         * @param e The mouse event
+<i>216</i>&nbsp;         */
+<i>217</i>&nbsp;        public void mousePressed(MouseEvent e) {
+<b class="nc"><i>218</i>&nbsp;            mouseClicked(e);</b>
+<i>219</i>&nbsp;        }
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;        /**
+<i>222</i>&nbsp;         * Do nothing
+<i>223</i>&nbsp;         * @param e The mouse event
+<i>224</i>&nbsp;         */
+<i>225</i>&nbsp;        public void mouseReleased(MouseEvent e) {}
+<i>226</i>&nbsp;
+<i>227</i>&nbsp;        /**
+<i>228</i>&nbsp;         * Mouse-entered-card manager: adds the details to the card switcher
+<i>229</i>&nbsp;         * @param e The mouse event
+<i>230</i>&nbsp;         */
+<i>231</i>&nbsp;        public void mouseEntered(MouseEvent e) {
+<b class="nc"><i>232</i>&nbsp;            cardSwitcher.setDetails(card);</b>
+<i>233</i>&nbsp;        }
+<i>234</i>&nbsp;
+<i>235</i>&nbsp;        /**
+<i>236</i>&nbsp;         * Mouse-exited-card manager: clear the details
+<i>237</i>&nbsp;         * @param e The mouse event
+<i>238</i>&nbsp;         */
+<i>239</i>&nbsp;        public void mouseExited(MouseEvent e) {
+<b class="nc"><i>240</i>&nbsp;            cardSwitcher.setDetails(null);</b>
+<i>241</i>&nbsp;        }
+<i>242</i>&nbsp;    }
+<i>243</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-17 19:54</div>
+</div>
+</body>
+</html>

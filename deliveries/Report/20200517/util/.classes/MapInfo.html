@@ -1,0 +1,255 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MapInfo</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MapInfo (util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MapInfo</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (10/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87,8%
+  </span>
+  <span class="absValue">
+    (36/ 41)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package util;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import model.Cell;
+<i>4</i>&nbsp;import model.Game;
+<i>5</i>&nbsp;import model.Player;
+<i>6</i>&nbsp;import model.Worker;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.io.Serializable;
+<i>9</i>&nbsp;import java.util.ArrayList;
+<i>10</i>&nbsp;import java.util.List;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;/**
+<i>13</i>&nbsp; * A summary of the game map information
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;public class MapInfo implements Serializable {
+<i>16</i>&nbsp;    private String[][] cellColorMatrix;
+<i>17</i>&nbsp;    private Genre[][] cellGenreMatrix;
+<i>18</i>&nbsp;    private Cell[][] cellsInfoMatrix;
+<i>19</i>&nbsp;    private List&lt;String&gt; playerNames;
+<i>20</i>&nbsp;    private List&lt;String&gt; colors;
+<i>21</i>&nbsp;    private List&lt;String&gt; cards;
+<i>22</i>&nbsp;    private PlayerColor currentPlayerColor;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * Constructor: build a map info synthesis
+<i>26</i>&nbsp;     *
+<i>27</i>&nbsp;     * @param game The game
+<i>28</i>&nbsp;     */
+<b class="fc"><i>29</i>&nbsp;    public MapInfo(Game game){</b>
+<b class="fc"><i>30</i>&nbsp;        generateInfo(game);</b>
+<b class="fc"><i>31</i>&nbsp;    }</b>
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * Constructor: build a map info synthesis
+<i>35</i>&nbsp;     *
+<i>36</i>&nbsp;     * @param game      The game
+<i>37</i>&nbsp;     * @param color     The color of the current player
+<i>38</i>&nbsp;     */
+<b class="nc"><i>39</i>&nbsp;    public MapInfo(Game game, PlayerColor color) {</b>
+<b class="nc"><i>40</i>&nbsp;        generateInfo(game);</b>
+<b class="nc"><i>41</i>&nbsp;        this.currentPlayerColor=color;</b>
+<b class="nc"><i>42</i>&nbsp;    }</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    /**
+<i>45</i>&nbsp;     * Generate map info
+<i>46</i>&nbsp;     * @param game  The game
+<i>47</i>&nbsp;     */
+<i>48</i>&nbsp;    private void generateInfo(Game game){
+<b class="fc"><i>49</i>&nbsp;        cellColorMatrix = new String[5][5];</b>
+<b class="fc"><i>50</i>&nbsp;        cellGenreMatrix = new Genre[5][5];</b>
+<b class="fc"><i>51</i>&nbsp;        cellsInfoMatrix = game.getBoard().getBoard();</b>
+<b class="fc"><i>52</i>&nbsp;        playerNames = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>53</i>&nbsp;        colors = new ArrayList&lt;&gt;();     // players color in the same order of playerNames</b>
+<b class="fc"><i>54</i>&nbsp;        cards = new ArrayList&lt;&gt;();      // players card in the same order of playerNames</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;        // Null initialization of the info matrix
+<b class="fc"><i>57</i>&nbsp;        for (int i = 0; i &lt; 5; i++) {</b>
+<b class="fc"><i>58</i>&nbsp;            for (int j = 0; j &lt; 5; j++) {</b>
+<b class="fc"><i>59</i>&nbsp;                cellColorMatrix[i][j] = null;</b>
+<b class="fc"><i>60</i>&nbsp;                cellGenreMatrix[i][j] = null;</b>
+<i>61</i>&nbsp;            }
+<i>62</i>&nbsp;        }
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;        // Fill matrix with correct information
+<b class="fc"><i>65</i>&nbsp;        for (Player player : game.getPlayers()) {</b>
+<b class="fc"><i>66</i>&nbsp;            for (Genre genre : Genre.values()) {</b>
+<b class="fc"><i>67</i>&nbsp;                Worker worker = player.getWorker(genre);</b>
+<b class="fc"><i>68</i>&nbsp;                Cell position = worker.getPosition();</b>
+<b class="fc"><i>69</i>&nbsp;                if (position != null) {</b>
+<b class="fc"><i>70</i>&nbsp;                    int row = position.getRow();</b>
+<b class="fc"><i>71</i>&nbsp;                    int column = position.getColumn();</b>
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;                    cellColorMatrix[row][column] = worker.getPlayerColor().toString();</b>
+<b class="fc"><i>74</i>&nbsp;                    cellGenreMatrix[row][column] = genre;</b>
+<b class="fc"><i>75</i>&nbsp;                    if (!colors.contains(cellColorMatrix[row][column])) {</b>
+<b class="fc"><i>76</i>&nbsp;                        playerNames.add(player.getNickname());</b>
+<b class="fc"><i>77</i>&nbsp;                        cards.add(player.getCard().getName());</b>
+<b class="fc"><i>78</i>&nbsp;                        colors.add(cellColorMatrix[row][column]);</b>
+<i>79</i>&nbsp;                    }
+<i>80</i>&nbsp;                }
+<i>81</i>&nbsp;            }
+<b class="fc"><i>82</i>&nbsp;        }</b>
+<b class="fc"><i>83</i>&nbsp;    }</b>
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /**
+<i>86</i>&nbsp;     * Gets the color of the current player if defined
+<i>87</i>&nbsp;     * @return The color of the current or the null value if it&#39;s not defined
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    public String getCurrentPlayerColor() {
+<b class="nc"><i>90</i>&nbsp;        return currentPlayerColor.toString();</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /**
+<i>94</i>&nbsp;     * Gets the color of the worker positioned in a specific cell
+<i>95</i>&nbsp;     *
+<i>96</i>&nbsp;     * @param row    The row of the cell
+<i>97</i>&nbsp;     * @param column The column of the cell
+<i>98</i>&nbsp;     * @return A string containing the name of the color or null value if the cell is empty
+<i>99</i>&nbsp;     */
+<i>100</i>&nbsp;    public String getColorAt(int row, int column) {
+<b class="fc"><i>101</i>&nbsp;        return cellColorMatrix[row][column] == null ? null : cellColorMatrix[row][column].toLowerCase();</b>
+<i>102</i>&nbsp;    }
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * Checks if a specific cell has a dome
+<i>106</i>&nbsp;     *
+<i>107</i>&nbsp;     * @param row    The row of the cell
+<i>108</i>&nbsp;     * @param column The column of the cell
+<i>109</i>&nbsp;     * @return True if the cell has a dome, otherwise false
+<i>110</i>&nbsp;     */
+<i>111</i>&nbsp;    public boolean getDomeAt(int row, int column) {
+<b class="fc"><i>112</i>&nbsp;        return cellsInfoMatrix[row][column].getDome();</b>
+<i>113</i>&nbsp;    }
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    /**
+<i>116</i>&nbsp;     * Gets the genre of the worker positioned in a specific cell
+<i>117</i>&nbsp;     *
+<i>118</i>&nbsp;     * @param row    The row of the cell
+<i>119</i>&nbsp;     * @param column The column of the cell
+<i>120</i>&nbsp;     * @return The genre of the worker or null value if the cell is empty
+<i>121</i>&nbsp;     */
+<i>122</i>&nbsp;    public Genre getGenreAt(int row, int column) {
+<b class="fc"><i>123</i>&nbsp;        return cellGenreMatrix[row][column];</b>
+<i>124</i>&nbsp;    }
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;    /**
+<i>127</i>&nbsp;     * Gets the floor number of a specific cell
+<i>128</i>&nbsp;     *
+<i>129</i>&nbsp;     * @param row    The row of the cell
+<i>130</i>&nbsp;     * @param column The column of the cell
+<i>131</i>&nbsp;     * @return The floor number
+<i>132</i>&nbsp;     */
+<i>133</i>&nbsp;    public int getFloorAt(int row, int column) {
+<b class="fc"><i>134</i>&nbsp;        return cellsInfoMatrix[row][column].getFloor();</b>
+<i>135</i>&nbsp;    }
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;    /**
+<i>138</i>&nbsp;     * Gets the number of the player positioned in the map
+<i>139</i>&nbsp;     *
+<i>140</i>&nbsp;     * @return The number of the player positioned in the map
+<i>141</i>&nbsp;     */
+<i>142</i>&nbsp;    public int getNumPlayers() {
+<b class="fc"><i>143</i>&nbsp;        return playerNames.size();</b>
+<i>144</i>&nbsp;    }
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;    /**
+<i>147</i>&nbsp;     * Gets a list containing the players positioned on the map sorted by turn
+<i>148</i>&nbsp;     *
+<i>149</i>&nbsp;     * @return a list containing the players positioned on the map sorted by turn
+<i>150</i>&nbsp;     */
+<i>151</i>&nbsp;    public List&lt;String&gt; getNicknames() {
+<b class="fc"><i>152</i>&nbsp;        return new ArrayList&lt;&gt;(playerNames);</b>
+<i>153</i>&nbsp;    }
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    /**
+<i>156</i>&nbsp;     * Gets a list containing the colors of the players positioned on the map sorted by turn
+<i>157</i>&nbsp;     *
+<i>158</i>&nbsp;     * @return a list containing the colors of the players positioned on the map sorted by turn
+<i>159</i>&nbsp;     */
+<i>160</i>&nbsp;    public List&lt;String&gt; getColors() {
+<b class="fc"><i>161</i>&nbsp;        return new ArrayList&lt;&gt;(colors);</b>
+<i>162</i>&nbsp;    }
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;    /**
+<i>165</i>&nbsp;     * Gets a list containing the cards of the players positioned on the map sorted by turn
+<i>166</i>&nbsp;     *
+<i>167</i>&nbsp;     * @return a list containing the cards of the players positioned on the map sorted by turn
+<i>168</i>&nbsp;     */
+<i>169</i>&nbsp;    public List&lt;String&gt; getCards() {
+<b class="fc"><i>170</i>&nbsp;        return new ArrayList&lt;&gt;(cards);</b>
+<i>171</i>&nbsp;    }
+<i>172</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-17 19:54</div>
+</div>
+</body>
+</html>

@@ -112,10 +112,10 @@ public class RoundActionsTest {
         RoundActions roundActions= new RoundActions();
         moveAction=new Action(ActionType.MOVE,Genre.FEMALE,Direction.SW,0);
         roundActions.add(moveAction);
-        assertNull(roundActions.canEnd());
+        assertNull(roundActions.findEnd());
         endAction= new Action(ActionType.END, Genre.FEMALE, Direction.NW, 0);
         roundActions.add(endAction);
-        assertEquals(endAction,roundActions.canEnd());
+        assertEquals(endAction,roundActions.findEnd());
     }
 
     @Test

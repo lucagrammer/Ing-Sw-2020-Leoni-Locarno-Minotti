@@ -1,0 +1,171 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FormElement</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">client.gui.elements</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FormElement (client.gui.elements)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FormElement</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 27)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package client.gui.elements;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import client.gui.components.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import javax.swing.*;
+<i>6</i>&nbsp;import java.awt.*;
+<i>7</i>&nbsp;import java.awt.event.ActionListener;
+<i>8</i>&nbsp;import java.util.ArrayList;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * A form with fields, error label and action button
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;public class FormElement {
+<i>14</i>&nbsp;    private final PPanelContainer bodyContainer;
+<i>15</i>&nbsp;    private final PLabelState errorLabel;
+<i>16</i>&nbsp;    private final ArrayList&lt;PTextField&gt; fieldList;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * Constructor: build an empty form
+<i>20</i>&nbsp;     *
+<i>21</i>&nbsp;     * @param formContainer The form container
+<i>22</i>&nbsp;     */
+<b class="nc"><i>23</i>&nbsp;    public FormElement(PPanelContainer formContainer) {</b>
+<b class="nc"><i>24</i>&nbsp;        bodyContainer = formContainer;</b>
+<b class="nc"><i>25</i>&nbsp;        fieldList = new ArrayList&lt;&gt;();</b>
+<i>26</i>&nbsp;
+<b class="nc"><i>27</i>&nbsp;        errorLabel = new PLabelState(&quot;&quot;);</b>
+<b class="nc"><i>28</i>&nbsp;        errorLabel.setErrorForeground();</b>
+<b class="nc"><i>29</i>&nbsp;        errorLabel.setBounds(0, 240, 840, 40);</b>
+<b class="nc"><i>30</i>&nbsp;        this.bodyContainer.add(errorLabel);</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * Adds a Button with text and Action Listener to the bottom of the form container
+<i>35</i>&nbsp;     * @param text              The text to be shown inside the button
+<i>36</i>&nbsp;     * @param actionListener    The Action Listener of the button
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    public void setActionButton(String text, ActionListener actionListener) {
+<b class="nc"><i>39</i>&nbsp;        Image scaledImage = (new ImageIcon(getClass().getResource(&quot;/GuiResources/btn_blue.png&quot;))).getImage().getScaledInstance(197, 50, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>40</i>&nbsp;        PButtonSigned button = new PButtonSigned(scaledImage,text);</b>
+<b class="nc"><i>41</i>&nbsp;        button.setBounds(322, 300, 197, 55);</b>
+<b class="nc"><i>42</i>&nbsp;        button.addActionListener(actionListener);</b>
+<b class="nc"><i>43</i>&nbsp;        bodyContainer.add(button);</b>
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * Adds a form to the form container
+<i>48</i>&nbsp;     *
+<i>49</i>&nbsp;     * @param position     The position of the form or a negative number to hide the component
+<i>50</i>&nbsp;     * @param formField    The name of the field
+<i>51</i>&nbsp;     * @param defaultValue The default value
+<i>52</i>&nbsp;     */
+<i>53</i>&nbsp;    public void addField(int position, String formField, String defaultValue) {
+<b class="nc"><i>54</i>&nbsp;        int yBound = 30 + position * 70;</b>
+<b class="nc"><i>55</i>&nbsp;        PLabel label = new PLabelForm(formField);</b>
+<b class="nc"><i>56</i>&nbsp;        label.setBounds(10, yBound, 400, 40);</b>
+<i>57</i>&nbsp;
+<b class="nc"><i>58</i>&nbsp;        PTextField textField = new PTextField(defaultValue);</b>
+<b class="nc"><i>59</i>&nbsp;        textField.setBounds(430, yBound, 250, 40);</b>
+<b class="nc"><i>60</i>&nbsp;        if (position &gt;= 0) {</b>
+<b class="nc"><i>61</i>&nbsp;            bodyContainer.add(label);</b>
+<b class="nc"><i>62</i>&nbsp;            bodyContainer.add(textField);</b>
+<i>63</i>&nbsp;        }
+<i>64</i>&nbsp;
+<b class="nc"><i>65</i>&nbsp;        fieldList.add(textField);</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * Sets the error message
+<i>70</i>&nbsp;     * @param errorMessage  The error message
+<i>71</i>&nbsp;     */
+<i>72</i>&nbsp;    public void setErrorMessage(String errorMessage){
+<b class="nc"><i>73</i>&nbsp;        errorLabel.setText(errorMessage);</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * Gets the value of a field
+<i>78</i>&nbsp;     * @param position The position of the field
+<i>79</i>&nbsp;     * @return  The value of the field
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;    public String getFieldValueAt(int position) {
+<b class="nc"><i>82</i>&nbsp;        PTextField field=fieldList.get(position);</b>
+<b class="nc"><i>83</i>&nbsp;        String value=&quot;&quot;;</b>
+<b class="nc"><i>84</i>&nbsp;        if(field!=null)</b>
+<b class="nc"><i>85</i>&nbsp;            value=field.getTextFieldText();</b>
+<b class="nc"><i>86</i>&nbsp;        return value;</b>
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-17 19:54</div>
+</div>
+</body>
+</html>
