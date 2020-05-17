@@ -3,6 +3,7 @@ package client.gui.elements;
 import client.GuiView;
 import client.gui.components.*;
 import model.Cell;
+import util.Action;
 import util.*;
 
 import javax.swing.*;
@@ -26,6 +27,12 @@ public class MapElement {
     private PButton[][] cells;
     private ArrayList<PButton> actionButtons;
     private boolean commandsVisibility;
+
+    private MapInfo mapInfo;
+    private Boolean actionPerformed;
+    private RoundActions possibleActions;
+    private ActionType selectedActionType;
+    private Genre selectedGenre;
 
     /**
      * Constructor: build a MapElement
@@ -108,6 +115,7 @@ public class MapElement {
      * @param mapInfo The information about the map
      */
     public void showMap(MapInfo mapInfo) {
+        this.mapInfo = mapInfo;
         cells = new PButton[5][5];
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -159,17 +167,15 @@ public class MapElement {
      * @param forbiddenCells The set of forbidden cells
      * @param genre          The genre of the worker to be positioned
      */
-    public void enableCellSelection(List<Cell> forbiddenCells, Genre genre) {
+    public void enableFirstPositionSelection(List<Cell> forbiddenCells, Genre genre) {
+        actionPerformed = false;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 Cell currentCell = new Cell(i, j);
-                if (forbiddenCells.contains(currentCell)) {
-                    cells[i][j].addActionListener((ev) -> (new Thread(() -> setErrorMessage("Invalid choice. Try again."))).start());
+                if (!forbiddenCells.contains(currentCell)) {
+                    cells[i][j].addActionListener(new FirstPositionListener(genre, currentCell));
                 } else {
-                    cells[i][j].addActionListener((ev) -> (new Thread(() -> {
-                        setErrorMessage("");
-                        guiView.getServerHandler().sendPlayerPosition(genre, currentCell);
-                    })).start());
+                    cells[i][j].addActionListener(new FirstPositionListener());
                 }
             }
         }
@@ -207,21 +213,76 @@ public class MapElement {
      *
      * @param possibleActions The possible actions to be allowed
      */
-    public void enableActions(RoundActions possibleActions) {
+    public void enableActionTypeSelection(RoundActions possibleActions) {
         if (!commandsVisibility)
             showCommands();
 
+        this.possibleActions = possibleActions;
+        this.selectedActionType = null;
         setHeading("Choose your action");
         int index = 0;
         for (ActionType actionType : ActionType.values()) {
             if (!actionType.equals(ActionType.LOSE)) {
-                if (possibleActions.contains(actionType)) {
-                    actionButtons.get(index).addActionListener(new AllowedActionListener(actionType));
-                } else {
-                    actionButtons.get(index).addActionListener(new ForbiddenActionListener(actionType));
-                }
+                removeAllActionListener(actionButtons.get(index));
+                boolean allowed = possibleActions.contains(actionType);
+                actionButtons.get(index).addActionListener(new ActionTypeListener(actionType, allowed));
                 index++;
             }
+        }
+    }
+
+    public void enableGenreSelection(ActionType actionType) {
+        this.selectedActionType = actionType;
+        this.selectedGenre = null;
+        if (actionType == ActionType.END) {
+            (new Thread(() -> guiView.getServerHandler().sendAction(possibleActions.findEnd()))).start();
+            return;
+        }
+
+        setHeading("Select one of your workers");
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                removeAllActionListener(cells[i][j]);
+                String currentColor = mapInfo.getColorAt(i, j);
+                boolean allowedWorker = currentColor != null && currentColor.equalsIgnoreCase(mapInfo.getCurrentPlayerColor());
+                if (allowedWorker) {
+                    Genre currentGenre = mapInfo.getGenreAt(i, j);
+                    if (possibleActions.findGenre(selectedActionType, currentGenre)) {
+                        cells[i][j].addActionListener(new GenreListener(currentGenre, i, j));
+                    } else {
+                        cells[i][j].addActionListener(new GenreListener());
+                    }
+                } else {
+                    cells[i][j].addActionListener(new GenreListener());
+                }
+            }
+        }
+    }
+
+    private void enableFinalCell(Genre genre, int row, int column) {
+        this.selectedGenre = genre;
+        this.actionPerformed = false;
+
+        setHeading("Select one of neighboring cells");
+        Cell workerCell = new Cell(row, column);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                removeAllActionListener(cells[i][j]);
+                Cell currentCell = new Cell(i, j);
+                Direction direction = workerCell.calculateDirection(currentCell);
+                Action theAction = possibleActions.find(selectedActionType, selectedGenre, direction);
+                if (theAction != null) {
+                    cells[i][j].addActionListener(new FinalCellListener(theAction));
+                } else {
+                    cells[i][j].addActionListener(new FinalCellListener());
+                }
+            }
+        }
+    }
+
+    private void removeAllActionListener(PButton pButton) {
+        for (ActionListener act : pButton.getActionListeners()) {
+            pButton.removeActionListener(act);
         }
     }
 
@@ -235,47 +296,45 @@ public class MapElement {
         commandsVisibility = true;
     }
 
-    /**
-     * Listener of not allowed actions
-     */
-    public class ForbiddenActionListener implements ActionListener {
-        private final ActionType notAllowedType;
 
-        /**
-         * Constructor: build a forbidden action type listener
-         *
-         * @param notAllowedType The not allowed action type
-         */
-        public ForbiddenActionListener(ActionType notAllowedType) {
-            this.notAllowedType = notAllowedType;
+    public class ActionTypeListener implements ActionListener {
+        private final ActionType actionType;
+        private final boolean allowed;
+
+        public ActionTypeListener(ActionType actionType, boolean allowed) {
+            this.actionType = actionType;
+            this.allowed = allowed;
         }
 
-
-        /**
-         * Adds the error message to the state label
-         *
-         * @param e The event to be processed
-         */
         public void actionPerformed(ActionEvent e) {
-            setErrorMessage(notAllowedType.name() + " is not allowed");
+            if (selectedActionType == null) {
+                if (allowed) {
+                    setErrorMessage("");
+                    enableGenreSelection(actionType);
+                } else {
+                    setErrorMessage(actionType.name() + " is not allowed");
+                }
+            } else {
+                setErrorMessage("You have already chosen your action type");
+            }
         }
     }
 
-    /**
-     * Listener of allowed round actions
-     */
-    public class AllowedActionListener implements ActionListener {
-        private final ActionType actionType;
+    public class GenreListener implements ActionListener {
+        private final boolean selectable;
+        private Genre genre;
+        private int row, column;
 
-        /**
-         * Constructor: build a allowed action type listener
-         *
-         * @param actionType The allowed action type
-         */
-        public AllowedActionListener(ActionType actionType) {
-            this.actionType = actionType;
+        public GenreListener(Genre genre, int row, int column) {
+            this.genre = genre;
+            this.row = row;
+            this.column = column;
+            this.selectable = true;
         }
 
+        public GenreListener() {
+            this.selectable = false;
+        }
 
         /**
          * Invoked when an action occurs
@@ -283,7 +342,80 @@ public class MapElement {
          * @param e The event to be processed
          */
         public void actionPerformed(ActionEvent e) {
-            System.out.println(actionType);
+            if (selectedGenre == null) {
+                if (selectable) {
+                    setErrorMessage("");
+                    enableFinalCell(genre, row, column);
+                } else {
+                    setErrorMessage("Not allowed selection");
+                }
+            } else {
+                setErrorMessage("You have already chosen your worker");
+            }
+        }
+    }
+
+    public class FinalCellListener implements ActionListener {
+        private final boolean selectable;
+        private Action action;
+
+        public FinalCellListener(Action action) {
+            this.action = action;
+            this.selectable = true;
+        }
+
+        public FinalCellListener() {
+            this.selectable = false;
+        }
+
+        /**
+         * Invoked when an action occurs
+         *
+         * @param e The event to be processed
+         */
+        public synchronized void actionPerformed(ActionEvent e) {
+            if (!actionPerformed) {
+                if (selectable) {
+                    actionPerformed = true;
+                    setErrorMessage("");
+                    (new Thread(() -> guiView.getServerHandler().sendAction(action))).start();
+                } else {
+                    setErrorMessage("Invalid choice. Try again.");
+                }
+            }
+        }
+    }
+
+    public class FirstPositionListener implements ActionListener {
+        private final boolean selectable;
+        private Genre genre;
+        private Cell currentCell;
+
+        public FirstPositionListener(Genre genre, Cell currentCell) {
+            this.genre = genre;
+            this.currentCell = currentCell;
+            this.selectable = true;
+        }
+
+        public FirstPositionListener() {
+            this.selectable = false;
+        }
+
+        /**
+         * Invoked when an action occurs.
+         *
+         * @param e the event to be processed
+         */
+        public void actionPerformed(ActionEvent e) {
+            if (!actionPerformed) {
+                if (!selectable) {
+                    setErrorMessage("Invalid choice. Try again.");
+                } else {
+                    actionPerformed = true;
+                    setErrorMessage("");
+                    (new Thread(() -> guiView.getServerHandler().sendPlayerPosition(genre, currentCell))).start();
+                }
+            }
         }
     }
 }

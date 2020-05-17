@@ -155,7 +155,8 @@ public class Controller {
                     virtualView.sendToEveryoneExcept(new ShowMap(new MapInfo(game), currentPlayer.getNickname(), loserNickname), currentPlayer);
 
                     int currentActionsNumber = currentPlayer.getRoundActions().getActionList().size();
-                    virtualView.getClientHandlerByNickname(currentPlayer.getNickname()).send(new Turn(possibleActions, new MapInfo(game), loserNickname));
+                    MapInfo mapInfo = new MapInfo(game, currentPlayer.getColor());
+                    virtualView.getClientHandlerByNickname(currentPlayer.getNickname()).send(new Turn(possibleActions, mapInfo, loserNickname));
                     loserNickname = null;
                     synchronized (this) {
                         while (currentPlayer.getRoundActions().getActionList().size() <= currentActionsNumber && isRunning()) {

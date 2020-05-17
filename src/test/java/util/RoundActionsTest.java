@@ -1,10 +1,9 @@
 package util;
 
-import java.util.List;
-
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -112,10 +111,10 @@ public class RoundActionsTest {
         RoundActions roundActions= new RoundActions();
         moveAction=new Action(ActionType.MOVE,Genre.FEMALE,Direction.SW,0);
         roundActions.add(moveAction);
-        assertNull(roundActions.canEnd());
-        endAction= new Action(ActionType.END, Genre.FEMALE, Direction.NW, 0);
+        assertNull(roundActions.findEnd());
+        endAction = new Action(ActionType.END, Genre.FEMALE, Direction.NW, 0);
         roundActions.add(endAction);
-        assertEquals(endAction,roundActions.canEnd());
+        assertEquals(endAction, roundActions.findEnd());
     }
 
     @Test

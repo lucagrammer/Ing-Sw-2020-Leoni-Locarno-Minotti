@@ -201,12 +201,28 @@ public class RoundActions implements Serializable {
         return null;
     }
 
+
+    /**
+     * Finds the specified actions
+     *
+     * @param action    The action type of the action to be found
+     * @param genre     The genre of the action to be found
+     * @param direction The direction of the action to be found
+     * @return The action or null value
+     */
+    public Action find(ActionType action, Genre genre, Direction direction) {
+        if (direction == null || genre == null || action == null)
+            return null;
+        else
+            return find(action.toString(), genre.toString().substring(0, 1), direction.toString());
+    }
+
     /**
      * Tests if a player can end his turn
      *
      * @return The end action or the null value
      */
-    public Action canEnd() {
+    public Action findEnd() {
         for (Action a : getActionList()) {
             if (a.getActionType().equals(ActionType.END)) {
                 return a;
@@ -255,5 +271,15 @@ public class RoundActions implements Serializable {
      */
     public boolean mustEnd() {
         return getActionList().size() == 1 && getActionList().get(0).getActionType().equals(ActionType.END);
+    }
+
+    //TODO sicuramente action type passatogli non è END o LOSE
+    public boolean findGenre(ActionType actionType, Genre genre) {
+        for (Action a : getActionList()) {
+            if (a.getActionType().equals(actionType) && a.getGenre().equals(genre)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
