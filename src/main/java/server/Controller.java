@@ -433,7 +433,7 @@ public class Controller {
      */
     public void setAsDisconnected(String nickname) {
         Player disconnectedPlayer = game.getPlayerByNickname(nickname);
-        if (disconnectedPlayer != null && disconnectedPlayer.isLoser()) {
+        if (disconnectedPlayer != null && (disconnectedPlayer.isLoser() || game.hasWinner())) {
             disconnectedPlayer.setConnected(false);
             return;
         }
