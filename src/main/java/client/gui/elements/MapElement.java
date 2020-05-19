@@ -27,12 +27,14 @@ public class MapElement {
     private PButton[][] cells;
     private ArrayList<PButton> actionButtons;
     private boolean commandsVisibility;
+    private final PPanelContainer sideBar;
 
     private MapInfo mapInfo;
     private Boolean actionPerformed;
     private RoundActions possibleActions;
     private ActionType selectedActionType;
     private Genre selectedGenre;
+    private boolean myTurn;
 
     /**
      * Constructor: build a MapElement
@@ -65,7 +67,7 @@ public class MapElement {
         messageLabel.setBounds(0, 50, 840, 25);
         bodyContainer.add(messageLabel);
 
-        PPanelContainer sideBar = new PPanelContainer();
+        sideBar = new PPanelContainer();
         sideBar.setBounds(island.getWidth() + 20, 80, 324, 500);
         sideBar.setLayout(null);
         bodyContainer.add(sideBar);
@@ -216,7 +218,9 @@ public class MapElement {
     public void enableActionTypeSelection(RoundActions possibleActions) {
         if (!commandsVisibility)
             showCommands();
+        setErrorMessage("");
 
+        this.myTurn = true;
         this.possibleActions = possibleActions;
         this.selectedActionType = null;
         setHeading("Choose your action");
@@ -296,6 +300,10 @@ public class MapElement {
         commandsVisibility = true;
     }
 
+    public void cleanSideBar() {
+        sideBar.removeAll();
+
+    }
 
     public class ActionTypeListener implements ActionListener {
         private final ActionType actionType;
@@ -307,6 +315,10 @@ public class MapElement {
         }
 
         public void actionPerformed(ActionEvent e) {
+            if (!myTurn) {
+                setErrorMessage("It's not your turn!");
+                return;
+            }
             if (selectedActionType == null) {
                 if (allowed) {
                     setErrorMessage("");
@@ -377,6 +389,7 @@ public class MapElement {
             if (!actionPerformed) {
                 if (selectable) {
                     actionPerformed = true;
+                    myTurn = false;
                     setErrorMessage("");
                     (new Thread(() -> guiView.getServerHandler().sendAction(action))).start();
                 } else {

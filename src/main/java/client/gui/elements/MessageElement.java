@@ -26,11 +26,4 @@ public class MessageElement {
     public void setMessage(String message){
         label.setText(message);
     }
-
-    /**
-     * Adds the loading icon to the message
-     */
-    public void showLoadingIcon(){
-        //TODO clessidra
-    }
 }

@@ -1,5 +1,6 @@
 package client;
 
+import client.gui.components.PButton;
 import client.gui.components.PLabel;
 import client.gui.components.PPanelBackground;
 import client.gui.components.PPanelContainer;
@@ -7,10 +8,7 @@ import client.gui.elements.*;
 import model.Card;
 import model.Cell;
 import model.Player;
-import util.Configurator;
-import util.Genre;
-import util.MapInfo;
-import util.RoundActions;
+import util.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -134,7 +132,6 @@ public class GuiView implements View {
 
             MessageElement messageElement=new MessageElement(bodyContainer);
             messageElement.setMessage("You will be added to the first available game...");
-            messageElement.showLoadingIcon();
 
             applyChangesTo(bodyContainer);
         });
@@ -170,7 +167,6 @@ public class GuiView implements View {
 
             MessageElement messageElement=new MessageElement(bodyContainer);
             messageElement.setMessage("The game will start shortly, get ready!");
-            messageElement.showLoadingIcon();
 
             applyChangesTo(bodyContainer);
         });
@@ -468,7 +464,42 @@ public class GuiView implements View {
      * @param youWin         True if the player has win
      */
     public void showGameEndMessage(String winnerNickname, boolean youWin) {
+        SwingUtilities.invokeLater(() -> {
+            mapElement.cleanSideBar();
+            mapElement.setHeading(winnerNickname + " is the winner!");
 
+            Image playAgain = (new ImageIcon(getClass().getResource("/GuiResources/play_again.png")))
+                    .getImage().getScaledInstance(159, 159, Image.SCALE_SMOOTH);
+            PButton playAgainButton = new PButton(playAgain);
+            playAgainButton.setBounds(598, 410, 159, 159);
+            bodyContainer.add(playAgainButton);
+            playAgainButton.addActionListener((ev) -> {
+                mainFrame.dispose();
+                (new Thread(() -> serverHandler.sendNewGame(true))).start();
+            });
+
+            Image endGameScaled;
+            String message;
+            if (youWin) {
+                endGameScaled = (new ImageIcon(getClass().getResource("/GuiResources/win.png")))
+                        .getImage().getScaledInstance(184, 260, Image.SCALE_SMOOTH);
+                message = "Congratulations!";
+            } else {
+                endGameScaled = (new ImageIcon(getClass().getResource("/GuiResources/lose.png")))
+                        .getImage().getScaledInstance(184, 260, Image.SCALE_SMOOTH);
+                message = "You lose!";
+            }
+
+            PButton endGame = new PButton(endGameScaled);
+            endGame.setBounds(586, 140, 184, 260);
+            PLabel endMessage = new PLabel(message);
+            endMessage.setFontSize(20);
+            endMessage.setBounds(27, 19, 130, 21);
+            endGame.setLayout(null);
+            endGame.add(endMessage);
+            bodyContainer.add(endGame);
+
+        });
     }
 
     /**
@@ -481,11 +512,18 @@ public class GuiView implements View {
             clear(bodyContainer);
 
             PLabel label = new PLabel("GAME OVER: " + disconnectedNickname + " has disconnected.");
-            label.setBounds(0, 0, 840, 450);
+            label.setBounds(0, 0, 840, 450 / 2);
             bodyContainer.add(label);
-            // TODO: mettere new game
-            //serverHandler.sendNewGame(choice.equalsIgnoreCase("yes"));
 
+            Image playAgain = (new ImageIcon(getClass().getResource("/GuiResources/play_again.png")))
+                    .getImage().getScaledInstance(159, 159, Image.SCALE_SMOOTH);
+            PButton playAgainButton = new PButton(playAgain);
+            playAgainButton.setBounds(340, 450 / 2, 159, 159);
+            bodyContainer.add(playAgainButton);
+            playAgainButton.addActionListener((ev) -> {
+                mainFrame.dispose();
+                (new Thread(() -> serverHandler.sendNewGame(true))).start();
+            });
             applyChangesTo(bodyContainer);
         });
     }
