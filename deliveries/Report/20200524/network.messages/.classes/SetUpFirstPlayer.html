@@ -1,0 +1,148 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SetUpFirstPlayer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">network.messages</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SetUpFirstPlayer (network.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SetUpFirstPlayer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (3/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    69,2%
+  </span>
+  <span class="absValue">
+    (9/ 13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package network.messages;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import client.View;
+<i>4</i>&nbsp;import network.CVMessage;
+<i>5</i>&nbsp;import network.VCMessage;
+<i>6</i>&nbsp;import server.VirtualView;
+<i>7</i>&nbsp;import util.MessageType;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import java.io.Serializable;
+<i>10</i>&nbsp;import java.util.ArrayList;
+<i>11</i>&nbsp;import java.util.List;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;/**
+<i>14</i>&nbsp; * Message to manage the choice of the first player by the challenger
+<i>15</i>&nbsp; */
+<i>16</i>&nbsp;public class SetUpFirstPlayer implements Serializable, CVMessage, VCMessage {
+<i>17</i>&nbsp;    private final MessageType messageType;
+<i>18</i>&nbsp;    private List&lt;String&gt; nicknames;
+<i>19</i>&nbsp;    private String firstPlayerNickname;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /**
+<i>22</i>&nbsp;     * Server-side constructor: build a request message
+<i>23</i>&nbsp;     *
+<i>24</i>&nbsp;     * @param nicknames All the nicknames
+<i>25</i>&nbsp;     */
+<b class="fc"><i>26</i>&nbsp;    public SetUpFirstPlayer(List&lt;String&gt; nicknames) {</b>
+<b class="fc"><i>27</i>&nbsp;        messageType = MessageType.CV;</b>
+<b class="fc"><i>28</i>&nbsp;        this.nicknames = new ArrayList&lt;&gt;(nicknames);</b>
+<b class="fc"><i>29</i>&nbsp;    }</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * Client-side constructor: build a response message
+<i>33</i>&nbsp;     */
+<b class="fc"><i>34</i>&nbsp;    public SetUpFirstPlayer(String firstPlayerNickname) {</b>
+<b class="fc"><i>35</i>&nbsp;        messageType = MessageType.VC;</b>
+<b class="fc"><i>36</i>&nbsp;        this.firstPlayerNickname = firstPlayerNickname;</b>
+<b class="fc"><i>37</i>&nbsp;    }</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /**
+<i>40</i>&nbsp;     * Execute the request client-side
+<i>41</i>&nbsp;     *
+<i>42</i>&nbsp;     * @param view The recipient component
+<i>43</i>&nbsp;     */
+<i>44</i>&nbsp;    public void execute(View view) {
+<b class="nc"><i>45</i>&nbsp;        view.askFirstPlayer(nicknames);</b>
+<b class="nc"><i>46</i>&nbsp;    }</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /**
+<i>49</i>&nbsp;     * Execute the request server-side
+<i>50</i>&nbsp;     *
+<i>51</i>&nbsp;     * @param virtualView The recipient component
+<i>52</i>&nbsp;     */
+<i>53</i>&nbsp;    public void execute(VirtualView virtualView) {
+<b class="nc"><i>54</i>&nbsp;        virtualView.setFirstPlayer(firstPlayerNickname);</b>
+<b class="nc"><i>55</i>&nbsp;    }</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * Gets the message type
+<i>59</i>&nbsp;     *
+<i>60</i>&nbsp;     * @return The message type
+<i>61</i>&nbsp;     */
+<i>62</i>&nbsp;    public MessageType getType() {
+<b class="fc"><i>63</i>&nbsp;        return messageType;</b>
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 16:54</div>
+</div>
+</body>
+</html>

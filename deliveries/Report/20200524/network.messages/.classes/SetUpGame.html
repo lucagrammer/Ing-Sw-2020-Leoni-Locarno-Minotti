@@ -1,0 +1,167 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SetUpGame</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">network.messages</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SetUpGame (network.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SetUpGame</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (3/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    70,6%
+  </span>
+  <span class="absValue">
+    (12/ 17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package network.messages;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import client.View;
+<i>4</i>&nbsp;import network.CVMessage;
+<i>5</i>&nbsp;import network.SYSMessage;
+<i>6</i>&nbsp;import server.VirtualView;
+<i>7</i>&nbsp;import util.MessageType;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import java.io.Serializable;
+<i>10</i>&nbsp;import java.util.Date;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;/**
+<i>13</i>&nbsp; * Server connection message and exchange of player and game information
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;public class SetUpGame implements Serializable, CVMessage, SYSMessage {
+<i>16</i>&nbsp;    private final MessageType messageType;
+<i>17</i>&nbsp;    private String nickname;
+<i>18</i>&nbsp;    private String temporaryNickname;
+<i>19</i>&nbsp;    private Date birthDate;
+<i>20</i>&nbsp;    private int numPlayers;
+<i>21</i>&nbsp;    private boolean newGame;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    /**
+<i>24</i>&nbsp;     * Client-side constructor: build the response message
+<i>25</i>&nbsp;     *
+<i>26</i>&nbsp;     * @param nickname   The chosen nickname
+<i>27</i>&nbsp;     * @param birthDate  The birth date of the player
+<i>28</i>&nbsp;     * @param numPlayers The number of the players for the game
+<i>29</i>&nbsp;     */
+<b class="fc"><i>30</i>&nbsp;    public SetUpGame(String nickname, Date birthDate, int numPlayers) {</b>
+<b class="fc"><i>31</i>&nbsp;        this.messageType = MessageType.SYS;</b>
+<b class="fc"><i>32</i>&nbsp;        this.nickname = nickname;</b>
+<b class="fc"><i>33</i>&nbsp;        this.birthDate = birthDate;</b>
+<b class="fc"><i>34</i>&nbsp;        this.numPlayers = numPlayers;</b>
+<b class="fc"><i>35</i>&nbsp;    }</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * Server-side constructor: build the request
+<i>39</i>&nbsp;     *
+<i>40</i>&nbsp;     * @param newGame True if the player has to decide the number of players, otherwise false
+<i>41</i>&nbsp;     */
+<b class="fc"><i>42</i>&nbsp;    public SetUpGame(boolean newGame, String temporaryNickname) {</b>
+<b class="fc"><i>43</i>&nbsp;        this.messageType = MessageType.CV;</b>
+<b class="fc"><i>44</i>&nbsp;        this.newGame = newGame;</b>
+<b class="fc"><i>45</i>&nbsp;        this.temporaryNickname = temporaryNickname;</b>
+<b class="fc"><i>46</i>&nbsp;    }</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /**
+<i>49</i>&nbsp;     * Gets the message type
+<i>50</i>&nbsp;     *
+<i>51</i>&nbsp;     * @return The message type
+<i>52</i>&nbsp;     */
+<i>53</i>&nbsp;    public MessageType getType() {
+<b class="fc"><i>54</i>&nbsp;        return messageType;</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * Gets the temporary nickname of the user
+<i>59</i>&nbsp;     *
+<i>60</i>&nbsp;     * @return The temporary nickname
+<i>61</i>&nbsp;     */
+<i>62</i>&nbsp;    public String getTemporaryNickname() {
+<b class="nc"><i>63</i>&nbsp;        return temporaryNickname;</b>
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /**
+<i>67</i>&nbsp;     * Execute the request client-side
+<i>68</i>&nbsp;     *
+<i>69</i>&nbsp;     * @param view The recipient component
+<i>70</i>&nbsp;     */
+<i>71</i>&nbsp;    public void execute(View view) {
+<b class="nc"><i>72</i>&nbsp;        view.setUpGame(newGame);</b>
+<b class="nc"><i>73</i>&nbsp;    }</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    /**
+<i>76</i>&nbsp;     * Execute the request
+<i>77</i>&nbsp;     *
+<i>78</i>&nbsp;     * @param virtualView       The recipient component
+<i>79</i>&nbsp;     * @param temporaryUsername The temporary username of the user
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;    public void execute(VirtualView virtualView, String temporaryUsername) {
+<b class="nc"><i>82</i>&nbsp;        virtualView.setUpGame(temporaryUsername, nickname, birthDate, numPlayers);</b>
+<b class="nc"><i>83</i>&nbsp;    }</b>
+<i>84</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 16:54</div>
+</div>
+</body>
+</html>

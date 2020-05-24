@@ -1,0 +1,110 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: EnemyRules</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">server.rules</a> ]
+</div>
+
+<h1>Coverage Summary for Class: EnemyRules (server.rules)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EnemyRules</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package server.rules;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import model.Game;
+<i>4</i>&nbsp;import model.Player;
+<i>5</i>&nbsp;import util.RoundActions;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.io.Serializable;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * The regular enemy rules
+<i>11</i>&nbsp; */
+<b class="fc"><i>12</i>&nbsp;public class EnemyRules implements Serializable {</b>
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    /**
+<i>15</i>&nbsp;     * Fixes the enemy actions according to the enemy rules
+<i>16</i>&nbsp;     *
+<i>17</i>&nbsp;     * @param enemyPossibleActions The enemy actions to be fixed
+<i>18</i>&nbsp;     * @param game                 The game
+<i>19</i>&nbsp;     * @param player               The owner of the card that fixed the actions
+<i>20</i>&nbsp;     * @return The fixed enemy actions
+<i>21</i>&nbsp;     */
+<i>22</i>&nbsp;    public RoundActions fixEnemyActions(RoundActions enemyPossibleActions, Game game, Player player) {
+<b class="fc"><i>23</i>&nbsp;        RoundActions fixedActions = new RoundActions();</b>
+<b class="fc"><i>24</i>&nbsp;        fixedActions.add(enemyPossibleActions);</b>
+<b class="fc"><i>25</i>&nbsp;        return fixedActions;</b>
+<i>26</i>&nbsp;    }
+<i>27</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 16:54</div>
+</div>
+</body>
+</html>

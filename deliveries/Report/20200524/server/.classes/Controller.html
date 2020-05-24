@@ -1,0 +1,561 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Controller</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">server</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Controller (server)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Controller</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 171)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package server;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import model.Card;
+<i>4</i>&nbsp;import model.Cell;
+<i>5</i>&nbsp;import model.Game;
+<i>6</i>&nbsp;import model.Player;
+<i>7</i>&nbsp;import network.messages.*;
+<i>8</i>&nbsp;import util.*;
+<i>9</i>&nbsp;import util.exceptions.DisconnectionException;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.util.ArrayList;
+<i>12</i>&nbsp;import java.util.Date;
+<i>13</i>&nbsp;import java.util.List;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * Controller of the game: manages the game flow
+<i>17</i>&nbsp; */
+<i>18</i>&nbsp;public class Controller {
+<i>19</i>&nbsp;    private final Game game;
+<i>20</i>&nbsp;    private VirtualView virtualView;
+<i>21</i>&nbsp;    private Player currentPlayer;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    /**
+<i>24</i>&nbsp;     * Constructor: build a Controller
+<i>25</i>&nbsp;     *
+<i>26</i>&nbsp;     * @param game The game to be controlled
+<i>27</i>&nbsp;     */
+<b class="nc"><i>28</i>&nbsp;    public Controller(Game game) {</b>
+<b class="nc"><i>29</i>&nbsp;        this.game = game;</b>
+<i>30</i>&nbsp;    }
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    /**
+<i>33</i>&nbsp;     * Sets the virtual view to communicate with
+<i>34</i>&nbsp;     *
+<i>35</i>&nbsp;     * @param virtualView The virtual view to communicate with
+<i>36</i>&nbsp;     */
+<i>37</i>&nbsp;    public void setVirtualView(VirtualView virtualView) {
+<b class="nc"><i>38</i>&nbsp;        this.virtualView = virtualView;</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * Manages the whole game cards setup process from their selection to their assignment
+<i>43</i>&nbsp;     *
+<i>44</i>&nbsp;     * @throws InterruptedException   When the thread is interrupted
+<i>45</i>&nbsp;     * @throws DisconnectionException When the a blocking disconnection event happens
+<i>46</i>&nbsp;     */
+<i>47</i>&nbsp;    public void gameStarter() throws InterruptedException, DisconnectionException {
+<b class="nc"><i>48</i>&nbsp;        synchronized (this) {</b>
+<b class="nc"><i>49</i>&nbsp;            while (!gameCanStart() &amp;&amp; isRunning()) {</b>
+<b class="nc"><i>50</i>&nbsp;                this.wait();</b>
+<i>51</i>&nbsp;            }
+<b class="nc"><i>52</i>&nbsp;        }</b>
+<b class="nc"><i>53</i>&nbsp;        System.out.println(&quot;&gt; Status: Starting the game&quot;);</b>
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;        // Challenger chooses cards
+<b class="nc"><i>56</i>&nbsp;        List&lt;Player&gt; players = game.getPlayers();</b>
+<b class="nc"><i>57</i>&nbsp;        int randomNumber = (int) (Math.random() * (players.size()));</b>
+<b class="nc"><i>58</i>&nbsp;        Player challenger = players.get(randomNumber);</b>
+<b class="nc"><i>59</i>&nbsp;        virtualView.getClientHandlerByNickname(challenger.getNickname()).send(new SetUpGameCards(players.size()));</b>
+<b class="nc"><i>60</i>&nbsp;        System.out.println(&quot;&gt; Status: Waiting for chosen cards&quot;);</b>
+<b class="nc"><i>61</i>&nbsp;        synchronized (this) {</b>
+<b class="nc"><i>62</i>&nbsp;            while (!(areCardsChosen()) &amp;&amp; isRunning()) {</b>
+<b class="nc"><i>63</i>&nbsp;                this.wait();</b>
+<i>64</i>&nbsp;            }
+<b class="nc"><i>65</i>&nbsp;        }</b>
+<b class="nc"><i>66</i>&nbsp;        System.out.println(&quot;&gt; Status: Cards has been chosen&quot;);</b>
+<i>67</i>&nbsp;
+<b class="nc"><i>68</i>&nbsp;        List&lt;Card&gt; possibleChoices = game.getUsedCards();</b>
+<b class="nc"><i>69</i>&nbsp;        virtualView.sendToEveryone(new ShowGameCards(possibleChoices));</b>
+<i>70</i>&nbsp;
+<b class="nc"><i>71</i>&nbsp;        currentPlayer = game.getNextPlayer(challenger);</b>
+<b class="nc"><i>72</i>&nbsp;        manageCardChoice(possibleChoices);</b>
+<i>73</i>&nbsp;        // Show cards to everyone
+<b class="nc"><i>74</i>&nbsp;        virtualView.sendToEveryone(new ShowCardAssignment(game.getPlayers()));</b>
+<i>75</i>&nbsp;
+<b class="nc"><i>76</i>&nbsp;        manageFirstPlayerChoice(challenger);</b>
+<b class="nc"><i>77</i>&nbsp;        firstTurn();</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    /**
+<i>81</i>&nbsp;     * Manages the first turn: color setup and positioning of the workers
+<i>82</i>&nbsp;     *
+<i>83</i>&nbsp;     * @throws InterruptedException   When the thread is interrupted
+<i>84</i>&nbsp;     * @throws DisconnectionException When the a blocking disconnection event happens
+<i>85</i>&nbsp;     */
+<i>86</i>&nbsp;    private void firstTurn() throws InterruptedException, DisconnectionException {
+<i>87</i>&nbsp;        String currentNickname;
+<i>88</i>&nbsp;        ClientHandler currentClientHandler;
+<b class="nc"><i>89</i>&nbsp;        ArrayList&lt;String&gt; availableColors = PlayerColor.allColorsToString();</b>
+<i>90</i>&nbsp;
+<b class="nc"><i>91</i>&nbsp;        for (int i = 0; i &lt; game.getPlayers().size(); i++) {</b>
+<b class="nc"><i>92</i>&nbsp;            currentNickname = currentPlayer.getNickname();</b>
+<b class="nc"><i>93</i>&nbsp;            currentClientHandler = virtualView.getClientHandlerByNickname(currentNickname);</b>
+<b class="nc"><i>94</i>&nbsp;            System.out.println(&quot;&gt; Status: waiting for color choice of &quot; + currentPlayer.getNickname());</b>
+<i>95</i>&nbsp;
+<b class="nc"><i>96</i>&nbsp;            virtualView.sendToEveryoneExcept(new ShowMap(new MapInfo(game), currentNickname, null), currentPlayer);</b>
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;            // PlayerColor setup
+<b class="nc"><i>99</i>&nbsp;            currentClientHandler.send(new SetUpPlayerColor(availableColors));</b>
+<b class="nc"><i>100</i>&nbsp;            synchronized (this) {</b>
+<b class="nc"><i>101</i>&nbsp;                while (currentPlayer.getColor() == null &amp;&amp; isRunning()) {</b>
+<b class="nc"><i>102</i>&nbsp;                    this.wait();</b>
+<i>103</i>&nbsp;                }
+<b class="nc"><i>104</i>&nbsp;            }</b>
+<b class="nc"><i>105</i>&nbsp;            availableColors.remove(currentPlayer.getColor().toString());</b>
+<b class="nc"><i>106</i>&nbsp;            System.out.println(&quot;&gt; Player info: &quot; + currentNickname.toUpperCase() +</b>
+<b class="nc"><i>107</i>&nbsp;                    &quot;\n\tcolor: &quot; + currentPlayer.getColor());</b>
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;            // Position setup
+<b class="nc"><i>110</i>&nbsp;            for (Genre genre : Genre.values()) {</b>
+<i>111</i>&nbsp;                // Calculate forbidden cells
+<b class="nc"><i>112</i>&nbsp;                List&lt;Cell&gt; forbiddenCells = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>113</i>&nbsp;                for (Player player : game.getPlayers()) {</b>
+<b class="nc"><i>114</i>&nbsp;                    forbiddenCells.addAll(player.getOccupiedCells());</b>
+<b class="nc"><i>115</i>&nbsp;                }</b>
+<i>116</i>&nbsp;
+<b class="nc"><i>117</i>&nbsp;                currentClientHandler.send(new SetUpPlayerPosition(genre, forbiddenCells, new MapInfo(game)));</b>
+<b class="nc"><i>118</i>&nbsp;                synchronized (this) {</b>
+<b class="nc"><i>119</i>&nbsp;                    while (currentPlayer.getWorker(genre).getPosition() == null &amp;&amp; isRunning()) {</b>
+<b class="nc"><i>120</i>&nbsp;                        this.wait();</b>
+<i>121</i>&nbsp;                    }
+<b class="nc"><i>122</i>&nbsp;                }</b>
+<b class="nc"><i>123</i>&nbsp;                System.out.println(&quot;\t&quot; + genre.name().toLowerCase() + &quot; position: &quot; + currentPlayer.getWorker(genre).getPosition());</b>
+<i>124</i>&nbsp;            }
+<i>125</i>&nbsp;
+<b class="nc"><i>126</i>&nbsp;            currentPlayer = game.getNextPlayer(currentPlayer);</b>
+<i>127</i>&nbsp;        }
+<b class="nc"><i>128</i>&nbsp;        game();</b>
+<i>129</i>&nbsp;    }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    /**
+<i>132</i>&nbsp;     * Manages the turns and calculate all the possible actions
+<i>133</i>&nbsp;     *
+<i>134</i>&nbsp;     * @throws InterruptedException   When the thread is interrupted
+<i>135</i>&nbsp;     * @throws DisconnectionException When the a blocking disconnection event happens
+<i>136</i>&nbsp;     */
+<i>137</i>&nbsp;    private void game() throws InterruptedException, DisconnectionException {
+<b class="nc"><i>138</i>&nbsp;        String loserNickname = null;</b>
+<i>139</i>&nbsp;
+<b class="nc"><i>140</i>&nbsp;        while (!game.hasWinner()) {</b>
+<b class="nc"><i>141</i>&nbsp;            RoundActions possibleActions = calculatePossibleActions();</b>
+<i>142</i>&nbsp;            // Contains the lose action?
+<b class="nc"><i>143</i>&nbsp;            if (possibleActions.hasLost()) {</b>
+<b class="nc"><i>144</i>&nbsp;                loserNickname = currentPlayer.getNickname();</b>
+<b class="nc"><i>145</i>&nbsp;                System.out.println(&quot;&gt; Status: &quot; + loserNickname + &quot; has lost&quot;);</b>
+<b class="nc"><i>146</i>&nbsp;                manageLose();</b>
+<i>147</i>&nbsp;            } else {
+<i>148</i>&nbsp;                // The player has ended his turn or can now only end his turn?
+<b class="nc"><i>149</i>&nbsp;                if (currentPlayer.getRoundActions().hasEnded() || possibleActions.mustEnd()) {</b>
+<b class="nc"><i>150</i>&nbsp;                    currentPlayer = game.getNextPlayer(currentPlayer);</b>
+<i>151</i>&nbsp;                    // Flush the actions of the next player
+<b class="nc"><i>152</i>&nbsp;                    currentPlayer.setRoundActions(new RoundActions());</b>
+<i>153</i>&nbsp;                } else {
+<i>154</i>&nbsp;                    // Update the map for everyone
+<b class="nc"><i>155</i>&nbsp;                    virtualView.sendToEveryoneExcept(new ShowMap(new MapInfo(game), currentPlayer.getNickname(), loserNickname), currentPlayer);</b>
+<i>156</i>&nbsp;
+<b class="nc"><i>157</i>&nbsp;                    int currentActionsNumber = currentPlayer.getRoundActions().getActionList().size();</b>
+<b class="nc"><i>158</i>&nbsp;                    MapInfo mapInfo = new MapInfo(game, currentPlayer.getColor());</b>
+<b class="nc"><i>159</i>&nbsp;                    virtualView.getClientHandlerByNickname(currentPlayer.getNickname()).send(new Turn(possibleActions, mapInfo, loserNickname));</b>
+<b class="nc"><i>160</i>&nbsp;                    loserNickname = null;</b>
+<b class="nc"><i>161</i>&nbsp;                    synchronized (this) {</b>
+<b class="nc"><i>162</i>&nbsp;                        while (currentPlayer.getRoundActions().getActionList().size() &lt;= currentActionsNumber &amp;&amp; isRunning()) {</b>
+<b class="nc"><i>163</i>&nbsp;                            this.wait();</b>
+<i>164</i>&nbsp;                        }
+<b class="nc"><i>165</i>&nbsp;                    }</b>
+<i>166</i>&nbsp;                }
+<i>167</i>&nbsp;            }
+<b class="nc"><i>168</i>&nbsp;        }</b>
+<b class="nc"><i>169</i>&nbsp;        manageWin();</b>
+<i>170</i>&nbsp;    }
+<i>171</i>&nbsp;
+<i>172</i>&nbsp;    /**
+<i>173</i>&nbsp;     * Calculates all the possible actions of the current player
+<i>174</i>&nbsp;     *
+<i>175</i>&nbsp;     * @return The round actions of the current player
+<i>176</i>&nbsp;     */
+<i>177</i>&nbsp;    private RoundActions calculatePossibleActions() {
+<b class="nc"><i>178</i>&nbsp;        RoundActions roundActions = currentPlayer.getCard().getRules().nextPossibleActions(currentPlayer, game);</b>
+<b class="nc"><i>179</i>&nbsp;        for (Player player : game.getPlayers()) {</b>
+<b class="nc"><i>180</i>&nbsp;            roundActions = player.getCard().getEnemyRules().fixEnemyActions(roundActions, game, player);</b>
+<b class="nc"><i>181</i>&nbsp;        }</b>
+<b class="nc"><i>182</i>&nbsp;        return roundActions;</b>
+<i>183</i>&nbsp;    }
+<i>184</i>&nbsp;
+<i>185</i>&nbsp;    /**
+<i>186</i>&nbsp;     * Manages the choice of the card by each player
+<i>187</i>&nbsp;     *
+<i>188</i>&nbsp;     * @throws InterruptedException   When the thread is interrupted
+<i>189</i>&nbsp;     * @throws DisconnectionException When the a blocking disconnection event happens
+<i>190</i>&nbsp;     */
+<i>191</i>&nbsp;    private void manageCardChoice(List&lt;Card&gt; possibleChoices) throws DisconnectionException, InterruptedException {
+<i>192</i>&nbsp;        String currentNickname;
+<b class="nc"><i>193</i>&nbsp;        for (int i = 0; i &lt; game.getPlayers().size() - 1; i++) {</b>
+<b class="nc"><i>194</i>&nbsp;            currentNickname = currentPlayer.getNickname();</b>
+<b class="nc"><i>195</i>&nbsp;            virtualView.getClientHandlerByNickname(currentNickname).send(new SetUpPlayerCard(possibleChoices));</b>
+<b class="nc"><i>196</i>&nbsp;            synchronized (this) {</b>
+<b class="nc"><i>197</i>&nbsp;                while (null == currentPlayer.getCard() &amp;&amp; isRunning()) {</b>
+<b class="nc"><i>198</i>&nbsp;                    this.wait();</b>
+<i>199</i>&nbsp;                }
+<b class="nc"><i>200</i>&nbsp;            }</b>
+<i>201</i>&nbsp;
+<b class="nc"><i>202</i>&nbsp;            System.out.println(&quot;&gt; Status: &quot; + currentNickname + &quot; has chosen &quot; + currentPlayer.getCard().getName() + &quot; card&quot;);</b>
+<b class="nc"><i>203</i>&nbsp;            possibleChoices.remove(currentPlayer.getCard());</b>
+<b class="nc"><i>204</i>&nbsp;            currentPlayer = game.getNextPlayer(currentPlayer);</b>
+<i>205</i>&nbsp;        }
+<b class="nc"><i>206</i>&nbsp;        currentNickname = currentPlayer.getNickname();</b>
+<b class="nc"><i>207</i>&nbsp;        currentPlayer.setCard(possibleChoices.get(0));</b>
+<b class="nc"><i>208</i>&nbsp;        System.out.println(&quot;&gt; Status: &quot; + currentNickname + &quot; has &quot; + currentPlayer.getCard().getName() + &quot; card&quot;);</b>
+<i>209</i>&nbsp;    }
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;    /**
+<i>212</i>&nbsp;     * Manage the first player choice by the challenger
+<i>213</i>&nbsp;     *
+<i>214</i>&nbsp;     * @param challenger The challenger
+<i>215</i>&nbsp;     * @throws InterruptedException   When the thread is interrupted
+<i>216</i>&nbsp;     * @throws DisconnectionException When the a blocking disconnection event happens
+<i>217</i>&nbsp;     */
+<i>218</i>&nbsp;    private void manageFirstPlayerChoice(Player challenger) throws InterruptedException, DisconnectionException {
+<b class="nc"><i>219</i>&nbsp;        currentPlayer = null;</b>
+<b class="nc"><i>220</i>&nbsp;        virtualView.getClientHandlerByNickname(challenger.getNickname()).send(new SetUpFirstPlayer(game.getPlayersNickname()));</b>
+<b class="nc"><i>221</i>&nbsp;        synchronized (this) {</b>
+<b class="nc"><i>222</i>&nbsp;            while (null == this.currentPlayer &amp;&amp; isRunning()) {</b>
+<b class="nc"><i>223</i>&nbsp;                this.wait();</b>
+<i>224</i>&nbsp;            }
+<b class="nc"><i>225</i>&nbsp;        }</b>
+<b class="nc"><i>226</i>&nbsp;        System.out.println(&quot;&gt; Status: The first player will be &quot; + currentPlayer.getNickname());</b>
+<i>227</i>&nbsp;    }
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;    /**
+<i>230</i>&nbsp;     * Manages the win of the current player: update the final map and then notify everyone
+<i>231</i>&nbsp;     */
+<i>232</i>&nbsp;    private void manageWin() {
+<b class="nc"><i>233</i>&nbsp;        virtualView.sendToEveryone(new ShowMap(new MapInfo(game), currentPlayer.getNickname(), null));</b>
+<b class="nc"><i>234</i>&nbsp;        System.out.println(&quot;&gt; Game ended: &quot; + currentPlayer.getNickname() + &quot; has won&quot;);</b>
+<b class="nc"><i>235</i>&nbsp;        for (Player p : game.getAllPlayers()) {</b>
+<b class="nc"><i>236</i>&nbsp;            virtualView.getClientHandlerByNickname(p.getNickname()).send(new ShowGameEndMessage(currentPlayer.getNickname(), currentPlayer.equals(p)));</b>
+<b class="nc"><i>237</i>&nbsp;        }</b>
+<i>238</i>&nbsp;    }
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;    /**
+<i>241</i>&nbsp;     * Manages the lose of the current player: end the game or remove the player
+<i>242</i>&nbsp;     */
+<i>243</i>&nbsp;    public void manageLose() {
+<b class="nc"><i>244</i>&nbsp;        removePlayer(currentPlayer);</b>
+<i>245</i>&nbsp;
+<b class="nc"><i>246</i>&nbsp;        currentPlayer = game.getNextPlayer(currentPlayer);</b>
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;        // The game must ended?
+<b class="nc"><i>249</i>&nbsp;        if (game.getPlayers().size() == 1) {</b>
+<b class="nc"><i>250</i>&nbsp;            System.out.println(&quot;&gt; Status: &quot; + game.getPlayers().get(0).getNickname() + &quot; has won&quot;);</b>
+<b class="nc"><i>251</i>&nbsp;            game.getPlayers().get(0).setWinner(true);</b>
+<i>252</i>&nbsp;        } else {
+<i>253</i>&nbsp;            // Flush the actions of the next player
+<b class="nc"><i>254</i>&nbsp;            currentPlayer.setRoundActions(new RoundActions());</b>
+<i>255</i>&nbsp;        }
+<i>256</i>&nbsp;    }
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;    /**
+<i>259</i>&nbsp;     * Tests if the game is ready to start and if everyone has a final nickname
+<i>260</i>&nbsp;     *
+<i>261</i>&nbsp;     * @return True if the game is ready to start
+<i>262</i>&nbsp;     */
+<i>263</i>&nbsp;    public boolean gameCanStart() {
+<b class="nc"><i>264</i>&nbsp;        return (game != null) &amp;&amp; game.canStart();</b>
+<i>265</i>&nbsp;    }
+<i>266</i>&nbsp;
+<i>267</i>&nbsp;    /**
+<i>268</i>&nbsp;     * Tests if the cards have been chosen by the challenger
+<i>269</i>&nbsp;     *
+<i>270</i>&nbsp;     * @return True if the cards have been chosen by the challenger
+<i>271</i>&nbsp;     */
+<i>272</i>&nbsp;    private boolean areCardsChosen() {
+<b class="nc"><i>273</i>&nbsp;        return game.getUsedCards().size() &gt;= game.getPlayers().size();</b>
+<i>274</i>&nbsp;    }
+<i>275</i>&nbsp;
+<i>276</i>&nbsp;    /**
+<i>277</i>&nbsp;     * Checks if a nickname is available
+<i>278</i>&nbsp;     *
+<i>279</i>&nbsp;     * @param requestedUsername The nickname to be checked
+<i>280</i>&nbsp;     * @return True if the username is available, otherwise false
+<i>281</i>&nbsp;     */
+<i>282</i>&nbsp;    public boolean checkNickname(String requestedUsername) {
+<b class="nc"><i>283</i>&nbsp;        for (Player aPlayer : game.getPlayers()) {</b>
+<b class="nc"><i>284</i>&nbsp;            if (aPlayer.getNickname().equalsIgnoreCase(requestedUsername)) {</b>
+<b class="nc"><i>285</i>&nbsp;                return false;</b>
+<i>286</i>&nbsp;            }
+<b class="nc"><i>287</i>&nbsp;        }</b>
+<b class="nc"><i>288</i>&nbsp;        return true;</b>
+<i>289</i>&nbsp;    }
+<i>290</i>&nbsp;
+<i>291</i>&nbsp;    /**
+<i>292</i>&nbsp;     * Creates the game and adds the first player
+<i>293</i>&nbsp;     *
+<i>294</i>&nbsp;     * @param numPlayers The number of players of the game
+<i>295</i>&nbsp;     */
+<i>296</i>&nbsp;    public void setNumPlayers(int numPlayers) {
+<b class="nc"><i>297</i>&nbsp;        game.setNumPlayers(numPlayers);</b>
+<b class="nc"><i>298</i>&nbsp;        wakeUpServerLauncher();</b>
+<i>299</i>&nbsp;    }
+<i>300</i>&nbsp;
+<i>301</i>&nbsp;    /**
+<i>302</i>&nbsp;     * Sets player info if the username is unique
+<i>303</i>&nbsp;     *
+<i>304</i>&nbsp;     * @param nickname  The requested nickname
+<i>305</i>&nbsp;     * @param birthDate The birth date of the player
+<i>306</i>&nbsp;     * @return True if the player has been added, otherwise false
+<i>307</i>&nbsp;     */
+<i>308</i>&nbsp;    public boolean setPlayerInfo(String nickname, Date birthDate) {
+<b class="nc"><i>309</i>&nbsp;        synchronized (this) {</b>
+<b class="nc"><i>310</i>&nbsp;            if (checkNickname(nickname)) {</b>
+<b class="nc"><i>311</i>&nbsp;                Player player = new Player(nickname, birthDate, false);</b>
+<b class="nc"><i>312</i>&nbsp;                game.addPlayer(player);</b>
+<b class="nc"><i>313</i>&nbsp;                return true;</b>
+<i>314</i>&nbsp;            }
+<b class="nc"><i>315</i>&nbsp;        }</b>
+<b class="nc"><i>316</i>&nbsp;        System.out.println(Frmt.color(&#39;y&#39;, &quot;&gt; Warning: someone is trying to connect with a nickname already in use&quot;));</b>
+<b class="nc"><i>317</i>&nbsp;        return false;</b>
+<i>318</i>&nbsp;    }
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;    /**
+<i>321</i>&nbsp;     * Sets temporary player info
+<i>322</i>&nbsp;     *
+<i>323</i>&nbsp;     * @param temporaryUsername The temporary nickname
+<i>324</i>&nbsp;     * @param birthDate         The birth date of the player
+<i>325</i>&nbsp;     */
+<i>326</i>&nbsp;    public void setTemporaryPlayerInfo(String temporaryUsername, Date birthDate) {
+<b class="nc"><i>327</i>&nbsp;        synchronized (this) {</b>
+<b class="nc"><i>328</i>&nbsp;            Player player = new Player(temporaryUsername, birthDate, true);</b>
+<b class="nc"><i>329</i>&nbsp;            game.addPlayer(player);</b>
+<b class="nc"><i>330</i>&nbsp;        }</b>
+<i>331</i>&nbsp;    }
+<i>332</i>&nbsp;
+<i>333</i>&nbsp;    /**
+<i>334</i>&nbsp;     * Update the player info with a final nickname if it&#39;s unique
+<i>335</i>&nbsp;     *
+<i>336</i>&nbsp;     * @param nickname The requested nickname
+<i>337</i>&nbsp;     * @return True if the player info has been updated, otherwise false
+<i>338</i>&nbsp;     */
+<i>339</i>&nbsp;    public boolean setNewNickname(String temporaryNickname, String nickname) {
+<b class="nc"><i>340</i>&nbsp;        synchronized (this) {</b>
+<b class="nc"><i>341</i>&nbsp;            if (checkNickname(nickname)) {</b>
+<b class="nc"><i>342</i>&nbsp;                game.getPlayerByNickname(temporaryNickname).setFinalNickname(nickname);</b>
+<b class="nc"><i>343</i>&nbsp;                return true;</b>
+<i>344</i>&nbsp;            }
+<b class="nc"><i>345</i>&nbsp;        }</b>
+<b class="nc"><i>346</i>&nbsp;        System.out.println(Frmt.color(&#39;y&#39;, &quot;&gt; Warning: someone is trying to connect with a nickname already in use&quot;));</b>
+<b class="nc"><i>347</i>&nbsp;        return false;</b>
+<i>348</i>&nbsp;    }
+<i>349</i>&nbsp;
+<i>350</i>&nbsp;    /**
+<i>351</i>&nbsp;     * Sets the cards that have been chosen by the challenger
+<i>352</i>&nbsp;     *
+<i>353</i>&nbsp;     * @param chosenCards The list of chosen cards
+<i>354</i>&nbsp;     */
+<i>355</i>&nbsp;    public void setCards(List&lt;Card&gt; chosenCards) {
+<b class="nc"><i>356</i>&nbsp;        game.setUsedCards(chosenCards);</b>
+<b class="nc"><i>357</i>&nbsp;        wakeUpController();</b>
+<i>358</i>&nbsp;    }
+<i>359</i>&nbsp;
+<i>360</i>&nbsp;    /**
+<i>361</i>&nbsp;     * Sets the card of a specified player
+<i>362</i>&nbsp;     *
+<i>363</i>&nbsp;     * @param chosenCard The chosen card
+<i>364</i>&nbsp;     * @param nickname   The player&#39;s nickname
+<i>365</i>&nbsp;     */
+<i>366</i>&nbsp;    public void setCard(Card chosenCard, String nickname) {
+<b class="nc"><i>367</i>&nbsp;        game.getPlayerByNickname(nickname).setCard(chosenCard);</b>
+<b class="nc"><i>368</i>&nbsp;        wakeUpController();</b>
+<i>369</i>&nbsp;    }
+<i>370</i>&nbsp;
+<i>371</i>&nbsp;    /**
+<i>372</i>&nbsp;     * Sets who will be the first player
+<i>373</i>&nbsp;     *
+<i>374</i>&nbsp;     * @param fistPlayerNickname The nickname of the first player
+<i>375</i>&nbsp;     */
+<i>376</i>&nbsp;    public void setFirstPlayer(String fistPlayerNickname) {
+<b class="nc"><i>377</i>&nbsp;        currentPlayer = game.getPlayerByNickname(fistPlayerNickname);</b>
+<b class="nc"><i>378</i>&nbsp;        wakeUpController();</b>
+<i>379</i>&nbsp;    }
+<i>380</i>&nbsp;
+<i>381</i>&nbsp;    /**
+<i>382</i>&nbsp;     * Sets the color of a specified player
+<i>383</i>&nbsp;     *
+<i>384</i>&nbsp;     * @param nickname The player&#39;s nickname
+<i>385</i>&nbsp;     * @param color    The chosen color
+<i>386</i>&nbsp;     */
+<i>387</i>&nbsp;    public void setColor(String nickname, String color) {
+<b class="nc"><i>388</i>&nbsp;        PlayerColor myPlayerColor = PlayerColor.getColorByName(color);</b>
+<b class="nc"><i>389</i>&nbsp;        game.getPlayerByNickname(nickname).chooseColor(myPlayerColor);</b>
+<b class="nc"><i>390</i>&nbsp;        wakeUpController();</b>
+<i>391</i>&nbsp;    }
+<i>392</i>&nbsp;
+<i>393</i>&nbsp;    /**
+<i>394</i>&nbsp;     * Sets the first position of a specified worker of a specified player
+<i>395</i>&nbsp;     *
+<i>396</i>&nbsp;     * @param nickname The player&#39;s nickname
+<i>397</i>&nbsp;     * @param genre    The genre of the worker
+<i>398</i>&nbsp;     * @param position The chosen position
+<i>399</i>&nbsp;     */
+<i>400</i>&nbsp;    public void setFirstPosition(String nickname, Genre genre, Cell position) {
+<b class="nc"><i>401</i>&nbsp;        game.getPlayerByNickname(nickname).getWorker(genre).setPosition(position);</b>
+<b class="nc"><i>402</i>&nbsp;        wakeUpController();</b>
+<i>403</i>&nbsp;    }
+<i>404</i>&nbsp;
+<i>405</i>&nbsp;    /**
+<i>406</i>&nbsp;     * Performs an action of a player
+<i>407</i>&nbsp;     *
+<i>408</i>&nbsp;     * @param action   The action to be performed
+<i>409</i>&nbsp;     * @param nickname The player that performs the action
+<i>410</i>&nbsp;     */
+<i>411</i>&nbsp;    public void setAction(Action action, String nickname) {
+<b class="nc"><i>412</i>&nbsp;        Player thePlayer = game.getPlayerByNickname(nickname);</b>
+<b class="nc"><i>413</i>&nbsp;        boolean isWinner = thePlayer.getCard().getRules().doAction(action, thePlayer, game);</b>
+<b class="nc"><i>414</i>&nbsp;        if (isWinner) {</b>
+<b class="nc"><i>415</i>&nbsp;            thePlayer.setWinner(true);</b>
+<i>416</i>&nbsp;        }
+<b class="nc"><i>417</i>&nbsp;        wakeUpController();</b>
+<i>418</i>&nbsp;    }
+<i>419</i>&nbsp;
+<i>420</i>&nbsp;    /**
+<i>421</i>&nbsp;     * Sets a player as loser
+<i>422</i>&nbsp;     *
+<i>423</i>&nbsp;     * @param removedPlayer The player that has lost
+<i>424</i>&nbsp;     */
+<i>425</i>&nbsp;    private void removePlayer(Player removedPlayer) {
+<b class="nc"><i>426</i>&nbsp;        removedPlayer.setLoser(true);</b>
+<i>427</i>&nbsp;    }
+<i>428</i>&nbsp;
+<i>429</i>&nbsp;    /**
+<i>430</i>&nbsp;     * Notify the other users and end the game if the player is not a loser
+<i>431</i>&nbsp;     *
+<i>432</i>&nbsp;     * @param nickname The nickname of the disconnected user
+<i>433</i>&nbsp;     */
+<i>434</i>&nbsp;    public void setAsDisconnected(String nickname) {
+<b class="nc"><i>435</i>&nbsp;        Player disconnectedPlayer = game.getPlayerByNickname(nickname);</b>
+<b class="nc"><i>436</i>&nbsp;        if (disconnectedPlayer != null &amp;&amp; (disconnectedPlayer.isLoser() || game.hasWinner())) {</b>
+<b class="nc"><i>437</i>&nbsp;            disconnectedPlayer.setConnected(false);</b>
+<i>438</i>&nbsp;            return;
+<i>439</i>&nbsp;        }
+<i>440</i>&nbsp;
+<b class="nc"><i>441</i>&nbsp;        virtualView.sendToEveryone(new ShowDisconnection(nickname));</b>
+<b class="nc"><i>442</i>&nbsp;        virtualView.closeAll();</b>
+<b class="nc"><i>443</i>&nbsp;        game.setInactive();</b>
+<b class="nc"><i>444</i>&nbsp;        wakeUpController();</b>
+<b class="nc"><i>445</i>&nbsp;        wakeUpServerLauncher();</b>
+<i>446</i>&nbsp;    }
+<i>447</i>&nbsp;
+<i>448</i>&nbsp;    /**
+<i>449</i>&nbsp;     * Checks if the game is still active
+<i>450</i>&nbsp;     *
+<i>451</i>&nbsp;     * @return True if the game is still active
+<i>452</i>&nbsp;     * @throws DisconnectionException When the game is not active
+<i>453</i>&nbsp;     */
+<i>454</i>&nbsp;    public boolean isRunning() throws DisconnectionException {
+<b class="nc"><i>455</i>&nbsp;        if (!game.isActive()) {</b>
+<b class="nc"><i>456</i>&nbsp;            throw new DisconnectionException();</b>
+<i>457</i>&nbsp;        }
+<b class="nc"><i>458</i>&nbsp;        return true;</b>
+<i>459</i>&nbsp;    }
+<i>460</i>&nbsp;
+<i>461</i>&nbsp;    /**
+<i>462</i>&nbsp;     * Notifies the Controller that it can proceed with execution
+<i>463</i>&nbsp;     */
+<i>464</i>&nbsp;    public void wakeUpController() {
+<b class="nc"><i>465</i>&nbsp;        synchronized (this) {</b>
+<b class="nc"><i>466</i>&nbsp;            this.notifyAll();</b>
+<b class="nc"><i>467</i>&nbsp;        }</b>
+<i>468</i>&nbsp;    }
+<i>469</i>&nbsp;
+<i>470</i>&nbsp;    /**
+<i>471</i>&nbsp;     * Notifies the ServerLauncher that it can proceed with execution
+<i>472</i>&nbsp;     */
+<i>473</i>&nbsp;    public void wakeUpServerLauncher() {
+<b class="nc"><i>474</i>&nbsp;        synchronized (game) {</b>
+<b class="nc"><i>475</i>&nbsp;            game.notifyAll();</b>
+<b class="nc"><i>476</i>&nbsp;        }</b>
+<i>477</i>&nbsp;    }
+<i>478</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-24 16:54</div>
+</div>
+</body>
+</html>
