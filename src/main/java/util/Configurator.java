@@ -37,7 +37,9 @@ public class Configurator {
         try {
             Document document;
             synchronized (connectionConfigLock) {
-                document = builder.build(new File(Configurator.class.getResource("/ConnectionConfig.xml").getFile()));
+                // todo
+                //document = builder.build(new File(Configurator.class.getResource("/ConnectionConfig.xml").getFile()));
+                document = builder.build(Configurator.class.getResourceAsStream("/ConnectionConfig.xml"));
             }
             Element rootElement = document.getRootElement();
 
@@ -58,7 +60,9 @@ public class Configurator {
         try {
             Document document;
             synchronized (connectionConfigLock) {
-                document = builder.build(new File(Configurator.class.getResource("/ConnectionConfig.xml").getFile()));
+                // todo
+                //document = builder.build(new File(Configurator.class.getResource("/ConnectionConfig.xml").getFile()));
+                document = builder.build(Configurator.class.getResourceAsStream("/ConnectionConfig.xml"));
             }
             Element rootElement = document.getRootElement();
 
@@ -79,7 +83,9 @@ public class Configurator {
         try {
             Document document;
             synchronized (cardsConfigLock) {
-                document = builder.build(new File(Configurator.class.getResource("/SimpleGodsConfig.xml").getFile()));
+                // todo
+                //document = builder.build(new File(Configurator.class.getResource("/SimpleGodsConfig.xml").getFile()));
+                document = builder.build(Configurator.class.getResourceAsStream("/SimpleGodsConfig.xml"));
             }
             Element rootElement = document.getRootElement();
 
