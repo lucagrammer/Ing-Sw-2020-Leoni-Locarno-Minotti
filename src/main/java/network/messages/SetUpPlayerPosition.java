@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Message for the choice of the color and the position of the workers of the player
+ * Message for the choice of the position of a worker of the player
  */
 public class SetUpPlayerPosition implements CVMessage, VCMessage, Serializable {
     private final MessageType messageType;

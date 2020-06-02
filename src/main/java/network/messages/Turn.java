@@ -27,7 +27,7 @@ public class Turn implements Serializable, CVMessage, VCMessage {
      *
      * @param roundActions  The possible actions
      * @param mapInfo       The map info
-     * @param loserNickname The nickname of the looser or null value
+     * @param loserNickname The nickname of the loser or null value
      */
     public Turn(RoundActions roundActions, MapInfo mapInfo, String loserNickname) {
         messageType = MessageType.CV;

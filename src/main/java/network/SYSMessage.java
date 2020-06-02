@@ -8,7 +8,7 @@ import server.VirtualView;
 public interface SYSMessage extends Message {
 
     /**
-     * Execute the request
+     * Execute the request server-side
      *
      * @param virtualView       The recipient component
      * @param temporaryUsername The temporary username of the user

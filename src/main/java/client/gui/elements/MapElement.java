@@ -211,7 +211,7 @@ public class MapElement {
     }
 
     /**
-     * Enable the commands buttons
+     * Enable the ActionTypeSelection buttons
      *
      * @param possibleActions The possible actions to be allowed
      */
@@ -235,6 +235,11 @@ public class MapElement {
         }
     }
 
+    /**
+     * Enable the GenreSelection buttons
+     *
+     * @param actionType The selected action type
+     */
     public void enableGenreSelection(ActionType actionType) {
         this.selectedActionType = actionType;
         this.selectedGenre = null;
@@ -263,6 +268,13 @@ public class MapElement {
         }
     }
 
+    /**
+     * Enable the FinalCell button
+     *
+     * @param genre  The selected genre
+     * @param row    The row of the selected worker
+     * @param column The column of the selected worker
+     */
     private void enableFinalCell(Genre genre, int row, int column) {
         this.selectedGenre = genre;
         this.actionPerformed = false;
@@ -284,6 +296,11 @@ public class MapElement {
         }
     }
 
+    /**
+     * Removes all the action listener from the button
+     *
+     * @param pButton The button to be cleared
+     */
     private void removeAllActionListener(PButton pButton) {
         for (ActionListener act : pButton.getActionListeners()) {
             pButton.removeActionListener(act);
@@ -300,20 +317,36 @@ public class MapElement {
         commandsVisibility = true;
     }
 
+    /**
+     * Clear the sidebar components
+     */
     public void cleanSideBar() {
         sideBar.removeAll();
-
     }
 
+    /**
+     * The action-type-selection action listener
+     */
     public class ActionTypeListener implements ActionListener {
         private final ActionType actionType;
         private final boolean allowed;
 
+        /**
+         * Constructor: build the action-type-selection action listener
+         *
+         * @param actionType The action type of the action listener
+         * @param allowed    True if and only if the action type is allowed
+         */
         public ActionTypeListener(ActionType actionType, boolean allowed) {
             this.actionType = actionType;
             this.allowed = allowed;
         }
 
+        /**
+         * Invoked when an action occurs
+         *
+         * @param e The event to be processed
+         */
         public void actionPerformed(ActionEvent e) {
             if (!myTurn) {
                 setErrorMessage("It's not your turn!");
@@ -332,11 +365,21 @@ public class MapElement {
         }
     }
 
+    /**
+     * The genre-selection action listener
+     */
     public class GenreListener implements ActionListener {
         private final boolean selectable;
         private Genre genre;
         private int row, column;
 
+        /**
+         * Constructor: build the genre-selection action listener of an allowed genre
+         *
+         * @param genre  The genre of the action listener
+         * @param row    The row of the action listener
+         * @param column The column of the action listener
+         */
         public GenreListener(Genre genre, int row, int column) {
             this.genre = genre;
             this.row = row;
@@ -344,6 +387,9 @@ public class MapElement {
             this.selectable = true;
         }
 
+        /**
+         * Constructor: build the genre-selection action listener of an not allowed genre
+         */
         public GenreListener() {
             this.selectable = false;
         }
@@ -367,15 +413,26 @@ public class MapElement {
         }
     }
 
+    /**
+     * The final-cell-selection action listener
+     */
     public class FinalCellListener implements ActionListener {
         private final boolean selectable;
         private Action action;
 
+        /**
+         * Constructor: build the final-cell-selection action listener of an allowed cell
+         *
+         * @param action The game action related to the action listener
+         */
         public FinalCellListener(Action action) {
             this.action = action;
             this.selectable = true;
         }
 
+        /**
+         * Constructor: build the final-cell-selection action listener of a not allowed cell
+         */
         public FinalCellListener() {
             this.selectable = false;
         }
@@ -399,17 +456,29 @@ public class MapElement {
         }
     }
 
+    /**
+     * The first-position-selection action listener
+     */
     public class FirstPositionListener implements ActionListener {
         private final boolean selectable;
         private Genre genre;
         private Cell currentCell;
 
+        /**
+         * Constructor: build the first-position-selection action listener of an allowed cell
+         *
+         * @param genre       The genre of the action listener
+         * @param currentCell The cell of the action listener
+         */
         public FirstPositionListener(Genre genre, Cell currentCell) {
             this.genre = genre;
             this.currentCell = currentCell;
             this.selectable = true;
         }
 
+        /**
+         * Constructor: build the first-position-selection action listener of a not allowed cell
+         */
         public FirstPositionListener() {
             this.selectable = false;
         }

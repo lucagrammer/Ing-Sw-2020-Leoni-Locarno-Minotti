@@ -40,6 +40,7 @@ public class PButton extends JButton {
      * Constructor: build a colored button
      *
      * @param color The color of the button
+     * @param image The image of the button
      */
     public PButton(Color color, Image image) {
         super(new ImageIcon(image));

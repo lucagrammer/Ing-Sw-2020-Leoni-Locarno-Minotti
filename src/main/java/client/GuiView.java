@@ -8,7 +8,10 @@ import client.gui.elements.*;
 import model.Card;
 import model.Cell;
 import model.Player;
-import util.*;
+import util.Configurator;
+import util.Genre;
+import util.MapInfo;
+import util.RoundActions;
 
 import javax.swing.*;
 import java.awt.*;
@@ -441,8 +444,9 @@ public class GuiView implements View {
 
     /**
      * Asks the action the player wants to perform
+     *
      * @param roundActions  All the possible actions
-     * @param mapInfo        The map info
+     * @param mapInfo       The map info
      * @param loserNickname The nickname of the looser or null value
      */
     public void askAction(RoundActions roundActions, MapInfo mapInfo, String loserNickname) {

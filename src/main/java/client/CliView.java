@@ -375,6 +375,7 @@ public class CliView implements View {
 
     /**
      * Asks the first position for the male and female worker
+     *
      * @param genre          The genre of the worker
      * @param forbiddenCells The forbidden cells
      * @param mapInfo        The map info

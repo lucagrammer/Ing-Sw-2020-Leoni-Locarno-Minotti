@@ -201,7 +201,6 @@ public class RoundActions implements Serializable {
         return null;
     }
 
-
     /**
      * Finds the specified actions
      *
@@ -273,7 +272,13 @@ public class RoundActions implements Serializable {
         return getActionList().size() == 1 && getActionList().get(0).getActionType().equals(ActionType.END);
     }
 
-    //TODO sicuramente action type passatogli non è END o LOSE
+    /**
+     * Checks if the round action contains an action with the specified genre and type
+     *
+     * @param actionType The action of the action type to be found
+     * @param genre      The genre of the action to be found
+     * @return True if the round action contains an action with the specified genre and type
+     */
     public boolean findGenre(ActionType actionType, Genre genre) {
         for (Action a : getActionList()) {
             if (a.getActionType().equals(actionType) && a.getGenre().equals(genre)) {

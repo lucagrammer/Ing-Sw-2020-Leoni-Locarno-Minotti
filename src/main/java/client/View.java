@@ -98,7 +98,8 @@ public interface View {
 
     /**
      * Asks the first position for the male and female worker
-     *  @param genre         The genre of the worker
+     *
+     * @param genre          The genre of the worker
      * @param forbiddenCells The forbidden cells
      * @param mapInfo        The map info
      */
@@ -114,8 +115,9 @@ public interface View {
 
     /**
      * Asks the action the player wants to perform
+     *
      * @param roundActions  All the possible actions
-     * @param mapInfo        The map info
+     * @param mapInfo       The map info
      * @param loserNickname The nickname of the looser or null value
      */
     void askAction(RoundActions roundActions, MapInfo mapInfo, String loserNickname);

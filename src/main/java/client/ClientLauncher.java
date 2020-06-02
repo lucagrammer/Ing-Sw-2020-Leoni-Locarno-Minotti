@@ -40,12 +40,6 @@ public class ClientLauncher {
                     view.setServerHandler(serverHandler);
                     incorrect = false;
                     view.launch();
-
-                    /*
-                    Frmt.clearScreen();
-                    System.out.println(Frmt.color('r', "  > This functionality is not available. Try again."));
-                    incorrect = true;
-                    */
                 } else {
                     Frmt.clearScreen();
                     System.out.println(Frmt.color('r', "  > Invalid choice. Try again."));

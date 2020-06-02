@@ -19,7 +19,8 @@ public class SetUpNewNickname implements CVMessage, VCMessage, Serializable {
     /**
      * Client-side constructor: build a response message
      *
-     * @param nickname The new chosen nickname
+     * @param nickname          The new chosen nickname
+     * @param temporaryNickname The temporary nickname of the user
      */
     public SetUpNewNickname(String temporaryNickname, String nickname) {
         this.messageType = MessageType.VC;
@@ -30,6 +31,8 @@ public class SetUpNewNickname implements CVMessage, VCMessage, Serializable {
 
     /**
      * Server-side constructor: build a request message
+     *
+     * @param temporaryNickname The temporary nickname of the client
      */
     public SetUpNewNickname(String temporaryNickname) {
         this.messageType = MessageType.CV;

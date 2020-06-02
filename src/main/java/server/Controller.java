@@ -177,7 +177,8 @@ public class Controller {
     private RoundActions calculatePossibleActions() {
         RoundActions roundActions = currentPlayer.getCard().getRules().nextPossibleActions(currentPlayer, game);
         for (Player player : game.getPlayers()) {
-            roundActions = player.getCard().getEnemyRules().fixEnemyActions(roundActions, game, player);
+            if (!player.equals(currentPlayer)) // TODO modificato
+                roundActions = player.getCard().getEnemyRules().fixEnemyActions(roundActions, game, player);
         }
         return roundActions;
     }
@@ -333,7 +334,8 @@ public class Controller {
     /**
      * Update the player info with a final nickname if it's unique
      *
-     * @param nickname The requested nickname
+     * @param nickname          The requested nickname
+     * @param temporaryNickname The temporary nickname
      * @return True if the player info has been updated, otherwise false
      */
     public boolean setNewNickname(String temporaryNickname, String nickname) {

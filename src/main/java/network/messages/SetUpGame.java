@@ -37,7 +37,8 @@ public class SetUpGame implements Serializable, CVMessage, SYSMessage {
     /**
      * Server-side constructor: build the request
      *
-     * @param newGame True if the player has to decide the number of players, otherwise false
+     * @param newGame           True if the player has to decide the number of players, otherwise false
+     * @param temporaryNickname The temporary nickname
      */
     public SetUpGame(boolean newGame, String temporaryNickname) {
         this.messageType = MessageType.CV;
@@ -73,7 +74,7 @@ public class SetUpGame implements Serializable, CVMessage, SYSMessage {
     }
 
     /**
-     * Execute the request
+     * Execute the request server-side
      *
      * @param virtualView       The recipient component
      * @param temporaryUsername The temporary username of the user
