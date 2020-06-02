@@ -37,7 +37,9 @@ public class GuiView implements View {
     public GuiView(){
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         try {
-            ge.registerFont(Font.createFont(0, new File(getClass().getResource("/GuiResources/LeGourmetScript.otf").getFile())));
+            // todo
+            //ge.registerFont(Font.createFont(0, new File(getClass().getResource("/GuiResources/LeGourmetScript.otf").getFile())));
+            ge.registerFont(Font.createFont(0, getClass().getResourceAsStream("/GuiResources/LeGourmetScript.otf")));
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
