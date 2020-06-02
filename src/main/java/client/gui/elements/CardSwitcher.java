@@ -165,6 +165,7 @@ public class CardSwitcher {
          * Constructor: build a CardMouseListener with multiple selection enabled
          *
          * @param card         The managed card
+         * @param chosenCards  The chosen cards
          * @param cardSwitcher The card switcher to be controlled
          * @param numCards     The number of cards to be selected
          */
