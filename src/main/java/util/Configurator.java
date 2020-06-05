@@ -10,7 +10,6 @@ import server.rules.Rules;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +36,6 @@ public class Configurator {
         try {
             Document document;
             synchronized (connectionConfigLock) {
-                // todo
-                //document = builder.build(new File(Configurator.class.getResource("/ConnectionConfig.xml").getFile()));
                 document = builder.build(Configurator.class.getResourceAsStream("/ConnectionConfig.xml"));
             }
             Element rootElement = document.getRootElement();
@@ -60,8 +57,6 @@ public class Configurator {
         try {
             Document document;
             synchronized (connectionConfigLock) {
-                // todo
-                //document = builder.build(new File(Configurator.class.getResource("/ConnectionConfig.xml").getFile()));
                 document = builder.build(Configurator.class.getResourceAsStream("/ConnectionConfig.xml"));
             }
             Element rootElement = document.getRootElement();
@@ -83,8 +78,6 @@ public class Configurator {
         try {
             Document document;
             synchronized (cardsConfigLock) {
-                // todo
-                //document = builder.build(new File(Configurator.class.getResource("/SimpleGodsConfig.xml").getFile()));
                 document = builder.build(Configurator.class.getResourceAsStream("/SimpleGodsConfig.xml"));
             }
             Element rootElement = document.getRootElement();

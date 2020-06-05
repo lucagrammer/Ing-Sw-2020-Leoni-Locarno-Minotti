@@ -37,8 +37,6 @@ public class GuiView implements View {
     public GuiView(){
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         try {
-            // todo
-            //ge.registerFont(Font.createFont(0, new File(getClass().getResource("/GuiResources/LeGourmetScript.otf").getFile())));
             ge.registerFont(Font.createFont(0, getClass().getResourceAsStream("/GuiResources/LeGourmetScript.otf")));
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
@@ -213,9 +211,9 @@ public class GuiView implements View {
             clear(bodyContainer);
 
             FormElement form = new FormElement(bodyContainer);
-            form.addField(0,"Nickname: ","Player");
-            form.addField(1,"Date of birth [dd/mm/yyyy]: ","24/09/1998");
-            form.addField((newGame)? 2 : -1,"Number of competitors [2..3]: ","2");
+            form.addField(0,"Nickname: ","");
+            form.addField(1,"Date of birth [dd/mm/yyyy]: ","");
+            form.addField((newGame)? 2 : -1,"Number of competitors [2..3]: ","");
 
             form.setActionButton("NEXT",(ev) -> (new Thread(() -> {
                 String nickname = form.getFieldValueAt(0);

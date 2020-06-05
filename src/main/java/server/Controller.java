@@ -177,7 +177,7 @@ public class Controller {
     private RoundActions calculatePossibleActions() {
         RoundActions roundActions = currentPlayer.getCard().getRules().nextPossibleActions(currentPlayer, game);
         for (Player player : game.getPlayers()) {
-            if (!player.equals(currentPlayer)) // TODO modificato
+            if (!player.equals(currentPlayer))
                 roundActions = player.getCard().getEnemyRules().fixEnemyActions(roundActions, game, player);
         }
         return roundActions;
