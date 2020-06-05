@@ -1,5 +1,5 @@
 
-# Prova Finale Ingegneria del Software 2019
+# Prova Finale Ingegneria del Software 2020
 ## Gruppo PSP39
 
 This final project was made between March and July 2020 as our final thesis project at Politecnico di Milano. 
