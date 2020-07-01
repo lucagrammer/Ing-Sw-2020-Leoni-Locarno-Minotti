@@ -1,0 +1,128 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ShowCardAssignment</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">network.messages</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ShowCardAssignment (network.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ShowCardAssignment</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71,4%
+  </span>
+  <span class="absValue">
+    (5/ 7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package network.messages;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import client.View;
+<i>4</i>&nbsp;import model.Player;
+<i>5</i>&nbsp;import network.MVMessage;
+<i>6</i>&nbsp;import util.MessageType;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.io.Serializable;
+<i>9</i>&nbsp;import java.util.List;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * Message to inform the player of the allocation of cards
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;public class ShowCardAssignment implements Serializable, MVMessage {
+<i>15</i>&nbsp;    private final MessageType messageType;
+<i>16</i>&nbsp;    private final List&lt;Player&gt; playerList;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * Server-side constructor: build a message
+<i>20</i>&nbsp;     *
+<i>21</i>&nbsp;     * @param playerList The list of players
+<i>22</i>&nbsp;     */
+<b class="fc"><i>23</i>&nbsp;    public ShowCardAssignment(List&lt;Player&gt; playerList) {</b>
+<b class="fc"><i>24</i>&nbsp;        messageType = MessageType.MV;</b>
+<b class="fc"><i>25</i>&nbsp;        this.playerList = playerList;</b>
+<b class="fc"><i>26</i>&nbsp;    }</b>
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /**
+<i>29</i>&nbsp;     * Execute the request client-side
+<i>30</i>&nbsp;     *
+<i>31</i>&nbsp;     * @param view The recipient component
+<i>32</i>&nbsp;     */
+<i>33</i>&nbsp;    public void execute(View view) {
+<b class="nc"><i>34</i>&nbsp;        view.showCardAssignmentMessage(playerList);</b>
+<b class="nc"><i>35</i>&nbsp;    }</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * Gets the message type
+<i>39</i>&nbsp;     *
+<i>40</i>&nbsp;     * @return The message type
+<i>41</i>&nbsp;     */
+<i>42</i>&nbsp;    public MessageType getType() {
+<b class="fc"><i>43</i>&nbsp;        return messageType;</b>
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 18:00</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,338 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ServerHandler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ServerHandler (client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ServerHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 72)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import model.Card;
+<i>4</i>&nbsp;import model.Cell;
+<i>5</i>&nbsp;import network.CVMessage;
+<i>6</i>&nbsp;import network.MVMessage;
+<i>7</i>&nbsp;import network.Message;
+<i>8</i>&nbsp;import network.messages.*;
+<i>9</i>&nbsp;import network.ping.NetworkHandler;
+<i>10</i>&nbsp;import network.ping.PingSender;
+<i>11</i>&nbsp;import util.Action;
+<i>12</i>&nbsp;import util.Configurator;
+<i>13</i>&nbsp;import util.Genre;
+<i>14</i>&nbsp;import util.MessageType;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import java.io.IOException;
+<i>17</i>&nbsp;import java.io.ObjectInputStream;
+<i>18</i>&nbsp;import java.io.ObjectOutputStream;
+<i>19</i>&nbsp;import java.net.Socket;
+<i>20</i>&nbsp;import java.util.Date;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Manages communication from and to the server
+<i>25</i>&nbsp; */
+<b class="nc"><i>26</i>&nbsp;public class ServerHandler implements NetworkHandler {</b>
+<b class="nc"><i>27</i>&nbsp;    private final Object lock = new Object();</b>
+<i>28</i>&nbsp;    private ObjectInputStream input;
+<i>29</i>&nbsp;    private ObjectOutputStream output;
+<i>30</i>&nbsp;    private Socket socket;
+<i>31</i>&nbsp;    private View view;
+<i>32</i>&nbsp;    private String nickname;
+<b class="nc"><i>33</i>&nbsp;    private boolean isConnected = false;</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    /**
+<i>36</i>&nbsp;     * Starts listening for server messages and execute them client-side
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    public void startListening() {
+<b class="nc"><i>39</i>&nbsp;        while (isConnected) {</b>
+<i>40</i>&nbsp;            try {
+<b class="nc"><i>41</i>&nbsp;                Message serverMessage = (Message) input.readObject();</b>
+<b class="nc"><i>42</i>&nbsp;                if (serverMessage.getType() == MessageType.MV) {</b>
+<b class="nc"><i>43</i>&nbsp;                    if (serverMessage instanceof ShowDisconnection &amp;&amp; isConnected) {</b>
+<i>44</i>&nbsp;                        // Under control disconnection
+<b class="nc"><i>45</i>&nbsp;                        isConnected = false;</b>
+<b class="nc"><i>46</i>&nbsp;                        closeConnection();</b>
+<i>47</i>&nbsp;                    }
+<b class="nc"><i>48</i>&nbsp;                    MVMessage mvMessage = (MVMessage) serverMessage;</b>
+<b class="nc"><i>49</i>&nbsp;                    mvMessage.execute(view);</b>
+<b class="nc"><i>50</i>&nbsp;                } else {</b>
+<b class="nc"><i>51</i>&nbsp;                    if (serverMessage.getType() == MessageType.CV) {</b>
+<b class="nc"><i>52</i>&nbsp;                        updateNickname(serverMessage);</b>
+<b class="nc"><i>53</i>&nbsp;                        CVMessage cvMessage = (CVMessage) serverMessage;</b>
+<b class="nc"><i>54</i>&nbsp;                        cvMessage.execute(view);</b>
+<i>55</i>&nbsp;                    }
+<i>56</i>&nbsp;                }
+<b class="nc"><i>57</i>&nbsp;            } catch (IOException | ClassNotFoundException e) {</b>
+<b class="nc"><i>58</i>&nbsp;                if (isConnected) {</b>
+<b class="nc"><i>59</i>&nbsp;                    String errorMessage = &quot;Server unreachable&quot; + (Configurator.getErrorDetailsFlag() ? &quot; during message reading&quot; : &quot;&quot;) + &quot;.&quot;;</b>
+<b class="nc"><i>60</i>&nbsp;                    view.showErrorMessage(errorMessage, true);</b>
+<i>61</i>&nbsp;                }
+<b class="nc"><i>62</i>&nbsp;                isConnected = false;</b>
+<b class="nc"><i>63</i>&nbsp;            }</b>
+<i>64</i>&nbsp;        }
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * Update the nickname of the client if the message contains it
+<i>69</i>&nbsp;     *
+<i>70</i>&nbsp;     * @param serverMessage The message received
+<i>71</i>&nbsp;     */
+<i>72</i>&nbsp;    private void updateNickname(Message serverMessage) {
+<b class="nc"><i>73</i>&nbsp;        if (serverMessage instanceof SetUpGame) {</b>
+<b class="nc"><i>74</i>&nbsp;            this.nickname = ((SetUpGame) serverMessage).getTemporaryNickname();</b>
+<i>75</i>&nbsp;        }
+<b class="nc"><i>76</i>&nbsp;        if (serverMessage instanceof SetUpNewNickname) {</b>
+<b class="nc"><i>77</i>&nbsp;            this.nickname = ((SetUpNewNickname) serverMessage).getTemporaryNickname();</b>
+<i>78</i>&nbsp;        }
+<i>79</i>&nbsp;    }
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;    /**
+<i>82</i>&nbsp;     * Sets the view
+<i>83</i>&nbsp;     *
+<i>84</i>&nbsp;     * @param view The view
+<i>85</i>&nbsp;     */
+<i>86</i>&nbsp;    public void setView(View view) {
+<b class="nc"><i>87</i>&nbsp;        this.view = view;</b>
+<i>88</i>&nbsp;    }
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    /**
+<i>91</i>&nbsp;     * Gets the nickname of the player
+<i>92</i>&nbsp;     *
+<i>93</i>&nbsp;     * @return The nickname of the player
+<i>94</i>&nbsp;     */
+<i>95</i>&nbsp;    public String getNickname() {
+<b class="nc"><i>96</i>&nbsp;        return nickname;</b>
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /**
+<i>100</i>&nbsp;     * Sets connection to the specified server
+<i>101</i>&nbsp;     *
+<i>102</i>&nbsp;     * @param serverIP IP address of the server
+<i>103</i>&nbsp;     */
+<i>104</i>&nbsp;    public void setConnection(String serverIP) {
+<i>105</i>&nbsp;        try {
+<b class="nc"><i>106</i>&nbsp;            socket = new Socket(serverIP, Configurator.getDefaultPort());</b>
+<b class="nc"><i>107</i>&nbsp;            output = new ObjectOutputStream(socket.getOutputStream());</b>
+<b class="nc"><i>108</i>&nbsp;            input = new ObjectInputStream(socket.getInputStream());</b>
+<b class="nc"><i>109</i>&nbsp;            isConnected = true;</b>
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;            // Sets the connection timeout to 20 seconds and start sending pings to the server every 5 seconds
+<b class="nc"><i>112</i>&nbsp;            socket.setSoTimeout(20000);</b>
+<b class="nc"><i>113</i>&nbsp;            (new PingSender(this, false)).start();</b>
+<b class="nc"><i>114</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>115</i>&nbsp;            String errorMessage = &quot;Server unreachable&quot; + (Configurator.getErrorDetailsFlag() ? &quot; during connection setup&quot; : &quot;&quot;);</b>
+<b class="nc"><i>116</i>&nbsp;            view.showErrorMessage(errorMessage, true);</b>
+<b class="nc"><i>117</i>&nbsp;        }</b>
+<i>118</i>&nbsp;
+<b class="nc"><i>119</i>&nbsp;        startListening();</b>
+<i>120</i>&nbsp;    }
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    /**
+<i>123</i>&nbsp;     * Closes the connection to the server
+<i>124</i>&nbsp;     */
+<i>125</i>&nbsp;    public void closeConnection() {
+<i>126</i>&nbsp;        try {
+<b class="nc"><i>127</i>&nbsp;            socket.close();</b>
+<b class="nc"><i>128</i>&nbsp;            isConnected = false;</b>
+<b class="nc"><i>129</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>130</i>&nbsp;            String errorMessage = &quot;An error occurred &quot; + (Configurator.getErrorDetailsFlag() ? &quot;  when closing the connection&quot; : &quot;&quot;) + &quot;.&quot;;</b>
+<b class="nc"><i>131</i>&nbsp;            view.showErrorMessage(errorMessage, true);</b>
+<b class="nc"><i>132</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>133</i>&nbsp;        }</b>
+<i>134</i>&nbsp;    }
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    /**
+<i>137</i>&nbsp;     * Checks the connection status
+<i>138</i>&nbsp;     *
+<i>139</i>&nbsp;     * @return True if it is connected, otherwise false
+<i>140</i>&nbsp;     */
+<i>141</i>&nbsp;    public boolean isConnected() {
+<b class="nc"><i>142</i>&nbsp;        return isConnected;</b>
+<i>143</i>&nbsp;    }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    /**
+<i>146</i>&nbsp;     * Sends a message
+<i>147</i>&nbsp;     *
+<i>148</i>&nbsp;     * @param message The message to be sent
+<i>149</i>&nbsp;     */
+<i>150</i>&nbsp;    public void send(Message message) {
+<b class="nc"><i>151</i>&nbsp;        if (isConnected) {</b>
+<i>152</i>&nbsp;            try {
+<b class="nc"><i>153</i>&nbsp;                synchronized (lock) {</b>
+<b class="nc"><i>154</i>&nbsp;                    output.writeUnshared(message);</b>
+<b class="nc"><i>155</i>&nbsp;                    output.flush();</b>
+<b class="nc"><i>156</i>&nbsp;                    output.reset();</b>
+<b class="nc"><i>157</i>&nbsp;                }</b>
+<b class="nc"><i>158</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>159</i>&nbsp;                isConnected = false;</b>
+<b class="nc"><i>160</i>&nbsp;                String errorMessage = &quot;Server unreachable&quot; + (Configurator.getErrorDetailsFlag() ? &quot; during message sending&quot; : &quot;&quot;) + &quot;.&quot;;</b>
+<b class="nc"><i>161</i>&nbsp;                view.showErrorMessage(errorMessage, true);</b>
+<b class="nc"><i>162</i>&nbsp;            }</b>
+<i>163</i>&nbsp;        }
+<i>164</i>&nbsp;    }
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;    /**
+<i>167</i>&nbsp;     * Prepares the request of SetUpGame with information about the player and the game
+<i>168</i>&nbsp;     *
+<i>169</i>&nbsp;     * @param nickname   The requested username
+<i>170</i>&nbsp;     * @param date       The date of birth
+<i>171</i>&nbsp;     * @param numPlayers The number of players of the game to be created (irrelevant if the player is joining an existing game)
+<i>172</i>&nbsp;     */
+<i>173</i>&nbsp;    public void sendSetUpGame(String nickname, Date date, int numPlayers) {
+<b class="nc"><i>174</i>&nbsp;        send(new SetUpGame(nickname, date, numPlayers));</b>
+<b class="nc"><i>175</i>&nbsp;        this.nickname = nickname;</b>
+<i>176</i>&nbsp;    }
+<i>177</i>&nbsp;
+<i>178</i>&nbsp;    /**
+<i>179</i>&nbsp;     * Prepares the response to the server ResetUsernameProcess request
+<i>180</i>&nbsp;     *
+<i>181</i>&nbsp;     * @param newNickname The new requested nickname
+<i>182</i>&nbsp;     */
+<i>183</i>&nbsp;    public void sendNewNickname(String newNickname) {
+<b class="nc"><i>184</i>&nbsp;        send(new SetUpNewNickname(nickname, newNickname));</b>
+<b class="nc"><i>185</i>&nbsp;        this.nickname = newNickname;</b>
+<i>186</i>&nbsp;    }
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;    /**
+<i>189</i>&nbsp;     * Prepares the response to the server SetUpGameCards request
+<i>190</i>&nbsp;     *
+<i>191</i>&nbsp;     * @param chosenCards The chosen cards
+<i>192</i>&nbsp;     */
+<i>193</i>&nbsp;    public void sendGameCards(List&lt;Card&gt; chosenCards) {
+<b class="nc"><i>194</i>&nbsp;        send(new SetUpGameCards(chosenCards));</b>
+<i>195</i>&nbsp;    }
+<i>196</i>&nbsp;
+<i>197</i>&nbsp;    /**
+<i>198</i>&nbsp;     * Prepares the response to the server SetUpPlayerCard request
+<i>199</i>&nbsp;     *
+<i>200</i>&nbsp;     * @param chosenCard The chosen card
+<i>201</i>&nbsp;     */
+<i>202</i>&nbsp;    public void sendPlayerCard(Card chosenCard) {
+<b class="nc"><i>203</i>&nbsp;        send(new SetUpPlayerCard(chosenCard, nickname));</b>
+<i>204</i>&nbsp;    }
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;    /**
+<i>207</i>&nbsp;     * Prepares the response to the server SetUpFirstPlayer request
+<i>208</i>&nbsp;     *
+<i>209</i>&nbsp;     * @param chosenNickname The first player&#39;s nickname
+<i>210</i>&nbsp;     */
+<i>211</i>&nbsp;    public void sendFirstPlayer(String chosenNickname) {
+<b class="nc"><i>212</i>&nbsp;        send(new SetUpFirstPlayer(chosenNickname));</b>
+<i>213</i>&nbsp;    }
+<i>214</i>&nbsp;
+<i>215</i>&nbsp;    /**
+<i>216</i>&nbsp;     * Prepares the response to the server SetUpPlayerColor request
+<i>217</i>&nbsp;     *
+<i>218</i>&nbsp;     * @param chosenColor The chosen color
+<i>219</i>&nbsp;     */
+<i>220</i>&nbsp;    public void sendPlayerColor(String chosenColor) {
+<b class="nc"><i>221</i>&nbsp;        send(new SetUpPlayerColor(chosenColor, nickname));</b>
+<i>222</i>&nbsp;    }
+<i>223</i>&nbsp;
+<i>224</i>&nbsp;    /**
+<i>225</i>&nbsp;     * Prepares the response to the server SetUpPlayerPosition request
+<i>226</i>&nbsp;     *
+<i>227</i>&nbsp;     * @param genre      The genre of the worker
+<i>228</i>&nbsp;     * @param chosenCell The position of the worker
+<i>229</i>&nbsp;     */
+<i>230</i>&nbsp;    public void sendPlayerPosition(Genre genre, Cell chosenCell) {
+<b class="nc"><i>231</i>&nbsp;        send(new SetUpPlayerPosition(genre, chosenCell, nickname));</b>
+<i>232</i>&nbsp;    }
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;    /**
+<i>235</i>&nbsp;     * Prepares the response to the server Turn request
+<i>236</i>&nbsp;     *
+<i>237</i>&nbsp;     * @param theAction The chosen action
+<i>238</i>&nbsp;     */
+<i>239</i>&nbsp;    public void sendAction(Action theAction) {
+<b class="nc"><i>240</i>&nbsp;        send(new Turn(theAction, nickname));</b>
+<i>241</i>&nbsp;    }
+<i>242</i>&nbsp;
+<i>243</i>&nbsp;    /**
+<i>244</i>&nbsp;     * Prepare a new game or terminate the program
+<i>245</i>&nbsp;     *
+<i>246</i>&nbsp;     * @param choice The choice of the user
+<i>247</i>&nbsp;     */
+<i>248</i>&nbsp;    public void sendNewGame(boolean choice) {
+<b class="nc"><i>249</i>&nbsp;        isConnected = false;</b>
+<b class="nc"><i>250</i>&nbsp;        closeConnection();</b>
+<b class="nc"><i>251</i>&nbsp;        if (choice) {</b>
+<b class="nc"><i>252</i>&nbsp;            ClientLauncher.main(null);</b>
+<i>253</i>&nbsp;        }
+<i>254</i>&nbsp;    }
+<i>255</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 18:00</div>
+</div>
+</body>
+</html>
