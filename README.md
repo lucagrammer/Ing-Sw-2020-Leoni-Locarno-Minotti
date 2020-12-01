@@ -7,7 +7,7 @@ This final project was made between March and July 2020 as our final thesis proj
 - ###        Locarno Silvia ([@silvialocarno](https://github.com/silvialocarno))
 - ###        Minotti Luca ([@lucagrammer](https://github.com/lucagrammer))
 
-Final score: 30/30
+#### Final score: 30/30
 
 
 ## How to start JARs
